@@ -3,7 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  connectivity_plus
   flutter_secure_storage_windows
+  local_auth_windows
+  permission_handler_windows
+  screen_retriever_windows
+  url_launcher_windows
+  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

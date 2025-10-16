@@ -1,0 +1,15 @@
+name: country_code_picker
+description: A customised country code picker.
+version: 3.0.0
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"  # Adjust according to the package's Dart SDK requirements
+
+dependencies:
+  flutter:
+    sdk: flutter
+flutter:
+  assets:
+    - flags/
+
+  # If there are any other dependencies the package uses, include them here.
