@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -63,14 +62,6 @@ class _CustomMultipleSelectorHorizontalState
           onTap: _toggleDropdown,
           child: Container(
             decoration: BoxDecoration(border: Border()
-                // borderRadius: BorderRadius.circular(8),
-                // boxShadow: const [
-                //   BoxShadow(
-                //     color: CommonColors.yellow,
-                //     blurRadius: 5,
-                //     offset: Offset(0, 2),
-                //   ),
-                // ],
                 ),
             child: CompositedTransformTarget(
               link: _layerLink,
@@ -96,11 +87,6 @@ class _CustomMultipleSelectorHorizontalState
                     color: Colors.transparent,
                     child: Row(
                       children: [
-                        // Container(
-                        //   width: 12.minSp,
-                        //
-                        //   color: CommonColors.yellow,
-                        // ),
                         Expanded(
                           child: BreadCrumb(
                             items: _buildBreadcrumbItems(context,
@@ -170,7 +156,6 @@ class _CustomMultipleSelectorHorizontalState
     return OverlayEntry(
       builder: (context2) => Stack(
         children: [
-          // This Positioned.fill widget will intercept taps outside of the dropdown
           Positioned.fill(
             child: GestureDetector(
               onTap: _closeDropdown,
@@ -235,7 +220,7 @@ class _CustomMultipleSelectorHorizontalState
 
     for (int index = 1; index < selectedFilters.length; index++) {
       final filter = selectedFilters[index];
-      if (filter != null && filter.isNotEmpty) {
+      if (filter.isNotEmpty) {
         breadcrumbItems.add(
           BreadCrumbItem(
             content: Text(
@@ -556,7 +541,7 @@ class _CustomMultipleSelectorHorizontal2State
     BuildContext context, DashboardBloc dashboardBloc) {
     final selectedFilters = dashboardBloc.currentFilters;
 
-    if (selectedFilters.isEmpty || selectedFilters.every((f) => f == null)) {
+    if (selectedFilters.isEmpty) {
       return [
         BreadCrumbItem(
           content: Text(
@@ -571,10 +556,10 @@ class _CustomMultipleSelectorHorizontal2State
     }
 
     return selectedFilters
-        .where((f) => f != null && f!.isNotEmpty)
+        .where((f) => f.isNotEmpty)
         .map((f) => BreadCrumbItem(
               content: Text(
-                f!.toUpperCase(),
+                f.toUpperCase(),
                 style: GoogleFonts.robotoMono(
                   fontSize: ThemeNotifier.small.minSp,
                   color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,

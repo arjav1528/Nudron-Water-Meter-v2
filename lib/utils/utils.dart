@@ -2,7 +2,7 @@ class Utils {
   static List<dynamic> sortTableDataByMonthDescending(
       List<dynamic>? tableData) {
     if (tableData == null) return [];
-    if (tableData!.length < 2 || tableData[1].isEmpty) return tableData;
+    if (tableData.length < 2 || tableData[1].isEmpty) return tableData;
 
     List<dynamic> data = tableData[1];
 
@@ -75,40 +75,4 @@ class Utils {
     }
   }
 
-  // static String lastSeenFromMilliseconds(dynamic milliseconds) {
-  //   try {
-  //     if (milliseconds == null || milliseconds.toString().isEmpty) {
-  //       return "";
-  //     }
-  //
-  //     // Convert to integer
-  //     int ms = (milliseconds is int)
-  //         ? milliseconds
-  //         : int.tryParse(milliseconds.toString()) ?? 0;
-  //
-  //     DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(ms);
-  //     Duration diff = DateTime.now().difference(timestamp);
-  //
-  //     // Extract time components
-  //     int years = diff.inDays ~/ 365;
-  //     int months = (diff.inDays % 365) ~/ 30;
-  //     int days = (diff.inDays % 365) % 30;
-  //     int hours = diff.inHours % 24;
-  //     int minutes = diff.inMinutes % 60;
-  //     int seconds = diff.inSeconds % 60;
-  //
-  //     List<String> parts = [];
-  //
-  //     if (years > 0) parts.add("$years yr");
-  //     if (months > 0) parts.add("$months mo");
-  //     if (days > 0) parts.add("$days dy");
-  //     if (hours > 0) parts.add("$hours hr");
-  //     if (minutes > 0) parts.add("$minutes min");
-  //     // if (seconds > 0) parts.add("$seconds sec");
-  //
-  //     return parts.isEmpty ? "Just now" : "${parts.join(" ")}";
-  //   } catch (e) {
-  //     return "Invalid date";
-  //   }
-  // }
 }

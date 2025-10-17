@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/main.dart';
 import 'package:watermeter2/utils/pok.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum AlertType { success, error, warning, info }
 

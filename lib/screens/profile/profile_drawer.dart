@@ -22,10 +22,8 @@ import '../../utils/toggle_button.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/customTextField.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/password_controller.dart';
 import 'active_devices.dart';
-import 'authenticator.dart';
 import 'country_code_picker.dart';
 import 'two_factor_disabled.dart';
 
@@ -47,8 +45,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   var oldPasswordController = ObscuringTextEditingController();
   var confirmNewPasswordController = ObscuringTextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _activationCodeController =
-      TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   TextEditingController emailOtpFieldController = TextEditingController();
@@ -56,9 +52,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   TextEditingController deleteConfirmationFieldController = TextEditingController();
   bool deleteAccountVisible = false;
 
-  // late String oldPhone;
-  // late String oldEmail;
-  // late String oldName;
 
   @override
   void initState() {
@@ -102,20 +95,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     confirmNewPasswordController.clear();
   }
 
-  // bool emailChanged() {
-  //   return _emailController.text !=
-  //       BlocProvider.of<HomeBloc>(context, listen: false).userInfo.email;
-  // }
-  //
-  // getPhoneNumberFull() {
-  //   return (selectedCountryCode?.dialCode ?? '') + (_phoneController.text);
-  // }
-  //
-  // bool phoneChanged() {
-  //   print("Phone number is ${getPhoneNumberFull()}");
-  //   return getPhoneNumberFull() !=
-  //       BlocProvider.of<HomeBloc>(context, listen: false).userInfo.phone;
-  // }
 
   bool emailChanged() {
     return _emailController.text !=
@@ -255,7 +234,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                 textColor: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .drawerHeadingColor,
-                                // text: "EEFWEFEW",
                                 borderColor:
                                     Provider.of<ThemeNotifier>(context)
                                         .currentTheme
@@ -300,7 +278,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             .digitsOnly,
                                       ],
                                       prefixIcon: Container(
-                                        // width: 60.w,
                                         padding:
                                             EdgeInsets.only(left: 16.w - 8),
                                         decoration: const BoxDecoration(
@@ -309,10 +286,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               bottomLeft: Radius.circular(10),
                                             ),
                                             color: Colors.transparent),
-                                        // width: 42.w,
-                                        // height: 51.h,
                                         child: CountryCodePicker2(
-                                          // key: UniqueKey(),
                                           refreshPhoneCode: refreshPhoneCode,
                                           dropDownColor:
                                               Provider.of<ThemeNotifier>(
@@ -333,14 +307,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                           },
                                           getPhoneNumberWithoutCountryCode:
                                               (String phoneNumber) async {
-                                            // print("This is executed");
                                             await Future.delayed(
                                                 const Duration(
                                                     milliseconds: 100));
                                             _phoneController.text =
                                                 phoneNumber;
                                           },
-                                          // isEditable: false,
                                           initialSelection:
                                               _phoneController.text,
                                         ),
@@ -447,7 +419,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     textColor: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .drawerHeadingColor,
-                                    // text: "EEFWEFEW",
                                     borderColor:
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
@@ -481,7 +452,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     textColor: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .drawerHeadingColor,
-                                    // text: "EEFWEFEW",
                                     borderColor:
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
@@ -562,7 +532,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     textColor: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .drawerHeadingColor,
-                                    // text: "EEFWEFEW",
                                     borderColor:
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
@@ -654,7 +623,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     textColor: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .drawerHeadingColor,
-                                    // text: "EEFWEFEW",
                                     borderColor:
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme

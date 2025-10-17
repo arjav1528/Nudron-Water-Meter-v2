@@ -9,7 +9,6 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../services/app_state_service.dart';
 import '../../utils/alert_message.dart';
-import '../../utils/loader.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import 'authenticator.dart';

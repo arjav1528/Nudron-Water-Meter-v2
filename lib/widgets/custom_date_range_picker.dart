@@ -8,7 +8,6 @@ import 'package:date_picker_plus/date_picker_plus.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../utils/pok.dart';
 import '../../widgets/chamfered_text_widget.dart';
-import '../../widgets/dialog_header.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../utils/alert_message.dart';
@@ -202,7 +201,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
       final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
       final currentTheme = themeNotifier.currentTheme;
-      final barrierColor = Provider.of<ThemeNotifier>(context, listen: false).currentTheme.dialogBG;
 
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
         context: context,

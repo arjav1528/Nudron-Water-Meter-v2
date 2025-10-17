@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:watermeter2/utils/pok.dart';
 import '../../api/auth_service.dart';
 import '../../constants/theme2.dart';
-import '../../services/app_state_service.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 

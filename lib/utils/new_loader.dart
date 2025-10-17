@@ -54,32 +54,3 @@ class LoaderUtility {
   }
 }
 
-// LoaderUtility.showLoader(
-// context,
-// LoginPostRequests.signUp(
-// _activationCodeController
-//     .text,
-// _nameController.text,
-// _emailController.text,
-// selectedCountryCode!
-//     .dialCode! +
-// _phoneController.text))
-//     .then((value) {
-// CustomAlert.showCustomscaffoldMessenger(
-// context,
-// "Verification code sent to your email address and phone number",
-// AlertType.info);
-// Navigator.of(context).push(
-// MaterialPageRoute(
-// builder: (context) => SignupPage2(
-// code:
-// _activationCodeController
-//     .text)));
-// }).catchError((e) {
-// CustomAlert.showCustomscaffoldMessenger(
-// context,
-// e.toString(),
-// AlertType.error);
-// return;
-// });
-// }

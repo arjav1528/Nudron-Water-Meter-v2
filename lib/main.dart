@@ -20,7 +20,6 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Platform-specific initialization
   if (PlatformUtils.isDesktop) {
     await DesktopInit.initialize();
   } else if (PlatformUtils.isMobile) {
@@ -67,12 +66,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine design size based on platform
     Size designSize;
     if (PlatformUtils.isMobile) {
-      designSize = const Size(430, 881.55); // Mobile
+      designSize = const Size(430, 881.55);
     } else {
-      designSize = const Size(1920, 1080); // Desktop
+      designSize = const Size(1920, 1080);
     }
 
     return ScreenUtilInit(

@@ -1,4 +1,3 @@
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +10,6 @@ import 'package:watermeter2/utils/pok.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
-import '../../utils/alert_message.dart';
-import '../../utils/new_loader.dart';
 import '../../widgets/data_grid_widget.dart';
 class DevicesPage extends StatefulWidget {
   const DevicesPage({super.key});
@@ -49,12 +46,10 @@ class _DevicesPageState extends State<DevicesPage> {
       },
       builder: (context, state){
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-        final currentProject = dashboardBloc.currentFilters.isNotEmpty &&
-            dashboardBloc.currentFilters.first != null
+        final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
 
-        debugPrint("Current Project: $currentProject");
 
         return GestureDetector(
           onTap: () {

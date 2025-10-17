@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:watermeter2/main.dart';
 
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
