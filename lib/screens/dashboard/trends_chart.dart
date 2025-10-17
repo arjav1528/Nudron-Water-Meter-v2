@@ -368,15 +368,8 @@ class _MonthlyChartState extends State<MonthlyChart> {
       colorIndex++;
     });
 
-    print('All Entries:');
     allEntries.forEach((year, entries) {
-      print('Year: $year');
       for (var entry in entries) {
-        print('  $entry');
-        print(entry.usages);
-        print(entry.alerts);
-        print(entry.x);
-        print(entry.x2);
       }
     });
 
@@ -387,19 +380,9 @@ class _MonthlyChartState extends State<MonthlyChart> {
 
   @override
   Widget build(BuildContext context) {
-    print("Monthly chart building");
-    print(monthlySeries);
     for (var series in monthlySeries) {
       int i = 1;
-      print('$series');
       for (var entry in series.dataSource!) {
-        print('  --------------');
-        print('   $entry');
-        print('   $i');
-        print('    ${entry.x}');
-        print('    ${entry.x2}');
-        print('    ${entry.usages}');
-        print('    ${entry.alerts}');
 
         i++;
       }
@@ -562,7 +545,6 @@ class _DailyChartState extends State<DailyChart> {
             x: NudronChartMap.getPreviousDate(day, indexMonth),
             x2: NudronChartMap.getYearOfPreviousMonth(indexMonth, year),
           ));
-          print("Added dummy daily data");
           check++;
         }
 
@@ -575,7 +557,6 @@ class _DailyChartState extends State<DailyChart> {
             x: dayLabel,
             x2: year.toString(),
           ));
-          print("Added actual daily data");
           check++;
           // Update maximum values
           maxAlerts = dayData.alerts > maxAlerts ? dayData.alerts : maxAlerts;
@@ -583,15 +564,8 @@ class _DailyChartState extends State<DailyChart> {
         }
       }
 
-      print('All Entries Daily:');
       allEntries.forEach((year, entries) {
-        print('Year: $year');
         for (var entry in entries) {
-          print('  $entry');
-          print(entry.usages);
-          print(entry.alerts);
-          print(entry.x);
-          print(entry.x2);
         }
       });
 
@@ -636,7 +610,6 @@ class _DailyChartState extends State<DailyChart> {
     int seriesIndex = 0;
 
     allEntries.forEach((year, entries) {
-      print("Adding column series");
       // Column series for alerts
       series.add(ColumnSeries<Entries, String>(
         animationDuration: animationDuration,
@@ -675,19 +648,9 @@ class _DailyChartState extends State<DailyChart> {
     // TODO: Make the adjustment for daily data when only one data point is available
 
     // Add a transparent series to ensure all days are shown
-    print("Daily chart building");
-    print(series);
     for (var ser in series) {
       int i = 1;
-      print('$ser');
       for (var entry in ser.dataSource!) {
-        print('  --------------');
-        print('   $entry');
-        print('   $i');
-        print('    ${entry.x}');
-        print('    ${entry.x2}');
-        print('    ${entry.usages}');
-        print('    ${entry.alerts}');
 
         i++;
       }
@@ -723,7 +686,7 @@ class _DailyChartState extends State<DailyChart> {
                             .splashColor,
                         splashFactory: InkRipple.splashFactory,
                         radius: 20.minSp,
-                        child: Container(
+                        child: SizedBox(
                           height: 41.minSp,
                           width: 41.minSp,
                           child: Icon(
@@ -782,7 +745,6 @@ class _TrendsChartState extends State<TrendsChart> {
     try {
       await BlocProvider.of<DashboardBloc>(context).captureSS();
     } catch (e) {
-      print(e);
     }
   }
 
@@ -883,7 +845,7 @@ class BasicChart extends StatelessWidget {
                                             .splashColor,
                                     splashFactory: InkRipple.splashFactory,
                                     radius: 20.minSp,
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 41.minSp,
                                       width: 41.minSp,
                                       child: Icon(
@@ -928,7 +890,7 @@ class BasicChart extends StatelessWidget {
                                               .splashColor,
                                       splashFactory: InkRipple.splashFactory,
                                       radius: 20.minSp,
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 41.minSp,
                                         width: 41.minSp,
                                         child: Icon(

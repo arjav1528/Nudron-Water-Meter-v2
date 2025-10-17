@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watermeter2/bloc/dashboard_bloc.dart';
 import 'package:watermeter2/bloc/auth_bloc.dart';
@@ -17,6 +16,8 @@ import 'package:watermeter2/constants/app_config.dart';
 import 'package:watermeter2/screens/auth/login_screen.dart';
 import 'package:watermeter2/utils/loader.dart';
 
+import 'utils/alert_message.dart';
+
 final mainNavigatorKey = GlobalKey<NavigatorState>();
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -32,7 +33,11 @@ void main() async {
   try {
     await ExcelHelper.deleteOldExportFiles();
   } catch (e) {
-    print('Warning: Could not delete old export files: $e');
+    CustomAlert.showCustomScaffoldMessenger(
+      mainNavigatorKey.currentContext!,
+      "Error deleting old export files: $e",
+      AlertType.error,
+    );
   }
   final themeProvider = ThemeNotifier();
   await themeProvider.readThemeMode();
@@ -94,9 +99,9 @@ class _MyAppState extends State<MyApp> {
             scaffoldMessengerKey: scaffoldMessengerKey,
             builder: (context, child) {
               return MediaQuery(
-                child: child!,
                 data: MediaQuery.of(context)
                     .copyWith(textScaler: TextScaler.linear(1.0)),
+                child: child!,
               );
             },
             routes: {

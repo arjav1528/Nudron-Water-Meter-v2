@@ -5,24 +5,24 @@ import 'package:watermeter2/utils/pok.dart';
 
 import '../constants/theme2.dart';
 class ToggleButtonCustom extends StatefulWidget {
-  List<String> tabs;
-  Function onTap;
-  Color? backgroundColor;
-  Color selectedTextColor;
-  Color unselectedTextColor;
-  double width;
-  double height;
-  double smallerWidth;
-  double smallerHeight;
-  double verticalGap;
-  double leftGap;
-  double? fontSize;
-  Color tabColor;
-  int index;
-  Color tabColor2;
-  bool dontChangeImmediately;
+  final List<String> tabs;
+  final Function onTap;
+  final Color? backgroundColor;
+  final Color selectedTextColor;
+  final Color unselectedTextColor;
+  final double width;
+  final double height;
+  final double smallerWidth;
+  final double smallerHeight;
+  final double verticalGap;
+  final double leftGap;
+  final double? fontSize;
+  final Color tabColor;
+  final int index;
+  final Color tabColor2;
+  final bool dontChangeImmediately;
 
-  ToggleButtonCustom({
+  const ToggleButtonCustom({
     super.key,
     required this.tabs,
     required this.onTap,

@@ -33,8 +33,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
   TextEditingController otpFieldController = TextEditingController();
 
   printdevicehash() async {
-    String a = await SmsAutoFill().getAppSignature;
-    print("Getting my device code: $a. ");
+    await SmsAutoFill().getAppSignature;
   }
 
   @override
@@ -73,31 +72,29 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                   ),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.arrow_back,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .basicAdvanceTextColor),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                          SizedBox(width: 10.w),
-                          Text(
-                            "TWO-FACTOR AUTHENTICATION",
-                            style: GoogleFonts.robotoMono(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.arrow_back,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
-                                  .basicAdvanceTextColor,
-                              fontSize: ThemeNotifier.large.minSp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                  .basicAdvanceTextColor),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        SizedBox(width: 10.w),
+                        Text(
+                          "TWO-FACTOR AUTHENTICATION",
+                          style: GoogleFonts.robotoMono(
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .basicAdvanceTextColor,
+                            fontSize: ThemeNotifier.large.minSp,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
@@ -230,7 +227,6 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
 
   @override
   void codeUpdated() {
-    print("Code updated: $code");
     setState(() {
       if (code != null) {
         otpFieldController.text = code!;

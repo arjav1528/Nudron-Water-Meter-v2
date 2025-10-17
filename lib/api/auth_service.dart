@@ -44,14 +44,12 @@ class LoginPostRequests {
               await InAppUpdate.startFlexibleUpdate();
             }
           } catch (e) {
-            print('Failed to update the app: $e');
             rethrow;
           }
         }
       } catch (e) {
         // print("Failed to check for update: $e");
         await deleteDataAndLogout();
-        print("Error: $e");
         throw CustomException(
             "Redirecting to login page.. Please update app and login again");
       }
@@ -86,7 +84,6 @@ class LoginPostRequests {
       String? biometricEnabled = await secureStorage.read(key: 'biometric');
       NudronRandomStuff.isBiometricEnabled.value = biometricEnabled == 'true';
     } catch (e) {
-      print(e);
     }
   }
 
@@ -116,7 +113,6 @@ class LoginPostRequests {
         if (kDebugMode) {
           print("not yet expired but expiring. will get after 10s.");
         }
-        print("Start");
         Future.delayed(const Duration(seconds: 10), () async {
           if (kDebugMode) {
             print("Getting access token2 after 10s.");
@@ -188,7 +184,6 @@ class LoginPostRequests {
     try {
       await SmsAutoFill().listenForCode();
     } catch (e) {
-      print("Error in parsing the otp.. $e");
     }
 
     if (response == '0') {
@@ -242,11 +237,8 @@ class LoginPostRequests {
       await twoFAToggleVal(false);
     } else if (splitResponse.length == 1) {
       try {
-        print("Init autofill");
         await SmsAutoFill().listenForCode();
-        print("Init autofill done");
       } catch (e) {
-        print("Error in parsing the otp.. $e");
       }
       await BiometricHelper.checkAndStoreBiometric(email, password);
       return response;
@@ -543,7 +535,6 @@ class LoginPostRequests {
         throw CustomException('Redirecting to login page.. Please login again');
       } else {
         String responseBody = await response.stream.bytesToString();
-        print(responseBody);
         throw CustomException(responseBody);
       }
     } on TimeoutException {

@@ -18,47 +18,44 @@ class ActiveDevices extends StatelessWidget {
   Widget build(BuildContext context) {
     var sessions =
         BlocProvider.of<DashboardBloc>(context, listen: true).sessions;
-    return Container(
-      // color: Colors.green,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Text(
-          //   'Active Devices',
-          //   style: GoogleFonts.roboto(
-          //     fontSize: ThemeNotifier.large.minSp,
-          //     color: Provider.of<ThemeNotifier>(context)
-          //         .currentTheme
-          //         .basicAdvanceTextColor,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              sessions.length,
-              (index) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: index == 0 ? 0 : 8.h,
-                        bottom: (index == sessions.length - 1) ? 8.h : 8.h),
-                    child: SessionWidget(session: sessions[index]),
-                  ),
-                  // if (index != sessions.length - 1)
-                  Container(
-                    height: 1,
-                    color: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .basicAdvanceTextColor,
-                  ),
-                ],
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Text(
+        //   'Active Devices',
+        //   style: GoogleFonts.roboto(
+        //     fontSize: ThemeNotifier.large.minSp,
+        //     color: Provider.of<ThemeNotifier>(context)
+        //         .currentTheme
+        //         .basicAdvanceTextColor,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            sessions.length,
+            (index) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: index == 0 ? 0 : 8.h,
+                      bottom: (index == sessions.length - 1) ? 8.h : 8.h),
+                  child: SessionWidget(session: sessions[index]),
+                ),
+                // if (index != sessions.length - 1)
+                Container(
+                  height: 1,
+                  color: Provider.of<ThemeNotifier>(context)
+                      .currentTheme
+                      .basicAdvanceTextColor,
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

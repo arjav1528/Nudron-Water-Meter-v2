@@ -510,10 +510,8 @@ class _AutoLoginState extends State<AutoLogin> {
           // Login successful
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
-          
-          // Preload user info - the main app will handle navigation automatically
-          final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-          dashboardBloc.initUserInfo();
+
+          Navigator.of(context).pop();
         } else if (state is AuthTwoFactorRequired) {
           // Two-factor authentication required
           Navigator.of(context).push(MaterialPageRoute(

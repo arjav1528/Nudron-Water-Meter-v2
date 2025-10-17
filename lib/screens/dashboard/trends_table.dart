@@ -16,23 +16,20 @@ class TrendsTable extends StatefulWidget {
 class _TrendsTableState extends State<TrendsTable> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ValueListenableBuilder<int>(
-          valueListenable: NudronChartMap.selectedMonth,
-          builder: (context, value, child) {
-            return DataGridWidget(
-              data: Utils.sortTableDataByMonthDescending(
-                      BlocProvider.of<DashboardBloc>(context)
-                          .nudronChartData
-                          ?.getCurrentTableData()) ??
-                  [],
-              exportToIncludeWholeData: true,
-              columnsToTakeHeaderWidthAndExtraPadding: {
-                0: 20,
-              },
-              key: UniqueKey(),
-            );
-          }),
-    );
+    return ValueListenableBuilder<int>(
+        valueListenable: NudronChartMap.selectedMonth,
+        builder: (context, value, child) {
+          return DataGridWidget(
+            data: Utils.sortTableDataByMonthDescending(
+                    BlocProvider.of<DashboardBloc>(context)
+                        .nudronChartData
+                        ?.getCurrentTableData()),
+            exportToIncludeWholeData: true,
+            columnsToTakeHeaderWidthAndExtraPadding: {
+              0: 20,
+            },
+            key: UniqueKey(),
+          );
+        });
   }
 }

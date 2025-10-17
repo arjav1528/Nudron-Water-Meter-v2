@@ -6,15 +6,16 @@ import 'package:watermeter2/utils/pok.dart';
 import '../constants/theme2.dart';
 
 class SmallButton extends StatefulWidget {
-  SmallButton(
-      {super.key,
-      required this.onPressed,
-      required this.iconData,
-      required this.bgColor});
+  const SmallButton({
+    super.key,
+    required this.onPressed,
+    required this.iconData,
+    required this.bgColor,
+  });
 
-  Function() onPressed;
-  IconData iconData;
-  Color bgColor;
+  final Function() onPressed;
+  final IconData iconData;
+  final Color bgColor;
 
   @override
   State<SmallButton> createState() => _SmallButtonState();

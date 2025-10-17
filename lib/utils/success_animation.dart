@@ -4,8 +4,8 @@ import '../utils/pok.dart';
 
 
 class SuccessAnimation extends StatefulWidget {
-  bool isFailure;
-   SuccessAnimation({super.key, this.isFailure=false});
+  final bool isFailure;
+  const SuccessAnimation({super.key, this.isFailure = false});
   @override
   _SuccessAnimationState createState() => _SuccessAnimationState();
 }
