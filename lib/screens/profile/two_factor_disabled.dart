@@ -17,9 +17,9 @@ import '../../utils/biometric_helper.dart';
 import '../../utils/pok.dart';
 
 class TwoFADisabled extends StatefulWidget {
-  TwoFADisabled({super.key, required this.closeFunction});
+  const TwoFADisabled({super.key, required this.closeFunction});
 
-  Function closeFunction;
+  final Function closeFunction;
 
   @override
   State<TwoFADisabled> createState() => _TwoFADisabledState();
@@ -190,7 +190,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             icon: Icons.message,
             title: "Text message (SMS)",
             subtitle:
-                "Receive verification codes via text message. We'll send a code to ${BlocProvider.of<DashboardBloc>(context).userInfo.phone ?? "your number"}",
+                "Receive verification codes via text message. We'll send a code to ${BlocProvider.of<DashboardBloc>(context).userInfo.phone}",
             onTap: () async {
               setState(() {
                 showCancelConfirmSms = !showCancelConfirmSms;
@@ -221,7 +221,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                       LoaderUtility.showLoader(
                               context, LoginPostRequests.enableTwoFactorAuth(2))
                           .then((s) async {
-                        print("SMS ENABLED");
+                        debugPrint("SMS ENABLED");
                         CustomAlert.showCustomScaffoldMessenger(
                             mainNavigatorKey.currentContext!,
                             "Two factor authentication (SMS) enabled",
@@ -233,7 +233,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                             e.toString(),
                             AlertType.error);
                       })
-                        ..whenComplete(
+                        .whenComplete(
                           () {
                             reset();
                             widget.closeFunction();
@@ -252,7 +252,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
 }
 
 class CustomtwofacRow extends StatefulWidget {
-  CustomtwofacRow(
+  const CustomtwofacRow(
       {super.key,
       required this.icon,
       required this.title,
@@ -260,11 +260,11 @@ class CustomtwofacRow extends StatefulWidget {
       required this.onTap,
       this.customRichText});
 
-  IconData icon;
-  String title;
-  String subtitle;
-  Function onTap;
-  RichText? customRichText;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Function onTap;
+  final RichText? customRichText;
 
   @override
   State<CustomtwofacRow> createState() => _CustomtwofacRowState();
@@ -331,9 +331,9 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
 }
 
 class BiometricDisabled extends StatefulWidget {
-  BiometricDisabled({super.key, required this.closeFunction});
+  const BiometricDisabled({super.key, required this.closeFunction});
 
-  Function closeFunction;
+  final Function closeFunction;
 
   @override
   State<BiometricDisabled> createState() => _BiometricDisabledState();

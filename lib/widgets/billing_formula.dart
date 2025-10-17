@@ -100,12 +100,12 @@ class _BillingFormulaState extends State<BillingFormula> {
 }
 
 class BillingFormulaDialog extends StatefulWidget {
-  BillingFormulaDialog({
+  const BillingFormulaDialog({
     super.key,
     required this.billingFormula,
   });
 
-  String? billingFormula;
+  final String? billingFormula;
 
   @override
   State<BillingFormulaDialog> createState() => _BillingFormulaDialogState();
@@ -119,9 +119,6 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
 
   @override
   void initState() {
-    if (widget.billingFormula == null) {
-      widget.billingFormula = "0<0";
-    }
     super.initState();
     _parseBillingFormula();
   }
@@ -135,7 +132,8 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
   }
 
   void _parseBillingFormula() {
-    List<String> parts = widget.billingFormula!.split('<');
+    String formula = widget.billingFormula ?? "0<0";
+    List<String> parts = formula.split('<');
     tiers = ['Fixed'];
 
     String prevThreshold = "0";
@@ -600,7 +598,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           text: "SUBMIT",
           onPressed: () {
             String newFormula = _buildBillingFormula();
-            // print("New formula: $newFormula");
+            // debugPrint("New formula: $newFormula");
             // return;
             LoaderUtility.showLoader(
               context,

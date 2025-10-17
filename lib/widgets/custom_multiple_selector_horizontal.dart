@@ -258,6 +258,23 @@ class _CustomMultipleSelectorHorizontalState
       }
     }
 
+    // Ensure we always return at least one breadcrumb item to prevent the assertion error
+    if (breadcrumbItems.isEmpty) {
+      breadcrumbItems.add(
+        BreadCrumbItem(
+          content: Text(
+            "NO FILTER SELECTED",
+            style: GoogleFonts.robotoMono(
+              fontSize: ThemeNotifier.small.minSp,
+              color: Provider.of<ThemeNotifier>(context)
+                  .currentTheme
+                  .basicAdvanceTextColor,
+            ),
+          ),
+        ),
+      );
+    }
+
     return breadcrumbItems;
   }
 

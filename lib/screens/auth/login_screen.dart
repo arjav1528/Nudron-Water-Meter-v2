@@ -18,7 +18,6 @@ import 'package:watermeter2/constants/theme2.dart';
 import 'package:watermeter2/utils/alert_message.dart';
 import 'package:watermeter2/utils/biometric_helper.dart';
 import 'package:watermeter2/utils/misc_functions.dart';
-import 'package:watermeter2/utils/new_loader.dart';
 import 'package:watermeter2/utils/toggle_button.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
@@ -212,8 +211,7 @@ class _SigninPageState extends State<SigninPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
-          // Show loading indicator
-          LoaderUtility.showLoader(context, Future.delayed(Duration.zero));
+          // Loading is handled by main.dart BlocBuilder - no need to show additional loader
         } else if (state is AuthAuthenticated) {
           // Login successful
           CustomAlert.showCustomScaffoldMessenger(
@@ -511,7 +509,9 @@ class _AutoLoginState extends State<AutoLogin> {
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
 
-          Navigator.of(context).pop();
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
         } else if (state is AuthTwoFactorRequired) {
           // Two-factor authentication required
           Navigator.of(context).push(MaterialPageRoute(
