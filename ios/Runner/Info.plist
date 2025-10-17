@@ -22,6 +22,51 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Excel Document</string>
+            <key>LSHandlerRank</key>
+            <string>Owner</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.microsoft.excel.xls</string>
+                <string>org.openxmlformats.spreadsheetml.sheet</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>PNG Image</string>
+            <key>LSHandlerRank</key>
+            <string>Owner</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.png</string>
+            </array>
+        </dict>
+    </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to save chart images if required.</string>
+    <key>NSDocumentsDirectoryUsageDescription</key>
+    <string>We need access to save and open exported Excel files</string>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+    <key>UIFileSharingEnabled</key>
+    <true/>
+    <key>NSFaceIDUsageDescription</key>
+    <string>We use Face ID to authenticate your login if enabled.</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.nudron.watermeter2</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>otpauth</string>
+            </array>
+        </dict>
+    </array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

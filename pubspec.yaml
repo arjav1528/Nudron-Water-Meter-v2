@@ -1,5 +1,5 @@
 name: watermeter2
-description: "A new Flutter project."
+description: "Unified Water Metering App for Mobile and Desktop Platforms"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 2.5.0+20
 
 environment:
-  sdk: ^3.9.2
+  sdk: '>=3.3.1 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -33,59 +33,72 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-  intl: ^0.19.0
-  provider: ^6.1.2
-  http: ^1.2.1
-  flutter_secure_storage: ^9.2.2
-  equatable: ^2.0.5
-  path_provider: ^2.1.3
-  permission_handler: ^11.3.1
-  device_info_plus: ^10.1.0
-  google_fonts: ^6.2.1
-  flutter_svg: ^2.0.10+1
-  logger: ^2.3.0 # Recommended for better logging
-
-  # State Management
-  flutter_bloc: ^8.1.5
-
-  # UI & Widgets
-  flutter_screenutil: ^5.9.3
+  cupertino_icons: ^1.0.3
+  intl: any
+  connectivity_plus: any
+  provider: ^6.0.3 # State Management
+  http: any
+  flutter_secure_storage: any
   pin_code_fields: ^8.0.1
   loading_animation_widget: ^1.2.1
+  flutter_launcher_icons: ^0.13.1
+  url_launcher: ^6.2.6
   flutter_switch: ^0.3.2
   date_picker_plus: ^4.2.0
-  super_tooltip: ^2.0.8
-  flutter_breadcrumb: ^1.0.1
-  screenshot: ^3.0.0
-  
-  # Charts
-  syncfusion_flutter_charts: ^26.1.35
-  syncfusion_flutter_core: ^26.1.35
+  dropdown_button2:
+    path: ./local_packages/dropdown_button2
+  country_code_picker:
+    path: ./local_packages/country_code_picker
 
-  # Platform Specific / Integration
-  connectivity_plus: ^6.0.3
-  url_launcher: ^6.2.6
+  flutter_bloc: ^8.1.5
+  flutter_svg: ^2.0.10+1
+  vibration: ^2.0.0
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.2.1
   clipboard: ^0.1.3
   local_auth: ^2.3.0
+  super_tooltip: ^2.0.8
   sms_autofill: ^2.4.0
+  device_info_plus: ^10.1.2
+  flutter_breadcrumb: ^1.0.1
   excel: ^4.0.6
   open_file: ^3.3.2
+  syncfusion_flutter_charts: ^30.2.5
+  equatable: any
+  syncfusion_flutter_core: any
+  path_provider: any
+  permission_handler: ^11.3.1
   in_app_update: ^4.2.3
+  timeago: ^3.7.0
+  device_preview: ^1.2.0
+  screenshot: ^3.0.0
   window_manager: ^0.4.3 # Desktop-only
-
-
-  dropdown_button2: ^2.3.9
-  country_code_picker:
-      path: ./local_packages/country_code_picker
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
-  flutter_launcher_icons: ^0.13.1
-  build_runner: ^2.4.10
-  msix: ^3.16.7 # Windows packaging
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.12
+  msix: ^3.16.12 # Windows packaging
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+
+msix_config:
+  display_name: "Water Meter: IoT Platform"
+  publisher_display_name: Nudron IoT
+  identity_name: NudronIoT.WaterMeterIoTPlatform
+  publisher: CN=8FE2F31C-E1F8-43B3-9C3B-E15FE39392D0
+  msix_version: 2.5.0.0
+  languages: en-us
+  capabilities: internetClient
+  logo_path: assets/icons/app_icon.png
+  certificate_path: D:\Dev\Nudron-Flutter-Desktop\windows\packaging\nudron.pfx
+  certificate_password: Nudron2025
+  install_certificate: false
+  sign_msix: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

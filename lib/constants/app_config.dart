@@ -9,6 +9,3 @@ static Widget testScreen = Container();
   static bool skipAnyAuths = false;
   static bool isLargerTextField = false;
 }
-
-final mainNavigatorKey = GlobalKey<NavigatorState>();
-final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
