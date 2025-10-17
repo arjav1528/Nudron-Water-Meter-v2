@@ -8,7 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/utils/pok.dart';
 
-import '../../api/auth_service.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_state.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
@@ -180,7 +181,9 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   }
 
   void showProfileDrawer(BuildContext context) async {
-    if (!LoginPostRequests.isLoggedIn) return;
+    // Check if user is authenticated using AuthBloc
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    if (authBloc.state is! AuthAuthenticated) return;
 
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
 

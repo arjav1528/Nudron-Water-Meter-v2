@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:watermeter2/utils/pok.dart';
 import 'package:watermeter2/widgets/custom_app_bar.dart';
 import '../../api/auth_service.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_event.dart';
+import '../../bloc/auth_state.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
@@ -74,7 +77,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     phoneOtpFieldController.clear();
     clearPasswords();
     refreshPhoneCode.value = _phoneController.text;
-    refreshPhoneCode.notifyListeners();
   }
 
   CountryCode findCountry(String dialCode) {
@@ -152,23 +154,34 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticated) {
+          // User has been logged out, close the profile drawer
+          Navigator.of(context).pop();
+        } else if (state is AuthError) {
+          // Show error message
+          CustomAlert.showCustomScaffoldMessenger(
+            context, 
+            state.message, 
+            AlertType.error
+          );
+        }
       },
-      child: Scaffold(
-        appBar: CustomAppBar(
-                choiceAction: (value) {
-                  Navigator.of(context).pop();
-                },
-                isProfile: true,
-              ),
-        backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-        resizeToAvoidBottomInset: false,
-        body: BlocBuilder<DashboardBloc, DashboardState>(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+                  choiceAction: (value) {
+                    Navigator.of(context).pop();
+                  },
+                  isProfile: true,
+                ),
+          backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+          resizeToAvoidBottomInset: false,
+          body: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           if (current is UserInfoUpdate || current is UserInfoUpdate2) {
             initControllers();
@@ -490,21 +503,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             dynamicWidth: true,
                                             // width: 154.w,
                                             onPressed: () async {
-                                              LoaderUtility.showLoader(context,
-                                                      NudronRandomStuff.logout())
-                                                  .then((s) {
-                                                CustomAlert
-                                                    .showCustomScaffoldMessenger(
-                                                        context,
-                                                        "Logged out successfully!",
-                                                        AlertType.success);
-                                              }).catchError((e) {
-                                                CustomAlert
-                                                    .showCustomScaffoldMessenger(
-                                                        context,
-                                                        e.toString(),
-                                                        AlertType.error);
-                                              });
+                                              // Use the new AuthBloc for logout
+                                              BlocProvider.of<AuthBloc>(context).add(AuthLogout());
                                             },
                                             isRed: true,
                                           ),
@@ -576,23 +576,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   dynamicWidth: true,
                                                   // width: 154.w,
                                                   onPressed: () async {
-                                                    LoaderUtility.showLoader(
-                                                            context,
-                                                            LoginPostRequests
-                                                                .globalLogout())
-                                                        .then((s) {
-                                                      CustomAlert
-                                                          .showCustomScaffoldMessenger(
-                                                              context,
-                                                              "Logged out of all devices",
-                                                              AlertType.success);
-                                                    }).catchError((e) {
-                                                      CustomAlert
-                                                          .showCustomScaffoldMessenger(
-                                                              context,
-                                                              e.toString(),
-                                                              AlertType.error);
-                                                    });
+                                                    // Use the new AuthBloc for global logout
+                                                    BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
                                                   },
                                                   isRed: true,
                                                 ),
@@ -711,24 +696,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                         text: "CONFIRM",
                                                         onPressed: () {
                                                           if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
-                                                            LoaderUtility.showLoader(
-                                                                      context,
-                                                                      LoginPostRequests
-                                                                          .globalLogout())
-                                                                  .then((s) {
-                                                                CustomAlert
-                                                                    .showCustomScaffoldMessenger(
-                                                                        context,
-                                                                        "Logged out of all devices",
-                                                                        AlertType.success);
-                                                              }).catchError((e) {
-                                                                CustomAlert
-                                                                    .showCustomScaffoldMessenger(
-                                                                        context,
-                                                                        e.toString(),
-                                                                        AlertType.error);
-                                                              });
-                                                            
+                                                            // Use the new AuthBloc for global logout (delete account)
+                                                            BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
                                                           } else {
                                                             print("Delete confirmation failed");
                                                             CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
@@ -767,6 +736,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             );
           });
         }),
+        ),
       ),
     );
   }

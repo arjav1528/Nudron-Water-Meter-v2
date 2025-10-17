@@ -24,26 +24,32 @@ class TrendsChartCombined extends StatefulWidget {
 }
 
 class _TrendsChartCombinedState extends State<TrendsChartCombined> {
+  String? _lastProject;
+  
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DashboardBloc, DashboardState>(
       listenWhen: (previous, current) => 
         current is RefreshDashboard || current is ChangeDashBoardNav,
       listener: (context, state) {
-        if (mounted) {
-          setState(() {}); // Force rebuild when state changes
+        final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+        final currentProject = dashboardBloc.currentFilters.isNotEmpty
+          ? dashboardBloc.currentFilters.first
+          : null;
+        
+        // Only rebuild if project actually changed
+        if (mounted && _lastProject != currentProject) {
+          _lastProject = currentProject;
+          setState(() {});
         }
       },
       builder: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         
         // Check if we have any filters selected
-        final currentProject = dashboardBloc.currentFilters.isNotEmpty && 
-                             dashboardBloc.currentFilters.first != null
+        final currentProject = dashboardBloc.currentFilters.isNotEmpty
           ? dashboardBloc.currentFilters.first.toUpperCase()
           : "NO PROJECT SELECTED";
-
-          print("Current Project: $currentProject");
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,

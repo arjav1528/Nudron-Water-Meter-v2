@@ -14,7 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:watermeter2/bloc/dashboard_state.dart';
 import 'package:watermeter2/main.dart';
 
-import '../api/auth_service.dart';
+import '../services/auth_service.dart';
 import '../api/data_service.dart';
 import '../models/chartModels.dart';
 import '../models/filterAndSummaryForProject.dart';
@@ -337,10 +337,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           // Request storage permission
           await Permission.storage.request();
 
-          Directory? directory = await getApplicationDocumentsDirectory();
-          if (directory == null) {
-            throw Exception("Error: External storage directory not available");
-          }
+          Directory directory = await getApplicationDocumentsDirectory();
 
           String filePath = "${directory.path}/chart.png";
           File file = File(filePath);
@@ -352,7 +349,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         });
       } catch (e) {
         final errorMsg = "Error in capturing screenshot: ${e.toString()}";
-        print(errorMsg);
+        debugPrint(errorMsg);
         CustomAlert.showCustomScaffoldMessenger(
             mainNavigatorKey.currentContext!, errorMsg, AlertType.error);
       }
@@ -371,7 +368,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   List<String> currentFilters = [];
 
   refreshSummaryPage() {
-    print("OOPS I WAS HIT 1");
+    debugPrint("OOPS I WAS HIT 1");
     if (state is RefreshSummaryPage) {
       emit(RefreshSummaryPage2());
     } else {
@@ -380,7 +377,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   refreshDevicesPage() {
-    print("OOPS I WAS HIT 2");
+    debugPrint("OOPS I WAS HIT 2");
     if (state is RefreshDevicesPage) {
       emit(RefreshDevicesPage2());
     } else {
@@ -395,8 +392,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           "Please select a project in the TRENDS page first.");
     }
 
-    summaryData = await DataPostRequests.getBillingData(
-        project: project, monthNumber: month);
     selectedMonth = month;
 
     int baseYear = 2020 + (month) ~/ 12;
@@ -405,6 +400,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     final lastDay = DateTime(baseYear, baseMonth + 1, 0);
     selectedStartDate = firstDay;
     selectedEndDate = lastDay;
+
+    // Use cached data loading
+    await _loadSummaryDataWithCache();
     refreshSummaryPage();
   }
 
@@ -418,11 +416,22 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     int startDayNum = DataPostRequests.getDayNumberFromDate(startDate);
     int endDayNum = DataPostRequests.getDayNumberFromDate(endDate);
     
-    summaryData = await DataPostRequests.getBillingDataByDateRange(
-        project: project, startDayNum: startDayNum, endDayNum: endDayNum);
-
     selectedStartDate = startDate;
     selectedEndDate = endDate;
+
+    // Use cache for date range data
+    final cacheKey = 'summary_${project}_${startDayNum}_$endDayNum';
+    
+    if (_isCacheValid(cacheKey)) {
+      summaryData = _apiCache[cacheKey];
+    } else {
+      summaryData = await DataPostRequests.getBillingDataByDateRange(
+          project: project, startDayNum: startDayNum, endDayNum: endDayNum);
+      
+      _apiCache[cacheKey] = summaryData;
+      _cacheTimestamps[cacheKey] = DateTime.now();
+    }
+    
     refreshSummaryPage();
   }
 
@@ -433,40 +442,20 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           "Please select a project in the TRENDS page first.");
     }
 
-    var response = await DataPostRequests.getFilters(project: project);
-
-    if (response.length > 2 &&
-        response[2] is List &&
-        response[2].length > 1 &&
-        response[2][0] == "Activity") {
-      var activityData = response[2][1];
-
-      if (activityData is List) {
-        devicesData = activityData;
-        allDevices = activityData;
-      } else {
-        throw CustomException("Unexpected data format in Activity section.");
-      }
-    } else {
-      throw CustomException(
-          "Unexpected response format or missing Activity data.");
-    }
-    print("***************************");
-    print(devicesData);
-    print("____________________________");
-    print(allDevices);
+    // Use cached data loading
+    await _loadDevicesDataWithCache();
     refreshDevicesPage();
   }
 
   filterDevices(String query) {
-    print("Query is : " + query);
+    debugPrint("Query is : $query");
 
     List header = allDevices[0]; // Save the header
     List dataToFilter = allDevices[1]; // Get the data array to filter
 
     List filteredData = dataToFilter.where((device) {
       if (device is! List || device.length < 2) {
-        print("Invalid");
+        debugPrint("Invalid");
         return false;
       }
 
@@ -478,7 +467,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     devicesData = [header, filteredData];
 
-    print(devicesData);
+    debugPrint(devicesData);
     refreshDevicesPage();
   }
 
@@ -617,7 +606,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         "Data exported successfully to:\n$directory",
         AlertType.success,
       );
-      print("Data exported successfully to $path");
+      debugPrint("Data exported successfully to $path");
     } else {
       CustomAlert.showCustomScaffoldMessenger(
         mainNavigatorKey.currentContext!,
@@ -626,6 +615,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       );
     }
   }
+
+  // Cache for API responses to prevent duplicate calls
+  final Map<String, dynamic> _apiCache = {};
+  final Map<String, DateTime> _cacheTimestamps = {};
+  static const Duration _cacheExpiry = Duration(minutes: 5);
 
   Future<FilterAndSummaryForProject?> updateSelectedFilters(
       List<String?> filters, FilterAndSummaryForProject? filterData) async {
@@ -636,46 +630,150 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     try {
       // Remove dynamic tab update, always use static tabs
       await updateBottomNavTabs(project: currentFilters.first);
-      // print(MainDashboardPage.bottomNavTabs);
       emit(ChangeDashBoardNav());
     } catch (e) {
       CustomAlert.showCustomScaffoldMessenger(mainNavigatorKey.currentContext!,
           "Error in loading trends data : ${e.toString()}", AlertType.error);
-      return null; // Return null instead of just 'return'
-    }
-    await loadTrendsData(currentFilters.firstOrNull);
-    try {
-      await loadTrendsData(currentFilters.firstOrNull);
-    } catch (e) {
-      CustomAlert.showCustomScaffoldMessenger(mainNavigatorKey.currentContext!,
-          "Error in loading trends data : ${e.toString()}", AlertType.error);
-      return null; // Return null instead of just 'return'
+      return null;
     }
 
-    try {
-      if (toRefreshSummaryPage) {
-        await selectMonth(selectedMonth);
-      }
-    } catch (e) {
-      CustomAlert.showCustomScaffoldMessenger(mainNavigatorKey.currentContext!,
-          "Error in loading summary data : ${e.toString()}", AlertType.error);
-      return null; // Return null instead of just 'return'
+    // Load data in parallel to improve performance
+    final List<Future<void>> dataLoadingTasks = [];
+    
+    // Only load trends data once
+    if (currentFilters.isNotEmpty) {
+      dataLoadingTasks.add(_loadTrendsDataWithCache(currentFilters.firstOrNull));
+    }
+    
+    if (toRefreshSummaryPage) {
+      dataLoadingTasks.add(_loadSummaryDataWithCache());
+      dataLoadingTasks.add(_loadDevicesDataWithCache());
     }
 
+    // Execute all data loading tasks in parallel
     try {
-      if (toRefreshSummaryPage) {
-        await getDevicesData();
-      }
+      await Future.wait(dataLoadingTasks);
     } catch (e) {
       CustomAlert.showCustomScaffoldMessenger(mainNavigatorKey.currentContext!,
-          "Error in loading device data : ${e.toString()}", AlertType.error);
-      return null; // Return null instead of just 'return'
+          "Error in loading data : ${e.toString()}", AlertType.error);
+      return null;
     }
+
+    // Emit refresh states only once at the end
     refreshSummaryPage();
     refreshDashboard();
     
-    // Add explicit return statement at the end
     return filterData;
+  }
+
+  // Helper method to load trends data with caching
+  Future<void> _loadTrendsDataWithCache(String? project) async {
+    if (project == null) return;
+    
+    final cacheKey = 'trends_${project}_${currentFilters.length > 1 ? currentFilters.sublist(1).join('>') : ""}';
+    
+    if (_isCacheValid(cacheKey)) {
+      updateTrendsData(_apiCache[cacheKey]);
+      return;
+    }
+
+    try {
+      final data = await DataPostRequests.getChartData(
+          project: project,
+          selectedLevels: currentFilters.length > 1 ? currentFilters.sublist(1) : [""]);
+      
+      _apiCache[cacheKey] = data;
+      _cacheTimestamps[cacheKey] = DateTime.now();
+      updateTrendsData(data);
+    } catch (e) {
+      throw Exception("Error loading trends data: ${e.toString()}");
+    }
+  }
+
+  // Helper method to load summary data with caching
+  Future<void> _loadSummaryDataWithCache() async {
+    if (currentFilters.isEmpty) return;
+    
+    final cacheKey = 'summary_${currentFilters.first}_$selectedMonth';
+    
+    if (_isCacheValid(cacheKey)) {
+      summaryData = _apiCache[cacheKey];
+      return;
+    }
+
+    try {
+      summaryData = await DataPostRequests.getBillingData(
+          project: currentFilters.first, monthNumber: selectedMonth);
+      
+      _apiCache[cacheKey] = summaryData;
+      _cacheTimestamps[cacheKey] = DateTime.now();
+    } catch (e) {
+      throw Exception("Error loading summary data: ${e.toString()}");
+    }
+  }
+
+  // Helper method to load devices data with caching
+  Future<void> _loadDevicesDataWithCache() async {
+    if (currentFilters.isEmpty) return;
+    
+    final cacheKey = 'devices_${currentFilters.first}';
+    
+    if (_isCacheValid(cacheKey)) {
+      devicesData = _apiCache[cacheKey];
+      allDevices = _apiCache['${cacheKey}_all'];
+      return;
+    }
+
+    try {
+      var response = await DataPostRequests.getFilters(project: currentFilters.first);
+
+      if (response.length > 2 &&
+          response[2] is List &&
+          response[2].length > 1 &&
+          response[2][0] == "Activity") {
+        var activityData = response[2][1];
+
+        if (activityData is List) {
+          devicesData = activityData;
+          allDevices = activityData;
+          
+          _apiCache[cacheKey] = devicesData;
+          _apiCache['${cacheKey}_all'] = allDevices;
+          _cacheTimestamps[cacheKey] = DateTime.now();
+        } else {
+          throw CustomException("Unexpected data format in Activity section.");
+        }
+      } else {
+        throw CustomException("Unexpected response format or missing Activity data.");
+      }
+    } catch (e) {
+      throw Exception("Error loading devices data: ${e.toString()}");
+    }
+  }
+
+  // Check if cache is valid
+  bool _isCacheValid(String cacheKey) {
+    if (!_apiCache.containsKey(cacheKey) || !_cacheTimestamps.containsKey(cacheKey)) {
+      return false;
+    }
+    
+    final cacheTime = _cacheTimestamps[cacheKey]!;
+    return DateTime.now().difference(cacheTime) < _cacheExpiry;
+  }
+
+  // Clear cache when needed
+  void clearCache() {
+    _apiCache.clear();
+    _cacheTimestamps.clear();
+  }
+
+  // Clear cache for specific project
+  void clearProjectCache(String project) {
+    final keysToRemove = _apiCache.keys.where((key) => key.contains(project)).toList();
+    for (final key in keysToRemove) {
+      _apiCache.remove(key);
+      _cacheTimestamps.remove(key);
+    }
   }
 
   static Future<List<String>?> updateBottomNavTabs(
@@ -705,11 +803,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     //         .whereType<String>()
     //         .toList(); // Remove null values
     //   }
-    //   print("Updated bottomNavTabs: $bottomNavTabs");
+    //   debugPrint("Updated bottomNavTabs: $bottomNavTabs");
     //   MainDashboardPage.bottomNavTabs = bottomNavTabs;
-    //   return bottomNavTabs; // Debug print
+    //   return bottomNavTabs; // Debug debugPrint
     // } catch (e) {
-    //   print("Error fetching bottomNavTabs: $e");
+    //   debugPrint("Error fetching bottomNavTabs: $e");
     //   return ["project"];
     // }
   }
@@ -748,16 +846,23 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   selectProject(int selectedIndex) async {
     if (selectedIndex < projects.length && selectedIndex >= 0) {
-      if (projects[selectedIndex] == currentFilters.firstOrNull) {
+      final selectedProject = projects[selectedIndex];
+      
+      if (selectedProject == currentFilters.firstOrNull) {
         return filterData;
       }
       
+      // Clear cache for the previous project if switching projects
+      if (currentFilters.isNotEmpty && currentFilters.first != selectedProject) {
+        clearProjectCache(currentFilters.first);
+      }
+      
       // Reset bottom nav position to Project tab if clearing the project
-      if (selectedIndex == -1 || projects[selectedIndex] == null) {
+      if (selectedIndex == -1) {
         switchBottomNavPos(0); // Project tab
       }
       
-      return await getFiltersAndSummaryForProject(projects[selectedIndex]);
+      return await getFiltersAndSummaryForProject(selectedProject);
     }
     
     // If no project selected, ensure we're on the Project tab
@@ -773,7 +878,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   initUserInfo() async {
     try {
-      Map<dynamic, dynamic> json = await LoginPostRequests.tokenCheck();
+      Map<String, dynamic>? json = await AuthService.getUserInfo();
+      if (json == null) {
+        throw Exception("Failed to get user info");
+      }
+      
+      // Clear cache when user info is refreshed
+      clearCache();
+      
       this.projects.clear();
       this.sessions.clear();
       var projects = json["projects"];
@@ -791,8 +903,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       }
 
       userInfo = UserInfo.fromJson(json["profile"]);
-      String mfa = json["profile"]["multiFactor"] ?? '0';
-      await LoginPostRequests.twoFAToggleVal(mfa == 'app' || mfa == 'sms');
+      // Two-factor authentication is now handled by AuthService
     } catch (e) {
       throw ("Error in getting user info $e");
     }
@@ -818,7 +929,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   int bottomNavPos = 0;
 
   refreshDashboard() {
-    print("OOPS I WAS HIT 3");
+    debugPrint("OOPS I WAS HIT 3");
     if (state is RefreshDashboard) {
       emit(RefreshDashboard2());
     } else {
@@ -829,11 +940,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   loadInitialData() async {
     try {
       await initUserInfo();
-      LoginPostRequests.refreshListeners();
       emit(DashboardPageLoaded());
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        debugPrint(e as String?);
       }
       emit(DashboardPageError(message: e.toString()));
     }

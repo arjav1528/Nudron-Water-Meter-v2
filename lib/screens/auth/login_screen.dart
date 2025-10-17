@@ -7,18 +7,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/bloc/dashboard_bloc.dart';
+import 'package:watermeter2/bloc/auth_bloc.dart';
+import 'package:watermeter2/bloc/auth_event.dart';
+import 'package:watermeter2/bloc/auth_state.dart';
 import 'package:watermeter2/utils/pok.dart';
 
 import 'package:watermeter2/services/app_state_service.dart';
 import 'package:watermeter2/constants/app_config.dart';
-import 'package:watermeter2/main.dart';
 import 'package:watermeter2/constants/theme2.dart';
 import 'package:watermeter2/utils/alert_message.dart';
 import 'package:watermeter2/utils/biometric_helper.dart';
 import 'package:watermeter2/utils/misc_functions.dart';
 import 'package:watermeter2/utils/new_loader.dart';
 import 'package:watermeter2/utils/toggle_button.dart';
-import '../../api/auth_service.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/customTextField.dart';
@@ -208,9 +209,47 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoading) {
+          // Show loading indicator
+          LoaderUtility.showLoader(context, Future.delayed(Duration.zero));
+        } else if (state is AuthAuthenticated) {
+          // Login successful
+          CustomAlert.showCustomScaffoldMessenger(
+              context, "Successfully logged in!", AlertType.success);
+          
+          // Preload user info - the main app will handle navigation automatically
+          final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+          dashboardBloc.initUserInfo();
+        } else if (state is AuthTwoFactorRequired) {
+          // Two-factor authentication required
+          CustomAlert.showCustomScaffoldMessenger(
+              context,
+              "Please enter the code sent to your authenticator app/sms",
+              AlertType.info);
+          
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EnterTwoFacCode(
+                    referenceCode: state.refCode,
+                  )));
+        } else if (state is AuthError) {
+          // Show error message
+          CustomAlert.showCustomScaffoldMessenger(
+              context, state.message, AlertType.error);
+        } else if (state is AuthForgotPasswordSent) {
+          // Forgot password email sent
+          CustomAlert.showCustomScaffoldMessenger(
+              context, state.message, AlertType.info);
+          
+          setState(() {
+            openForgotPasswordButtons = false;
+          });
+        }
+      },
+      child: Container(
+        child: Column(
+          children: [
           Padding(
               padding: EdgeInsets.only(left: 35.w, right: 35.w),
               child: CustomTextField(
@@ -259,23 +298,9 @@ class _SigninPageState extends State<SigninPage> {
                         width: 130.w,
                         text: "SEND EMAIL",
                         onPressed: () async {
-                          LoaderUtility.showLoader(
-                                  context,
-                                  LoginPostRequests.forgotPassword(
-                                      emailController.text))
-                              .then((s) {
-                            CustomAlert.showCustomScaffoldMessenger(
-                                context,
-                                "Temporary password sent to your email",
-                                AlertType.info);
-
-                            setState(() {
-                              openForgotPasswordButtons = false;
-                            });
-                          }).catchError((e) {
-                            CustomAlert.showCustomScaffoldMessenger(
-                                context, e.toString(), AlertType.error);
-                          });
+                          // Trigger forgot password using AuthBloc
+                          final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+                          authBloc.add(AuthForgotPassword(email: emailController.text));
                         },
                       ),
                     ],
@@ -350,18 +375,17 @@ class _SigninPageState extends State<SigninPage> {
                           // height: 58.h,
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
+                            
+                            // Validate inputs
                             if (ConfigurationCustom.skipAnyAuths == false) {
-                              if (emailController.text.isEmpty ||
-                                  getPassword().isEmpty) {
+                              if (emailController.text.isEmpty || getPassword().isEmpty) {
                                 CustomAlert.showCustomScaffoldMessenger(
                                     context,
                                     "Please Enter Email and Password",
                                     AlertType.warning);
                                 return;
                               }
-                              final bool emailValid =
-                                  MiscellaneousFunctions.isEmailValid(
-                                      emailController.text);
+                              final bool emailValid = MiscellaneousFunctions.isEmailValid(emailController.text);
                               if (emailValid == false) {
                                 CustomAlert.showCustomScaffoldMessenger(
                                     context,
@@ -370,45 +394,13 @@ class _SigninPageState extends State<SigninPage> {
                                 return;
                               }
                             }
-                            LoaderUtility.showLoader(
-                              context,
-                              LoginPostRequests.login(
-                                emailController.text,
-                                getPassword(),
-                              ),
-                            ).then((twoFacRefCode) async {
-                              // The loader has been dismissed at this point
-                              // Handle the login result here
-                              if (twoFacRefCode != null) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                    context,
-                                    "Please enter the code sent to your authenticator app/sms",
-                                    AlertType.info);
 
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => EnterTwoFacCode(
-                                          referenceCode: twoFacRefCode!,
-                                        )));
-                                // Login successful, proceed further
-                              } else {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                    context,
-                                    "Successfully logged in!",
-                                    AlertType.success);
-
-                                LoginPostRequests.isLoggedIn = true;
-
-                                // Preload user info before navigating to dashboard
-                                final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-                                await dashboardBloc.initUserInfo();
-
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    "/", (route) => false);
-                              }
-                            }).catchError((error) {
-                              CustomAlert.showCustomScaffoldMessenger(
-                                  context, error.toString(), AlertType.error);
-                            });
+                            // Trigger login using AuthBloc
+                            final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+                            authBloc.add(AuthLogin(
+                              email: emailController.text,
+                              password: getPassword(),
+                            ));
                           },
                         ),
                       ),
@@ -443,10 +435,8 @@ class _SigninPageState extends State<SigninPage> {
                             ),
                           ),
                           onPressed: () async {
-                            emailBiometricSaved =
-                                await BiometricHelper.isBiometricEnabled();
-                            if (emailBiometricSaved == null ||
-                                emailBiometricSaved!.isEmpty) {
+                            emailBiometricSaved = await BiometricHelper.isBiometricEnabled();
+                            if (emailBiometricSaved == null || emailBiometricSaved!.isEmpty) {
                               CustomAlert.showCustomScaffoldMessenger(
                                   context,
                                   "No biometric data saved. Please enable in the profile section on login",
@@ -492,6 +482,7 @@ class _SigninPageState extends State<SigninPage> {
           // SizedBox(height: 38.h),
         ],
       ),
+    ),
     );
   }
 }
@@ -513,12 +504,35 @@ class _AutoLoginState extends State<AutoLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-      ),
-      backgroundColor:
-          Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          // Login successful
+          CustomAlert.showCustomScaffoldMessenger(
+              context, "Successfully logged in!", AlertType.success);
+          
+          // Preload user info - the main app will handle navigation automatically
+          final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+          dashboardBloc.initUserInfo();
+        } else if (state is AuthTwoFactorRequired) {
+          // Two-factor authentication required
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EnterTwoFacCode(
+                    referenceCode: state.refCode,
+                  )));
+        } else if (state is AuthError) {
+          // Show error message
+          CustomAlert.showCustomScaffoldMessenger(
+              context, state.message, AlertType.error);
+          Navigator.of(context).pop();
+        }
+      },
+      child: Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0.0),
+        ),
+        backgroundColor:
+            Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -585,73 +599,9 @@ class _AutoLoginState extends State<AutoLogin> {
                 CustomButton(
                   text: "YES",
                   onPressed: () async {
-                    // Initiating biometric authentication
-                    BiometricHelper biometricHelper = BiometricHelper();
-
-                    if (!await biometricHelper.isBiometricSetup()) {
-                      CustomAlert.showCustomScaffoldMessenger(
-                        context,
-                        "Biometric authentication not available. Please enable biometrics on your device first.",
-                        AlertType.error,
-                      );
-                      Navigator.of(context).pop();
-                      return;
-                    }
-
-                    bool isCorrectBiometric =
-                        await biometricHelper.isCorrectBiometric();
-
-                    if (!isCorrectBiometric) {
-                      CustomAlert.showCustomScaffoldMessenger(
-                        context,
-                        "Biometric authentication failed",
-                        AlertType.error,
-                      );
-                      Navigator.of(context).pop();
-                      return;
-                    }
-
-                    // Assuming successful biometric authentication
-                    String password = await biometricHelper.getPassword();
-                    LoaderUtility.showLoader(
-                      context,
-                      LoginPostRequests.login(widget.email, password),
-                    ).then((twoFacRefCode) async {
-                      print("Hey");
-                      print(twoFacRefCode);
-                      if (twoFacRefCode != null) {
-                        // CustomAlert.showCustomScaffoldMessenger(
-                        //   context,
-                        //   "Please enter the code sent to your authenticator app/sms",
-                        //   AlertType.info,
-                        // );//TODO: Show Alert after page rendering with context (Throws error )
-                        Navigator.of(mainNavigatorKey.currentContext!).push(
-                          MaterialPageRoute(
-                            builder: (context) => EnterTwoFacCode(
-                              referenceCode: twoFacRefCode!,
-                            ),
-                          ),
-                        );
-                        Navigator.of(context).pop();
-                      } else {
-                        LoginPostRequests.isLoggedIn = true;
-
-                        // Preload user info before navigating to dashboard
-                        final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-                        await dashboardBloc.initUserInfo();
-
-                        Navigator.of(mainNavigatorKey.currentContext!)
-                            .pushNamedAndRemoveUntil("/", (route) => false);
-                        Navigator.of(context).pop();
-                      }
-                    }).catchError((error) {
-                      print(error);
-                      CustomAlert.showCustomScaffoldMessenger(
-                          mainNavigatorKey.currentContext!,
-                          error.toString(),
-                          AlertType.error);
-                      Navigator.of(context).pop();
-                    });
+                    // Trigger biometric login using AuthBloc
+                    final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+                    authBloc.add(AuthLoginWithBiometric());
                   },
                 ),
               ],
@@ -660,6 +610,7 @@ class _AutoLoginState extends State<AutoLogin> {
           ],
         ),
       ),
+    ),
     );
   }
 }

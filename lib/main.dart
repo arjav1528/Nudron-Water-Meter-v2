@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watermeter2/bloc/dashboard_bloc.dart';
+import 'package:watermeter2/bloc/auth_bloc.dart';
+import 'package:watermeter2/bloc/auth_state.dart';
+import 'package:watermeter2/bloc/auth_event.dart';
 import 'package:watermeter2/utils/excel_helpers.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/services/mobile/mobile_init.dart';
@@ -11,8 +14,8 @@ import 'package:watermeter2/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/constants/app_config.dart';
-import 'package:watermeter2/api/auth_service.dart';
 import 'package:watermeter2/screens/auth/login_screen.dart';
+import 'package:watermeter2/utils/loader.dart';
 
 final mainNavigatorKey = GlobalKey<NavigatorState>();
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -35,8 +38,15 @@ void main() async {
   await themeProvider.readThemeMode();
   
   runApp(
-    BlocProvider<DashboardBloc>(
-      create: (context) => DashboardBloc(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<DashboardBloc>(
+          create: (context) => DashboardBloc(),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(),
+        ),
+      ],
       child: ChangeNotifierProvider(
         create: (_) => themeProvider,
         child: const MyApp(),
@@ -53,15 +63,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  checkLogin() async {
-    await LoginPostRequests.checkLogin();
-    setState(() {});
-  }
-
   @override
-  initState() {
+  void initState() {
     super.initState();
-    checkLogin();
+    // Trigger initial authentication check
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+      authBloc.add(AuthCheckLoginStatus());
+    });
   }
 
   @override
@@ -95,11 +104,22 @@ class _MyAppState extends State<MyApp> {
                 if (ConfigurationCustom.isTest) {
                   return ConfigurationCustom.testScreen;
                 }
-                if (LoginPostRequests.isLoggedIn) {
-                  return const DashboardPage();
-                } else {
-                  return const LoginPage();
-                }
+                return BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    if (state is AuthAuthenticated) {
+                      return const DashboardPage();
+                    } else if (state is AuthLoading) {
+                      // Show loading screen while checking authentication
+                      return const Scaffold(
+                        body: Center(
+                          child: CustomLoader(),
+                        ),
+                      );
+                    } else {
+                      return const LoginPage();
+                    }
+                  },
+                );
               },
               '/login': (context) => const LoginPage(),
               '/homePage': (context) => const DashboardPage(),

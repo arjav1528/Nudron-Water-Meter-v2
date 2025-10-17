@@ -58,22 +58,21 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       await LoaderUtility.showLoader(
         context,
         () async {
+          // Clear current filters and data
           dashboardBloc.currentFilters.clear();
           dashboardBloc.filterData = null;
           dashboardBloc.summaryData = null;
           dashboardBloc.devicesData = null;
 
+          // Select project and get filter data
           var filterData = await dashboardBloc.selectProject(dashboardBloc.projects.indexOf(selectedProject ?? ""));
           if (filterData != null) {
+            // Update selected filters - this will load all data in parallel with caching
             await dashboardBloc.updateSelectedFilters([selectedProject], filterData);
 
             setState(() {
               selectedProject = selectedProject;
             });
-
-            await dashboardBloc.loadTrendsData(selectedProject);
-
-            dashboardBloc.emit(RefreshDashboard());
           }
         }(),
       );
@@ -85,8 +84,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       );
     }
 
-    if (selectedProject == null && (dashboardBloc.currentFilters.isEmpty ||
-        dashboardBloc.currentFilters.first == null)) {
+    if (selectedProject == null && dashboardBloc.currentFilters.isEmpty) {
       CustomAlert.showCustomScaffoldMessenger(
           context, "Please select a project", AlertType.error);
       return;
@@ -94,7 +92,6 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     
     // Switch to trends tab and emit navigation event
     dashboardBloc.switchBottomNavPos(1);
-    dashboardBloc.emit(ChangeDashBoardNav());
   }
 
   void _showAddProjectDialog() {
