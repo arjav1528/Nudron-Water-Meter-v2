@@ -23,10 +23,10 @@ class LoaderUtility {
                 decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
                 // Semi-transparent background
                 child: SizedBox(
-                  width: 75.minSp,
-                  height: 75.minSp,
+                  width: 75.responsiveSp,
+                  height: 75.responsiveSp,
                   child:LoadingAnimationWidget.hexagonDots(
-                    size: 75.minSp,
+                    size: 75.responsiveSp,
                     color: CommonColors.blue,
                   ),
                   // child: CircularProgressIndicator(

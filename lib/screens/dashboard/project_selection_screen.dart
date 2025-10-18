@@ -107,7 +107,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                 color: currentTheme.dialogBG, // Match BillingFormula dialog BG
                 border: Border.all(
                   color: currentTheme.gridLineColor, // Match BillingFormula border color
-                  width: 3.minSp, // Match BillingFormula border width
+                  width: 3.responsiveSp, // Match BillingFormula border width
                 ),
                 // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
                 // boxShadow: [
@@ -276,7 +276,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                       Text(
                         "SELECT PROJECT",
                         style: GoogleFonts.robotoMono(
-                          fontSize: 18.minSp,
+                          fontSize: 18.responsiveSp,
                           fontWeight: FontWeight.w500,
                           color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                       ),
@@ -289,7 +289,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                   //   icon: Icon(
                   //     Icons.add,
                   //     color: theme.basicAdvanceTextColor,
-                  //     size: 24.minSp,
+                  //     size: 24.responsiveSp,
                   //   ),
                   //   style: ButtonStyle(
                   //     backgroundColor: MaterialStateProperty.all(Colors.transparent),

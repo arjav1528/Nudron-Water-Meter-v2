@@ -54,13 +54,13 @@ class DataGridWidget extends StatelessWidget {
         text: Utils.cleanFieldName(text),
         style: isHeader
             ? GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.minSp,
+                fontSize: ThemeNotifier.medium.responsiveSp,
                 fontWeight: FontWeight.bold,
                 height: 1.2, // Reduced line height
                 letterSpacing: 0.5, // Matching spacing with the Text widget
               )
             : GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.minSp,
+                fontSize: ThemeNotifier.medium.responsiveSp,
                 height: 1.2,
                 fontWeight: FontWeight.normal,
                 letterSpacing: 0.5,
@@ -73,7 +73,7 @@ class DataGridWidget extends StatelessWidget {
     // No longer multiplying the width excessively
     return textPainter.width +
         8 +
-        3.minSp +
+        3.responsiveSp +
         (hasDownloadButton
             ? rowHeight
             : 0.0); // Add small padding to account for edges
@@ -152,13 +152,13 @@ class DataGridWidget extends StatelessWidget {
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: index == columnWidths.length - 1 ? 0 : 3.minSp,
+              width: index == columnWidths.length - 1 ? 0 : 3.responsiveSp,
             ),
             bottom: BorderSide(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: 3.minSp,
+              width: 3.responsiveSp,
             ),
           ),
         ),
@@ -180,13 +180,13 @@ class DataGridWidget extends StatelessWidget {
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: index == columnWidths.length - 1 ? 0 : 3.minSp,
+              width: index == columnWidths.length - 1 ? 0 : 3.responsiveSp,
             ),
             bottom: BorderSide(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: 3.minSp,
+              width: 3.responsiveSp,
             ),
           ),
         ),
@@ -214,7 +214,7 @@ class DataGridWidget extends StatelessWidget {
           right: BorderSide(
             color:
                 Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: index2 == data![1][index].length - 1 ? 0 : 3.minSp,
+            width: index2 == data![1][index].length - 1 ? 0 : 3.responsiveSp,
           ),
           bottom: BorderSide(
             color: index == data![1]!.length - 1
@@ -222,7 +222,7 @@ class DataGridWidget extends StatelessWidget {
                 : Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridLineColor,
-            width: index == data![1]!.length - 1 ? 0.00 : 3.minSp,
+            width: index == data![1]!.length - 1 ? 0.00 : 3.responsiveSp,
           ),
         ),
       ),
@@ -244,7 +244,7 @@ class DataGridWidget extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.minSp,
+          fontSize: ThemeNotifier.medium.responsiveSp,
           height: 1.2,
           fontWeight: FontWeight.normal,
           letterSpacing: 0.5,
@@ -262,7 +262,7 @@ class DataGridWidget extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.minSp,
+          fontSize: ThemeNotifier.medium.responsiveSp,
           height: 1.2,
           fontWeight: FontWeight.normal,
           letterSpacing: 0.5,
@@ -275,7 +275,7 @@ class DataGridWidget extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.minSp,
+          fontSize: ThemeNotifier.medium.responsiveSp,
           height: 1.2,
           fontWeight: FontWeight.normal,
           letterSpacing: 0.5,
@@ -323,13 +323,13 @@ class DataGridWidget extends StatelessWidget {
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .gridLineColor,
-                                  width: 3.minSp,
+                                  width: 3.responsiveSp,
                                 ),
                                 bottom: BorderSide(
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .gridLineColor,
-                                  width: 3.minSp,
+                                  width: 3.responsiveSp,
                                 ),
                               ),
                             ),
@@ -343,7 +343,7 @@ class DataGridWidget extends StatelessWidget {
                                             .currentTheme
                                             .splashColor,
                                     splashFactory: InkRipple.splashFactory,
-                                    radius: 20.minSp,
+                                    radius: 20.responsiveSp,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 2.h, horizontal: 7.w),
@@ -351,7 +351,7 @@ class DataGridWidget extends StatelessWidget {
                                       // width: rowHeight,
                                       child: Icon(
                                         Icons.download,
-                                        size: 30.minSp,
+                                        size: 30.responsiveSp,
                                         color:
                                             Provider.of<ThemeNotifier>(context)
                                                 .currentTheme

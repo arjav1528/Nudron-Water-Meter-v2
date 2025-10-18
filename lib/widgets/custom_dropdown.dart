@@ -69,7 +69,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       widget.fieldName,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.robotoMono(
-                        fontSize: ThemeNotifier.small.minSp,
+                        fontSize: ThemeNotifier.small.responsiveSp,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -93,11 +93,11 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     buttonPadding: EdgeInsets.zero,
                     dropdownPadding: EdgeInsets.symmetric(vertical: 0.h),
                     itemHeight: 40.h,
-                    iconSize: 30.minSp,
+                    iconSize: 30.responsiveSp,
                     itemPadding: EdgeInsets.zero,
                     dropdownMaxHeight: 200.h,
-                    dropdownWidth: widget.width2.w + 30.minSp,
-                    buttonWidth: widget.width2.w + 30.minSp,
+                    dropdownWidth: widget.width2.w + 30.responsiveSp,
+                    buttonWidth: widget.width2.w + 30.responsiveSp,
                     dropdownDecoration: BoxDecoration(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
@@ -118,7 +118,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       ),
                     ),
                     customButton: Container(
-                      width: widget.width2.w + 30.minSp,
+                      width: widget.width2.w + 30.responsiveSp,
                       height: 40.h,
                       alignment: Alignment.center,
                       child: Row(
@@ -137,7 +137,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.robotoMono(
-                                    fontSize: ThemeNotifier.small.minSp,
+                                    fontSize: ThemeNotifier.small.responsiveSp,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -148,7 +148,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                           ),
                           Icon(
                             Icons.arrow_drop_down,
-                            size: 30.minSp,
+                            size: 30.responsiveSp,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
@@ -164,7 +164,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                         child: Column(
                           children: [
                             Container(
-                              width: widget.width2.w + 30.minSp,
+                              width: widget.width2.w + 30.responsiveSp,
                               height: 39.5.h,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
@@ -177,7 +177,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                                     : widget.valueConvertor!(value),
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.robotoMono(
-                                  fontSize: ThemeNotifier.small.minSp,
+                                  fontSize: ThemeNotifier.small.responsiveSp,
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .basicAdvanceTextColor,
@@ -322,7 +322,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                           widget.items[index],
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(
-                            fontSize: ThemeNotifier.small.minSp,
+                            fontSize: ThemeNotifier.small.responsiveSp,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
@@ -382,7 +382,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                               widget.fieldName,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.robotoMono(
-                                fontSize: ThemeNotifier.small.minSp,
+                                fontSize: ThemeNotifier.small.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
@@ -402,7 +402,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                   GestureDetector(
                     onTap: _toggleDropdown,
                     child: Container(
-                      width: widget.width2.w + 30.minSp,
+                      width: widget.width2.w + 30.responsiveSp,
                       height: 40.h,
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -416,7 +416,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                                 selectedValue ?? '-',
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.robotoMono(
-                                  fontSize: ThemeNotifier.small.minSp,
+                                  fontSize: ThemeNotifier.small.responsiveSp,
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .basicAdvanceTextColor,
@@ -428,7 +428,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                             _isOpen
                                 ? Icons.arrow_drop_up
                                 : Icons.arrow_drop_down,
-                            size: 30.minSp,
+                            size: 30.responsiveSp,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,

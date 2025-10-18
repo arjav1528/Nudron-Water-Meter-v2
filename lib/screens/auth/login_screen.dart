@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                       fit: BoxFit.cover,
                       clipBehavior: Clip.hardEdge,
                       color: CommonColors.blue.withOpacity(0.25),
-                      width: 450.minSp,
+                      width: 450.responsiveSp,
                     ),
                   ),
                 ),
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Nudron IoT Solutions',
                             style: GoogleFonts.roboto(
-                                fontSize: 37.minSp,
+                                fontSize: 37.responsiveSp,
                                 fontWeight: FontWeight.bold,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                                   "Welcome to Nudron's Water Metering Dashboard",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.roboto(
-                                      fontSize: ThemeNotifier.medium.minSp,
+                                      fontSize: ThemeNotifier.medium.responsiveSp,
                                       color: Provider.of<ThemeNotifier>(context)
                                           .currentTheme
                                           .basicAdvanceTextColor)),
@@ -271,7 +271,7 @@ class _SigninPageState extends State<SigninPage> {
                         Text(
                           "Forgot Password?",
                           style: GoogleFonts.roboto(
-                              fontSize: ThemeNotifier.medium.minSp,
+                              fontSize: ThemeNotifier.medium.responsiveSp,
                               fontWeight: FontWeight.w500,
                               color: CommonColors.red),
                         ),
@@ -354,7 +354,7 @@ class _SigninPageState extends State<SigninPage> {
                               child: Text(
                                 "Forgot Password?",
                                 style: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.medium.minSp,
+                                    fontSize: ThemeNotifier.medium.responsiveSp,
                                     decoration: TextDecoration.underline,
                                     decorationColor: CommonColors.red,
                                     fontWeight: FontWeight.w500,
@@ -447,7 +447,7 @@ class _SigninPageState extends State<SigninPage> {
                             children: [
                               Icon(
                                 Icons.fingerprint,
-                                size: 70.minSp,
+                                size: 70.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
@@ -460,7 +460,7 @@ class _SigninPageState extends State<SigninPage> {
                                       Provider.of<ThemeNotifier>(context)
                                           .currentTheme
                                           .basicAdvanceTextColor,
-                                  fontSize: ThemeNotifier.small.minSp,
+                                  fontSize: ThemeNotifier.small.responsiveSp,
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .basicAdvanceTextColor,
@@ -536,7 +536,7 @@ class _AutoLoginState extends State<AutoLogin> {
           border: Border.all(
             color:
                 Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: 3.minSp,
+            width: 3.responsiveSp,
           ),
         ),
         width: 350.w,
@@ -577,7 +577,7 @@ class _AutoLoginState extends State<AutoLogin> {
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
-                  fontSize: ThemeNotifier.small.minSp,
+                  fontSize: ThemeNotifier.small.responsiveSp,
                 ),
               ),
             ),

@@ -73,7 +73,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                       color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                       fontFamily: GoogleFonts.robotoMono().fontFamily,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16.sp,
+                      fontSize: 16.responsiveSp,
                       letterSpacing: 0.5.sp
                     ),
                   ),
@@ -83,7 +83,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
             
             CustomMultipleSelectorHorizontal(),
             Container(
-              height: 3.minSp,
+              height: 3.responsiveSp,
               color: CommonColors.yellow,
             ),
             Expanded(
@@ -102,7 +102,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               }),
             ),
             Container(
-              height: 3.minSp,
+              height: 3.responsiveSp,
               color: CommonColors.yellow,
             ),
             Expanded(

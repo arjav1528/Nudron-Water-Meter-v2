@@ -51,7 +51,7 @@ class _SummaryTableState extends State<SummaryTable> {
         return Column(
           children: [
             Container(
-              height: 3.minSp,
+              height: 3.responsiveSp,
               color: CommonColors.green,
             ),
             Padding(
@@ -72,7 +72,7 @@ class _SummaryTableState extends State<SummaryTable> {
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16.sp,
+                            fontSize: 16.responsiveSp,
                             letterSpacing: 0.5.sp
                         ),
                       ),
@@ -85,14 +85,14 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             ),
             Container(
-              height: 3.minSp,
+              height: 3.responsiveSp,
               color: CommonColors.green,
             ),
 
 
             const CustomDateRangePicker(),
             Container(
-              height: 3.minSp,
+              height: 3.responsiveSp,
               color: CommonColors.green,
             ),
 
@@ -114,7 +114,7 @@ class _SummaryTableState extends State<SummaryTable> {
                     data: data,
                     key: UniqueKey(),
                     columnsToTakeHeaderWidthAndExtraPadding: {
-                      0: 20.minSp.toInt(),
+                      0: 20.responsiveSp.toInt(),
                       1: 0,
                     },
                     frozenColumns: 2,

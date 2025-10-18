@@ -37,7 +37,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
           border: Border.all(
             color:
                 Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: 3.minSp,
+            width: 3.responsiveSp,
           ),
         ),
         width: 350.w,
@@ -78,7 +78,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.robotoMono(
                   textStyle: TextStyle(
-                    fontSize: ThemeNotifier.small.minSp,
+                    fontSize: ThemeNotifier.small.responsiveSp,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,

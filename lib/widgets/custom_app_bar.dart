@@ -48,8 +48,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             Container(
                               child: Image.asset(
                                 "assets/icons/nudronlogo.png",
-                                width: 34.minSp,
-                                height: 34.minSp,
+                                width: 34.responsiveSp,
+                                height: 34.responsiveSp,
                                 fit: BoxFit.cover,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
@@ -62,7 +62,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                               child: Text("WATER METERING",
                                   // textAlign: TextAlign.center,
                                   style: GoogleFonts.robotoMono(
-                                    fontSize: 24.minSp,
+                                    fontSize: 24.responsiveSp,
                                     fontWeight: FontWeight.w500,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
@@ -99,13 +99,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                     right: 11.w,
-                                    top: (51.h - 28.minSp) / 2,
-                                    bottom: (51.h - 28.minSp) / 2,
+                                    top: (51.h - 28.responsiveSp) / 2,
+                                    bottom: (51.h - 28.responsiveSp) / 2,
                                     left: 11.w,
                                   ),
                                   child: Icon(
                                     Icons.contrast,
-                                    size: 28.minSp,
+                                    size: 28.responsiveSp,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .loginTitleColor,
@@ -140,14 +140,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                       child: Padding(
                                         padding: EdgeInsets.only(
                                           right: 11.w,
-                                          top: (51.h - 28.minSp) / 2,
-                                          bottom: (51.h - 28.minSp) / 2,
+                                          top: (51.h - 28.responsiveSp) / 2,
+                                          bottom: (51.h - 28.responsiveSp) / 2,
                                           left: 11.w,
                                         ),
                                         child: SvgPicture.asset(
                                           "assets/icons/profile2.svg",
-                                          width: 28.minSp,
-                                          height: 28.minSp,
+                                          width: 28.responsiveSp,
+                                          height: 28.responsiveSp,
                                           color: widget.isProfile
                                               ? CommonColors.blue2
                                               : Provider.of<ThemeNotifier>(context)
@@ -204,7 +204,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             //                   borderRadius:
                             //                       BorderRadius.circular(0),
                             //                   side: BorderSide(
-                            //                       width: 2.minSp,
+                            //                       width: 2.responsiveSp,
                             //                       color: CommonColors.blue)),
                             //               itemBuilder: (context2) {
                             //                 return <PopupMenuEntry>[
@@ -220,7 +220,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             //                         style:
                             //                             GoogleFonts.robotoMono(
                             //                           fontSize: ThemeNotifier
-                            //                               .small.minSp,
+                            //                               .small.responsiveSp,
                             //                           fontWeight:
                             //                               FontWeight.w500,
                             //                           color: Provider.of<
@@ -243,7 +243,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             //                         style:
                             //                             GoogleFonts.robotoMono(
                             //                           fontSize: ThemeNotifier
-                            //                               .small.minSp,
+                            //                               .small.responsiveSp,
                             //                           fontWeight:
                             //                               FontWeight.w500,
                             //                           color: Provider.of<
@@ -260,13 +260,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             //                 padding: EdgeInsets.only(
                             //                   right: 16.w,
                             //                   left: 11.w,
-                            //                   top: (51.h - 28.minSp) / 2,
-                            //                   bottom: (51.h - 28.minSp) / 2,
+                            //                   top: (51.h - 28.responsiveSp) / 2,
+                            //                   bottom: (51.h - 28.responsiveSp) / 2,
                             //                 ),
                             //                 child: SvgPicture.asset(
                             //                   "assets/icons/hamburger.svg",
-                            //                   width: 26.minSp,
-                            //                   height: 26.minSp,
+                            //                   width: 26.responsiveSp,
+                            //                   height: 26.responsiveSp,
                             //                   color: Provider.of<ThemeNotifier>(
                             //                           context)
                             //                       .currentTheme

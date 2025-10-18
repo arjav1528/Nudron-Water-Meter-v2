@@ -54,7 +54,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           color: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .textfieldHintColor,
-          size: 16.minSp,
+          size: 16.responsiveSp,
         ),
         onPressed: _toggleObscureText,
       ),

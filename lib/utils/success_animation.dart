@@ -72,7 +72,7 @@ class _SuccessAnimationState extends State<SuccessAnimation>
               child: Icon(
                 widget.isFailure?Icons.cancel:Icons.check_circle,
                 color: widget.isFailure?Colors.redAccent:CommonColors.green,
-                size: 150.minSp,
+                size: 150.responsiveSp,
               ),
             ),
           ],

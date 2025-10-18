@@ -192,7 +192,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
               Container(
                 child: Text(country.dialCode ?? '',
                     style: GoogleFonts.roboto(
-                      fontSize: ThemeNotifier.medium.minSp,
+                      fontSize: ThemeNotifier.medium.responsiveSp,
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .textfieldTextColor,
@@ -214,7 +214,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
     // Add divider after priority countries
     dropdownItems.add(
       Container(
-        height: 1.minSp,
+        height: 1.responsiveSp,
         color:
             Provider.of<ThemeNotifier>(context).currentTheme.textfieldTextColor,
       ),

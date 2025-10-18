@@ -210,7 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
               //     "If you are a customer of Nudron's smart meters and want access, please contact us at hello@nudron.com",
               //     textAlign: TextAlign.center,
               //     style: GoogleFonts.roboto(
-              //         fontSize: 15.minSp,
+              //         fontSize: 15.responsiveSp,
               //
               //         // fontWeight: FontWeight.w500,
               //         color: Provider.of<ThemeNotifier>(context)

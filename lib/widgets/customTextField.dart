@@ -94,7 +94,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           inputFormatters: widget.inputFormatters,
           style: widget.style ??
               GoogleFonts.roboto(
-                fontSize: ThemeNotifier.medium.minSp,
+                fontSize: ThemeNotifier.medium.responsiveSp,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .textfieldTextColor,
@@ -102,7 +102,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           cursorColor: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .textfieldCursorColor,
-          cursorHeight: 30.minSp,
+          cursorHeight: 30.responsiveSp,
           enableSuggestions: widget.enableSuggestions,
           autocorrect: widget.autocorrect,
           decoration: InputDecoration(
@@ -142,7 +142,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             hintText: widget.hintText,
             hintStyle: widget.hintStyle ??
                 GoogleFonts.roboto(
-                  fontSize: ThemeNotifier.medium.minSp,
+                  fontSize: ThemeNotifier.medium.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .textfieldHintColor,

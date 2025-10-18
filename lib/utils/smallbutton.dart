@@ -37,20 +37,20 @@ class _SmallButtonState extends State<SmallButton> {
           elevation: 0,
           padding: EdgeInsets.zero,
           constraints:
-              BoxConstraints.tightFor(width: 30.minSp, height: 30.minSp),
+              BoxConstraints.tightFor(width: 30.responsiveSp, height: 30.responsiveSp),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(2.minSp),
+            borderRadius: BorderRadius.circular(2.responsiveSp),
             side: BorderSide(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor, // Set border color
-              width: 1.minSp, // Set border width
+              width: 1.responsiveSp, // Set border width
             ),
           ),
           child: Center(
             child: Icon(
               widget.iconData,
-              size: 20.minSp,
+              size: 20.responsiveSp,
               color: Colors.white, // Set the icon color
             ),
           ),

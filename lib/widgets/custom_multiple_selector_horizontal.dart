@@ -70,11 +70,11 @@ class _CustomMultipleSelectorHorizontalState
                     border: Border(
                       left: BorderSide(
                         color: CommonColors.yellow,
-                        width: 10.minSp,
+                        width: 10.responsiveSp,
                       ),
                       top: BorderSide(
                         color: CommonColors.yellow,
-                        width: 3.minSp,
+                        width: 3.responsiveSp,
                       ),
                       
                       
@@ -108,7 +108,7 @@ class _CustomMultipleSelectorHorizontalState
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                          size: 30.minSp,
+                          size: 30.responsiveSp,
                         )
                       ],
                     ),
@@ -171,7 +171,7 @@ class _CustomMultipleSelectorHorizontalState
             child: CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
-              offset: Offset(0, size.height + 3.minSp),
+              offset: Offset(0, size.height + 3.responsiveSp),
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: Material(
@@ -189,7 +189,7 @@ class _CustomMultipleSelectorHorizontalState
                       // borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                       color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor, // Match BillingFormula border color
-                      width: 3.minSp, // Match BillingFormula border width
+                      width: 3.responsiveSp, // Match BillingFormula border width
                 ),
                     ),
                     child: GestureDetector(
@@ -226,7 +226,7 @@ class _CustomMultipleSelectorHorizontalState
             content: Text(
               filter.toUpperCase(),
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.small.minSp,
+                fontSize: ThemeNotifier.small.responsiveSp,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
@@ -247,7 +247,7 @@ class _CustomMultipleSelectorHorizontalState
             content: Text(
               buildings.first.toUpperCase(),
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.small.minSp,
+                fontSize: ThemeNotifier.small.responsiveSp,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
@@ -265,7 +265,7 @@ class _CustomMultipleSelectorHorizontalState
           content: Text(
             "NO FILTER SELECTED",
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.small.minSp,
+              fontSize: ThemeNotifier.small.responsiveSp,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -564,7 +564,7 @@ class _CustomMultipleSelectorHorizontal2State
           content: Text(
             "NO FILTER SELECTED",
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.small.minSp,
+              fontSize: ThemeNotifier.small.responsiveSp,
               color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
             ),
           ),
@@ -578,7 +578,7 @@ class _CustomMultipleSelectorHorizontal2State
               content: Text(
                 f.toUpperCase(),
                 style: GoogleFonts.robotoMono(
-                  fontSize: ThemeNotifier.small.minSp,
+                  fontSize: ThemeNotifier.small.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                 ),
               ),

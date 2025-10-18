@@ -226,7 +226,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   Text(
                                     "PROFILE",
                                     style: GoogleFonts.robotoMono(
-                                      fontSize: 18.minSp,
+                                      fontSize: 18.responsiveSp,
                                       fontWeight: FontWeight.w500,
                                       color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                                     ),
@@ -263,7 +263,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .profileBorderColor,
-                                  width: 3.minSp,
+                                  width: 3.responsiveSp,
                                 )),
                                 child: Column(
                                   children: [
@@ -478,7 +478,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                        width: 3.minSp,
+                                        width: 3.responsiveSp,
                                       )),
                                       child: Row(
                                         mainAxisAlignment:
@@ -490,7 +490,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               "Log out from this app",
                                               style: GoogleFonts.roboto(
                                                 fontSize:
-                                                    ThemeNotifier.medium.minSp,
+                                                    ThemeNotifier.medium.responsiveSp,
                                                 color: Provider.of<ThemeNotifier>(
                                                         context)
                                                     .currentTheme
@@ -545,7 +545,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                        width: 3.minSp,
+                                        width: 3.responsiveSp,
                                       )),
                                       child: Padding(
                                         padding: EdgeInsets.only(left: 8.w),
@@ -563,7 +563,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   "Log out from all devices",
                                                   style: GoogleFonts.roboto(
                                                     fontSize: ThemeNotifier
-                                                        .medium.minSp,
+                                                        .medium.responsiveSp,
                                                     color: Provider.of<
                                                                 ThemeNotifier>(
                                                             context)
@@ -621,7 +621,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                        width: 3.minSp,
+                                        width: 3.responsiveSp,
                                       )),
                                       child: Column(
                                         children: [
@@ -635,7 +635,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   "Delete your account",
                                                   style: GoogleFonts.roboto(
                                                     fontSize:
-                                                        ThemeNotifier.medium.minSp,
+                                                        ThemeNotifier.medium.responsiveSp,
                                                     color: Provider.of<ThemeNotifier>(
                                                             context)
                                                         .currentTheme
@@ -667,7 +667,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                     "Warning: This action is irreversible. You will no longer be able to access your IoT data.",
                                                     style: GoogleFonts.roboto(
                                                       fontSize:
-                                                          ThemeNotifier.extrasmall.minSp,
+                                                          ThemeNotifier.extrasmall.responsiveSp,
                                                       color: CommonColors.red,
                                                     ),
                                                   ),
@@ -786,19 +786,19 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .profileBorderColor,
-                  width: 3.minSp,
+                  width: 3.responsiveSp,
                 ),
                 right: BorderSide(
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .profileBorderColor,
-                  width: 3.minSp,
+                  width: 3.responsiveSp,
                 ),
                 bottom: BorderSide(
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .profileBorderColor,
-                  width: 3.minSp,
+                  width: 3.responsiveSp,
                 ),
               )
             : widget.bottomOpen
@@ -807,26 +807,26 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.minSp,
+                      width: 3.responsiveSp,
                     ),
                     right: BorderSide(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.minSp,
+                      width: 3.responsiveSp,
                     ),
                     top: BorderSide(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.minSp,
+                      width: 3.responsiveSp,
                     ),
                   )
                 : Border.all(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.minSp,
+                    width: 3.responsiveSp,
                   ),
       ),
       child: Column(
@@ -839,7 +839,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 child: Text(
                   "Two Factor Authentication",
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.medium.minSp,
+                    fontSize: ThemeNotifier.medium.responsiveSp,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,
@@ -1028,19 +1028,19 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.minSp,
+                    width: 3.responsiveSp,
                   ),
                   right: BorderSide(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.minSp,
+                    width: 3.responsiveSp,
                   ),
                   bottom: BorderSide(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.minSp,
+                    width: 3.responsiveSp,
                   ),
                   top: BorderSide.none,
                 )
@@ -1050,19 +1050,19 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .profileBorderColor,
-                        width: 3.minSp,
+                        width: 3.responsiveSp,
                       ),
                       right: BorderSide(
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .profileBorderColor,
-                        width: 3.minSp,
+                        width: 3.responsiveSp,
                       ),
                       top: BorderSide(
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .profileBorderColor,
-                        width: 3.minSp,
+                        width: 3.responsiveSp,
                       ),
                       bottom: BorderSide.none,
                     )
@@ -1070,7 +1070,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.minSp,
+                      width: 3.responsiveSp,
                     ),
         ),
         child: Column(
@@ -1083,7 +1083,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   child: Text(
                     "Biometric Login",
                     style: GoogleFonts.roboto(
-                      fontSize: ThemeNotifier.medium.minSp,
+                      fontSize: ThemeNotifier.medium.responsiveSp,
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor,

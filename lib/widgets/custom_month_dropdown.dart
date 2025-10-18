@@ -67,7 +67,7 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
                 border: Border(
                   left: BorderSide(
                     color: CommonColors.green,
-                    width: 12.minSp,
+                    width: 12.responsiveSp,
                   ),
                 ),
               ),
@@ -81,7 +81,7 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
                             .convertMonthNumberToText(selectedMonth)
                             .toUpperCase(),
                         style: GoogleFonts.robotoMono(
-                          fontSize: ThemeNotifier.small.minSp,
+                          fontSize: ThemeNotifier.small.responsiveSp,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -93,7 +93,7 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor,
-                      size: 30.minSp,
+                      size: 30.responsiveSp,
                     ),
                   ],
                 ),
@@ -153,7 +153,7 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
             child: CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
-              offset: Offset(0, size.height + 3.minSp),
+              offset: Offset(0, size.height + 3.responsiveSp),
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: Material(
@@ -331,7 +331,7 @@ class StringItem extends StatelessWidget {
             value.toUpperCase(),
             style: GoogleFonts.robotoMono(
               textStyle: TextStyle(
-                  fontSize: ThemeNotifier.medium.minSp,
+                  fontSize: ThemeNotifier.medium.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor),
             ),
           ),

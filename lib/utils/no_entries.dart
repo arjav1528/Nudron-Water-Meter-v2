@@ -22,16 +22,16 @@ class NoEntries extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 'assets/icons/noentries.svg',
-                height: min(114,constraints.maxHeight*0.8).minSp,
-                width: min(114,constraints.maxHeight*0.8).minSp,
+                height: min(114,constraints.maxHeight*0.8).responsiveSp,
+                width: min(114,constraints.maxHeight*0.8).responsiveSp,
                 color:
                 Provider.of<ThemeNotifier>(context).currentTheme.noEntriesColor,
               ),
-              // SizedBox(height: 20.minSp),
+              // SizedBox(height: 20.responsiveSp),
               // Text(
               //   "NO ENTRIES FOUND",
               //   style: GoogleFonts.robotoMono(
-              //       fontSize: ThemeNotifier.small.minSp,
+              //       fontSize: ThemeNotifier.small.responsiveSp,
               //       color: Provider.of<ThemeNotifier>(context)
               //           .currentTheme
               //           .noEntriesColor,

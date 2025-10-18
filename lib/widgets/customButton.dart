@@ -64,7 +64,7 @@ class CustomButton extends StatelessWidget {
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(
-                            fontSize: (fontSize ?? ThemeNotifier.small).minSp,
+                            fontSize: (fontSize ?? ThemeNotifier.medium).responsiveSp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -74,7 +74,7 @@ class CustomButton extends StatelessWidget {
                           Icon(
                             Icons.arrow_forward,
                             color: Colors.white,
-                            size: (fontSize ?? ThemeNotifier.small).minSp + 4,
+                            size: (fontSize ?? ThemeNotifier.small).responsiveSp + 4,
                           ),
                         ],
                       ],

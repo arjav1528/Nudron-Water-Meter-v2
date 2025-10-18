@@ -114,7 +114,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 border: Border(
                   left: BorderSide(
                     color: CommonColors.green,
-                    width: 12.minSp,
+                    width: 12.responsiveSp,
                   ),
                 ),
               ),
@@ -128,7 +128,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             ? "${DateFormat('MMM dd').format(startDate!)} - ${DateFormat('MMM dd, yyyy').format(endDate!)}"
                             : "Select Month Range",
                         style: GoogleFonts.robotoMono(
-                          fontSize: ThemeNotifier.small.minSp,
+                          fontSize: ThemeNotifier.small.responsiveSp,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -142,7 +142,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                      size: 30.minSp,
+                      size: 30.responsiveSp,
                     ),
                   ],
                 ),
@@ -214,7 +214,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 color: currentTheme.dialogBG, // Match BillingFormula dialog BG
                 border: Border.all(
                   color: currentTheme.gridLineColor, // Match BillingFormula border color
-                  width: 3.minSp, // Match BillingFormula border width
+                  width: 3.responsiveSp, // Match BillingFormula border width
                 ),
                 // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
                 // boxShadow: [
@@ -276,7 +276,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
                       currentDateTextStyle: TextStyle(
                         color: CommonColors.green,
-                        fontSize: 14.sp,
+                        fontSize: 14.responsiveSp,
                         fontWeight: FontWeight.w600,
                   
                       ),
@@ -288,7 +288,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
                       enabledCellsTextStyle: TextStyle(
                         color: currentTheme.basicAdvanceTextColor,
-                        fontSize: 14.sp,
+                        fontSize: 14.responsiveSp,
                       ),
                   
                       selectedCellsDecoration: BoxDecoration(
@@ -297,7 +297,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
                       selectedCellsTextStyle: TextStyle(
                         color: currentTheme.basicAdvanceTextColor,
-                        fontSize: 14.sp,
+                        fontSize: 14.responsiveSp,
                         fontWeight: FontWeight.w500,
                       ),
                   
@@ -308,23 +308,23 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
                       singleSelectedCellTextStyle: TextStyle(
                         color: Colors.white,
-                        fontSize: 14.sp,
+                        fontSize: 14.responsiveSp,
                         fontWeight: FontWeight.w600,
                       ),
                   
                       daysOfTheWeekTextStyle: TextStyle(
                         color: currentTheme.gridHeadingColor,
-                        fontSize: 12.sp,
+                        fontSize: 12.responsiveSp,
                         fontWeight: FontWeight.w500,
                       ),
                   
                       disabledCellsTextStyle: TextStyle(
                         color: currentTheme.noEntriesColor,
-                        fontSize: 14.sp,
+                        fontSize: 14.responsiveSp,
                       ),
                   
                       leadingDateTextStyle: GoogleFonts.robotoMono(
-                        fontSize: 18.sp,
+                        fontSize: 18.responsiveSp,
                         fontWeight: FontWeight.w600,
                         color: currentTheme.basicAdvanceTextColor,
                       ),
@@ -348,7 +348,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       'Tip: You can select a range by tapping the start and end dates.',
                       style: TextStyle(
                         color: currentTheme.gridHeadingColor,
-                        fontSize: 13.sp,
+                        fontSize: 13.responsiveSp,
                         fontStyle: FontStyle.italic,
                       ),
                       textAlign: TextAlign.center,
@@ -370,7 +370,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             // Get the currently selected range from the picker
                             Navigator.of(context).pop(selectedRange);
                           },
-                          fontSize: ThemeNotifier.medium.minSp,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
                           dynamicWidth: true,
                         ),
                         CustomButton(
@@ -381,7 +381,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             // Get the currently selected range from the picker
                             Navigator.of(context).pop(selectedRange);
                           },
-                          fontSize: ThemeNotifier.medium.minSp,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
                           dynamicWidth: true,
                         ),
                       ],

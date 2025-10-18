@@ -136,7 +136,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
                                 ? widget.selectedTextColor
                                 : widget.unselectedTextColor,
                             fontSize:
-                            (widget.fontSize ?? ThemeNotifier.small).minSp,
+                            (widget.fontSize ?? ThemeNotifier.small).responsiveSp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

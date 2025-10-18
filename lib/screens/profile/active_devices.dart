@@ -24,7 +24,7 @@ class ActiveDevices extends StatelessWidget {
         // Text(
         //   'Active Devices',
         //   style: GoogleFonts.roboto(
-        //     fontSize: ThemeNotifier.large.minSp,
+        //     fontSize: ThemeNotifier.large.responsiveSp,
         //     color: Provider.of<ThemeNotifier>(context)
         //         .currentTheme
         //         .basicAdvanceTextColor,
@@ -73,7 +73,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Client: ${session.clientID}',
           style: GoogleFonts.roboto(
-            fontSize: ThemeNotifier.large.minSp,
+            fontSize: ThemeNotifier.large.responsiveSp,
             color: CommonColors.blue2,
             fontWeight: FontWeight.bold,
           ),
@@ -85,7 +85,7 @@ class SessionWidget extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.roboto(
-              fontSize: ThemeNotifier.medium.minSp,
+              fontSize: ThemeNotifier.medium.responsiveSp,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -95,7 +95,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Location: ${session.location}',
           style: GoogleFonts.roboto(
-            fontSize: ThemeNotifier.medium.minSp,
+            fontSize: ThemeNotifier.medium.responsiveSp,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,
@@ -104,7 +104,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Last Active: ${timeago.format(session.lastRefresh)}',
           style: GoogleFonts.roboto(
-            fontSize: ThemeNotifier.medium.minSp,
+            fontSize: ThemeNotifier.medium.responsiveSp,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,

@@ -90,7 +90,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
-                            fontSize: ThemeNotifier.large.minSp,
+                            fontSize: ThemeNotifier.large.responsiveSp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -116,7 +116,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
-                            fontSize: ThemeNotifier.small.minSp,
+                            fontSize: ThemeNotifier.small.responsiveSp,
                           ),
                         ),
                         SizedBox(height: 25.h),
@@ -137,7 +137,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
-                            fontSize: ThemeNotifier.medium.minSp,
+                            fontSize: ThemeNotifier.medium.responsiveSp,
                             fontWeight: FontWeight.w400,
                           ),
                           pinTheme: PinTheme(

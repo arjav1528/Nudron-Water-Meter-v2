@@ -66,21 +66,21 @@ class _BackgroundChartState extends State<BackgroundChart> {
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: 11.w,
-                      top: (51.h - 28.minSp) / 2,
-                      bottom: (51.h - 28.minSp) / 2,
+                      top: (51.h - 28.responsiveSp) / 2,
+                      bottom: (51.h - 28.responsiveSp) / 2,
                       left: 11.w,
                     ),
                     // child: Image.asset(
                     //   "assets/icons/themetoggle.png",
-                    //   width: 28.minSp,
-                    //   height: 28.minSp,
+                    //   width: 28.responsiveSp,
+                    //   height: 28.responsiveSp,
                     //   color: Provider.of<ThemeNotifier>(context)
                     //       .currentTheme
                     //       .loginTitleColor,
                     // ),
                     child: Icon(
                       Icons.contrast,
-                      size: 28.minSp,
+                      size: 28.responsiveSp,
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .loginTitleColor,
@@ -91,7 +91,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
             ],
             title: Text('FULLSCREEN CHART',
                 style: GoogleFonts.roboto(
-                  fontSize: 24.minSp,
+                  fontSize: 24.responsiveSp,
                   fontWeight: FontWeight.w500,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
@@ -102,7 +102,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
               // Define the height of the line
               child: Container(
                 color: CommonColors.yellow, // The color of the line
-                height: 3.minSp, // Define the thickness of the line
+                height: 3.responsiveSp, // Define the thickness of the line
               ),
             ),
           ),
@@ -135,7 +135,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                       child: Column(
                         children: [
                           Container(
-                            height: 3.minSp, // Divider
+                            height: 3.responsiveSp, // Divider
                             color: CommonColors.yellow,
                           ),
                           Expanded(
@@ -153,7 +153,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                   "Error loading chart data",
                   style: GoogleFonts.roboto(
                     color: CommonColors.red,
-                    fontSize: ThemeNotifier.medium.minSp,
+                    fontSize: ThemeNotifier.medium.responsiveSp,
                   ),
                 ),
               );

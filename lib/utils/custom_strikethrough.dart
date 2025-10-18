@@ -26,7 +26,7 @@ class CustomStrikethrough extends StatelessWidget {
       text: TextSpan(
         text: oldValue.toString(),
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.minSp,
+          fontSize: ThemeNotifier.medium.responsiveSp,
           color: CommonColors.red,
         ),
       ),
@@ -42,7 +42,7 @@ class CustomStrikethrough extends StatelessWidget {
           text: TextSpan(
             text: oldValue.toString(),
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.medium.minSp,
+              fontSize: ThemeNotifier.medium.responsiveSp,
               color: CommonColors.red,
             ),
             children: <TextSpan>[
@@ -50,7 +50,7 @@ class CustomStrikethrough extends StatelessWidget {
               TextSpan(
                   text: newValue.toString(),
                   style: GoogleFonts.robotoMono(
-                    fontSize: ThemeNotifier.medium.minSp,
+                    fontSize: ThemeNotifier.medium.responsiveSp,
                     color:
                         (isPreviousChange != null && isPreviousChange == true)
                             ? const Color(0xff00bc8a)
@@ -60,7 +60,7 @@ class CustomStrikethrough extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 13.minSp, // Adjust the position as needed
+          top: 13.responsiveSp, // Adjust the position as needed
           left: 0,
           child: Container(
             height: 2, // Thickness of the strikethrough line

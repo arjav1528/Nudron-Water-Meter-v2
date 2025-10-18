@@ -120,13 +120,24 @@ class ExcelHelper {
       // Save the file
       var fileBytes = excel.save();
       if (fileBytes != null) {
-        await Permission.storage.request();
+        // Request storage permission only for mobile platforms
+        if (Platform.isAndroid || Platform.isIOS) {
+          try {
+            await Permission.storage.request();
+          } catch (e) {
+            print("Permission request failed (this is expected on some platforms): $e");
+            // Continue with file operations even if permission request fails
+          }
+        }
 
         // Get directory path based on platform
         Directory? directory;
         if (Platform.isAndroid) {
           directory = await getExternalStorageDirectory();
         } else if (Platform.isIOS) {
+          directory = await getApplicationDocumentsDirectory();
+        } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+          // For desktop platforms, use application documents directory
           directory = await getApplicationDocumentsDirectory();
         } else {
           throw UnsupportedError("Unsupported platform");

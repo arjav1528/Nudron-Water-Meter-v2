@@ -30,7 +30,7 @@ class ChamferedTextWidgetInverted extends StatelessWidget {
 
     // return LayoutBuilder(
     //   builder: (context, constraints) {
-    //     final double height = 45.minSp;
+    //     final double height = 45.responsiveSp;
     //     final double triangleSize = height;
     //
     //     return Container(
@@ -43,12 +43,12 @@ class ChamferedTextWidgetInverted extends StatelessWidget {
     //               right: triangleSize,
     //               top: 8.h,
     //               bottom: 8.h,
-    //               left: 14.minSp),
+    //               left: 14.responsiveSp),
     //           child: Text(
     //             text,
     //             style: GoogleFonts.roboto(
     //               textStyle: TextStyle(
-    //                 fontSize: ThemeNotifier.medium.minSp,
+    //                 fontSize: ThemeNotifier.medium.responsiveSp,
     //                 fontWeight: FontWeight.bold,
     //                 color: borderColor,
     //               ),
@@ -82,7 +82,7 @@ class InvertedChamferedLinePainter extends CustomPainter {
     // Paint for the border color
     final borderPaint = Paint()
       ..color = borderColor
-      ..strokeWidth = 3.minSp
+      ..strokeWidth = 3.responsiveSp
       ..style = PaintingStyle.stroke;
 
     // Path for the filled area
@@ -132,7 +132,7 @@ class ChamferedTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double height = 45.minSp;
+        final double height = 45.responsiveSp;
         final double triangleSize = height;
 
         return Transform(
@@ -150,7 +150,7 @@ class ChamferedTextWidget extends StatelessWidget {
                 child: Container(
                   height: height,
                   padding: EdgeInsets.only(
-                      right: triangleSize, top: isInverted?0:10.minSp,bottom: isInverted?6.minSp:0, left: 14.minSp),
+                      right: triangleSize, top: isInverted?0:10.responsiveSp,bottom: isInverted?6.responsiveSp:0, left: 14.responsiveSp),
                   child: Transform(
                     alignment: Alignment.center,
                     transform:isInverted? (Matrix4.identity()..scale(-1.0, 1.0, 1.0)):Matrix4.identity(),
@@ -161,7 +161,7 @@ class ChamferedTextWidget extends StatelessWidget {
                         // textAlign: TextAlign.center,
                         style: GoogleFonts.roboto(
                           textStyle: TextStyle(
-                            fontSize: ThemeNotifier.medium.minSp,
+                            fontSize: ThemeNotifier.medium.responsiveSp,
                             fontWeight: FontWeight.bold,
                             color: textColor ?? borderColor,
                           ),
@@ -198,14 +198,14 @@ class ChamferedLinePainter extends CustomPainter {
     // Paint for the border color
     final borderPaint = Paint()
       ..color = borderColor
-      ..strokeWidth = 3.minSp
+      ..strokeWidth = 3.responsiveSp
       ..style = PaintingStyle.stroke;
 
     // Path for the filled area
     final fillPath = Path();
 
-    fillPath.moveTo(1.5.minSp, size.height);
-    fillPath.lineTo(1.5.minSp, 0);
+    fillPath.moveTo(1.5.responsiveSp, size.height);
+    fillPath.lineTo(1.5.responsiveSp, 0);
     fillPath.lineTo(size.width - size.height, 0);
     fillPath.lineTo(size.width, size.height);
     fillPath.close();
@@ -213,11 +213,11 @@ class ChamferedLinePainter extends CustomPainter {
     // Path for the border
     final borderPath = Path();
     if(!isInverted) {
-      borderPath.moveTo(1.5.minSp, size.height);
-      borderPath.lineTo(1.5.minSp, 0);
+      borderPath.moveTo(1.5.responsiveSp, size.height);
+      borderPath.lineTo(1.5.responsiveSp, 0);
     }
     borderPath.lineTo(size.width - size.height, 0);
-    borderPath.lineTo(size.width, size.height+1.5.minSp);
+    borderPath.lineTo(size.width, size.height+1.5.responsiveSp);
 
     // Draw the filled area
     canvas.drawPath(fillPath, fillPaint);

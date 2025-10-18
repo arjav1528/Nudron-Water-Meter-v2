@@ -37,7 +37,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
           height: 48.h,
           decoration: BoxDecoration(
             color: widget.bgColor,
-            borderRadius: BorderRadius.circular(10.minSp),
+            borderRadius: BorderRadius.circular(10.responsiveSp),
           ),
           child: Stack(
             children: [
@@ -57,7 +57,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
                   height: 38.h,
                   decoration: BoxDecoration(
                     color: widget.tabBgColor, // Alternate shades of red
-                    borderRadius: BorderRadius.circular(6.minSp),
+                    borderRadius: BorderRadius.circular(6.responsiveSp),
                   ),
                 ),
               ),
@@ -74,7 +74,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
                         widget.tabTitles[index],
                         style: GoogleFonts.robotoMono(
                           textStyle: TextStyle(
-                            fontSize: ThemeNotifier.small.minSp,
+                            fontSize: ThemeNotifier.small.responsiveSp,
                             color: index == selectedIndex
                                 ? widget.selectedColor
                                 : widget.unselectedColor,

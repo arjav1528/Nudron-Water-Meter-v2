@@ -23,13 +23,13 @@ class CustomAlert {
                 TextSpan(
                   text: '$alertName! ',
                   style: GoogleFonts.roboto(
-                      fontSize: 18.minSp,
+                      fontSize: 18.responsiveSp,
                       fontWeight: FontWeight.bold,
                       color: color),
                 ),
                 TextSpan(
                   text: message,
-                  style: GoogleFonts.roboto(fontSize: 18.minSp, color: color),
+                  style: GoogleFonts.roboto(fontSize: 18.responsiveSp, color: color),
                 ),
               ],
             ),
@@ -62,13 +62,13 @@ class CustomAlert {
             TextSpan(
               text: '$alertName! ',
               style: GoogleFonts.roboto(
-                  fontSize: 18.minSp,
+                  fontSize: 18.responsiveSp,
                   fontWeight: FontWeight.bold,
                   color: color),
             ),
             TextSpan(
               text: message,
-              style: GoogleFonts.roboto(fontSize: 18.minSp, color: color),
+              style: GoogleFonts.roboto(fontSize: 18.responsiveSp, color: color),
             ),
           ],
         ),

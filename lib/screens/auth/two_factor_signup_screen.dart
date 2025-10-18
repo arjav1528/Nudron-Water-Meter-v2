@@ -120,7 +120,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                       enableSuggestions: false,
                       autocorrect: false,
                       style: GoogleFonts.roboto(
-                        fontSize: ThemeNotifier.medium.minSp,
+                        fontSize: ThemeNotifier.medium.responsiveSp,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .textfieldTextColor,
@@ -128,7 +128,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                       cursorColor: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .textfieldCursorColor,
-                      cursorHeight: 30.minSp,
+                      cursorHeight: 30.responsiveSp,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 22.w),
@@ -195,7 +195,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                           },
                         ),
                         hintStyle: GoogleFonts.roboto(
-                          fontSize: ThemeNotifier.medium.minSp,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .textfieldHintColor,
@@ -240,7 +240,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                       enableSuggestions: false,
                       autocorrect: false,
                       style: GoogleFonts.roboto(
-                        fontSize: ThemeNotifier.medium.minSp,
+                        fontSize: ThemeNotifier.medium.responsiveSp,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .textfieldTextColor,
@@ -248,7 +248,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                       cursorColor: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .textfieldCursorColor,
-                      cursorHeight: 30.minSp,
+                      cursorHeight: 30.responsiveSp,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 22.w),
@@ -317,7 +317,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                           },
                         ),
                         hintStyle: GoogleFonts.roboto(
-                          fontSize: ThemeNotifier.medium.minSp,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .textfieldHintColor,
@@ -442,7 +442,7 @@ class _CustomPincodeState extends State<CustomPincode> {
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .loginTitleColor,
-                  fontSize: ThemeNotifier.medium.minSp,
+                  fontSize: ThemeNotifier.medium.responsiveSp,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -482,7 +482,7 @@ class _CustomPincodeState extends State<CustomPincode> {
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
-                fontSize: 16,
+                fontSize: 16.responsiveSp,
                 fontWeight: FontWeight.w400,
               ),
               cursorColor: Provider.of<ThemeNotifier>(context)

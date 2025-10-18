@@ -19,7 +19,7 @@ class PolygonContainer extends StatelessWidget {
       text: TextSpan(
         text: text,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.small.minSp,
+          fontSize: ThemeNotifier.small.responsiveSp,
         ),
       ),
       maxLines: 1,
@@ -50,7 +50,7 @@ class PolygonContainer extends StatelessWidget {
         child: Text(
           text,
           style: GoogleFonts.robotoMono(
-            fontSize: ThemeNotifier.small.minSp,
+            fontSize: ThemeNotifier.small.responsiveSp,
             color: theme.basicAdvanceTextColor,
           ),
           maxLines: 1,

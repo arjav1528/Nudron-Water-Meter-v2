@@ -23,7 +23,7 @@ class HeaderWidget extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.minSp,
+                fontSize: ThemeNotifier.medium.responsiveSp,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
@@ -90,12 +90,12 @@ class CustomIconButton extends StatelessWidget {
               height: 25.h,
               decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(2.minSp),
+                borderRadius: BorderRadius.circular(2.responsiveSp),
               ),
               child: SvgPicture.asset(
                 iconAsset,
-                width: 25.minSp,
-                height: 25.minSp,
+                width: 25.responsiveSp,
+                height: 25.responsiveSp,
                 color: Provider.of<ThemeNotifier>(context, listen: false)
                     .currentTheme
                     .gridHeadingColor,
@@ -121,7 +121,7 @@ class CustomIconButton extends StatelessWidget {
       text: TextSpan(
         text: tooltipMessage,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.minSp,
+          fontSize: ThemeNotifier.medium.responsiveSp,
           color: Provider.of<ThemeNotifier>(context, listen: false)
               .currentTheme
               .gridHeadingColor,
@@ -144,8 +144,8 @@ class CustomIconButton extends StatelessWidget {
         : leftOffset; // Ensure it doesn't go off the left edge
 
     // Adjust if it goes beyond the screen width
-    if (leftOffset + fullTooltipWidth + 25.minSp > screenWidth) {
-      leftOffset = screenWidth - fullTooltipWidth - 25.minSp;
+    if (leftOffset + fullTooltipWidth + 25.responsiveSp > screenWidth) {
+      leftOffset = screenWidth - fullTooltipWidth - 25.responsiveSp;
     }
 
     // Create and insert the new overlay
@@ -165,7 +165,7 @@ class CustomIconButton extends StatelessWidget {
             child: Text(
               tooltipMessage,
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.minSp,
+                fontSize: ThemeNotifier.medium.responsiveSp,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridHeadingColor,

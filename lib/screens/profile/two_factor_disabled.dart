@@ -95,18 +95,18 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
               text: TextSpan(
                   style: GoogleFonts.roboto(
                     color: const Color(0xFF00BC8A),
-                    fontSize: ThemeNotifier.small.minSp,
+                    fontSize: ThemeNotifier.small.responsiveSp,
                   ),
                   children: [
                     TextSpan(
                         text: "Recommended! ",
                         style: GoogleFonts.roboto(
                           color: const Color(0xFF00BC8A),
-                          fontSize: ThemeNotifier.small.minSp,
+                          fontSize: ThemeNotifier.small.responsiveSp,
                         )),
                     TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: ThemeNotifier.small.minSp,
+                          fontSize: ThemeNotifier.small.responsiveSp,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -280,7 +280,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.minSp),
+            padding: EdgeInsets.all(8.responsiveSp),
             child: Icon(
               widget.icon,
               color: Provider.of<ThemeNotifier>(context)
@@ -296,7 +296,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                 Text(
                   widget.title,
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.medium.minSp,
+                    fontSize: ThemeNotifier.medium.responsiveSp,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,
@@ -306,7 +306,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                     Text(
                       widget.subtitle,
                       style: GoogleFonts.roboto(
-                        fontSize: ThemeNotifier.small.minSp,
+                        fontSize: ThemeNotifier.small.responsiveSp,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -316,7 +316,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.minSp),
+            padding: EdgeInsets.all(8.responsiveSp),
             child: Icon(
               Icons.chevron_right,
               color: Provider.of<ThemeNotifier>(context)

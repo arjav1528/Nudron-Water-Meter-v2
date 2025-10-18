@@ -67,7 +67,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
               child: Text(
                 'Scan the QR code with your Authenticator app',
                 style: GoogleFonts.roboto(
-                  fontSize: ThemeNotifier.small.minSp,
+                  fontSize: ThemeNotifier.small.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -156,7 +156,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
                 TextSpan(
                   text: 'Click here ',
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.small.minSp,
+                    fontSize: ThemeNotifier.small.responsiveSp,
                     color: CommonColors.blue,
                     decoration: TextDecoration.underline,
                   ),
@@ -175,7 +175,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
                 TextSpan(
                   text: 'to open the default Authenticator app',
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.medium.minSp,
+                    fontSize: ThemeNotifier.medium.responsiveSp,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,

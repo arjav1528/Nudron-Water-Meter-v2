@@ -89,7 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Text("ERROR IN FETCHING DATA. REFRESH LATER",
                             style: GoogleFonts.roboto(
                               color: CommonColors.blue,
-                              fontSize: ThemeNotifier.medium.minSp,
+                              fontSize: ThemeNotifier.medium.responsiveSp,
                               fontWeight: FontWeight.w500,
                             )),
                         SizedBox(height: 20.h),
@@ -273,7 +273,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           BlocProvider.of<DashboardBloc>(context).switchBottomNavPos(index);
         },
         child: Container(
-          height: 60.h,
+          height: 86.h,
           padding: EdgeInsets.symmetric(horizontal: isCollapsed ? 8.0 : 16.0),
           child: isCollapsed
               ? Column(
@@ -286,8 +286,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .inactiveBottomNavbarIconColor,
-                      width: 24.0,
-                      height: 24.0,
+                      width: 50.w,
+                      height: 50.w,
                     ),
                     SizedBox(height: 4.h),
                     Text(
@@ -298,7 +298,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                             : Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .inactiveBottomNavbarIconColor,
-                        fontSize: 10.0,
+                        fontSize: 20.responsiveSp,
                         fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,
@@ -327,7 +327,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                               : Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .inactiveBottomNavbarIconColor,
-                          fontSize: 18.0,
+                          fontSize: 18.0.responsiveSp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -391,7 +391,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               },
             ),
             Container(
-              width: 3.minSp,
+              width: 3.responsiveSp,
               color: selectedColor[BlocProvider.of<DashboardBloc>(context).bottomNavPos % selectedColor.length],
             ),
             Expanded(
@@ -453,8 +453,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                                 : Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .inactiveBottomNavbarIconColor,
-                            width: 45.minSp,
-                            height: 45.minSp,
+                            width: 45.responsiveSp,
+                            height: 45.responsiveSp,
                           ),
                           Text(
                             visibleTabs[index].toUpperCase(),
@@ -464,7 +464,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                                   : Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .inactiveBottomNavbarIconColor,
-                              fontSize: 16.minSp,
+                              fontSize: 16.responsiveSp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

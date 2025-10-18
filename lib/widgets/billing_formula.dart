@@ -91,7 +91,7 @@ class _BillingFormulaState extends State<BillingFormula> {
                 : Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
-            height: 30.minSp,
+            height: 30.responsiveSp,
           ),
         ),
       ),
@@ -211,7 +211,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     if (tiers.length == 2) {
       rightpaddingconstant = 0;
     } else {
-      rightpaddingconstant = 30.minSp + 8.w;
+      rightpaddingconstant = 30.responsiveSp + 8.w;
     }
 
     return Container(
@@ -225,7 +225,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridLineColor,
-                width: 3.minSp,
+                width: 3.responsiveSp,
               ),
             ),
             child: Column(
@@ -237,13 +237,13 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .gridLineColor,
-                    height: 1.minSp),
+                    height: 1.responsiveSp),
                 _buildTable(context),
                 Container(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .gridLineColor,
-                    height: 1.minSp),
+                    height: 1.responsiveSp),
                 SizedBox(height: 20.h),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -283,7 +283,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                           bgColor: CommonColors.green),
                       Text("ADD TIER",
                           style: GoogleFonts.robotoMono(
-                            fontSize: ThemeNotifier.medium.minSp,
+                            fontSize: ThemeNotifier.medium.responsiveSp,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
@@ -327,7 +327,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     );
   }
 
-  double rightpaddingconstant = 30.minSp + 8.w;
+  double rightpaddingconstant = 30.responsiveSp + 8.w;
 
   Widget _buildEditableTierCell(int index) {
     // Handle the first tier (Fixed)
@@ -367,7 +367,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         ),
         Text(" to ",
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.medium.minSp,
+              fontSize: ThemeNotifier.medium.responsiveSp,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -393,7 +393,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  right: addPlusSuffix ? ThemeNotifier.medium.minSp + 2 : 0),
+                  right: addPlusSuffix ? ThemeNotifier.medium.responsiveSp + 2 : 0),
               child: TextField(
                 controller: controller,
                 enabled: editable,
@@ -403,9 +403,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                 cursorColor: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .textfieldCursorColor,
-                cursorHeight: 30.minSp,
+                cursorHeight: 30.responsiveSp,
                 style: GoogleFonts.robotoMono(
-                  fontSize: ThemeNotifier.medium.minSp,
+                  fontSize: ThemeNotifier.medium.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -446,7 +446,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                   final textSpan = TextSpan(
                     text: value.text,
                     style: GoogleFonts.robotoMono(
-                      fontSize: ThemeNotifier.medium.minSp,
+                      fontSize: ThemeNotifier.medium.responsiveSp,
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor,
@@ -466,13 +466,13 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                   if (textWidth < availableWidth) {
                     // Center the `+` sign relative to the text
                     plusPosition =
-                        ((availableWidth - ThemeNotifier.medium.minSp + 2) /
+                        ((availableWidth - ThemeNotifier.medium.responsiveSp + 2) /
                                 2) -
                             (textWidth / 2) +
                             textWidth;
                   } else {
                     // Keep the `+` sign at the end if text exceeds available width
-                    plusPosition = availableWidth - ThemeNotifier.medium.minSp;
+                    plusPosition = availableWidth - ThemeNotifier.medium.responsiveSp;
                   }
 
                   return Positioned(
@@ -486,7 +486,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                          fontSize: ThemeNotifier.medium.minSp,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
                         ),
                       ),
                     ),
@@ -509,9 +509,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         cursorColor: Provider.of<ThemeNotifier>(context)
             .currentTheme
             .textfieldCursorColor,
-        cursorHeight: 30.minSp,
+        cursorHeight: 30.responsiveSp,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.minSp,
+          fontSize: ThemeNotifier.medium.responsiveSp,
           color: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor,
@@ -655,7 +655,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           text,
           textAlign: TextAlign.center,
           style: GoogleFonts.robotoMono(
-            fontSize: ThemeNotifier.medium.minSp,
+            fontSize: ThemeNotifier.medium.responsiveSp,
             fontWeight: FontWeight.bold,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme

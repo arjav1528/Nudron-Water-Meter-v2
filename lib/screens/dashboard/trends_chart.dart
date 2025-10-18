@@ -92,19 +92,20 @@ TooltipBehavior createCustomTooltipBehavior({
 
       // tooltipContent.sort((a, b) => b.compareTo(a));
 
-      if (tooltipContent.isEmpty)
+      if (tooltipContent.isEmpty) {
         return Container(
           padding: const EdgeInsets.all(4.0),
           child: Text(
             "No data available",
             style: GoogleFonts.roboto(
-              fontSize: ThemeNotifier.small.minSp,
+              fontSize: ThemeNotifier.small.responsiveSp,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
             ),
           ),
         );
+      }
 
       return Padding(
         padding: const EdgeInsets.all(4.0),
@@ -116,7 +117,7 @@ TooltipBehavior createCustomTooltipBehavior({
               Text(
                 content,
                 style: GoogleFonts.roboto(
-                  fontSize: ThemeNotifier.small.minSp,
+                  fontSize: ThemeNotifier.small.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -403,7 +404,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
       middleWidget: Text(
         "MONTHLY TREND",
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.small.minSp,
+          fontSize: ThemeNotifier.small.responsiveSp,
           color: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor,
@@ -685,13 +686,13 @@ class _DailyChartState extends State<DailyChart> {
                             .currentTheme
                             .splashColor,
                         splashFactory: InkRipple.splashFactory,
-                        radius: 20.minSp,
+                        radius: 20.responsiveSp,
                         child: SizedBox(
-                          height: 41.minSp,
-                          width: 41.minSp,
+                          height: 41.responsiveSp,
+                          width: 41.responsiveSp,
                           child: Icon(
                             Icons.arrow_back_sharp,
-                            size: 30.minSp,
+                            size: 30.responsiveSp,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor
@@ -707,7 +708,7 @@ class _DailyChartState extends State<DailyChart> {
                       "${xLabelsMonthly[NudronChartMap.selectedMonth.value - 1]} Trend"
                           .toUpperCase(),
                       style: GoogleFonts.robotoMono(
-                        fontSize: ThemeNotifier.small.minSp,
+                        fontSize: ThemeNotifier.small.responsiveSp,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -826,7 +827,7 @@ class BasicChart extends StatelessWidget {
                             Text(
                               "USAGE(L)",
                               style: GoogleFonts.robotoMono(
-                                fontSize: ThemeNotifier.small.minSp,
+                                fontSize: ThemeNotifier.small.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
@@ -844,13 +845,13 @@ class BasicChart extends StatelessWidget {
                                             .currentTheme
                                             .splashColor,
                                     splashFactory: InkRipple.splashFactory,
-                                    radius: 20.minSp,
+                                    radius: 20.responsiveSp,
                                     child: SizedBox(
-                                      height: 41.minSp,
-                                      width: 41.minSp,
+                                      height: 41.responsiveSp,
+                                      width: 41.responsiveSp,
                                       child: Icon(
                                         Icons.save,
-                                        size: 30.minSp,
+                                        size: 30.responsiveSp,
                                         color:
                                             Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
@@ -889,13 +890,13 @@ class BasicChart extends StatelessWidget {
                                               .currentTheme
                                               .splashColor,
                                       splashFactory: InkRipple.splashFactory,
-                                      radius: 20.minSp,
+                                      radius: 20.responsiveSp,
                                       child: SizedBox(
-                                        height: 41.minSp,
-                                        width: 41.minSp,
+                                        height: 41.responsiveSp,
+                                        width: 41.responsiveSp,
                                         child: Icon(
                                           Icons.zoom_out_map,
-                                          size: 30.minSp,
+                                          size: 30.responsiveSp,
                                           color: Provider.of<ThemeNotifier>(
                                                   context)
                                               .currentTheme
@@ -968,7 +969,7 @@ class BasicChart extends StatelessWidget {
                             Text(
                               "ALERTS",
                               style: GoogleFonts.robotoMono(
-                                fontSize: ThemeNotifier.small.minSp,
+                                fontSize: ThemeNotifier.small.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
@@ -1006,7 +1007,7 @@ class BasicChart extends StatelessWidget {
                                 legend: Legend(
                                   isVisible: true,
                                   textStyle: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.small.minSp,
+                                    fontSize: ThemeNotifier.small.responsiveSp,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -1044,7 +1045,7 @@ class BasicChart extends StatelessWidget {
                                           .currentTheme
                                           .gridLineColor),
                                   labelStyle: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.small.minSp,
+                                    fontSize: ThemeNotifier.small.responsiveSp,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -1090,7 +1091,7 @@ class BasicChart extends StatelessWidget {
                                           .currentTheme
                                           .gridLineColor),
                                   labelStyle: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.small.minSp,
+                                    fontSize: ThemeNotifier.small.responsiveSp,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -1107,7 +1108,7 @@ class BasicChart extends StatelessWidget {
                                           .currentTheme
                                           .basicAdvanceTextColor,
                                       fontFamily: 'Roboto',
-                                      fontSize: 12,
+                                      fontSize: 12.responsiveSp,
                                     ),
                                   ),
                                 ),
@@ -1135,7 +1136,7 @@ class BasicChart extends StatelessWidget {
                                                 .currentTheme
                                                 .gridLineColor),
                                     labelStyle: GoogleFonts.roboto(
-                                      fontSize: ThemeNotifier.small.minSp,
+                                      fontSize: ThemeNotifier.small.responsiveSp,
                                       color: Provider.of<ThemeNotifier>(context)
                                           .currentTheme
                                           .basicAdvanceTextColor,
@@ -1148,7 +1149,7 @@ class BasicChart extends StatelessWidget {
                                                 .currentTheme
                                                 .basicAdvanceTextColor,
                                         fontFamily: 'Roboto',
-                                        fontSize: 12,
+                                        fontSize: 12.responsiveSp,
                                       ),
                                     ),
                                   ),

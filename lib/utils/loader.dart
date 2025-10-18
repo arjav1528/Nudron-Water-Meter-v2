@@ -37,10 +37,10 @@ class _CustomLoaderState extends State<CustomLoader> {
         backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         body: Center(
           child: SizedBox(
-            height: 75.minSp,
-            width: 75.minSp,
+            height: 75.responsiveSp,
+            width: 75.responsiveSp,
             child:LoadingAnimationWidget.hexagonDots(
-              size: 75.minSp,
+              size: 75.responsiveSp,
               color: CommonColors.blue,
             ),
             // child: CircularProgressIndicator(

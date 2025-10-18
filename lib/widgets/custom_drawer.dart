@@ -62,7 +62,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .drawerHeadingColor,
-                                    size: 24.minSp,
+                                    size: 24.responsiveSp,
                                   ),
                                   onPressed: () {
                                     Navigator.pop(context);
@@ -78,7 +78,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
                                   child: Text(
                                     widget.drawerName[widget.drawerIndex],
                                     style: GoogleFonts.roboto(
-                                      fontSize: 24.minSp,
+                                      fontSize: 24.responsiveSp,
                                       fontWeight: FontWeight.bold,
                                       color:
                                           Provider.of<ThemeNotifier>(context)

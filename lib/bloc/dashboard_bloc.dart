@@ -282,8 +282,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
           Uint8List pngBytes = byteData.buffer.asUint8List();
 
-          // Request storage permission
-          await Permission.storage.request();
+          // Request storage permission only for mobile platforms
+          if (Platform.isAndroid || Platform.isIOS) {
+            try {
+              await Permission.storage.request();
+            } catch (e) {
+              print("Permission request failed (this is expected on some platforms): $e");
+              // Continue with file operations even if permission request fails
+            }
+          }
 
           Directory? directory = await getExternalStorageDirectory();
           if (directory == null) {
@@ -334,8 +341,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
           Uint8List pngBytes = byteData.buffer.asUint8List();
 
-          // Request storage permission
-          await Permission.storage.request();
+          // Request storage permission only for mobile platforms
+          if (Platform.isAndroid || Platform.isIOS) {
+            try {
+              await Permission.storage.request();
+            } catch (e) {
+              print("Permission request failed (this is expected on some platforms): $e");
+              // Continue with file operations even if permission request fails
+            }
+          }
 
           Directory directory = await getApplicationDocumentsDirectory();
 
