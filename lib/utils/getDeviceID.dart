@@ -47,6 +47,6 @@ class DeviceInfoUtil {
     if (_deviceName == 'WaterMeteringMobile2' || _deviceName == 'Unknown') {
       await _initDeviceInfo();
     }
-    return '${_deviceName}\/$_deviceVersion';
+    return '$_deviceName/$_deviceVersion';
   }
 }

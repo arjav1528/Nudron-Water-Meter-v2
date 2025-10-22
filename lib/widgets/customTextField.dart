@@ -108,20 +108,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
           decoration: InputDecoration(
             suffixIcon: widget.suffixIcon,
             prefixIcon: widget.prefixIcon ??
-                Container(
-                  child: Padding(
-                    padding: widget.iconPath != null
-                        ? EdgeInsets.symmetric(horizontal: 16.w)
-                        : EdgeInsets.zero,
-                    child: widget.iconPath != null
-                        ? SvgPicture.asset(
-                            widget.iconPath!,
-                            height: 16.69.h,
-                            width: 21.w,
-                            fit: BoxFit.scaleDown,
-                          )
-                        : null,
-                  ),
+                Padding(
+                  padding: widget.iconPath != null
+                      ? EdgeInsets.symmetric(horizontal: 16.w)
+                      : EdgeInsets.zero,
+                  child: widget.iconPath != null
+                      ? SvgPicture.asset(
+                          widget.iconPath!,
+                          height: 16.69.h,
+                          width: 21.w,
+                          fit: BoxFit.scaleDown,
+                        )
+                      : null,
                 ),
             prefixIconConstraints: BoxConstraints(
               minHeight: 16.69.h,

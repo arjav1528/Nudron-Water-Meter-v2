@@ -221,7 +221,7 @@ class StringSelectorOverlay extends StatefulWidget {
   final VoidCallback onClose;
   final BuildContext context;
 
-  StringSelectorOverlay({
+  const StringSelectorOverlay({super.key, 
     required this.values,
     required this.initialValue,
     required this.onValueSelected,
@@ -257,7 +257,7 @@ class _StringSelectorOverlayState extends State<StringSelectorOverlay> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        SizedBox(
           height: 200.h,
           child: ListWheelScrollView.useDelegate(
             controller: _scrollController,
@@ -309,7 +309,7 @@ class StringItem extends StatelessWidget {
   final String value;
   final bool isSelected;
 
-  StringItem({
+  const StringItem({super.key, 
     required this.value,
     required this.isSelected,
   });

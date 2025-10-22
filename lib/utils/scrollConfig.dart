@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NoBounceScrollBehavior extends ScrollBehavior {
-  @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child; // Removes the overscroll effect (e.g., glow or bounce)

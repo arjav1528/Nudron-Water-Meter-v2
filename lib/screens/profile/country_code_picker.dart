@@ -20,14 +20,14 @@ class CountryCodePicker2 extends StatefulWidget {
   const CountryCodePicker2({
     required this.height,
     required this.decoration,
-    Key? key,
+    super.key,
     required this.initialSelection,
     this.refreshPhoneCode,
     required this.onChanged,
     required this.getPhoneNumberWithoutCountryCode,
     this.isEditable = true,
     this.dropDownColor = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   _CountryCodePicker2State createState() => _CountryCodePicker2State();
@@ -41,12 +41,10 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   List<String> priorityCountryCodes = ["IN", "GB", "SG", "MY"];
 
   // refresh(String selection) {
-  //   print('refreshing');
   //   selectedItem = allowedCountries.firstWhere(
   //     (country) => selection.startsWith(country.code!),
   //     orElse: () => allowedCountries.first,
   //   );
-  //   print('selectedItem: $selectedItem');
   //   widget.onChanged(selectedItem!);
   //   //remove selected item.dialcode from the initialSelection
   //   widget.getPhoneNumberWithoutCountryCode(
@@ -57,7 +55,6 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   // }
 
   refresh(String fullNumber) {
-    print('Refreshing with: $fullNumber');
 
     // Find the selected country code from allowedCountries
     selectedItem = allowedCountries.firstWhere(
@@ -65,15 +62,12 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       orElse: () => allowedCountries.first,
     );
 
-    print(
-        'Selected Country: ${selectedItem!.code}, Dial Code: ${selectedItem!.dialCode}');
 
     widget.onChanged(selectedItem!);
 
     // Remove country code from phone number
     String purePhoneNumber =
         fullNumber.replaceFirst(selectedItem!.dialCode ?? '', '');
-    print('Extracted Phone Number: $purePhoneNumber');
 
     widget.getPhoneNumberWithoutCountryCode(purePhoneNumber);
 
@@ -149,7 +143,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
           child: Material(
             color: widget.dropDownColor,
             elevation: 4.0,
-            child: Container(
+            child: SizedBox(
               height: 200.h,
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -182,22 +176,18 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                child: Image.asset(
-                  'flags/${country.code!.toLowerCase()}.png',
-                  package: 'country_code_picker',
-                  width: 20,
-                ),
+              Image.asset(
+                'flags/${country.code!.toLowerCase()}.png',
+                package: 'country_code_picker',
+                width: 20,
               ),
-              Container(
-                child: Text(country.dialCode ?? '',
-                    style: GoogleFonts.roboto(
-                      fontSize: ThemeNotifier.medium.responsiveSp,
-                      color: Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .textfieldTextColor,
-                    )),
-              ),
+              Text(country.dialCode ?? '',
+                  style: GoogleFonts.roboto(
+                    fontSize: ThemeNotifier.medium.responsiveSp,
+                    color: Provider.of<ThemeNotifier>(context)
+                        .currentTheme
+                        .textfieldTextColor,
+                  )),
             ],
           ),
         ),

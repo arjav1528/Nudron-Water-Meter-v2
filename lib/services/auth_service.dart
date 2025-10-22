@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,6 +23,11 @@ class AuthService {
   static const String _twoFactorKey = 'two_factor';
   static const String _biometricKey = 'biometric';
   static const String _themeModeKey = 'themeMode';
+  
+  // Token refresh optimization
+  static Future<String?>? _tokenRefreshFuture;
+  static DateTime? _lastTokenRefresh;
+  static const Duration _tokenRefreshCooldown = Duration(minutes: 1);
 
   /// Check if user is currently logged in
   static Future<bool> isLoggedIn() async {
@@ -33,7 +37,6 @@ class AuthService {
       
       return !_isTokenExpired(token);
     } catch (e) {
-      if (kDebugMode) print('Error checking login status: $e');
       return false;
     }
   }
@@ -62,7 +65,6 @@ class AuthService {
       return _handleLoginResponse(response, email, password);
 
     } catch (e) {
-      if (kDebugMode) print('Login error: $e');
       return AuthResult.error(_getErrorMessage(e));
     }
   }
@@ -112,7 +114,6 @@ class AuthService {
         return AuthResult.error('Unexpected response from server');
       }
     } catch (e) {
-      if (kDebugMode) print('Two-factor verification error: $e');
       return AuthResult.error(_getErrorMessage(e));
     }
   }
@@ -124,18 +125,45 @@ class AuthService {
       if (token == null) return null;
 
       if (_isTokenExpired(token)) {
-        return await _refreshAccessToken();
+        return await _refreshAccessTokenOptimized();
       } else if (_isTokenExpiring(token)) {
-        // Refresh token in background
-        _refreshAccessToken();
+        // Refresh token in background without blocking
+        _refreshAccessTokenOptimized();
         return token;
       }
       
       return token;
     } catch (e) {
-      if (kDebugMode) print('Error getting access token: $e');
       await logout();
       return null;
+    }
+  }
+
+  /// Optimized token refresh with deduplication and cooldown
+  static Future<String?> _refreshAccessTokenOptimized() async {
+    // Check if there's already a refresh in progress
+    if (_tokenRefreshFuture != null) {
+      return await _tokenRefreshFuture!;
+    }
+    
+    // Check cooldown to prevent rapid refresh calls
+    final now = DateTime.now();
+    if (_lastTokenRefresh != null) {
+      final timeSinceLastRefresh = now.difference(_lastTokenRefresh!);
+      if (timeSinceLastRefresh < _tokenRefreshCooldown) {
+        // Return current token if refresh was recent
+        return await _secureStorage.read(key: _accessTokenKey);
+      }
+    }
+    
+    _lastTokenRefresh = now;
+    _tokenRefreshFuture = _refreshAccessToken();
+    
+    try {
+      final result = await _tokenRefreshFuture!;
+      return result;
+    } finally {
+      _tokenRefreshFuture = null;
     }
   }
 
@@ -165,7 +193,6 @@ class AuthService {
         return null;
       }
     } catch (e) {
-      if (kDebugMode) print('Error refreshing token: $e');
       await logout();
       return null;
     }
@@ -192,7 +219,6 @@ class AuthService {
       final response = await _makeRequest(body, url: _au3Url);
       return jsonDecode(response);
     } catch (e) {
-      if (kDebugMode) print('Error getting user info: $e');
       return null;
     }
   }
@@ -213,7 +239,6 @@ class AuthService {
       
       return AuthResult.success(message: 'Password reset email sent');
     } catch (e) {
-      if (kDebugMode) print('Forgot password error: $e');
       return AuthResult.error(_getErrorMessage(e));
     }
   }
@@ -229,7 +254,6 @@ class AuthService {
           await _makeRequest(body, url: _au3Url);
         } catch (e) {
           // Ignore logout API errors
-          if (kDebugMode) print('Logout API error: $e');
         }
       }
     } finally {
@@ -244,7 +268,6 @@ class AuthService {
       const body = '09';
       await _makeRequest(body, url: _au3Url);
     } catch (e) {
-      if (kDebugMode) print('Global logout error: $e');
     } finally {
       await _clearAuthData();
     }
@@ -256,7 +279,6 @@ class AuthService {
       final value = await _secureStorage.read(key: _twoFactorKey);
       return value == 'true';
     } catch (e) {
-      if (kDebugMode) print('Error checking 2FA status: $e');
       return false;
     }
   }
@@ -283,7 +305,6 @@ class AuthService {
         'url': responseValues.length > 1 ? responseValues[1] : null,
       });
     } catch (e) {
-      if (kDebugMode) print('Enable 2FA error: $e');
       return AuthResult.error(_getErrorMessage(e));
     }
   }
@@ -296,7 +317,6 @@ class AuthService {
       await _setTwoFactorEnabled(false);
       return AuthResult.success(message: 'Two-factor authentication disabled');
     } catch (e) {
-      if (kDebugMode) print('Disable 2FA error: $e');
       return AuthResult.error(_getErrorMessage(e));
     }
   }
@@ -306,7 +326,6 @@ class AuthService {
     try {
       return await _secureStorage.read(key: _emailKey);
     } catch (e) {
-      if (kDebugMode) print('Error getting stored email: $e');
       return null;
     }
   }
@@ -316,7 +335,6 @@ class AuthService {
     try {
       return await _secureStorage.read(key: _passwordKey);
     } catch (e) {
-      if (kDebugMode) print('Error getting stored password: $e');
       return null;
     }
   }
@@ -327,7 +345,6 @@ class AuthService {
       await _secureStorage.write(key: _emailKey, value: email);
       await _secureStorage.write(key: _passwordKey, value: password);
     } catch (e) {
-      if (kDebugMode) print('Error storing credentials: $e');
     }
   }
 
@@ -337,7 +354,6 @@ class AuthService {
       await _secureStorage.delete(key: _emailKey);
       await _secureStorage.delete(key: _passwordKey);
     } catch (e) {
-      if (kDebugMode) print('Error clearing credentials: $e');
     }
   }
 
@@ -381,7 +397,6 @@ class AuthService {
         await _secureStorage.write(key: _themeModeKey, value: themeMode);
       }
     } catch (e) {
-      if (kDebugMode) print('Error clearing auth data: $e');
     }
   }
 
@@ -390,7 +405,6 @@ class AuthService {
       final expiryTime = _getTokenExpiryTime(token);
       return DateTime.now().isAfter(expiryTime);
     } catch (e) {
-      if (kDebugMode) print('Error checking token expiry: $e');
       return true;
     }
   }
@@ -401,7 +415,6 @@ class AuthService {
       final thirtyMinutesFromNow = DateTime.now().add(const Duration(minutes: 30));
       return thirtyMinutesFromNow.isAfter(expiryTime);
     } catch (e) {
-      if (kDebugMode) print('Error checking token expiry: $e');
       return true;
     }
   }
@@ -419,7 +432,6 @@ class AuthService {
       final expiryTime = tokenData['exp'] as int;
       return DateTime.fromMillisecondsSinceEpoch(expiryTime * 1000);
     } catch (e) {
-      if (kDebugMode) print('Error parsing token: $e');
       return DateTime.now().subtract(const Duration(hours: 1));
     }
   }
@@ -462,24 +474,13 @@ class AuthService {
     request.body = body;
     request.headers.addAll(headers);
 
-    if (kDebugMode) {
-      print("Auth Request - URL: ${request.url}");
-      print("Auth Request - Body: ${request.body}");
-      print("Auth Request - Headers: ${request.headers}");
-    }
 
     try {
       final response = await request.send().timeout(timeout ?? const Duration(seconds: 10));
       
-      if (kDebugMode) {
-        print("Auth Response - Status: ${response.statusCode}");
-      }
 
       if (response.statusCode == 200) {
         final responseBody = await response.stream.bytesToString();
-        if (kDebugMode) {
-          print("Auth Response - Body: $responseBody");
-        }
         return responseBody;
       } else if (response.statusCode == 401 || response.statusCode == 403) {
         await logout();
@@ -491,7 +492,6 @@ class AuthService {
     } on TimeoutException {
       throw CustomException('Request timed out');
     } catch (e) {
-      if (kDebugMode) print('Network request error: $e');
       throw CustomException('Network error: ${e.toString()}');
     }
   }

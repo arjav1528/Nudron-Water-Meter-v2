@@ -9,7 +9,6 @@ import 'package:watermeter2/utils/pok.dart';
 
 import '../../api/auth_service.dart';
 import '../../bloc/dashboard_bloc.dart';
-import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/loader.dart';
@@ -124,30 +123,27 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                      // color: Colors.green,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ChamferedTextWidgetInverted(
-                            text: "ADD PROJECT",
-                            borderColor: Provider.of<ThemeNotifier>(context)
-                                .currentTheme
-                                .gridLineColor,
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.close,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .gridLineColor),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ChamferedTextWidgetInverted(
+                        text: "ADD PROJECT",
+                        borderColor: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .gridLineColor,
                       ),
-                    ),
+                      IconButton(
+                        icon: Icon(Icons.close,
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .gridLineColor),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 15.h),
                   Padding(
                     padding: EdgeInsets.only(left: 24.w,right: 24.w),

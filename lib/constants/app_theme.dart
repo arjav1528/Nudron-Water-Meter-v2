@@ -88,7 +88,7 @@ class CommonColors {
   static const Color red = Color(0xFFFF5353);
   static const Color green = Color(0xFF00bc8a);
   static const Color yellow = Color(0xFFDFAC46);
-  static const Color blue2 = const Color(0xff45b4d9);
+  static const Color blue2 = Color(0xff45b4d9);
 }
 
 class ThemeNotifier with ChangeNotifier {
@@ -177,13 +177,10 @@ class ThemeNotifier with ChangeNotifier {
       const FlutterSecureStorage()
           .write(key: 'themeMode', value: isDark.toString());
     } catch (e) {
-      print(e);
     }
   }
 
   readThemeMode() async {
-    // print("App Signature: ");
-    // print(await SmsAutoFill().getAppSignature);
 
     try {
       String? themeModeString =
@@ -196,7 +193,6 @@ class ThemeNotifier with ChangeNotifier {
         }
       }
     } catch (e) {
-      print(e);
     }
 
     setThemeMode();

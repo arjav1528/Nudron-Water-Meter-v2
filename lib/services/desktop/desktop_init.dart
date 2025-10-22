@@ -13,7 +13,6 @@ class DesktopInit {
         SecurityContext.defaultContext
             .setTrustedCertificatesBytes(data.buffer.asUint8List());
       } catch (e) {
-        print('Warning: Could not load certificate file: $e');
       }
       
       // Initialize window manager
@@ -29,7 +28,6 @@ class DesktopInit {
         await windowManager.focus();
       });
     } catch (e) {
-      print('Warning: Desktop initialization failed: $e');
     }
     
     // Desktop allows all orientations

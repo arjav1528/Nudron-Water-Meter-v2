@@ -13,9 +13,6 @@ class NudronChartMap {
   }
 
   printClass() {
-    print('selectedMonth: ${selectedMonth.value}');
-    print('DataMap: $_dataMap');
-    print('Headers: $headers');
   }
 
   static getMonthNumberFromName(String month) {
@@ -112,7 +109,7 @@ class NudronChartMap {
 
   String getMMMYY(int month, int year) {
     DateTime date = DateTime(year, month, 1);
-    return DateFormat.MMM().format(date) + " " + year.toString();
+    return "${DateFormat.MMM().format(date)} $year";
   }
 
   String getddmmmyy(int day, int month, int year) {
@@ -132,11 +129,12 @@ class NudronChartMap {
     for (var year in years) {
       for (var month in _dataMap[year]!.keys) {
         for (var day in _dataMap[year]![month]!.keys) {
-          if (day != 0)
+          if (day != 0) {
             values.add([
               getddmmmyy(day, month, year),
               ..._dataMap[year]![month]![day]!
             ]);
+          }
         }
       }
     }
@@ -178,11 +176,12 @@ class NudronChartMap {
           continue;
         }
         for (var day in _dataMap[year]![selectedMonth.value]!.keys) {
-          if (day != 0)
+          if (day != 0) {
             values.add([
               getddmmmyy(day, selectedMonth.value, year),
               ..._dataMap[year]![selectedMonth.value]![day]!
             ]);
+          }
         }
       }
       toReturn.add(values);
@@ -192,39 +191,51 @@ class NudronChartMap {
   }
 
   void _initializeDataMap(List<dynamic> chartData) {
-    for (var entry in chartData) {
-      final date = getDateFromDayNumber(entry[0]);
-      final year = date.year;
-      final month = date.month;
-      final day = date.day;
+    // Pre-allocate maps for better performance
+    final Map<int, Map<int, Map<int, List<dynamic>>>> tempDataMap = {};
+    
+    // Process data in batches for better memory management
+    const int batchSize = 1000;
+    for (int i = 0; i < chartData.length; i += batchSize) {
+      final endIndex = (i + batchSize < chartData.length) ? i + batchSize : chartData.length;
+      final batch = chartData.sublist(i, endIndex);
+      
+      for (var entry in batch) {
+        final date = getDateFromDayNumber(entry[0]);
+        final year = date.year;
+        final month = date.month;
+        final day = date.day;
 
-      // Check if the year key exists in the map
-      if (!_dataMap.containsKey(year)) {
-        _dataMap[year] = {};
+        // Use putIfAbsent for better performance
+        tempDataMap.putIfAbsent(year, () => {});
+        tempDataMap[year]!.putIfAbsent(month, () => {});
+        
+        // Store data directly
+        tempDataMap[year]![month]![day] = entry.sublist(1);
       }
-
-      // Check if the month key exists in the map
-      if (!_dataMap[year]!.containsKey(month)) {
-        _dataMap[year]![month] = {};
-      }
-
-      // Update only the existing day entries
-      _dataMap[year]![month]![day] = entry.sublist(1);
     }
+    
+    // Copy to main data map
+    _dataMap.addAll(tempDataMap);
 
-    //do aggregation on the month
+    // Optimize aggregation with pre-calculated lengths
     for (var year in _dataMap.keys) {
       for (var month in _dataMap[year]!.keys) {
-        //length of the data
-        int length = _dataMap[year]![month]!.values.first.length;
-        List<dynamic> aggregatedData = List.filled(length, 0);
+        final monthData = _dataMap[year]![month]!;
+        if (monthData.isEmpty) continue;
+        
+        // Get length from first entry
+        final firstEntry = monthData.values.first;
+        final length = firstEntry.length;
+        final aggregatedData = List<dynamic>.filled(length, 0);
 
-        for (var day in _dataMap[year]![month]!.keys) {
-          for (var i = 0; i < _dataMap[year]![month]![day]!.length; i++) {
-            aggregatedData[i] += _dataMap[year]![month]![day]![i];
+        // Use for-in loop for better performance
+        for (var dayData in monthData.values) {
+          for (int i = 0; i < length; i++) {
+            aggregatedData[i] += dayData[i];
           }
         }
-        _dataMap[year]![month]![0] = aggregatedData;
+        monthData[0] = aggregatedData;
       }
     }
   }
@@ -239,8 +250,6 @@ class NudronChartMap {
     if (data == null) {
       return null;
     }
-    print("HERE: ${data.length}");
-    print("HERE: ${data}");
     return data.length;
   }
 
@@ -265,7 +274,6 @@ class NudronChartMap {
     if (data == null) {
       return null;
     }
-    print("THERE: ${data}");
     return data.length;
   }
 
@@ -307,9 +315,5 @@ class Entries {
 
   // Debugging print function
   void printClass() {
-    print('alerts: $alerts');
-    print('usages: $usages');
-    print('day: $x');
-    print('year: $x2');
   }
 }

@@ -12,7 +12,6 @@ class NudronRandomStuff {
     // try {
       await LoginPostRequests.logout();
     // } catch (e) {
-    //   print(e);
     // }
   }
 }

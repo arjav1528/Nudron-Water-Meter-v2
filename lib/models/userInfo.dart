@@ -51,8 +51,6 @@ class UserInfo {
 
   printClass() {
     if (kDebugMode) {
-      print(
-          'UserInfo: id: $id, name: $name, email: $email, emailVerified: $emailVerified, phone: $phone, phoneVerified: $phoneVerified');
     }
   }
 
@@ -67,7 +65,6 @@ class UserInfo {
     };
   }
 
-  @override
   List<Object?> get props => [
         id,
         name,

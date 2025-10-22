@@ -23,6 +23,7 @@ import '../screens/dashboard/dashboard_screen.dart';
 import '../utils/alert_message.dart';
 import '../utils/custom_exception.dart';
 import '../utils/excel_helpers.dart';
+import '../utils/performance_monitor.dart';
 import 'dashboard_event.dart';
 
 
@@ -287,7 +288,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             try {
               await Permission.storage.request();
             } catch (e) {
-              print("Permission request failed (this is expected on some platforms): $e");
               // Continue with file operations even if permission request fails
             }
           }
@@ -346,7 +346,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             try {
               await Permission.storage.request();
             } catch (e) {
-              print("Permission request failed (this is expected on some platforms): $e");
               // Continue with file operations even if permission request fails
             }
           }
@@ -630,10 +629,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Cache for API responses to prevent duplicate calls
+  // Enhanced cache for API responses to prevent duplicate calls
   final Map<String, dynamic> _apiCache = {};
   final Map<String, DateTime> _cacheTimestamps = {};
+  final Map<String, Future<dynamic>> _pendingRequests = {};
   static const Duration _cacheExpiry = Duration(minutes: 5);
+  
+  // Memory-efficient cache with size limits
+  static const int _maxCacheSize = 50;
+  final List<String> _cacheAccessOrder = [];
 
   Future<FilterAndSummaryForProject?> updateSelectedFilters(
       List<String?> filters, FilterAndSummaryForProject? filterData) async {
@@ -680,28 +684,51 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     return filterData;
   }
 
-  // Helper method to load trends data with caching
+  // Helper method to load trends data with enhanced caching and deduplication
   Future<void> _loadTrendsDataWithCache(String? project) async {
     if (project == null) return;
     
+    PerformanceMonitor.startTimer('load_trends_data');
+    
     final cacheKey = 'trends_${project}_${currentFilters.length > 1 ? currentFilters.sublist(1).join('>') : ""}';
+    
+    // Check if there's already a pending request for this data
+    if (_pendingRequests.containsKey(cacheKey)) {
+      final data = await _pendingRequests[cacheKey]!;
+      updateTrendsData(data);
+      PerformanceMonitor.endTimer('load_trends_data');
+      return;
+    }
     
     if (_isCacheValid(cacheKey)) {
       updateTrendsData(_apiCache[cacheKey]);
+      PerformanceMonitor.endTimer('load_trends_data');
       return;
     }
 
+    // Create the future and store it to prevent duplicate requests
+    final future = _loadTrendsDataInternal(project);
+    _pendingRequests[cacheKey] = future;
+    
     try {
-      final data = await DataPostRequests.getChartData(
-          project: project,
-          selectedLevels: currentFilters.length > 1 ? currentFilters.sublist(1) : [""]);
-      
+      final data = await future;
       _apiCache[cacheKey] = data;
       _cacheTimestamps[cacheKey] = DateTime.now();
+      _cacheAccessOrder.add(cacheKey);
+      _evictLRUEntries();
       updateTrendsData(data);
     } catch (e) {
       throw Exception("Error loading trends data: ${e.toString()}");
+    } finally {
+      _pendingRequests.remove(cacheKey);
+      PerformanceMonitor.endTimer('load_trends_data');
     }
+  }
+  
+  Future<dynamic> _loadTrendsDataInternal(String project) async {
+    return await DataPostRequests.getChartData(
+        project: project,
+        selectedLevels: currentFilters.length > 1 ? currentFilters.sublist(1) : [""]);
   }
 
   // Helper method to load summary data with caching
@@ -765,20 +792,39 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Check if cache is valid
+  // Check if cache is valid with LRU eviction
   bool _isCacheValid(String cacheKey) {
     if (!_apiCache.containsKey(cacheKey) || !_cacheTimestamps.containsKey(cacheKey)) {
       return false;
     }
     
     final cacheTime = _cacheTimestamps[cacheKey]!;
-    return DateTime.now().difference(cacheTime) < _cacheExpiry;
+    final isValid = DateTime.now().difference(cacheTime) < _cacheExpiry;
+    
+    if (isValid) {
+      // Update access order for LRU
+      _cacheAccessOrder.remove(cacheKey);
+      _cacheAccessOrder.add(cacheKey);
+    }
+    
+    return isValid;
   }
 
-  // Clear cache when needed
+  // Clear cache when needed with LRU eviction
   void clearCache() {
     _apiCache.clear();
     _cacheTimestamps.clear();
+    _pendingRequests.clear();
+    _cacheAccessOrder.clear();
+  }
+  
+  // Evict least recently used cache entries
+  void _evictLRUEntries() {
+    while (_apiCache.length > _maxCacheSize && _cacheAccessOrder.isNotEmpty) {
+      final oldestKey = _cacheAccessOrder.removeAt(0);
+      _apiCache.remove(oldestKey);
+      _cacheTimestamps.remove(oldestKey);
+    }
   }
 
   // Clear cache for specific project
@@ -787,6 +833,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     for (final key in keysToRemove) {
       _apiCache.remove(key);
       _cacheTimestamps.remove(key);
+    }
+    
+    // Also clear any pending requests for this project
+    final pendingKeysToRemove = _pendingRequests.keys.where((key) => key.contains(project)).toList();
+    for (final key in pendingKeysToRemove) {
+      _pendingRequests.remove(key);
     }
   }
 
@@ -966,5 +1018,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   DashboardBloc() : super(DashboardPageInitial()) {
     toUpdateProfile.addListener(updateProfile);
     loadInitialData();
+    
+    // Log performance summary periodically in debug mode
+    if (kDebugMode) {
+      Timer.periodic(const Duration(minutes: 5), (timer) {
+        PerformanceMonitor.logPerformanceSummary();
+      });
+    }
   }
 }

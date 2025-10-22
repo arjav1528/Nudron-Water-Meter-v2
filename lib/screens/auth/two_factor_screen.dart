@@ -168,7 +168,6 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                           enablePinAutofill: true,
                           onCompleted: (v) {
                             if (kDebugMode) {
-                              print("Completed");
                             }
                           },
                           beforeTextPaste: (text) {

@@ -198,7 +198,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   height: 3.h,
                   color: CommonColors.blue2,
                 ),
-                Container(
+                SizedBox(
                   height: constraints.maxHeight - 6.h,
                   child: SingleChildScrollView(
                     physics: ClampingScrollPhysics(),
@@ -363,14 +363,11 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
                                         try {
                                           if (kDebugMode) {
-                                            print("Checking all text fields");
                                           }
 
                                           checkAllTextFields();
                                         } catch (e) {
                                           if (kDebugMode) {
-                                            print(
-                                                "Error in checking all text fields $e");
                                           }
                                           CustomAlert
                                               .showCustomScaffoldMessenger(
@@ -687,7 +684,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                           setState(() {
                                                             deleteAccountVisible = false;
                                                           });
-                                                          print("Delete action cancelled");
                                                           // Perform cancel action
                                                         },
                                                       ),
@@ -699,7 +695,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                             // Use the new AuthBloc for global logout (delete account)
                                                             BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
                                                           } else {
-                                                            print("Delete confirmation failed");
                                                             CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
                                                           }
                                                         },
@@ -763,8 +758,6 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   @override
   void initState() {
     NudronRandomStuff.isAuthEnabled.addListener(() {
-      print(
-          "isAuthEnabled changed to ${NudronRandomStuff.isAuthEnabled.value}");
       if (mounted) {
         setState(() {
           is2FAEnabled = NudronRandomStuff.isAuthEnabled.value ||
@@ -975,8 +968,6 @@ class _BiometricWidgetState extends State<BiometricWidget> {
   void initState() {
     NudronRandomStuff.isBiometricEnabled.addListener(() {
       if (mounted) {
-        print(
-            "isBiometricEnabled changed to ${NudronRandomStuff.isBiometricEnabled.value}");
         setState(() {
           isBiometricEnabled = NudronRandomStuff.isBiometricEnabled.value;
         });

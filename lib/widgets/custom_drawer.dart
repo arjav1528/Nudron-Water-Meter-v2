@@ -35,77 +35,76 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
         },
         child: Scaffold(
           backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-          body: Container(
+          body: Column(
+                      children: [
+          // CustomAppBar outside the scrollable region
+          CustomAppBar(choiceAction: null),
+          
+          Expanded(
+            child: SingleChildScrollView(
               child: Column(
-            children: [
-              // CustomAppBar outside the scrollable region
-              CustomAppBar(choiceAction: null),
-
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: Provider.of<ThemeNotifier>(context)
-                            .currentTheme
-                            .bgColor,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                          child: Stack(
-                            children: [
-                              Container(),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.arrow_back_ios,
-                                    color: Provider.of<ThemeNotifier>(context)
-                                        .currentTheme
-                                        .drawerHeadingColor,
-                                    size: 24.responsiveSp,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                children: [
+                  Container(
+                    color: Provider.of<ThemeNotifier>(context)
+                        .currentTheme
+                        .bgColor,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                      child: Stack(
+                        children: [
+                          Container(),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.arrow_back_ios,
+                                color: Provider.of<ThemeNotifier>(context)
+                                    .currentTheme
+                                    .drawerHeadingColor,
+                                size: 24.responsiveSp,
                               ),
-
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    widget.drawerName[widget.drawerIndex],
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 24.responsiveSp,
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          Provider.of<ThemeNotifier>(context)
-                                              .currentTheme
-                                              .drawerHeadingColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           ),
-                        ),
+          
+          
+          
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                widget.drawerName[widget.drawerIndex],
+                                style: GoogleFonts.roboto(
+                                  fontSize: 24.responsiveSp,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Provider.of<ThemeNotifier>(context)
+                                          .currentTheme
+                                          .drawerHeadingColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(0.0),
-                      //   child: Container(
-                      //     height: 1.h,
-                      //     color: Color(0xFFB3B3B3),
-                      //   ),
-                      // ),
-                      widget.drawerIndex >= 1 ? Container() : list[widget.drawerIndex],
-                    ],
+                    ),
                   ),
-                ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(0.0),
+                  //   child: Container(
+                  //     height: 1.h,
+                  //     color: Color(0xFFB3B3B3),
+                  //   ),
+                  // ),
+                  widget.drawerIndex >= 1 ? Container() : list[widget.drawerIndex],
+                ],
               ),
-            ],
-          )),
+            ),
+          ),
+                      ],
+                    ),
         ),
       ),
     );

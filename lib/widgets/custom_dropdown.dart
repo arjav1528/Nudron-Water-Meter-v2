@@ -370,34 +370,32 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
               ),
               child: Row(
                 children: [
-                  widget.fieldNameVisible ? Container(
-                    child: Row(
-                      children: [
-                        SizedBox(width: 10.w),
-                        SizedBox(
-                          width: widget.width1.w,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              widget.fieldName,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.robotoMono(
-                                fontSize: ThemeNotifier.small.responsiveSp,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .basicAdvanceTextColor,
-                              ),
+                  widget.fieldNameVisible ? Row(
+                    children: [
+                      SizedBox(width: 10.w),
+                      SizedBox(
+                        width: widget.width1.w,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            widget.fieldName,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.robotoMono(
+                              fontSize: ThemeNotifier.small.responsiveSp,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .basicAdvanceTextColor,
                             ),
                           ),
                         ),
-                        Container(width: 10.w),
-                        Container(
-                          height: 50.91.h,
-                          width: 1.w,
-                          color: CommonColors.blue,
-                        ),
-                      ],
-                    ),
+                      ),
+                      Container(width: 10.w),
+                      Container(
+                        height: 50.91.h,
+                        width: 1.w,
+                        color: CommonColors.blue,
+                      ),
+                    ],
                   ) : Container(),
                   GestureDetector(
                     onTap: _toggleDropdown,

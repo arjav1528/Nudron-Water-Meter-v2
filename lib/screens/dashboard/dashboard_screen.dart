@@ -141,7 +141,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   
   // Desktop-specific properties
   final double _drawerWidth = 230.0;
-  bool _isDrawerCollapsed = true;
+  final bool _isDrawerCollapsed = true;
 
   List<IconData> icons = [
     Icons.trending_up_sharp,
@@ -167,7 +167,6 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   @override
   void initState() {
     super.initState();
-    print("YES I AM BEING HIT");
     // Remove dynamic tab update
     // WidgetsBinding.instance.addPostFrameCallback(
     //   (_) async {

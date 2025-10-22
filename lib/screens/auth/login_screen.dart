@@ -118,16 +118,14 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Center(
-                            child: Container(
-                              child: Text(
-                                  "Welcome to Nudron's Water Metering Dashboard",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.roboto(
-                                      fontSize: ThemeNotifier.medium.responsiveSp,
-                                      color: Provider.of<ThemeNotifier>(context)
-                                          .currentTheme
-                                          .basicAdvanceTextColor)),
-                            ),
+                            child: Text(
+                                "Welcome to Nudron's Water Metering Dashboard",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    fontSize: ThemeNotifier.medium.responsiveSp,
+                                    color: Provider.of<ThemeNotifier>(context)
+                                        .currentTheme
+                                        .basicAdvanceTextColor)),
                           ),
                         ),
                         SizedBox(height: 20.h),
@@ -245,242 +243,237 @@ class _SigninPageState extends State<SigninPage> {
           });
         }
       },
-      child: Container(
-        child: Column(
-          children: [
-          Padding(
-              padding: EdgeInsets.only(left: 35.w, right: 35.w),
-              child: CustomTextField(
-                key: UniqueKey(),
-                controller: emailController,
-                iconPath: 'assets/icons/mail.svg',
-                hintText: 'Enter Email',
-                keyboardType: TextInputType.emailAddress,
-              )),
-          Visibility(
-            visible: openForgotPasswordButtons,
-            child: Padding(
-              padding: EdgeInsets.only(left: 35.w, right: 35.w),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Forgot Password?",
-                          style: GoogleFonts.roboto(
-                              fontSize: ThemeNotifier.medium.responsiveSp,
-                              fontWeight: FontWeight.w500,
-                              color: CommonColors.red),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        children: [
+        Padding(
+            padding: EdgeInsets.only(left: 35.w, right: 35.w),
+            child: CustomTextField(
+              key: UniqueKey(),
+              controller: emailController,
+              iconPath: 'assets/icons/mail.svg',
+              hintText: 'Enter Email',
+              keyboardType: TextInputType.emailAddress,
+            )),
+        Visibility(
+          visible: openForgotPasswordButtons,
+          child: Padding(
+            padding: EdgeInsets.only(left: 35.w, right: 35.w),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CustomButton(
-                        width: 130.w,
-                        text: "CANCEL",
-                        isRed: true,
-                        onPressed: () {
-                          setState(() {
-                            openForgotPasswordButtons = false;
-                          });
-                        },
-                      ),
-                      CustomButton(
-                        width: 130.w,
-                        text: "SEND EMAIL",
-                        onPressed: () async {
-                          // Trigger forgot password using AuthBloc
-                          final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
-                          authBloc.add(AuthForgotPassword(email: emailController.text));
-                        },
+                      Text(
+                        "Forgot Password?",
+                        style: GoogleFonts.roboto(
+                            fontSize: ThemeNotifier.medium.responsiveSp,
+                            fontWeight: FontWeight.w500,
+                            color: CommonColors.red),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      width: 130.w,
+                      text: "CANCEL",
+                      isRed: true,
+                      onPressed: () {
+                        setState(() {
+                          openForgotPasswordButtons = false;
+                        });
+                      },
+                    ),
+                    CustomButton(
+                      width: 130.w,
+                      text: "SEND EMAIL",
+                      onPressed: () async {
+                        // Trigger forgot password using AuthBloc
+                        final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+                        authBloc.add(AuthForgotPassword(email: emailController.text));
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          LayoutBuilder(builder: (context, constraints) {
-            return Visibility(
-              visible: !openForgotPasswordButtons,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 35.w, right: 35.w, top: 22.h),
-                          child: PasswordTextField(
-                            controller: passwordControllerObscure,
-                          )),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          // color: Colors.green,
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 35.w, top: 25.h),
-                            child: GestureDetector(
-                              onTap: () async {
-                                if (emailController.text.isNotEmpty) {
-                                  final bool emailValid =
-                                      MiscellaneousFunctions.isEmailValid(
-                                          emailController.text);
-                                  if (emailValid == false) {
-                                    CustomAlert.showCustomScaffoldMessenger(
-                                        context,
-                                        "Please enter a valid email",
-                                        AlertType.warning);
-                                    return;
-                                  } else {
-                                    setState(() {
-                                      openForgotPasswordButtons = true;
-                                    });
-                                  }
-                                } else {
-                                  CustomAlert.showCustomScaffoldMessenger(
-                                      context,
-                                      "Please enter an email",
-                                      AlertType.warning);
-                                }
-                              },
-                              child: Text(
-                                "Forgot Password?",
-                                style: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.medium.responsiveSp,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: CommonColors.red,
-                                    fontWeight: FontWeight.w500,
-                                    color: CommonColors.red),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(height: 40.h),
-                      Center(
-                        child: CustomButton(
-                          text: "SIGN IN",
-                          // fontSize: 16,
-                          // width: 147.64.w,
-                          // height: 58.h,
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            
-                            // Validate inputs
-                            if (ConfigurationCustom.skipAnyAuths == false) {
-                              if (emailController.text.isEmpty || getPassword().isEmpty) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                    context,
-                                    "Please Enter Email and Password",
-                                    AlertType.warning);
-                                return;
-                              }
-                              final bool emailValid = MiscellaneousFunctions.isEmailValid(emailController.text);
+        ),
+        LayoutBuilder(builder: (context, constraints) {
+          return Visibility(
+            visible: !openForgotPasswordButtons,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(
+                            left: 35.w, right: 35.w, top: 22.h),
+                        child: PasswordTextField(
+                          controller: passwordControllerObscure,
+                        )),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 35.w, top: 25.h),
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (emailController.text.isNotEmpty) {
+                              final bool emailValid =
+                                  MiscellaneousFunctions.isEmailValid(
+                                      emailController.text);
                               if (emailValid == false) {
                                 CustomAlert.showCustomScaffoldMessenger(
                                     context,
                                     "Please enter a valid email",
                                     AlertType.warning);
                                 return;
+                              } else {
+                                setState(() {
+                                  openForgotPasswordButtons = true;
+                                });
                               }
-                            }
-
-                            // Trigger login using AuthBloc
-                            final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
-                            authBloc.add(AuthLogin(
-                              email: emailController.text,
-                              password: getPassword(),
-                            ));
-                          },
-                        ),
-                      ),
-                      Container(height: 40.h),
-                    ],
-                  ),
-                  // Container(height: 70.h),
-                  // ((emailBiometricSaved == null) ||
-                  //         (emailBiometricSaved!.isEmpty))
-                  //     ? Container()
-                  Column(
-                    children: [
-                      Material(
-                        //make the splash blue color
-                        color: Colors.transparent,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            elevation: MaterialStateProperty.all(0),
-                            overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
-                                  return CommonColors.blue
-                                      .withOpacity(0.25); // Custom splash color
-                                }
-                                return null; // Default splash color
-                              },
-                            ),
-                          ),
-                          onPressed: () async {
-                            emailBiometricSaved = await BiometricHelper.isBiometricEnabled();
-                            if (emailBiometricSaved == null || emailBiometricSaved!.isEmpty) {
+                            } else {
                               CustomAlert.showCustomScaffoldMessenger(
                                   context,
-                                  "No biometric data saved. Please enable in the profile section on login",
+                                  "Please enter an email",
+                                  AlertType.warning);
+                            }
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: GoogleFonts.roboto(
+                                fontSize: ThemeNotifier.medium.responsiveSp,
+                                decoration: TextDecoration.underline,
+                                decorationColor: CommonColors.red,
+                                fontWeight: FontWeight.w500,
+                                color: CommonColors.red),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(height: 40.h),
+                    Center(
+                      child: CustomButton(
+                        text: "SIGN IN",
+                        // fontSize: 16,
+                        // width: 147.64.w,
+                        // height: 58.h,
+                        onPressed: () async {
+                          FocusScope.of(context).unfocus();
+                          
+                          // Validate inputs
+                          if (ConfigurationCustom.skipAnyAuths == false) {
+                            if (emailController.text.isEmpty || getPassword().isEmpty) {
+                              CustomAlert.showCustomScaffoldMessenger(
+                                  context,
+                                  "Please Enter Email and Password",
                                   AlertType.warning);
                               return;
                             }
-                            _showEmailConfirmationDialog(context);
-                          },
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.fingerprint,
-                                size: 70.responsiveSp,
+                            final bool emailValid = MiscellaneousFunctions.isEmailValid(emailController.text);
+                            if (emailValid == false) {
+                              CustomAlert.showCustomScaffoldMessenger(
+                                  context,
+                                  "Please enter a valid email",
+                                  AlertType.warning);
+                              return;
+                            }
+                          }
+      
+                          // Trigger login using AuthBloc
+                          final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+                          authBloc.add(AuthLogin(
+                            email: emailController.text,
+                            password: getPassword(),
+                          ));
+                        },
+                      ),
+                    ),
+                    Container(height: 40.h),
+                  ],
+                ),
+                // Container(height: 70.h),
+                // ((emailBiometricSaved == null) ||
+                //         (emailBiometricSaved!.isEmpty))
+                //     ? Container()
+                Column(
+                  children: [
+                    Material(
+                      //make the splash blue color
+                      color: Colors.transparent,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          elevation: MaterialStateProperty.all(0),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return CommonColors.blue
+                                    .withOpacity(0.25); // Custom splash color
+                              }
+                              return null; // Default splash color
+                            },
+                          ),
+                        ),
+                        onPressed: () async {
+                          emailBiometricSaved = await BiometricHelper.isBiometricEnabled();
+                          if (emailBiometricSaved == null || emailBiometricSaved!.isEmpty) {
+                            CustomAlert.showCustomScaffoldMessenger(
+                                context,
+                                "No biometric data saved. Please enable in the profile section on login",
+                                AlertType.warning);
+                            return;
+                          }
+                          _showEmailConfirmationDialog(context);
+                        },
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.fingerprint,
+                              size: 70.responsiveSp,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .basicAdvanceTextColor,
+                            ),
+                            Text(
+                              "LOGIN WITH BIOMETRICS",
+                              style: GoogleFonts.robotoMono(
+                                decoration: TextDecoration.underline,
+                                decorationColor:
+                                    Provider.of<ThemeNotifier>(context)
+                                        .currentTheme
+                                        .basicAdvanceTextColor,
+                                fontSize: ThemeNotifier.small.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
                               ),
-                              Text(
-                                "LOGIN WITH BIOMETRICS",
-                                style: GoogleFonts.robotoMono(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor:
-                                      Provider.of<ThemeNotifier>(context)
-                                          .currentTheme
-                                          .basicAdvanceTextColor,
-                                  fontSize: ThemeNotifier.small.responsiveSp,
-                                  color: Provider.of<ThemeNotifier>(context)
-                                      .currentTheme
-                                      .basicAdvanceTextColor,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 20.h),
-                    ],
-                  )
-                ],
-              ),
-            );
-          }),
-          // SizedBox(height: 38.h),
-        ],
-      ),
-    ),
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
+                )
+              ],
+            ),
+          );
+        }),
+        // SizedBox(height: 38.h),
+      ],
+            ),
     );
   }
 }

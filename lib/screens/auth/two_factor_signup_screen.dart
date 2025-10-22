@@ -516,7 +516,6 @@ class _CustomPincodeState extends State<CustomPincode> {
               controller: widget.controller,
               onCompleted: (v) {
                 if (kDebugMode) {
-                  print("Completed");
                 }
               },
               beforeTextPaste: (text) {

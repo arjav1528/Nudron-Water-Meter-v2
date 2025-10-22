@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -17,6 +16,14 @@ class DataPostRequests {
   static const String nf3Url = '$portalUrl/nf3';
   static const String wm1Url = 'https://api.nudron.com/prod/dashboard/wm1';
   static FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  
+  // Request deduplication cache with improved performance
+  static final Map<String, Future<dynamic>> _pendingRequests = {};
+  static final Map<String, DateTime> _lastRequestTime = {};
+  static const Duration _requestThrottle = Duration(milliseconds: 300); // Reduced throttle time
+  
+  // Request timeout configuration
+  static const Duration _fastTimeout = Duration(seconds: 5);
 
   static getIconNamesForAlerts(int index) {
     switch (index) {
@@ -75,15 +82,9 @@ class DataPostRequests {
       // Print in chunks
       const int chunkSize = 1000;
       for (int i = 0; i < jsonString.length; i += chunkSize) {
-        print(jsonString.substring(
-            i,
-            i + chunkSize > jsonString.length
-                ? jsonString.length
-                : i + chunkSize));
       }
     } else {
       // Print directly if the string is short enough
-      print(jsonString);
     }
 
     // Dummy wait for 2 seconds
@@ -403,6 +404,36 @@ class DataPostRequests {
   }
 
   static Future<dynamic> getFilters({required String project}) async {
+    final cacheKey = 'filters_$project';
+    
+    // Check for pending request
+    if (_pendingRequests.containsKey(cacheKey)) {
+      return await _pendingRequests[cacheKey]!;
+    }
+    
+    // Throttle rapid requests
+    final now = DateTime.now();
+    if (_lastRequestTime.containsKey(cacheKey)) {
+      final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
+      if (timeSinceLastRequest < _requestThrottle) {
+        await Future.delayed(_requestThrottle - timeSinceLastRequest);
+      }
+    }
+    
+    _lastRequestTime[cacheKey] = now;
+    
+    final future = _getFiltersInternal(project);
+    _pendingRequests[cacheKey] = future;
+    
+    try {
+      final result = await future;
+      return result;
+    } finally {
+      _pendingRequests.remove(cacheKey);
+    }
+  }
+  
+  static Future<dynamic> _getFiltersInternal(String project) async {
     String body = "00$project>Water Metering";
     var response;
     if (project.toLowerCase() == 'test') {
@@ -419,6 +450,36 @@ class DataPostRequests {
 
   static Future<dynamic> getChartData(
       {required String project, required List<String> selectedLevels}) async {
+    final cacheKey = 'chart_${project}_${selectedLevels.join('>')}';
+    
+    // Check for pending request
+    if (_pendingRequests.containsKey(cacheKey)) {
+      return await _pendingRequests[cacheKey]!;
+    }
+    
+    // Throttle rapid requests
+    final now = DateTime.now();
+    if (_lastRequestTime.containsKey(cacheKey)) {
+      final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
+      if (timeSinceLastRequest < _requestThrottle) {
+        await Future.delayed(_requestThrottle - timeSinceLastRequest);
+      }
+    }
+    
+    _lastRequestTime[cacheKey] = now;
+    
+    final future = _getChartDataInternal(project, selectedLevels);
+    _pendingRequests[cacheKey] = future;
+    
+    try {
+      final result = await future;
+      return result;
+    } finally {
+      _pendingRequests.remove(cacheKey);
+    }
+  }
+  
+  static Future<dynamic> _getChartDataInternal(String project, List<String> selectedLevels) async {
     String body = "01$project>Water Metering|${selectedLevels.join('>')}";
     var response;
     if (project.toLowerCase() == 'test') {
@@ -435,6 +496,36 @@ class DataPostRequests {
 
   static Future<dynamic> getBillingData(
       {required String project, required int monthNumber}) async {
+    final cacheKey = 'billing_${project}_$monthNumber';
+    
+    // Check for pending request
+    if (_pendingRequests.containsKey(cacheKey)) {
+      return await _pendingRequests[cacheKey]!;
+    }
+    
+    // Throttle rapid requests
+    final now = DateTime.now();
+    if (_lastRequestTime.containsKey(cacheKey)) {
+      final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
+      if (timeSinceLastRequest < _requestThrottle) {
+        await Future.delayed(_requestThrottle - timeSinceLastRequest);
+      }
+    }
+    
+    _lastRequestTime[cacheKey] = now;
+    
+    final future = _getBillingDataInternal(project, monthNumber);
+    _pendingRequests[cacheKey] = future;
+    
+    try {
+      final result = await future;
+      return result;
+    } finally {
+      _pendingRequests.remove(cacheKey);
+    }
+  }
+  
+  static Future<dynamic> _getBillingDataInternal(String project, int monthNumber) async {
     String body = "02$project>Water Metering|$monthNumber";
     var response;
 
@@ -443,13 +534,42 @@ class DataPostRequests {
     } else {
       response = await _makeRequest(body, url: wm1Url);
     }
-    // final response =
-    //     await _makeRequest(body, url: wm1Url, contenttype: 'application/json');
+    
     return jsonDecode(response);
   }
 
   static Future<dynamic> getBillingDataByDateRange(
       {required String project, required int startDayNum, required int endDayNum}) async {
+    final cacheKey = 'billing_range_${project}_${startDayNum}_$endDayNum';
+    
+    // Check for pending request
+    if (_pendingRequests.containsKey(cacheKey)) {
+      return await _pendingRequests[cacheKey]!;
+    }
+    
+    // Throttle rapid requests
+    final now = DateTime.now();
+    if (_lastRequestTime.containsKey(cacheKey)) {
+      final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
+      if (timeSinceLastRequest < _requestThrottle) {
+        await Future.delayed(_requestThrottle - timeSinceLastRequest);
+      }
+    }
+    
+    _lastRequestTime[cacheKey] = now;
+    
+    final future = _getBillingDataByDateRangeInternal(project, startDayNum, endDayNum);
+    _pendingRequests[cacheKey] = future;
+    
+    try {
+      final result = await future;
+      return result;
+    } finally {
+      _pendingRequests.remove(cacheKey);
+    }
+  }
+  
+  static Future<dynamic> _getBillingDataByDateRangeInternal(String project, int startDayNum, int endDayNum) async {
     String body = "05$project>Water Metering|$startDayNum|$endDayNum";
     var response;
 
@@ -473,13 +593,16 @@ class DataPostRequests {
 
   static Future<String> _makeRequest(String requestBody,
       {String url = wm1Url, Duration? timeout}) async {
-    DateTime now = DateTime.now();
 
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
     if (connectivityResult.contains(ConnectivityResult.none)) {
       throw CustomException('No internet connection');
     }
+    
+    // Use optimized timeout based on request type
+    final effectiveTimeout = timeout ?? _fastTimeout;
+    
     final jwt = await AuthService.getAccessToken();
     String userAgent = await DeviceInfoUtil.getUserAgent();
     final headers = {
@@ -492,40 +615,24 @@ class DataPostRequests {
     request.body = requestBody;
     request.headers.addAll(headers);
 
-    if (kDebugMode) {
-      print("url ${request.url}");
-      print("body ${request.body}");
-      print("header ${request.headers}");
-    }
-
     try {
       http.StreamedResponse response =
-          await request.send().timeout(timeout ?? const Duration(seconds: 5));
-      DateTime later = DateTime.now();
-
-      if (kDebugMode) {
-        print("Time taken: ${later.difference(now).inMilliseconds} ms");
-        print(response.statusCode);
-      }
+          await request.send().timeout(effectiveTimeout);
 
       if (response.statusCode == 200) {
         var resp = await response.stream.bytesToString();
-        if (kDebugMode) {
-          print(resp);
-        }
         return resp;
       } else if (response.statusCode == 401 || response.statusCode == 403) {
         await AuthService.logout();
         throw CustomException('Redirecting to login page..Please login again');
       } else {
         String responseBody = await response.stream.bytesToString();
-        if (kDebugMode) {
-          print(responseBody);
-        }
         throw CustomException(responseBody);
       }
     } on TimeoutException {
       throw CustomException('Request timed out');
+    } catch (e) {
+      throw CustomException('Network error: ${e.toString()}');
     }
   }
 }

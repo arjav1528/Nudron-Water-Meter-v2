@@ -48,7 +48,6 @@ class LoginPostRequests {
           }
         }
       } catch (e) {
-        // print("Failed to check for update: $e");
         await deleteDataAndLogout();
         throw CustomException(
             "Redirecting to login page.. Please update app and login again");
@@ -98,38 +97,26 @@ class LoginPostRequests {
   }
 
   static Future<String?> getAccessToken2() async {
-    if (kDebugMode) {
-      print("Getting access token2");
-    }
+    
     try {
       String? accessToken = await secureStorage.read(key: 'access_token');
       if (accessToken == null || isTokenExpired(accessToken)) {
-        if (kDebugMode) {
-          print("access token2 expired. getting new");
-        }
+        
         return getNewAccessToken();
       } else if (isTokenExpiring(accessToken)) {
-        //refresh in 10 seconds
-        if (kDebugMode) {
-          print("not yet expired but expiring. will get after 10s.");
-        }
+        
         Future.delayed(const Duration(seconds: 10), () async {
-          if (kDebugMode) {
-            print("Getting access token2 after 10s.");
-          }
+          
           await getNewAccessToken();
         });
-        if (kDebugMode) {
-          print("returned old access token2");
-        }
+        
         return accessToken;
       }
       if (kDebugMode) {
-        print("access token2 fine. returning.");
       }
       return accessToken;
     } catch (e) {
-      if (kDebugMode) print(e);
+      
       await deleteDataAndLogout();
       throw CustomException('Please login again');
     }
@@ -149,8 +136,6 @@ class LoginPostRequests {
 
   static bool isTokenExpired(String accessToken) {
     DateTime expiryDateTime = getExpiryTime(accessToken);
-    // print("Expiry time");
-    // print(expiryDateTime);
     DateTime now = DateTime.now(); // use UTC time for comparisons
     // return now.add(const Duration(seconds: 30)).isAfter(expiryDateTime);
 
@@ -161,12 +146,6 @@ class LoginPostRequests {
     // return true;
     DateTime expiryDateTime = getExpiryTime(accessToken);
     DateTime now = DateTime.now(); // use UTC time for comparisons
-    // print("Now");
-    // print(now);
-    // print("Expiry time");
-    // print(expiryDateTime);
-    // print("Now +59");
-    // print(now.add(const Duration(minutes: 59)));
     return now.add(const Duration(minutes: 30)).isAfter(expiryDateTime);
   }
 
@@ -243,9 +222,7 @@ class LoginPostRequests {
       await BiometricHelper.checkAndStoreBiometric(email, password);
       return response;
     } else {
-      if (kDebugMode) {
-        print(response);
-      }
+      
       throw CustomException('Unexpected response');
     }
     return null;
@@ -262,9 +239,7 @@ class LoginPostRequests {
   static Future<void> sendTwoFactorCode(
       String refCode, String twoFactorCode) async {
     final body = '03$refCode|$twoFactorCode';
-    if (kDebugMode) {
-      print(body);
-    }
+    
     final response = await _makeRequest(body);
     final splitResponse = response.split('|');
     if (response == '0') {
@@ -330,9 +305,6 @@ class LoginPostRequests {
     final body = '00$oldPassB64|$fullName|$email|$phone|$newPassB64';
     final response = await _makeRequest(body, url: au3Url);
 
-    if (kDebugMode) {
-      print(response);
-    }
     if (response == '0') {
       throw CustomException('Incorrect old password');
     } else if (response == '1') {
@@ -348,9 +320,7 @@ class LoginPostRequests {
     final body = '04$activationCode';
     final response = await _makeRequest(body, url: au3Url);
 
-    if (kDebugMode) {
-      print(response);
-    }
+    
     if (response == '0') {
       throw CustomException('Incorrect activation code. Please check again');
     } else {
@@ -406,13 +376,7 @@ class LoginPostRequests {
 
     // Split the response by '|' and return the resulting list. first is the base64 image, second is the clickable url
     List<String?> responseValues = response.split('|');
-    if (kDebugMode) {
-      print("TWO FA RESPONSE");
-
-      print(response);
-      print(responseValues[1]);
-    }
-
+    
     return responseValues;
   }
 
@@ -458,7 +422,6 @@ class LoginPostRequests {
   static Future<int> logout() async {
     const body = '08';
     if (kDebugMode) {
-      print("logout");
     }
 
     final response = await _makeRequest(body, url: au3Url);
@@ -483,7 +446,6 @@ class LoginPostRequests {
 
   static Future<String> _makeRequest(String body,
       {String url = au1Url, Duration? timeout}) async {
-    DateTime now = DateTime.now();
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       throw CustomException('No internet connection');
@@ -503,31 +465,21 @@ class LoginPostRequests {
     request.body = body;
     request.headers.addAll(headers);
     if (kDebugMode) {
-      print("url ${request.url}");
-      print("body ${request.body}");
-      print("header ${request.headers}");
     }
     try {
       if (kDebugMode) {
-        print('Making request to: ${request.url}');
-        print('Request headers: ${request.headers}');
       }
       http.StreamedResponse response =
           await request.send().timeout(timeout ?? const Duration(seconds: 10));
 
-      DateTime later = DateTime.now();
 
       if (kDebugMode) {
-        print("Time taken: ");
-        print(later.difference(now).inMilliseconds);
       }
       if (kDebugMode) {
-        print(response.statusCode);
       }
       if (response.statusCode == 200) {
         var resp = await response.stream.bytesToString();
         if (kDebugMode) {
-          print(resp);
         }
         return resp;
       } else if (response.statusCode == 401 || response.statusCode == 403) {
@@ -541,7 +493,6 @@ class LoginPostRequests {
       throw CustomException('Request timed out');
     } catch (e) {
       if (kDebugMode) {
-        print('Network request error: $e');
       }
       throw CustomException('Network error: ${e.toString()}');
     }

@@ -44,31 +44,28 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              // color: Colors.green,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ChamferedTextWidgetInverted(
-                    text: widget.heading.toUpperCase(),
-                    borderColor: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .gridLineColor,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close,
-                        color: Provider.of<ThemeNotifier>(context)
-                            .currentTheme
-                            .gridLineColor),
-                    onPressed: () {
-                      if (mounted) {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ChamferedTextWidgetInverted(
+                  text: widget.heading.toUpperCase(),
+                  borderColor: Provider.of<ThemeNotifier>(context)
+                      .currentTheme
+                      .gridLineColor,
+                ),
+                IconButton(
+                  icon: Icon(Icons.close,
+                      color: Provider.of<ThemeNotifier>(context)
+                          .currentTheme
+                          .gridLineColor),
+                  onPressed: () {
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
             ),
             SizedBox(height: 20.h),
             Padding(

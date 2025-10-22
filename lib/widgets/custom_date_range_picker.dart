@@ -228,33 +228,30 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
               child: Column(
                 children: [
                   // Custom Header
-                  Container(
-                    // color: Colors.green,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ChamferedTextWidgetInverted(
-                          text: "SELECT MONTH RANGE",
-                          borderColor: Provider.of<ThemeNotifier>(context)
-                              .currentTheme
-                              .gridLineColor,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.close,
-                              color: Provider.of<ThemeNotifier>(context)
-                                  .currentTheme
-                                  .gridLineColor),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ChamferedTextWidgetInverted(
+                        text: "SELECT MONTH RANGE",
+                        borderColor: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .gridLineColor,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.close,
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .gridLineColor),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
                   ),
 
                   // Date Picker Content
-                  Container(
+                  SizedBox(
                     width: 310.w,
                     height: 350.h,
                     
@@ -342,7 +339,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                   ),
 
                   // Tip Text
-                  Container(
+                  SizedBox(
                     width: 290.w,
                     child: Text(
                       'Tip: You can select a range by tapping the start and end dates.',
@@ -404,7 +401,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         await _applyDateRange();
       }
     } catch (e) {
-      print('Error in date range picker: $e');
       // Show error message to user
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

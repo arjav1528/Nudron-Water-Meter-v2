@@ -10,8 +10,5 @@ class FilterAndSummaryForProject {
   }
 
   printData() {
-    print("Levels: $levels");
-    print("Nested Levels: $nestedLevels");
-    print("Summary Formatted Text: $summaryFormattedtext");
   }
 }

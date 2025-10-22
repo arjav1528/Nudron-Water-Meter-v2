@@ -48,13 +48,13 @@ class ExcelHelper {
           if (bloc.selectedStartDate != null && bloc.selectedEndDate != null) {
             final startStr = DateFormat('ddMMyyyy').format(bloc.selectedStartDate!);
             final endStr = DateFormat('ddMMyyyy').format(bloc.selectedEndDate!);
-            rangePart = "${startStr}_${endStr}";
+            rangePart = "${startStr}_$endStr";
             // Replace slashes to avoid invalid filename characters on some OS
             rangePart = "${startStr.replaceAll('/', '-')}_${endStr.replaceAll('/', '-')}";
           } else {
             rangePart = todayMMM;
           }
-          fileName = "Water_Summary_${identifier[0]}_${rangePart}.xlsx";
+          fileName = "Water_Summary_${identifier[0]}_$rangePart.xlsx";
           break;
         case 'activity':
           fileName = "Water_Meters_${identifier[0]}_$todayDDMMYYYY.xlsx";
@@ -125,7 +125,6 @@ class ExcelHelper {
           try {
             await Permission.storage.request();
           } catch (e) {
-            print("Permission request failed (this is expected on some platforms): $e");
             // Continue with file operations even if permission request fails
           }
         }
@@ -158,8 +157,7 @@ class ExcelHelper {
 
         return filePath;
       }
-    } catch (e, stack) {
-      print("Error exporting Excel file: $e\n$stack");
+    } catch (e) {
       CustomAlert.showCustomScaffoldMessenger(
         mainNavigatorKey.currentContext!,
         "Export failed: ${e.toString()}",
@@ -185,7 +183,6 @@ class ExcelHelper {
       for (var file in files) {
         if (file is File && file.path.endsWith(".xlsx")) {
           await file.delete();
-          print("Deleted old file: ${file.path}");
         }
       }
     }

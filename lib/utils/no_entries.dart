@@ -13,7 +13,6 @@ class NoEntries extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context,constraints) {
-        // print("NoEntries: ${constraints.maxHeight}");
 
         return Center(
           child: Column(

@@ -16,15 +16,15 @@ import '../../widgets/export_to_excel.dart';
 import '../../widgets/icon_header.dart';
 import '../utils/scrollConfig.dart';
 
-class DataGridWidget extends StatelessWidget {
-  List<dynamic>? data;
+class DataGridWidget extends StatefulWidget {
+  final List<dynamic>? data;
   final int frozenColumns;
-  Map<int, int> columnsToTakeHeaderWidthAndExtraPadding;
+  final Map<int, int> columnsToTakeHeaderWidthAndExtraPadding;
   final bool exportToIncludeWholeData;
   final bool? devicesTable;
   final String location;
 
-  DataGridWidget({
+  const DataGridWidget({
     super.key,
     required this.data,
     this.frozenColumns = 1,
@@ -34,6 +34,11 @@ class DataGridWidget extends StatelessWidget {
     this.location = 'trends',
   });
 
+  @override
+  State<DataGridWidget> createState() => _DataGridWidgetState();
+}
+
+class _DataGridWidgetState extends State<DataGridWidget> {
   final ScrollController _verticalScrollController1 = ScrollController();
   final ScrollController _verticalScrollController2 = ScrollController();
   final ScrollController _horizontalScrollController1 = ScrollController();
@@ -41,7 +46,7 @@ class DataGridWidget extends StatelessWidget {
 
   List<double> columnWidths = [];
 
-  double rowHeight = 41.h;
+  final double rowHeight = 41.h;
 
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
@@ -83,39 +88,60 @@ class DataGridWidget extends StatelessWidget {
 
   void init(double height) {
     calculateColumnWidths();
-    if (height > rowHeight * data![1].length) {
-      //add dummy rows
-      dummyRows = (height / rowHeight).ceil() - data![1].length - 1;
-      for (int i = 0; i < dummyRows; i++) {
-        data![1].add(List.generate(data![1][0].length, (index) => ''));
+    
+    // Optimize dummy row generation for large datasets
+    final dataLength = widget.data![1].length;
+    final visibleRows = (height / rowHeight).ceil();
+    
+    if (height > rowHeight * dataLength) {
+      dummyRows = visibleRows - dataLength - 1;
+      
+      // Only add dummy rows if we have a reasonable number
+      if (dummyRows > 0 && dummyRows < 1000) {
+        final columnCount = widget.data![1][0].length;
+        final dummyRow = List.filled(columnCount, '');
+        
+        for (int i = 0; i < dummyRows; i++) {
+          widget.data![1].add(List.from(dummyRow));
+        }
       }
     }
   }
 
   void calculateColumnWidths() {
-    if (data != null && data!.isNotEmpty) {
-      var headers = data![0];
-      var rows = data![1];
+    if (widget.data != null && widget.data!.isNotEmpty) {
+      var headers = widget.data![0];
+      var rows = widget.data![1];
 
-      columnWidths = List.generate(headers.length, (index) {
+      // Pre-allocate column widths list for better performance
+      columnWidths = List<double>.filled(headers.length, 0.0);
+      
+      // Process columns with optimized width calculation
+      for (int index = 0; index < headers.length; index++) {
         double headerWidth = calculateTextWidth(headers[index].toString(),
             isHeader: true, hasDownloadButton: index == 0);
-        if (columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
-          return headerWidth +
-              columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
+        
+        if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
+          columnWidths[index] = headerWidth +
+              widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
+          continue;
         }
 
-        double maxDataWidth = rows.fold<double>(
-          0.0,
-          (prev, row) {
-            double cellWidth = row[index] != null
-                ? calculateTextWidth(row[index].toString())
-                : 0.0;
-            return max<double>(prev, cellWidth);
-          },
-        );
-        return max(headerWidth, maxDataWidth);
-      });
+        // Optimize data width calculation with early termination
+        double maxDataWidth = 0.0;
+        for (var row in rows) {
+          if (row[index] != null) {
+            double cellWidth = calculateTextWidth(row[index].toString());
+            if (cellWidth > maxDataWidth) {
+              maxDataWidth = cellWidth;
+              // Early termination if we've found a very wide cell
+              if (maxDataWidth > headerWidth * 2) break;
+            }
+          }
+        }
+        
+        columnWidths[index] = max(headerWidth, maxDataWidth);
+      }
     }
   }
 
@@ -139,7 +165,7 @@ class DataGridWidget extends StatelessWidget {
   }
 
   _getHeaderWidget(int index, BuildContext context) {
-    if (devicesTable == true) {
+    if (widget.devicesTable == true) {
       return Container(
         height: rowHeight,
         width: columnWidths[index],
@@ -164,7 +190,7 @@ class DataGridWidget extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: HeaderWidget(
-          title: Utils.cleanFieldName(data![0][index].toString()),
+          title: Utils.cleanFieldName(widget.data![0][index].toString()),
         ),
       );
     } else {
@@ -192,7 +218,7 @@ class DataGridWidget extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: HeaderWidget(
-          title: Utils.cleanFieldName(data![0][index].toString()),
+          title: Utils.cleanFieldName(widget.data![0][index].toString()),
         ),
       );
     }
@@ -214,19 +240,19 @@ class DataGridWidget extends StatelessWidget {
           right: BorderSide(
             color:
                 Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: index2 == data![1][index].length - 1 ? 0 : 3.responsiveSp,
+            width: index2 == widget.data![1][index].length - 1 ? 0 : 3.responsiveSp,
           ),
           bottom: BorderSide(
-            color: index == data![1]!.length - 1
+            color: index == widget.data![1]!.length - 1
                 ? Colors.transparent
                 : Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridLineColor,
-            width: index == data![1]!.length - 1 ? 0.00 : 3.responsiveSp,
+            width: index == widget.data![1]!.length - 1 ? 0.00 : 3.responsiveSp,
           ),
         ),
       ),
-      child: columnsToTakeHeaderWidthAndExtraPadding.containsKey(index2)
+      child: widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index2)
           ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: _getNCNormalWidget(index, index2, context))
@@ -235,11 +261,10 @@ class DataGridWidget extends StatelessWidget {
   }
 
   _getNCNormalWidget(int index, int index2, BuildContext context) {
-    String? field = data![0][index2].toString();
-    if (field[0] == '%' && devicesTable == true) {
-      print("Index: $index $index2");
+    String? field = widget.data![0][index2].toString();
+    if (field[0] == '%' && widget.devicesTable == true) {
       return Text(
-        Utils.lastSeenFromMilliseconds(data![1][index][index2].toString())
+        Utils.lastSeenFromMilliseconds(widget.data![1][index][index2].toString())
             .toString(),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -251,9 +276,9 @@ class DataGridWidget extends StatelessWidget {
           color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
         ),
       );
-    } else if (field[0] == '@' && devicesTable == true) {
+    } else if (field[0] == '@' && widget.devicesTable == true) {
       String? lastSeenDate =
-          NudronChartMap.convertDaysToDate(data![1][index][index2].toString());
+          NudronChartMap.convertDaysToDate(widget.data![1][index][index2].toString());
       if (lastSeenDate == '01-Jan-20') {
         lastSeenDate = 'NA';
       }
@@ -271,7 +296,7 @@ class DataGridWidget extends StatelessWidget {
       );
     } else {
       return Text(
-        data![1][index][index2].toString(),
+        widget.data![1][index][index2].toString(),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: GoogleFonts.robotoMono(
@@ -292,7 +317,7 @@ class DataGridWidget extends StatelessWidget {
     syncScrollControllers(
         _horizontalScrollController1, _horizontalScrollController2);
 
-    if (data == null || data!.isEmpty || data![1].isEmpty) {
+    if (widget.data == null || widget.data!.isEmpty || widget.data![1].isEmpty) {
       return Center(
         child: const NoEntries(),
       );
@@ -310,7 +335,7 @@ class DataGridWidget extends StatelessWidget {
                     // Header Row including the top-left cell
                     Row(
                       children: [
-                        if (frozenColumns > 0)
+                        if (widget.frozenColumns > 0)
                           Container(
                             width: columnWidths[0],
                             height: rowHeight,
@@ -374,9 +399,9 @@ class DataGridWidget extends StatelessWidget {
                                       if (confirm == true) {
                                         BlocProvider.of<DashboardBloc>(context)
                                             .exportDataToExcel(
-                                          data!,
-                                          exportToIncludeWholeData,
-                                          location,
+                                          widget.data!,
+                                          widget.exportToIncludeWholeData,
+                                          widget.location,
                                           context,
                                         );
                                       }
@@ -389,7 +414,7 @@ class DataGridWidget extends StatelessWidget {
                                     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
-                                          data![0][0].toString()),
+                                          widget.data![0][0].toString()),
                                     ),
                                   ),
                                 ),
@@ -398,7 +423,7 @@ class DataGridWidget extends StatelessWidget {
                           ),
                         Row(
                           children: List.generate(
-                            frozenColumns - 1,
+                            widget.frozenColumns - 1,
                             (index) => _getHeaderWidget(index + 1, context),
                           ),
                         ),
@@ -408,9 +433,9 @@ class DataGridWidget extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: List.generate(
-                                data![0].length - frozenColumns,
+                                widget.data![0].length - widget.frozenColumns,
                                 (index) => _getHeaderWidget(
-                                    index + frozenColumns, context),
+                                    index + widget.frozenColumns, context),
                               ),
                             ),
                           ),
@@ -428,10 +453,10 @@ class DataGridWidget extends StatelessWidget {
                             scrollDirection: Axis.vertical,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: List.generate(data![1].length, (index) {
+                              children: List.generate(widget.data![1].length, (index) {
                                 return Row(
                                   children: List.generate(
-                                    frozenColumns,
+                                    widget.frozenColumns,
                                     (index2) => _getNormalWidget(
                                         index, index2, context),
                                   ),
@@ -450,13 +475,13 @@ class DataGridWidget extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children:
-                                      List.generate(data![1].length, (index) {
+                                      List.generate(widget.data![1].length, (index) {
                                     return Row(
                                       children: List.generate(
-                                          data![1][index].length -
-                                              frozenColumns, (index2) {
+                                          widget.data![1][index].length -
+                                              widget.frozenColumns, (index2) {
                                         return _getNormalWidget(index,
-                                            index2 + frozenColumns, context);
+                                            index2 + widget.frozenColumns, context);
                                       }),
                                     );
                                   }),

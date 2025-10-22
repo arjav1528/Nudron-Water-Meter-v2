@@ -5,9 +5,8 @@ import '../../constants/theme2.dart';
 import 'customTextField.dart';
 
 class PasswordTextField extends StatefulWidget {
-  PasswordTextField(
-      {Key? key, required this.controller, this.hint = 'Enter Password'})
-      : super(key: key);
+  const PasswordTextField(
+      {super.key, required this.controller, this.hint = 'Enter Password'});
 
   final ObscuringTextEditingController controller;
   final String hint;

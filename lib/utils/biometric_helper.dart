@@ -53,7 +53,6 @@ class BiometricHelper {
       );
       return authenticated;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -78,7 +77,6 @@ class BiometricHelper {
     String? biometric = await const FlutterSecureStorage().read(key: 'biometric');
     String? email = await const FlutterSecureStorage().read(key: 'email');
     if(kDebugMode)
-    print('biometric: $biometric, email: $email');
     if (biometric != null && email != null && biometric == 'true' && LoginPostRequests.isLoggedIn==false) {
       return email;
     }

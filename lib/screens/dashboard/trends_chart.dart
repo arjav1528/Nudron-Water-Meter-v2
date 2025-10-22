@@ -13,6 +13,7 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../models/chartModels.dart';
 import '../../utils/no_entries.dart';
+import '../../utils/performance_monitor.dart';
 import '../../widgets/export_to_excel.dart';
 
 
@@ -152,11 +153,10 @@ class MonthlyChart extends StatefulWidget {
   final bool isFullScreen;
 
   const MonthlyChart(
-      {Key? key,
+      {super.key,
       required this.onMonthSelected,
       required this.onSaveChart,
-      required this.isFullScreen})
-      : super(key: key);
+      required this.isFullScreen});
 
   @override
   _MonthlyChartState createState() => _MonthlyChartState();
@@ -181,17 +181,18 @@ class _MonthlyChartState extends State<MonthlyChart> {
   }
 
   void _getSeriesMonthly(NudronChartMap dataMap) {
-    // print(dataMap.printClass());
+    PerformanceMonitor.startTimer('get_series_monthly');
+    
     List<CartesianSeries<Entries, String>> series = [];
     String currentMonth = DateFormat('MM').format(DateTime.now());
 
-    Map<int, List<Entries>> allEntries = {};
+    // Pre-allocate maps for better performance
+    final Map<int, List<Entries>> allEntries = {};
     int maxAlerts = 0;
     int maxUsages = 0;
 
     List<int> years = dataMap.getYearKeys();
-    Set<int> doneMonths =
-        {}; // To keep track of months that have data across all years
+    Set<int> doneMonths = {}; // To keep track of months that have data across all years
 
     // Collect data entries for all years without adding missing months
     for (int year in years) {
@@ -369,25 +370,18 @@ class _MonthlyChartState extends State<MonthlyChart> {
       colorIndex++;
     });
 
-    allEntries.forEach((year, entries) {
-      for (var entry in entries) {
-      }
-    });
+    
 
     setState(() {
       monthlySeries = series;
     });
+    
+    PerformanceMonitor.endTimer('get_series_monthly');
   }
 
   @override
   Widget build(BuildContext context) {
-    for (var series in monthlySeries) {
-      int i = 1;
-      for (var entry in series.dataSource!) {
-
-        i++;
-      }
-    }
+    
     return BasicChart(
       series: monthlySeries,
       onSaveChart: widget.onSaveChart,
@@ -441,8 +435,7 @@ double customRound(double value) {
 }
 
 class DailyChart extends StatefulWidget {
-  DailyChart({Key? key, required this.onSaveChart, required this.isFullScreen})
-      : super(key: key);
+  DailyChart({super.key, required this.onSaveChart, required this.isFullScreen});
   Function onSaveChart;
   bool isFullScreen;
 
@@ -565,10 +558,7 @@ class _DailyChartState extends State<DailyChart> {
         }
       }
 
-      allEntries.forEach((year, entries) {
-        for (var entry in entries) {
-        }
-      });
+     
 
       if (yearEntries.isNotEmpty) {
         allEntries[year] = yearEntries;
@@ -648,14 +638,7 @@ class _DailyChartState extends State<DailyChart> {
     });
     // TODO: Make the adjustment for daily data when only one data point is available
 
-    // Add a transparent series to ensure all days are shown
-    for (var ser in series) {
-      int i = 1;
-      for (var entry in ser.dataSource!) {
-
-        i++;
-      }
-    }
+   
 
     setState(() {
       isShowingState = true;
@@ -735,7 +718,7 @@ class _DailyChartState extends State<DailyChart> {
 class TrendsChart extends StatefulWidget {
   final bool isFullScreen;
 
-  TrendsChart({super.key, this.isFullScreen = false});
+  const TrendsChart({super.key, this.isFullScreen = false});
 
   @override
   _TrendsChartState createState() => _TrendsChartState();
@@ -788,8 +771,8 @@ class BasicChart extends StatelessWidget {
   final bool isFullScreen;
   final Function? switchToDaily;
 
-  BasicChart({
-    Key? key,
+  const BasicChart({
+    super.key,
     required this.onSaveChart,
     required this.series,
     required this.usageMaximum,
@@ -799,7 +782,7 @@ class BasicChart extends StatelessWidget {
     required this.middleWidget,
     required this.isFullScreen,
     this.switchToDaily,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -818,25 +801,67 @@ class BasicChart extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                   child: Column(
                     children: [
-                      Container(
-                        // color:Colors.green,
-                        // height: 25.h,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "USAGE(L)",
-                              style: GoogleFonts.robotoMono(
-                                fontSize: ThemeNotifier.small.responsiveSp,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .basicAdvanceTextColor,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "USAGE(L)",
+                            style: GoogleFonts.robotoMono(
+                              fontSize: ThemeNotifier.small.responsiveSp,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .basicAdvanceTextColor,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Row(
-                              children: [
-                                middleWidget,
+                          ),
+                          Row(
+                            children: [
+                              middleWidget,
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  splashColor:
+                                      Provider.of<ThemeNotifier>(context)
+                                          .currentTheme
+                                          .splashColor,
+                                  splashFactory: InkRipple.splashFactory,
+                                  radius: 20.responsiveSp,
+                                  child: SizedBox(
+                                    height: 41.responsiveSp,
+                                    width: 41.responsiveSp,
+                                    child: Icon(
+                                      Icons.save,
+                                      size: 30.responsiveSp,
+                                      color:
+                                          Provider.of<ThemeNotifier>(context)
+                                              .currentTheme
+                                              .basicAdvanceTextColor
+                                              .withOpacity(0.8),
+                                    ),
+                                  ),
+                                  onTap: () async {
+                                    bool? confirm = await showDialog(
+                                      context: context,
+                                      builder: (context2) {
+                                        return RotatedBox(
+                                          quarterTurns: isFullScreen ? 1 : 0,
+                                          child: ConfirmationDialog(
+                                            heading: "Export image",
+                                            message:
+                                                "Do you want to save this chart as an image?"
+                                                    .toUpperCase(),
+                                          ),
+                                        );
+                                      },
+                                    );
+                      
+                                    if (confirm == true) {
+                                      onSaveChart(context);
+                                    }
+                                  },
+                                ),
+                              ),
+                              if (!isFullScreen)
                                 Material(
                                   color: Colors.transparent,
                                   child: InkWell(
@@ -850,141 +875,95 @@ class BasicChart extends StatelessWidget {
                                       height: 41.responsiveSp,
                                       width: 41.responsiveSp,
                                       child: Icon(
-                                        Icons.save,
+                                        Icons.zoom_out_map,
                                         size: 30.responsiveSp,
-                                        color:
-                                            Provider.of<ThemeNotifier>(context)
-                                                .currentTheme
-                                                .basicAdvanceTextColor
-                                                .withOpacity(0.8),
+                                        color: Provider.of<ThemeNotifier>(
+                                                context)
+                                            .currentTheme
+                                            .basicAdvanceTextColor
+                                            .withOpacity(0.8),
                                       ),
                                     ),
                                     onTap: () async {
-                                      bool? confirm = await showDialog(
-                                        context: context,
-                                        builder: (context2) {
-                                          return RotatedBox(
-                                            quarterTurns: isFullScreen ? 1 : 0,
-                                            child: ConfirmationDialog(
-                                              heading: "Export image",
-                                              message:
-                                                  "Do you want to save this chart as an image?"
-                                                      .toUpperCase(),
-                                            ),
-                                          );
-                                        },
-                                      );
-
-                                      if (confirm == true) {
-                                        onSaveChart(context);
-                                      }
+                                      BlocProvider.of<DashboardBloc>(context)
+                                          .changeScreen();
+                      
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context2) =>
+                                      //         BlocProvider.value(
+                                      //       value:
+                                      //           BlocProvider.of<DashboardBloc>(
+                                      //               context),
+                                      //       child: Scaffold(
+                                      //         backgroundColor:
+                                      //             Provider.of<ThemeNotifier>(
+                                      //                     context)
+                                      //                 .currentTheme
+                                      //                 .bgColor,
+                                      //         appBar: AppBar(
+                                      //           backgroundColor:
+                                      //               Provider.of<ThemeNotifier>(
+                                      //                       context)
+                                      //                   .currentTheme
+                                      //                   .bgColor,
+                                      //           leading: IconButton(
+                                      //             icon: Icon(
+                                      //               Icons.arrow_back,
+                                      //               color: Provider.of<
+                                      //                           ThemeNotifier>(
+                                      //                       context)
+                                      //                   .currentTheme
+                                      //                   .basicAdvanceTextColor,
+                                      //             ),
+                                      //             onPressed: () {
+                                      //               Navigator.pop(context2);
+                                      //             },
+                                      //           ),
+                                      //           title: Text('Fullscreen Chart',
+                                      //               style: TextStyle(
+                                      //                   color: Provider.of<
+                                      //                               ThemeNotifier>(
+                                      //                           context)
+                                      //                       .currentTheme
+                                      //                       .basicAdvanceTextColor)),
+                                      //         ),
+                                      //         body: Center(
+                                      //           child: RotatedBox(
+                                      //             quarterTurns: 1,
+                                      //             // Rotate 90 degrees
+                                      //             child: TrendsChart(
+                                      //                 isFullScreen: true),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // );
                                     },
                                   ),
                                 ),
-                                if (!isFullScreen)
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      splashColor:
-                                          Provider.of<ThemeNotifier>(context)
-                                              .currentTheme
-                                              .splashColor,
-                                      splashFactory: InkRipple.splashFactory,
-                                      radius: 20.responsiveSp,
-                                      child: SizedBox(
-                                        height: 41.responsiveSp,
-                                        width: 41.responsiveSp,
-                                        child: Icon(
-                                          Icons.zoom_out_map,
-                                          size: 30.responsiveSp,
-                                          color: Provider.of<ThemeNotifier>(
-                                                  context)
-                                              .currentTheme
-                                              .basicAdvanceTextColor
-                                              .withOpacity(0.8),
-                                        ),
-                                      ),
-                                      onTap: () async {
-                                        BlocProvider.of<DashboardBloc>(context)
-                                            .changeScreen();
-
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context2) =>
-                                        //         BlocProvider.value(
-                                        //       value:
-                                        //           BlocProvider.of<DashboardBloc>(
-                                        //               context),
-                                        //       child: Scaffold(
-                                        //         backgroundColor:
-                                        //             Provider.of<ThemeNotifier>(
-                                        //                     context)
-                                        //                 .currentTheme
-                                        //                 .bgColor,
-                                        //         appBar: AppBar(
-                                        //           backgroundColor:
-                                        //               Provider.of<ThemeNotifier>(
-                                        //                       context)
-                                        //                   .currentTheme
-                                        //                   .bgColor,
-                                        //           leading: IconButton(
-                                        //             icon: Icon(
-                                        //               Icons.arrow_back,
-                                        //               color: Provider.of<
-                                        //                           ThemeNotifier>(
-                                        //                       context)
-                                        //                   .currentTheme
-                                        //                   .basicAdvanceTextColor,
-                                        //             ),
-                                        //             onPressed: () {
-                                        //               Navigator.pop(context2);
-                                        //             },
-                                        //           ),
-                                        //           title: Text('Fullscreen Chart',
-                                        //               style: TextStyle(
-                                        //                   color: Provider.of<
-                                        //                               ThemeNotifier>(
-                                        //                           context)
-                                        //                       .currentTheme
-                                        //                       .basicAdvanceTextColor)),
-                                        //         ),
-                                        //         body: Center(
-                                        //           child: RotatedBox(
-                                        //             quarterTurns: 1,
-                                        //             // Rotate 90 degrees
-                                        //             child: TrendsChart(
-                                        //                 isFullScreen: true),
-                                        //           ),
-                                        //         ),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // );
-                                      },
-                                    ),
-                                  ),
-                              ],
+                            ],
+                          ),
+                          Text(
+                            "ALERTS",
+                            style: GoogleFonts.robotoMono(
+                              fontSize: ThemeNotifier.small.responsiveSp,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .basicAdvanceTextColor,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(
-                              "ALERTS",
-                              style: GoogleFonts.robotoMono(
-                                fontSize: ThemeNotifier.small.responsiveSp,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .basicAdvanceTextColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       // width: isFullScreen
                       //     ? constriants.maxWidth
                       //     : constriants.maxWidth * 1.5,
                       Expanded(
                         // height: constriants.maxHeight -25,
-                        child: isDaily && series.length == 0
+                        child: isDaily && series.isEmpty
                             ? NoEntries()
                             : SfCartesianChart(
                                 onAxisLabelTapped: (args) {
@@ -1000,7 +979,6 @@ class BasicChart extends StatelessWidget {
                                     }
                                   }
                                   // var b=DateTime.now();
-                                  // print(b.difference(a).inMicroseconds);
                                 },
                                 plotAreaBorderWidth: 0,
                                 margin: const EdgeInsets.only(top: 0),

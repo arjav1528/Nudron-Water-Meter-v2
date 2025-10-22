@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/foundation.dart';
 
 import '../services/auth_service.dart';
 import '../utils/biometric_helper.dart';
@@ -41,7 +40,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       }
     } catch (e) {
-      if (kDebugMode) print('Error checking login status: $e');
       emit(AuthError('Failed to check login status: ${e.toString()}'));
     }
   }
@@ -67,7 +65,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(result.error ?? 'Login failed'));
       }
     } catch (e) {
-      if (kDebugMode) print('Login error: $e');
       emit(AuthError('Login failed: ${e.toString()}'));
     }
   }
@@ -117,7 +114,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(result.error ?? 'Biometric login failed'));
       }
     } catch (e) {
-      if (kDebugMode) print('Biometric login error: $e');
       emit(AuthError('Biometric login failed: ${e.toString()}'));
     }
   }
@@ -141,7 +137,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(result.error ?? 'Two-factor verification failed'));
       }
     } catch (e) {
-      if (kDebugMode) print('Two-factor verification error: $e');
       emit(AuthError('Two-factor verification failed: ${e.toString()}'));
     }
   }
@@ -153,7 +148,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await AuthService.logout();
       emit(AuthUnauthenticated());
     } catch (e) {
-      if (kDebugMode) print('Logout error: $e');
       emit(AuthError('Logout failed: ${e.toString()}'));
     }
   }
@@ -165,7 +159,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await AuthService.globalLogout();
       emit(AuthUnauthenticated());
     } catch (e) {
-      if (kDebugMode) print('Global logout error: $e');
       emit(AuthError('Global logout failed: ${e.toString()}'));
     }
   }
@@ -183,7 +176,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(result.error ?? 'Failed to send password reset email'));
       }
     } catch (e) {
-      if (kDebugMode) print('Forgot password error: $e');
       emit(AuthError('Failed to send password reset email: ${e.toString()}'));
     }
   }
@@ -204,7 +196,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(result.error ?? 'Failed to enable two-factor authentication'));
       }
     } catch (e) {
-      if (kDebugMode) print('Enable two-factor error: $e');
       emit(AuthError('Failed to enable two-factor authentication: ${e.toString()}'));
     }
   }
@@ -222,7 +213,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(result.error ?? 'Failed to disable two-factor authentication'));
       }
     } catch (e) {
-      if (kDebugMode) print('Disable two-factor error: $e');
       emit(AuthError('Failed to disable two-factor authentication: ${e.toString()}'));
     }
   }
@@ -245,7 +235,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       }
     } catch (e) {
-      if (kDebugMode) print('Token refresh error: $e');
       emit(AuthUnauthenticated());
     }
   }
