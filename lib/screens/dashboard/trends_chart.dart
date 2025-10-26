@@ -95,7 +95,7 @@ TooltipBehavior createCustomTooltipBehavior({
 
       if (tooltipContent.isEmpty) {
         return Container(
-          padding: const EdgeInsets.all(4.0),
+          padding: EdgeInsets.all(4.w),
           child: Text(
             "No data available",
             style: GoogleFonts.roboto(
@@ -109,7 +109,7 @@ TooltipBehavior createCustomTooltipBehavior({
       }
 
       return Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: EdgeInsets.all(4.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -834,7 +834,7 @@ class BasicChart extends StatelessWidget {
                   color:
                       Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 0.h),
                   child: Column(
                     children: [
                       Row(
@@ -1017,7 +1017,7 @@ class BasicChart extends StatelessWidget {
                                   // var b=DateTime.now();
                                 },
                                 plotAreaBorderWidth: 0,
-                                margin: const EdgeInsets.only(top: 0),
+                                margin: EdgeInsets.only(top: 0.h),
                                 legend: Legend(
                                   isVisible: true,
                                   textStyle: GoogleFonts.roboto(

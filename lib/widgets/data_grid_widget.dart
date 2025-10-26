@@ -244,7 +244,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       width: columnWidths[index2],
       height: rowHeight,
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 4),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
       decoration: BoxDecoration(
         color: index % 2 == 1
             ? Provider.of<ThemeNotifier>(context)
@@ -426,7 +426,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 0.h),
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
                                           widget.data![0][0].toString()),

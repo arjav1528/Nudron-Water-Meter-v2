@@ -525,7 +525,7 @@ class _CustomMultipleSelectorHorizontal2State
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
           child: Container(
             color: Colors.transparent,
             child: Row(

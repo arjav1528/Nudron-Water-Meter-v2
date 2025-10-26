@@ -16,7 +16,7 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: title[0] != '!'
           ? Text(
               title,
@@ -157,7 +157,7 @@ class CustomIconButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: Container(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
               borderRadius: BorderRadius.circular(4.0),

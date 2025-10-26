@@ -100,7 +100,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .textFieldFillColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.25),
@@ -111,7 +111,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(0),
+                    padding: EdgeInsets.all(0.w),
                     // Ensures no extra padding
                     child: TextField(
                       controller: _obscureText
@@ -143,11 +143,11 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                           minHeight: 16.69.h,
                           minWidth: 21.w,
                         ),
-                        focusedBorder: const OutlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: CommonColors.blue,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         filled: true,
                         fillColor: Provider.of<ThemeNotifier>(context)
@@ -163,7 +163,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .textfieldHintColor,
-                            size: 16,
+                            size: 16.w,
                           ),
                           onPressed: () {
                             int cursorPos = _obscureText
@@ -200,9 +200,9 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                               .currentTheme
                               .textfieldHintColor,
                         ),
-                        border: const OutlineInputBorder(
+                        border: OutlineInputBorder(
                           borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: isLargerTextField ? 22.h : 0.h),
@@ -220,7 +220,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .textFieldFillColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.25),
@@ -231,7 +231,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(0),
+                    padding: EdgeInsets.all(0.w),
                     // Ensures no extra padding
                     child: TextField(
                       controller: _obscureText2
@@ -263,11 +263,11 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                           minHeight: 16.69.h,
                           minWidth: 21.w,
                         ),
-                        focusedBorder: const OutlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: CommonColors.blue,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         filled: true,
                         fillColor: Provider.of<ThemeNotifier>(context)
@@ -283,7 +283,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .textfieldHintColor,
-                            size: 16,
+                            size: 16.w,
                           ),
                           onPressed: () {
                             int cursorPos = _obscureText2
@@ -322,9 +322,9 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                               .currentTheme
                               .textfieldHintColor,
                         ),
-                        border: const OutlineInputBorder(
+                        border: OutlineInputBorder(
                           borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: isLargerTextField ? 22.h : 0.h),
@@ -434,7 +434,7 @@ class _CustomPincodeState extends State<CustomPincode> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.w),
               child: Text(
                 widget.name,
                 textAlign: TextAlign.center,
@@ -457,7 +457,7 @@ class _CustomPincodeState extends State<CustomPincode> {
               // color: Provider.of<ThemeNotifier>(context)
               //     .currentTheme
               //     .textFieldFillColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               border: Border.all(
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
@@ -494,7 +494,7 @@ class _CustomPincodeState extends State<CustomPincode> {
               animationType: AnimationType.fade,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.underline,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(5.r),
                 fieldHeight: (isLargerTextField ? 51 : 40).h,
                 fieldWidth: 40.w,
                 activeFillColor: Provider.of<ThemeNotifier>(context)

@@ -150,7 +150,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 ),
                               );
                             
-                            return const SizedBox.shrink();
+                            return SizedBox.shrink();
                           },
                         ),
                                     

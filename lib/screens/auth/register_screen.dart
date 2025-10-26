@@ -109,10 +109,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     prefixIcon: Container(
                       // width: 60.w,
                       padding: EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
+                            topLeft: Radius.circular(10.r),
+                            bottomLeft: Radius.circular(10.r),
                           ),
                           color: Colors.transparent),
                       // width: 42.w,
@@ -122,11 +122,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             .currentTheme
                             .textFieldBGProfile,
                         height: 30.78.h,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
+                            topLeft: Radius.circular(10.r),
+                            bottomLeft: Radius.circular(10.r),
                           ),
                         ),
                         onChanged: (CountryCode countryCode) {

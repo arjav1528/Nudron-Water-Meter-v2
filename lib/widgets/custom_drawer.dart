@@ -72,7 +72,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
           
           
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.w),
                             child: Center(
                               child: Text(
                                 widget.drawerName[widget.drawerIndex],

@@ -27,7 +27,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   Widget build(BuildContext context) {
 
     return Dialog(
-      insetPadding: const EdgeInsets.all(0),
+      insetPadding: EdgeInsets.all(0.w),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0.0),
       ),

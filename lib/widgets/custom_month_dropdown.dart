@@ -317,14 +317,14 @@ class StringItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Container(
         width: 311.w,
         decoration: BoxDecoration(
           color: isSelected
               ? Provider.of<ThemeNotifier>(context).currentTheme.numberWheelSelectedBG
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Center(
           child: Text(

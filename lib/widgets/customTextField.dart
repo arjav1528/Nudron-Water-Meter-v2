@@ -72,7 +72,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: BoxDecoration(
         color:
             Provider.of<ThemeNotifier>(context).currentTheme.textFieldFillColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10.r)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.25),
@@ -83,7 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0),
+        padding: EdgeInsets.symmetric(vertical: 0.h),
         child: TextField(
           controller: widget.controller,
           focusNode: _focusNode,
@@ -130,7 +130,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   borderSide: BorderSide(
                     color: CommonColors.blue,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
                 ),
             filled: true,
             fillColor: widget.fillColor ??
@@ -148,7 +148,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             border: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
                 ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: isLargerTextField

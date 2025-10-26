@@ -83,7 +83,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5.r),
       ),
       child: Column(
         children: [
@@ -412,7 +412,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5.r),
       ),
       child: Column(
         children: [

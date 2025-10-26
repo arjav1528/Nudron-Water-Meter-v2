@@ -293,10 +293,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       prefixIcon: Container(
                                         padding:
                                             EdgeInsets.only(left: 16.w - 8),
-                                        decoration: const BoxDecoration(
+                                        decoration: BoxDecoration(
                                             borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
+                                              topLeft: Radius.circular(10.r),
+                                              bottomLeft: Radius.circular(10.r),
                                             ),
                                             color: Colors.transparent),
                                         child: CountryCodePicker2(
@@ -307,11 +307,11 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   .currentTheme
                                                   .textFieldBGProfile,
                                           height: 30.78.h,
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             color: Colors.transparent,
                                             borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
+                                              topLeft: Radius.circular(10.r),
+                                              bottomLeft: Radius.circular(10.r),
                                             ),
                                           ),
                                           onChanged:
@@ -446,7 +446,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                 height: 16.h,
                               ),
                               SizedBox(
-                                height: 16,
+                                height: 16.h,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

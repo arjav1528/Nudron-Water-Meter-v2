@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum ThemeType {
   Light,
@@ -94,10 +95,10 @@ class CommonColors {
 class ThemeNotifier with ChangeNotifier {
   CustomThemeData _currentTheme = _lightTheme;
   bool isDark = false;
-  static double extrasmall = 14;
-  static double small = 16;
-  static double medium = 18;
-  static double large = 20;
+  static double extrasmall = 14.sp;
+  static double small = 16.sp;
+  static double medium = 18.sp;
+  static double large = 20.sp;
 
   static final CustomThemeData _lightTheme = CustomThemeData(
       bgColor: const Color(0XFFe5ebf0),

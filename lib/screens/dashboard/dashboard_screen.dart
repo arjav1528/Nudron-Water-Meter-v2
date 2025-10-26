@@ -319,7 +319,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                       width: 40.0,
                       height: 40.0,
                     ),
-                    const SizedBox(width: 16.0),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: Text(
                         MainDashboardPage.bottomNavTabs[index].toUpperCase(),
@@ -420,7 +420,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
       bottomNavigationBar: BottomAppBar(
         key: UniqueKey(),
         height: 69.h,
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.all(0.w),
         color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
         child: BlocBuilder<DashboardBloc, DashboardState>(
           buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,

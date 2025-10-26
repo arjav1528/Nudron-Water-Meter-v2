@@ -232,7 +232,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
           child: GestureDetector(
             onTap: () => widget.isEditable ? _toggleDropdown(context) : null,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 Image.asset(
                   'flags/${selectedItem?.code!.toLowerCase()}.png',

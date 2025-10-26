@@ -142,7 +142,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                           ),
                           pinTheme: PinTheme(
                             shape: PinCodeFieldShape.underline,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5.r),
                             fieldHeight: 50.h,
                             fieldWidth: 40.w,
 
