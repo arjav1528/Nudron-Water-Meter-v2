@@ -215,6 +215,10 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     }
 
     return Container(
+      width: 400.w,
+      constraints: BoxConstraints(
+        maxHeight: 600.h,
+      ),
       color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
       child: SingleChildScrollView(
         child: Padding(

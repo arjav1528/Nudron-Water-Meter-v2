@@ -202,191 +202,250 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
       final currentTheme = themeNotifier.currentTheme;
 
+      // Store the currently selected range in the dialog
+      DateTimeRange? currentSelectedRange = selectedRange;
+
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
-            backgroundColor: currentTheme.dialogBG,
-            elevation: 0,
-            child: Container(
-              height: 530.h,
-              decoration: BoxDecoration(
-                color: currentTheme.dialogBG, // Match BillingFormula dialog BG
-                border: Border.all(
-                  color: currentTheme.gridLineColor, // Match BillingFormula border color
-                  width: 3.responsiveSp, // Match BillingFormula border width
-                ),
-                // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: currentTheme.profileBorderColor,
-                //     blurRadius: 10.r,
-                //     offset: Offset(0, 4.h),
-                //   ),
-                // ],
-              ),
-              child: Column(
-                children: [
-                  // Custom Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ChamferedTextWidgetInverted(
-                        text: "SELECT MONTH RANGE",
-                        borderColor: Provider.of<ThemeNotifier>(context)
-                            .currentTheme
-                            .gridLineColor,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.close,
-                            color: Provider.of<ThemeNotifier>(context)
-                                .currentTheme
-                                .gridLineColor),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-
-                  // Date Picker Content
-                  SizedBox(
-                    width: 310.w,
-                    height: 350.h,
-                    
-                    child: RangeDatePicker(
-                      minDate: minDate,
-                      maxDate: maxDate,
-                      initialDate: validStartDate ?? maxDate,
-                      selectedRange: selectedRange,
-                      centerLeadingDate: true,
-                  
-                      // Styling
-                      currentDateDecoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(
-                          color: CommonColors.green,
-                          width: 2,
-                        ),
-                          borderRadius: BorderRadius.circular(100.r)
-                      ),
-                      currentDateTextStyle: TextStyle(
-                        color: CommonColors.green,
-                        fontSize: 14.responsiveSp,
-                        fontWeight: FontWeight.w600,
-                  
-                      ),
-                  
-                      enabledCellsDecoration: BoxDecoration(
-                        color: Colors.transparent,
-                          // shape: BoxShape.circle
-                        borderRadius: BorderRadius.circular(100.r),
-                      ),
-                      enabledCellsTextStyle: TextStyle(
-                        color: currentTheme.basicAdvanceTextColor,
-                        fontSize: 14.responsiveSp,
-                      ),
-                  
-                      selectedCellsDecoration: BoxDecoration(
-                        color: CommonColors.green.withOpacity(0.15),
-                        // borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      selectedCellsTextStyle: TextStyle(
-                        color: currentTheme.basicAdvanceTextColor,
-                        fontSize: 14.responsiveSp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                  
-                      singleSelectedCellDecoration: BoxDecoration(
-                        color: CommonColors.green,
-                          // shape: BoxShape.circle
-                        borderRadius: BorderRadius.circular(100.r),
-                      ),
-                      singleSelectedCellTextStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.responsiveSp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                  
-                      daysOfTheWeekTextStyle: TextStyle(
-                        color: currentTheme.gridHeadingColor,
-                        fontSize: 12.responsiveSp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                  
-                      disabledCellsTextStyle: TextStyle(
-                        color: currentTheme.noEntriesColor,
-                        fontSize: 14.responsiveSp,
-                      ),
-                  
-                      leadingDateTextStyle: GoogleFonts.robotoMono(
-                        fontSize: 18.responsiveSp,
-                        fontWeight: FontWeight.w600,
-                        color: currentTheme.basicAdvanceTextColor,
-                      ),
-                  
-                      slidersColor: CommonColors.green,
-                      splashColor: CommonColors.green.withOpacity(0.1),
-                      highlightColor: CommonColors.green.withOpacity(0.2),
-                  
-                      onRangeSelected: (DateTimeRange? range) {
-                        if (range != null) {
-                          Navigator.of(context).pop(range);
-                        }
-                      },
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              return Dialog(
+                backgroundColor: currentTheme.dialogBG,
+                elevation: 0,
+                  child: Container(
+                    width: 380.w,
+                    constraints: BoxConstraints(
+                      maxHeight: 500.h,
                     ),
-                  ),
-
-                  // Tip Text
-                  SizedBox(
-                    width: 290.w,
-                    child: Text(
-                      'Tip: You can select a range by tapping the start and end dates.',
-                      style: TextStyle(
-                        color: currentTheme.gridHeadingColor,
-                        fontSize: 13.responsiveSp,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      textAlign: TextAlign.center,
+                  decoration: BoxDecoration(
+                    color: currentTheme.dialogBG, // Match BillingFormula dialog BG
+                    border: Border.all(
+                      color: currentTheme.gridLineColor, // Match BillingFormula border color
+                      width: 3.responsiveSp, // Match BillingFormula border width
                     ),
+                    // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: currentTheme.profileBorderColor,
+                    //     blurRadius: 10.r,
+                    //     offset: Offset(0, 4.h),
+                    //   ),
+                    // ],
                   ),
-
-                  // Action Buttons
-                  Container(
-                    padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
-                    width: 280.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        CustomButton(
-                          text: 'CANCEL',
-                          isEnabled: true,
-                          isRed: true,
-                          onPressed: () {
-                            // Get the currently selected range from the picker
-                            Navigator.of(context).pop(selectedRange);
+                      // Custom Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ChamferedTextWidgetInverted(
+                            text: "SELECT MONTH RANGE",
+                            borderColor: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .gridLineColor,
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.close,
+                                color: Provider.of<ThemeNotifier>(context)
+                                    .currentTheme
+                                    .gridLineColor),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+
+                      // Date Picker Content
+                      SizedBox(
+                        width: 320.w,
+                        height: 300.h,
+                        
+                        child: RangeDatePicker(
+                          minDate: minDate,
+                          maxDate: maxDate,
+                          initialDate: validStartDate ?? maxDate,
+                          selectedRange: currentSelectedRange,
+                          centerLeadingDate: true,
+                      
+                          // Styling
+                          currentDateDecoration: BoxDecoration(
+                            color: Colors.transparent,
+                            border: Border.all(
+                              color: CommonColors.green,
+                              width: 2,
+                            ),
+                              borderRadius: BorderRadius.circular(100.r)
+                          ),
+                          currentDateTextStyle: TextStyle(
+                            color: CommonColors.green,
+                            fontSize: 14.responsiveSp,
+                            fontWeight: FontWeight.w600,
+                      
+                          ),
+                      
+                          enabledCellsDecoration: BoxDecoration(
+                            color: Colors.transparent,
+                              // shape: BoxShape.circle
+                            borderRadius: BorderRadius.circular(100.r),
+                          ),
+                          enabledCellsTextStyle: TextStyle(
+                            color: currentTheme.basicAdvanceTextColor,
+                            fontSize: 14.responsiveSp,
+                          ),
+                      
+                          selectedCellsDecoration: BoxDecoration(
+                            color: CommonColors.green.withOpacity(0.15),
+                            // borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          selectedCellsTextStyle: TextStyle(
+                            color: currentTheme.basicAdvanceTextColor,
+                            fontSize: 14.responsiveSp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                      
+                          singleSelectedCellDecoration: BoxDecoration(
+                            color: CommonColors.green,
+                              // shape: BoxShape.circle
+                            borderRadius: BorderRadius.circular(100.r),
+                          ),
+                          singleSelectedCellTextStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.responsiveSp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      
+                          daysOfTheWeekTextStyle: TextStyle(
+                            color: currentTheme.gridHeadingColor,
+                            fontSize: 12.responsiveSp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                      
+                          disabledCellsTextStyle: TextStyle(
+                            color: currentTheme.noEntriesColor,
+                            fontSize: 14.responsiveSp,
+                          ),
+                      
+                          leadingDateTextStyle: GoogleFonts.robotoMono(
+                            fontSize: 18.responsiveSp,
+                            fontWeight: FontWeight.w600,
+                            color: currentTheme.basicAdvanceTextColor,
+                          ),
+                      
+                          slidersColor: CommonColors.green,
+                          splashColor: CommonColors.green.withOpacity(0.1),
+                          highlightColor: CommonColors.green.withOpacity(0.2),
+                      
+                          onRangeSelected: (DateTimeRange? range) {
+                            if (range != null) {
+                              // Check if the range exceeds 92 days
+                              final daysDifference = range.end.difference(range.start).inDays + 1;
+                              if (daysDifference > 92) {
+                                // Show error message and don't update the selection
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Maximum date range is 92 days. Selected range is $daysDifference days.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                return;
+                              }
+                            }
+                            
+                            // Store the selected range but don't close the dialog
+                            currentSelectedRange = range;
+                            setDialogState(() {
+                              // Update the dialog state to reflect the new selection
+                            });
                           },
-                          fontSize: ThemeNotifier.medium.responsiveSp,
-                          dynamicWidth: true,
                         ),
-                        CustomButton(
-                          text: 'CONFIRM',
-                          isEnabled: true,
-                          isRed: false,
-                          onPressed: () {
-                            // Get the currently selected range from the picker
-                            Navigator.of(context).pop(selectedRange);
-                          },
-                          fontSize: ThemeNotifier.medium.responsiveSp,
-                          dynamicWidth: true,
+                      ),
+
+                      // Selected Date Range Display
+                      Container(
+                        width: 300.w,
+                        padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+                        decoration: BoxDecoration(
+                          color: currentTheme.dropDownColor,
+                          border: Border.all(
+                            color: currentTheme.gridLineColor,
+                            width: 1.responsiveSp,
+                          ),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
+                        child: Text(
+                          currentSelectedRange != null
+                              ? '${DateFormat('MMM dd').format(currentSelectedRange!.start)} - ${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.end)}'
+                              : 'No date range selected',
+                          style: TextStyle(
+                            color: currentSelectedRange != null 
+                                ? CommonColors.green 
+                                : currentTheme.noEntriesColor,
+                            fontSize: 13.responsiveSp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      // Tip Text
+                      Container(
+                        width: 300.w,
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        child: Text(
+                          'Tip: Select start and end dates. Max range: 92 days.',
+                          style: TextStyle(
+                            color: currentTheme.gridHeadingColor,
+                            fontSize: 12.responsiveSp,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      // Action Buttons
+                      Container(
+                        padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
+                        width: 300.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomButton(
+                              text: 'CANCEL',
+                              isEnabled: true,
+                              isRed: true,
+                              onPressed: () {
+                                // Close dialog without applying changes
+                                Navigator.of(context).pop();
+                              },
+                              fontSize: ThemeNotifier.small.responsiveSp,
+                              dynamicWidth: true,
+                            ),
+                            CustomButton(
+                              text: 'CONFIRM',
+                              isEnabled: true,
+                              isRed: false,
+                              onPressed: () {
+                                // Return the currently selected range
+                                Navigator.of(context).pop(currentSelectedRange);
+                              },
+                              fontSize: ThemeNotifier.small.responsiveSp,
+                              dynamicWidth: true,
+                            ),
+                          ],
+                        ),
+                      ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         },
       );
@@ -473,6 +532,13 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     // Ensure end date is not before start date
     if (validEnd.isBefore(validStart)) {
       validEnd = validStart;
+    }
+
+    // Ensure the range doesn't exceed 92 days
+    final daysDifference = validEnd.difference(validStart).inDays + 1;
+    if (daysDifference > 92) {
+      // Adjust the end date to be exactly 92 days from the start date
+      validEnd = validStart.add(Duration(days: 91));
     }
 
     return DateTimeRange(start: validStart, end: validEnd);

@@ -102,6 +102,10 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           backgroundColor: currentTheme.dialogBG,
             elevation: 0,
           child: Container(
+            width: 350.w,
+            constraints: BoxConstraints(
+              maxHeight: 500.h,
+            ),
             decoration: BoxDecoration(
                 color: currentTheme.dialogBG, // Match BillingFormula dialog BG
                 border: Border.all(
