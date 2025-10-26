@@ -11,9 +11,8 @@ import '../services/auth_service.dart';
 
 
 class DataPostRequests {
-  static const String portalUrl = 'https://api.nudron.com/prod/portal';
-  static const String nf1Url = '$portalUrl/nf1';
-  static const String nf3Url = '$portalUrl/nf3';
+  
+  
   static const String wm1Url = 'https://api.nudron.com/prod/dashboard/wm1';
   static FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   

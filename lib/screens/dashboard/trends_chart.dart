@@ -792,6 +792,42 @@ class BasicChart extends StatelessWidget {
       },
       child: LayoutBuilder(
         builder: (context, constriants) {
+          // Calculate responsive visible months based on screen width
+          double screenWidth = constriants.maxWidth;
+          int totalMonths = series.isNotEmpty ? (series.first.dataSource?.length ?? 12) : 12;
+          int visibleMonths;
+          
+          if (isFullScreen) {
+            // In full screen, show all months
+            visibleMonths = totalMonths;
+          } else {
+            if (isDaily) {
+              // For daily view, calculate based on available width
+              // Each day needs approximately 30-40 pixels for proper display
+              double minWidthPerDay = 35.0;
+              visibleMonths = (screenWidth / minWidthPerDay).floor();
+              visibleMonths = visibleMonths > 31 ? 31 : visibleMonths; // Max 31 days
+              visibleMonths = visibleMonths < 7 ? 7 : visibleMonths; // Min 7 days
+            } else {
+              // For monthly view, calculate based on available width
+              // Each month needs approximately 50-70 pixels for proper display
+              double minWidthPerMonth = 55.0;
+              visibleMonths = (screenWidth / minWidthPerMonth).floor();
+              
+              // Ensure we don't exceed total available months
+              visibleMonths = visibleMonths > totalMonths ? totalMonths : visibleMonths;
+              
+              // Set minimum visible months to 4 for better readability
+              visibleMonths = visibleMonths < 4 ? 4 : visibleMonths;
+              
+              // If we have more data than can fit comfortably, show all months
+              // This ensures the chart contracts to fit all data when needed
+              if (totalMonths <= visibleMonths) {
+                visibleMonths = totalMonths;
+              }
+            }
+          }
+          
           return series.isEmpty && !isDaily
               ? NoEntries()
               : Container(
@@ -1014,9 +1050,7 @@ class BasicChart extends StatelessWidget {
                                   // labelAlignment: LabelAlignment.start,
                                   initialVisibleMaximum: isFullScreen
                                       ? null
-                                      : isDaily
-                                          ? 14
-                                          : 6,
+                                      : visibleMonths.toDouble(),
                                   axisLine: AxisLine(
                                       width: 1,
                                       color: Provider.of<ThemeNotifier>(context)
@@ -1030,9 +1064,7 @@ class BasicChart extends StatelessWidget {
                                   ),
                                   desiredIntervals: isFullScreen
                                       ? null
-                                      : isDaily
-                                          ? 14
-                                          : 6,
+                                      : visibleMonths,
                                   labelPlacement: LabelPlacement.betweenTicks,
                                   majorGridLines: MajorGridLines(
                                       width: 0.w,

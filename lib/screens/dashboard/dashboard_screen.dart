@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -297,10 +298,12 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                             : Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .inactiveBottomNavbarIconColor,
-                        fontSize: 20.responsiveSp,
+                        fontSize: math.max(12.0, math.min(20.responsiveSp, 20.responsiveSp * (130.0.w / 200.0))),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                   ],
                 )
@@ -326,9 +329,10 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                               : Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .inactiveBottomNavbarIconColor,
-                          fontSize: 18.0.responsiveSp,
+                          fontSize: math.max(14.0, math.min(18.0.responsiveSp, 18.0.responsiveSp * (_drawerWidth / 300.0))),
                           fontWeight: FontWeight.w500,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
