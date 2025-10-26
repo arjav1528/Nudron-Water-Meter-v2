@@ -341,9 +341,57 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         init(contraints.maxHeight);
         return ScrollConfiguration(
           behavior: NoBounceScrollBehavior(),
-          child: Stack(
-            children: [
-              IntrinsicHeight(
+          child: GestureDetector(
+            onPanUpdate: (details) {
+              // Vertical scroll
+              final newOffsetV1 =
+                  _verticalScrollController1.offset - details.delta.dy;
+              if (_verticalScrollController1.hasClients) {
+                _verticalScrollController1.jumpTo(
+                  newOffsetV1.clamp(
+                    0.0,
+                    _verticalScrollController1.position.maxScrollExtent,
+                  ),
+                );
+              }
+
+              final newOffsetV2 =
+                  _verticalScrollController2.offset - details.delta.dy;
+              if (_verticalScrollController2.hasClients) {
+                _verticalScrollController2.jumpTo(
+                  newOffsetV2.clamp(
+                    0.0,
+                    _verticalScrollController2.position.maxScrollExtent,
+                  ),
+                );
+              }
+
+              // Horizontal scroll
+              final newOffsetH1 =
+                  _horizontalScrollController1.offset - details.delta.dx;
+              if (_horizontalScrollController1.hasClients) {
+                _horizontalScrollController1.jumpTo(
+                  newOffsetH1.clamp(
+                    0.0,
+                    _horizontalScrollController1.position.maxScrollExtent,
+                  ),
+                );
+              }
+
+              final newOffsetH2 =
+                  _horizontalScrollController2.offset - details.delta.dx;
+              if (_horizontalScrollController2.hasClients) {
+                _horizontalScrollController2.jumpTo(
+                  newOffsetH2.clamp(
+                    0.0,
+                    _horizontalScrollController2.position.maxScrollExtent,
+                  ),
+                );
+              }
+            },
+            child: Stack(
+              children: [
+                IntrinsicHeight(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -512,6 +560,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               ),
             ],
           ),
+        ),
         );
       });
     }
