@@ -114,8 +114,8 @@ class _SummaryTableState extends State<SummaryTable> {
                     data: data,
                     key: UniqueKey(),
                     columnsToTakeHeaderWidthAndExtraPadding: {
-                      0: 20.responsiveSp.toInt(),
-                      1: 0,
+                      0: 30.responsiveSp.toInt(), // Increased padding for first column (Building)
+                      1: 20.responsiveSp.toInt(), // Added padding for second column (Flat)
                     },
                     frozenColumns: 2,
                     location: 'billing',

@@ -51,7 +51,22 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
     if (isHeader && text[0] == '!') {
-      return 60.w;
+      // Calculate dynamic width for special headers instead of hardcoded 60.w
+      final TextPainter textPainter = TextPainter(
+        text: TextSpan(
+          text: Utils.cleanFieldName(text),
+          style: GoogleFonts.robotoMono(
+            fontSize: ThemeNotifier.medium.responsiveSp,
+            fontWeight: FontWeight.bold,
+            height: 1.2,
+            letterSpacing: 0.5,
+          ),
+        ),
+        maxLines: 1,
+        textDirection: TextDirection.ltr,
+      )..layout(minWidth: 0);
+      
+      return textPainter.width + 16 + 6.responsiveSp;
     }
 
     final TextPainter textPainter = TextPainter(
@@ -75,10 +90,10 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       textDirection: TextDirection.ltr,
     )..layout(minWidth: 0);
 
-    // No longer multiplying the width excessively
+    // Increased padding to ensure text fits properly with adequate spacing
     return textPainter.width +
-        8 +
-        3.responsiveSp +
+        16 + // Increased horizontal padding from 8 to 16
+        6.responsiveSp + // Increased responsive padding from 3 to 6
         (hasDownloadButton
             ? rowHeight
             : 0.0); // Add small padding to account for edges
