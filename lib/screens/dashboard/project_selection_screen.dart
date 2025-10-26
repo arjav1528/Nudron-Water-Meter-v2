@@ -193,39 +193,44 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                     padding: EdgeInsets.only(left: 24.w,right: 24.w),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomButton(
-                          text: "CANCEL",
-                          isRed: true,
-                          onPressed: () {
-                            activationCodeController.clear();
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        CustomButton(
-                          text: "CONFIRM",
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            if (activationCodeController.text.isEmpty) {
-                              CustomAlert.showCustomScaffoldMessenger(
-                                  context, "Activation code cannot be empty", AlertType.error);
-                              return;
-                            }
-                            try {
-                              var result = await LoaderUtility.showLoader(
-                                context,
-                                LoginPostRequests.addProject(activationCodeController.text),
-                              );
-                              BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
+                        Expanded(
+                          child: CustomButton(
+                            text: "CANCEL",
+                            isRed: true,
+                            onPressed: () {
                               activationCodeController.clear();
                               Navigator.of(context).pop();
-                              setState(() {}); // Refresh project list
-                            } catch (e) {
-                              CustomAlert.showCustomScaffoldMessenger(
-                                  context, e.toString(), AlertType.error);
-                            }
-                          },
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: CustomButton(
+                            text: "CONFIRM",
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              if (activationCodeController.text.isEmpty) {
+                                CustomAlert.showCustomScaffoldMessenger(
+                                    context, "Activation code cannot be empty", AlertType.error);
+                                return;
+                              }
+                              try {
+                                var result = await LoaderUtility.showLoader(
+                                  context,
+                                  LoginPostRequests.addProject(activationCodeController.text),
+                                );
+                                BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
+                                activationCodeController.clear();
+                                Navigator.of(context).pop();
+                                setState(() {}); // Refresh project list
+                              } catch (e) {
+                                CustomAlert.showCustomScaffoldMessenger(
+                                    context, e.toString(), AlertType.error);
+                              }
+                            },
+                          ),
                         ),
                       ],
                     ),

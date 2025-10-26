@@ -350,21 +350,33 @@ class _DropdownContentState extends State<DropdownContent> {
           ),
         SizedBox(height: 20.h),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // SizedBox(
+            //   width: 273.w + 30.responsiveSp, // Match dropdown width
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+                  
+            //     ],
+            //   ),
+            // ),
             CustomButton(
               text: 'CANCEL',
               isRed: true,
               onPressed: widget.onClose,
+              width: 120.w, // Fixed width for each button
             ),
-            SizedBox(width: 20.w),
+            SizedBox(width: 160.w),
             CustomButton(
               text: 'CONFIRM',
               onPressed: _onConfirm,
+              width: 120.w, // Fixed width for each button
             ),
           ],
         ),
         SizedBox(height: 20.h),
+        
       ],
     );
   }
