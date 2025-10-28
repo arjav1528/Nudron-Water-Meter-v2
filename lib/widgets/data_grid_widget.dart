@@ -45,11 +45,27 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   final ScrollController _horizontalScrollController2 = ScrollController();
 
   List<double> columnWidths = [];
+  
+  // Cache for text width calculations to avoid repeated calculations
+  final Map<String, double> _textWidthCache = {};
+  
+  // Cache for processed data to avoid repeated processing
+  List<List<dynamic>>? _cachedProcessedData;
 
   final double rowHeight = 41.h;
 
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
+    // Create cache key
+    final cacheKey = '${text}_${isHeader}_${hasDownloadButton}';
+    
+    // Return cached value if available
+    if (_textWidthCache.containsKey(cacheKey)) {
+      return _textWidthCache[cacheKey]!;
+    }
+    
+    double width;
+    
     if (isHeader && text[0] == '!') {
       // Calculate dynamic width for special headers instead of hardcoded 60.w
       final TextPainter textPainter = TextPainter(
@@ -66,43 +82,52 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         textDirection: TextDirection.ltr,
       )..layout(minWidth: 0);
       
-      return textPainter.width + 16 + 6.responsiveSp;
+      width = textPainter.width + 16 + 6.responsiveSp;
+    } else {
+      final TextPainter textPainter = TextPainter(
+        text: TextSpan(
+          text: Utils.cleanFieldName(text),
+          style: isHeader
+              ? GoogleFonts.robotoMono(
+                  fontSize: ThemeNotifier.medium.responsiveSp,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2, // Reduced line height
+                  letterSpacing: 0.5, // Matching spacing with the Text widget
+                )
+              : GoogleFonts.robotoMono(
+                  fontSize: ThemeNotifier.medium.responsiveSp,
+                  height: 1.2,
+                  fontWeight: FontWeight.normal,
+                  letterSpacing: 0.5,
+                ),
+        ),
+        maxLines: 1,
+        textDirection: TextDirection.ltr,
+      )..layout(minWidth: 0);
+
+      // Increased padding to ensure text fits properly with adequate spacing
+      width = textPainter.width +
+          16 + // Increased horizontal padding from 8 to 16
+          6.responsiveSp + // Increased responsive padding from 3 to 6
+          (hasDownloadButton
+              ? rowHeight
+              : 0.0); // Add small padding to account for edges
     }
-
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(
-        text: Utils.cleanFieldName(text),
-        style: isHeader
-            ? GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.responsiveSp,
-                fontWeight: FontWeight.bold,
-                height: 1.2, // Reduced line height
-                letterSpacing: 0.5, // Matching spacing with the Text widget
-              )
-            : GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.responsiveSp,
-                height: 1.2,
-                fontWeight: FontWeight.normal,
-                letterSpacing: 0.5,
-              ),
-      ),
-      maxLines: 1,
-      textDirection: TextDirection.ltr,
-    )..layout(minWidth: 0);
-
-    // Increased padding to ensure text fits properly with adequate spacing
-    return textPainter.width +
-        16 + // Increased horizontal padding from 8 to 16
-        6.responsiveSp + // Increased responsive padding from 3 to 6
-        (hasDownloadButton
-            ? rowHeight
-            : 0.0); // Add small padding to account for edges
+    
+    // Cache the result
+    _textWidthCache[cacheKey] = width;
+    return width;
   }
 
   num dummyRows = 0;
 
   void init(double height) {
-    calculateColumnWidths();
+    // Only recalculate if data has changed
+    if (_cachedProcessedData == null || 
+        _cachedProcessedData!.length != widget.data![1].length) {
+      calculateColumnWidths();
+      _cachedProcessedData = List.from(widget.data![1]);
+    }
     
     // Optimize dummy row generation for large datasets
     final dataLength = widget.data![1].length;
@@ -111,8 +136,9 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     if (height > rowHeight * dataLength) {
       dummyRows = visibleRows - dataLength - 1;
       
-      // Only add dummy rows if we have a reasonable number
-      if (dummyRows > 0 && dummyRows < 1000) {
+      // Only add dummy rows if we have a reasonable number and haven't added them yet
+      if (dummyRows > 0 && dummyRows < 1000 && 
+          widget.data![1].length == dataLength) {
         final columnCount = widget.data![1][0].length;
         final dummyRow = List.filled(columnCount, '');
         
@@ -142,15 +168,35 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           continue;
         }
 
-        // Optimize data width calculation with early termination
+        // Optimize data width calculation with sampling for large datasets
         double maxDataWidth = 0.0;
-        for (var row in rows) {
-          if (row[index] != null) {
-            double cellWidth = calculateTextWidth(row[index].toString());
-            if (cellWidth > maxDataWidth) {
-              maxDataWidth = cellWidth;
-              // Early termination if we've found a very wide cell
-              if (maxDataWidth > headerWidth * 2) break;
+        
+        // For very large datasets, use sampling to improve performance
+        if (rows.length > 1000) {
+          // Sample every nth row to get representative width
+          final sampleSize = min<int>(100, rows.length);
+          final step = (rows.length ~/ sampleSize) as int;
+          
+          for (int i = 0; i < rows.length; i += step) {
+            if (rows[i][index] != null) {
+              double cellWidth = calculateTextWidth(rows[i][index].toString());
+              if (cellWidth > maxDataWidth) {
+                maxDataWidth = cellWidth;
+                // Early termination if we've found a very wide cell
+                if (maxDataWidth > headerWidth * 2) break;
+              }
+            }
+          }
+        } else {
+          // For smaller datasets, check all rows
+          for (var row in rows) {
+            if (row[index] != null) {
+              double cellWidth = calculateTextWidth(row[index].toString());
+              if (cellWidth > maxDataWidth) {
+                maxDataWidth = cellWidth;
+                // Early termination if we've found a very wide cell
+                if (maxDataWidth > headerWidth * 2) break;
+              }
             }
           }
         }
@@ -158,6 +204,21 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         columnWidths[index] = max(headerWidth, maxDataWidth);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    // Clean up scroll controllers
+    _verticalScrollController1.dispose();
+    _verticalScrollController2.dispose();
+    _horizontalScrollController1.dispose();
+    _horizontalScrollController2.dispose();
+    
+    // Clear caches to free memory
+    _textWidthCache.clear();
+    _cachedProcessedData = null;
+    
+    super.dispose();
   }
 
   void syncScrollControllers(
@@ -275,25 +336,36 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     );
   }
 
+  // Cache for text styles to avoid repeated style creation
+  TextStyle? _cachedTextStyle;
+  
+  TextStyle _getTextStyle(BuildContext context) {
+    if (_cachedTextStyle == null) {
+      _cachedTextStyle = GoogleFonts.robotoMono(
+        fontSize: ThemeNotifier.medium.responsiveSp,
+        height: 1.2,
+        fontWeight: FontWeight.normal,
+        letterSpacing: 0.5,
+        color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
+      );
+    }
+    return _cachedTextStyle!;
+  }
+
   _getNCNormalWidget(int index, int index2, BuildContext context) {
     String? field = widget.data![0][index2].toString();
+    final cellValue = widget.data![1][index][index2].toString();
+    final textStyle = _getTextStyle(context);
+    
     if (field[0] == '%' && widget.devicesTable == true) {
       return Text(
-        Utils.lastSeenFromMilliseconds(widget.data![1][index][index2].toString())
-            .toString(),
+        Utils.lastSeenFromMilliseconds(cellValue).toString(),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.responsiveSp,
-          height: 1.2,
-          fontWeight: FontWeight.normal,
-          letterSpacing: 0.5,
-          color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-        ),
+        style: textStyle,
       );
     } else if (field[0] == '@' && widget.devicesTable == true) {
-      String? lastSeenDate =
-          NudronChartMap.convertDaysToDate(widget.data![1][index][index2].toString());
+      String? lastSeenDate = NudronChartMap.convertDaysToDate(cellValue);
       if (lastSeenDate == '01-Jan-20') {
         lastSeenDate = 'NA';
       }
@@ -301,26 +373,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         lastSeenDate,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.responsiveSp,
-          height: 1.2,
-          fontWeight: FontWeight.normal,
-          letterSpacing: 0.5,
-          color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-        ),
+        style: textStyle,
       );
     } else {
       return Text(
-        widget.data![1][index][index2].toString(),
+        cellValue,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.responsiveSp,
-          height: 1.2,
-          fontWeight: FontWeight.normal,
-          letterSpacing: 0.5,
-          color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-        ),
+        style: textStyle,
       );
     }
   }
