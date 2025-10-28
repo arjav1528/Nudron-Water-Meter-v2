@@ -65,43 +65,35 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _showCustomTooltip(context);
-        onTap();
-      },
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            // Call the same onTap as GestureDetector
-            _showCustomTooltip(context);
-            onTap();
-          },
-          splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-              .currentTheme
-              .splashColor,
-          highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-              .currentTheme
-              .splashColor,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 0.w),
-            child: Container(
-              height: 25.h,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(2.responsiveSp),
-              ),
-              child: SvgPicture.asset(
-                iconAsset,
-                width: 25.responsiveSp,
-                height: 25.responsiveSp,
-                color: Provider.of<ThemeNotifier>(context, listen: false)
-                    .currentTheme
-                    .gridHeadingColor,
-                semanticsLabel: 'Icon',
-              ),
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          _showCustomTooltip(context);
+          onTap();
+        },
+        splashColor: Provider.of<ThemeNotifier>(context, listen: false)
+            .currentTheme
+            .splashColor,
+        highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
+            .currentTheme
+            .splashColor,
+        child: Container(
+          // Remove fixed height to allow it to expand to fill the parent container
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(2.responsiveSp),
+          ),
+          // Center the icon within the full cell area
+          alignment: Alignment.center,
+          child: SvgPicture.asset(
+            iconAsset,
+            width: 25.responsiveSp,
+            height: 25.responsiveSp,
+            color: Provider.of<ThemeNotifier>(context, listen: false)
+                .currentTheme
+                .gridHeadingColor,
+            semanticsLabel: 'Icon',
           ),
         ),
       ),
