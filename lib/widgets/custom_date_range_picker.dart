@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:date_picker_plus/date_picker_plus.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../utils/pok.dart';
 import '../../widgets/chamfered_text_widget.dart';
@@ -155,8 +154,10 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
   }
 
   Future<void> _showDateRangePicker() async {
-    try {
+    
       // Ensure dates are within valid range
+
+    try{
       final now = DateTime.now();
       final minDate = DateTime(2020, 1, 1);
       final maxDate = DateTime(now.year, now.month, now.day);
@@ -208,32 +209,34 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
         context: context,
         builder: (BuildContext context) {
+          // Store visibleMonth in a variable that persists across rebuilds
+          DateTime? _storedVisibleMonth;
+          
           return StatefulBuilder(
             builder: (context, setDialogState) {
+              // Initialize if not set, otherwise use stored value
+              _storedVisibleMonth ??= DateTime(
+                (currentSelectedRange?.start ?? validStartDate ?? maxDate).year,
+                (currentSelectedRange?.start ?? validStartDate ?? maxDate).month,
+                1,
+              );
+              
+              // Always use the current stored value (which may have been updated by buttons)
+              DateTime visibleMonth = _storedVisibleMonth!;
+              
               return Dialog(
                 backgroundColor: currentTheme.dialogBG,
                 elevation: 0,
                   child: Container(
                     width: 380.w,
-                    constraints: BoxConstraints(
-                      maxHeight: 500.h,
-                    ),
+                  height: 600.h,
                   decoration: BoxDecoration(
-                    color: currentTheme.dialogBG, // Match BillingFormula dialog BG
+                    color: currentTheme.dialogBG,
                     border: Border.all(
-                      color: currentTheme.gridLineColor, // Match BillingFormula border color
-                      width: 3.responsiveSp, // Match BillingFormula border width
+                      color: currentTheme.gridLineColor,
+                      width: 3.responsiveSp,
                     ),
-                    // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: currentTheme.profileBorderColor,
-                    //     blurRadius: 10.r,
-                    //     offset: Offset(0, 4.h),
-                    //   ),
-                    // ],
                   ),
-                  child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -261,109 +264,198 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       // Date Picker Content
-                      SizedBox(
-                        width: 320.w,
-                        height: 300.h,
-                        
-                        child: RangeDatePicker(
-                          minDate: minDate,
-                          maxDate: maxDate,
-                          initialDate: validStartDate ?? maxDate,
-                          selectedRange: currentSelectedRange,
-                          centerLeadingDate: true,
-                      
-                          // Styling
-                          currentDateDecoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                              color: CommonColors.green,
-                              width: 2,
-                            ),
-                              borderRadius: BorderRadius.circular(100.r)
-                          ),
-                          currentDateTextStyle: TextStyle(
-                            color: CommonColors.green,
-                            fontSize: 14.responsiveSp,
-                            fontWeight: FontWeight.w600,
-                      
-                          ),
-                      
-                          enabledCellsDecoration: BoxDecoration(
-                            color: Colors.transparent,
-                              // shape: BoxShape.circle
-                            borderRadius: BorderRadius.circular(100.r),
-                          ),
-                          enabledCellsTextStyle: TextStyle(
-                            color: currentTheme.basicAdvanceTextColor,
-                            fontSize: 14.responsiveSp,
-                          ),
-                      
-                          selectedCellsDecoration: BoxDecoration(
-                            color: CommonColors.green.withOpacity(0.15),
-                            // borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          selectedCellsTextStyle: TextStyle(
-                            color: currentTheme.basicAdvanceTextColor,
-                            fontSize: 14.responsiveSp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                      
-                          singleSelectedCellDecoration: BoxDecoration(
-                            color: CommonColors.green,
-                              // shape: BoxShape.circle
-                            borderRadius: BorderRadius.circular(100.r),
-                          ),
-                          singleSelectedCellTextStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.responsiveSp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                      
-                          daysOfTheWeekTextStyle: TextStyle(
+                      StatefulBuilder(
+                        builder: (context, setLocal) {
+                          // visibleMonth is from outer scope and will be updated when outer state rebuilds
+
+                          List<String> dow = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+                          TextStyle dowStyle = TextStyle(
                             color: currentTheme.gridHeadingColor,
                             fontSize: 12.responsiveSp,
                             fontWeight: FontWeight.w500,
-                          ),
-                      
-                          disabledCellsTextStyle: TextStyle(
-                            color: currentTheme.noEntriesColor,
-                            fontSize: 14.responsiveSp,
-                          ),
-                      
-                          leadingDateTextStyle: GoogleFonts.robotoMono(
+                            fontFamily: GoogleFonts.robotoMono().fontFamily,
+                          );
+
+                          Widget buildDayCell(DateTime day) {
+                            bool isToday = DateTime.now().year == day.year && DateTime.now().month == day.month && DateTime.now().day == day.day;
+                            bool inCurrentMonth = day.month == visibleMonth.month && day.year == visibleMonth.year;
+                            bool isDisabled = day.isBefore(minDate) || day.isAfter(maxDate) || !inCurrentMonth;
+
+                            DateTimeRange? r = currentSelectedRange;
+                            bool isStart = r != null && day.isAtSameMomentAs(DateTime(r.start.year, r.start.month, r.start.day));
+                            bool isEnd = r != null && day.isAtSameMomentAs(DateTime(r.end.year, r.end.month, r.end.day));
+                            bool inRange = r != null && !isStart && !isEnd && (day.isAfter(r.start) && day.isBefore(r.end));
+
+                            Color textColor = isDisabled
+                                ? currentTheme.noEntriesColor
+                                : currentTheme.basicAdvanceTextColor;
+
+                            BoxDecoration? deco;
+                            TextStyle textStyle = TextStyle(
+                              color: textColor,
+                              fontSize: 14.responsiveSp,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              fontWeight: FontWeight.w500,
+                            );
+
+                            if (inRange) {
+                              deco = BoxDecoration(color: CommonColors.green.withOpacity(0.15));
+                            }
+                            if (isStart || isEnd) {
+                              deco = BoxDecoration(
+                                color: CommonColors.green,
+                                borderRadius: BorderRadius.circular(100.r),
+                              );
+                              textStyle = textStyle.copyWith(color: Colors.white, fontWeight: FontWeight.w600);
+                            } else if (isToday) {
+                              deco = BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: CommonColors.green, width: 2),
+                                borderRadius: BorderRadius.circular(100.r),
+                              );
+                              textStyle = textStyle.copyWith(color: CommonColors.green);
+                            }
+
+                            return Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: isDisabled ? null : () {
+                                  DateTime tapped = DateTime(day.year, day.month, day.day);
+                                  if (currentSelectedRange == null) {
+                                    currentSelectedRange = DateTimeRange(start: tapped, end: tapped);
+                                  } else {
+                                    final s = DateTime(currentSelectedRange!.start.year, currentSelectedRange!.start.month, currentSelectedRange!.start.day);
+                                    final e = DateTime(currentSelectedRange!.end.year, currentSelectedRange!.end.month, currentSelectedRange!.end.day);
+                                    if (s == e) {
+                                      if (tapped.isBefore(s)) {
+                                        currentSelectedRange = DateTimeRange(start: tapped, end: s);
+                                      } else {
+                                        currentSelectedRange = DateTimeRange(start: s, end: tapped);
+                                      }
+                                    } else {
+                                      currentSelectedRange = DateTimeRange(start: tapped, end: tapped);
+                                    }
+                                  }
+
+                                  // Enforce 92-day cap
+                                  final rr = currentSelectedRange!;
+                                  final d = rr.end.difference(rr.start).inDays + 1;
+                                  if (d > 92) {
+                                    currentSelectedRange = DateTimeRange(start: rr.start, end: rr.start.add(Duration(days: 91)));
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   SnackBar(
+                                    //     content: Text('Maximum date range is 92 days. Selected range adjusted.'),
+                                    //     backgroundColor: Colors.red,
+                                    //     duration: Duration(seconds: 2),
+                                    //   ),
+                                    // );
+                                    CustomAlert.showCustomScaffoldMessenger(
+                                        context, "Maximum date range is 92 days. Selected range adjusted.", AlertType.error);
+                                  }
+
+                                  // Update dialog preview immediately
+                                  setDialogState(() {});
+                                  
+                                  // Update bloc instantly with the new range
+                                  final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+                                  // Update bloc dates immediately
+                                  dashboardBloc.selectedStartDate = currentSelectedRange!.start;
+                                  dashboardBloc.selectedEndDate = currentSelectedRange!.end;
+                                  
+                                  // Load data for the new range
+                                  final normalized = DateTimeRange(
+                                    start: currentSelectedRange!.start,
+                                    end: currentSelectedRange!.end,
+                                  );
+                                  // ignore: unawaited_futures
+                                  dashboardBloc.selectDateRange(normalized.start, normalized.end);
+                                },
+                                splashColor: CommonColors.green.withOpacity(0.1),
+                                highlightColor: CommonColors.green.withOpacity(0.2),
+                                child: Container(
+                                  decoration: deco,
+                                  alignment: Alignment.center,
+                                  child: Text('${day.day}', style: textStyle),
+                                ),
+                              ),
+                            );
+                          }
+
+                          // Build a 7x6 grid for the month
+                          DateTime firstOfMonth = visibleMonth;
+                          int weekdayOffset = firstOfMonth.weekday % 7; // Sunday=0
+                          // int daysInMonth = DateTime(visibleMonth.year, visibleMonth.month + 1, 0).day; // not needed explicitly
+                          List<Widget> rows = [];
+
+                          // Header with arrows and month
+                          rows.add(
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.chevron_left, color: CommonColors.green),
+                                    onPressed: () {
+                                      _storedVisibleMonth = DateTime(visibleMonth.year, visibleMonth.month - 1, 1);
+                                      setDialogState(() {});
+                                    },
+                                  ),
+                                  Text(
+                                    DateFormat('MMMM yyyy').format(visibleMonth),
+                                    style: GoogleFonts.robotoMono(
                             fontSize: 18.responsiveSp,
                             fontWeight: FontWeight.w600,
                             color: currentTheme.basicAdvanceTextColor,
                           ),
-                      
-                          slidersColor: CommonColors.green,
-                          splashColor: CommonColors.green.withOpacity(0.1),
-                          highlightColor: CommonColors.green.withOpacity(0.2),
-                      
-                          onRangeSelected: (DateTimeRange? range) {
-                            if (range != null) {
-                              // Check if the range exceeds 92 days
-                              final daysDifference = range.end.difference(range.start).inDays + 1;
-                              if (daysDifference > 92) {
-                                // Show error message and don't update the selection
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Maximum date range is 92 days. Selected range is $daysDifference days.'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
                                   ),
-                                );
-                                return;
-                              }
-                            }
-                            
-                            // Store the selected range but don't close the dialog
-                            currentSelectedRange = range;
-                            setDialogState(() {
-                              // Update the dialog state to reflect the new selection
-                            });
-                          },
-                        ),
+                                  IconButton(
+                                    icon: Icon(Icons.chevron_right, color: CommonColors.green),
+                                    onPressed: () {
+                                      _storedVisibleMonth = DateTime(visibleMonth.year, visibleMonth.month + 1, 1);
+                                      setDialogState(() {});
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+
+                          // Days of week row
+                          rows.add(
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: dow
+                                    .map((d) => Expanded(
+                                          child: Center(child: Text(d, style: dowStyle)),
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
+                          );
+
+                          // Grid
+                          List<Widget> gridChildren = [];
+                          int totalCells = 42; // 6 weeks
+                          for (int i = 0; i < totalCells; i++) {
+                            int dayNum = i - weekdayOffset + 1;
+                            DateTime cellDate = DateTime(visibleMonth.year, visibleMonth.month, dayNum);
+                            gridChildren.add(Expanded(child: SizedBox(height: 38.h, child: buildDayCell(cellDate))));
+                          }
+                          for (int r = 0; r < 6; r++) {
+                            rows.add(Row(children: gridChildren.sublist(r * 7, (r + 1) * 7)));
+                          }
+
+                          return SizedBox(
+                            width: 320.w,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: rows,
+                            ),
+                          );
+                        },
                       ),
 
                       // Selected Date Range Display
@@ -380,7 +472,9 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                         child: Text(
                           currentSelectedRange != null
-                              ? '${DateFormat('MMM dd').format(currentSelectedRange!.start)} - ${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.end)}'
+                              ? (currentSelectedRange!.start == currentSelectedRange!.end
+                                  ? '${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.start)}'
+                                  : '${DateFormat('MMM dd').format(currentSelectedRange!.start)} - ${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.end)}')
                               : 'No date range selected',
                           style: TextStyle(
                             color: currentSelectedRange != null 
@@ -388,6 +482,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                                 : currentTheme.noEntriesColor,
                             fontSize: 13.responsiveSp,
                             fontWeight: FontWeight.w600,
+                            fontFamily: GoogleFonts.robotoMono().fontFamily,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -403,6 +498,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             color: currentTheme.gridHeadingColor,
                             fontSize: 12.responsiveSp,
                             fontStyle: FontStyle.italic,
+                            fontFamily: GoogleFonts.robotoMono().fontFamily,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -441,14 +537,14 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                       ),
                       ],
-                    ),
                   ),
                 ),
               );
+
             },
           );
-        },
-      );
+        });
+      
 
       if (pickedRange != null) {
         setState(() {
@@ -459,6 +555,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         // Apply the date range
         await _applyDateRange();
       }
+      
     } catch (e) {
       // Show error message to user
       if (mounted) {
