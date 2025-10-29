@@ -266,7 +266,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
         SizedBox(
           width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width/3,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: PlatformUtils.isMobile ? 16.w : 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
