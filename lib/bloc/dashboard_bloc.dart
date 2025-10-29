@@ -633,7 +633,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final Map<String, dynamic> _apiCache = {};
   final Map<String, DateTime> _cacheTimestamps = {};
   final Map<String, Future<dynamic>> _pendingRequests = {};
-  static const Duration _cacheExpiry = Duration(minutes: 5);
+  static const Duration _cacheExpiry = Duration(minutes: 15);
   
   // Memory-efficient cache with size limits
   static const int _maxCacheSize = 50;
