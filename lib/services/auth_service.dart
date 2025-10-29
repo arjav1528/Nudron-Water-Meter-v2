@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -458,42 +459,83 @@ class AuthService {
       throw CustomException('No internet connection');
     }
 
-    final jwt = (url == _au3Url) ? await getAccessToken() : null;
-    final userAgent = await DeviceInfoUtil.getUserAgent();
+    // Retry configuration
+    const int maxRetries = 3;
+    const Duration initialRetryDelay = Duration(seconds: 1);
+    final effectiveTimeout = timeout ?? const Duration(seconds: 30);
+    
+    int attempt = 0;
+    Exception? lastException;
+    
+    while (attempt < maxRetries) {
+      try {
+        final jwt = (url == _au3Url) ? await getAccessToken() : null;
+        final userAgent = await DeviceInfoUtil.getUserAgent();
 
-    final headers = {
-      'User-Agent': userAgent,
-      'medium': 'phone',
-      'Content-Type': 'text/plain',
-      if (jwt != null) 'Authorization': 'Bearer $jwt',
-      if (url == _au1Url) 'tenantID': "d14b3819-5e90-4b1e-8821-9fcb72684627",
-      if (url == _au1Url) 'clientID': "WaterMeteringMobile2",
-    };
+        final headers = {
+          'User-Agent': userAgent,
+          'medium': 'phone',
+          'Content-Type': 'text/plain',
+          if (jwt != null) 'Authorization': 'Bearer $jwt',
+          if (url == _au1Url) 'tenantID': "d14b3819-5e90-4b1e-8821-9fcb72684627",
+          if (url == _au1Url) 'clientID': "WaterMeteringMobile2",
+        };
 
-    final request = http.Request('POST', Uri.parse(url));
-    request.body = body;
-    request.headers.addAll(headers);
+        final request = http.Request('POST', Uri.parse(url));
+        request.body = body;
+        request.headers.addAll(headers);
 
+        // Send request with timeout
+        final response = await request.send().timeout(effectiveTimeout);
 
-    try {
-      final response = await request.send().timeout(timeout ?? const Duration(seconds: 10));
-      
-
-      if (response.statusCode == 200) {
-        final responseBody = await response.stream.bytesToString();
-        return responseBody;
-      } else if (response.statusCode == 401 || response.statusCode == 403) {
-        await logout();
-        throw CustomException('Session expired. Please login again.');
-      } else {
-        final responseBody = await response.stream.bytesToString();
-        throw CustomException(responseBody.isNotEmpty ? responseBody : 'Server error');
+        if (response.statusCode == 200) {
+          // Read response body with timeout
+          final responseBody = await response.stream.bytesToString().timeout(effectiveTimeout);
+          return responseBody;
+        } else if (response.statusCode == 401 || response.statusCode == 403) {
+          await logout();
+          throw CustomException('Session expired. Please login again.');
+        } else {
+          final responseBody = await response.stream.bytesToString().timeout(const Duration(seconds: 5));
+          throw CustomException(responseBody.isNotEmpty ? responseBody : 'Server error');
+        }
+      } on TimeoutException catch (e) {
+        lastException = e;
+        attempt++;
+        if (attempt < maxRetries) {
+          // Exponential backoff: 1s, 2s, 4s
+          final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));
+          await Future.delayed(delay);
+          continue;
+        }
+        throw CustomException('Request timed out after $maxRetries attempts');
+      } on SocketException catch (e) {
+        lastException = e;
+        attempt++;
+        if (attempt < maxRetries) {
+          // Exponential backoff for connection errors
+          final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));
+          await Future.delayed(delay);
+          continue;
+        }
+        throw CustomException('Network connection failed: ${e.message}');
+      } catch (e) {
+        // For non-retryable errors (like 401/403), throw immediately
+        if (e is CustomException && e.message.contains('login')) {
+          rethrow;
+        }
+        lastException = e is Exception ? e : Exception(e.toString());
+        attempt++;
+        if (attempt < maxRetries) {
+          final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));
+          await Future.delayed(delay);
+          continue;
+        }
+        throw CustomException('Network error: ${e.toString()}');
       }
-    } on TimeoutException {
-      throw CustomException('Request timed out');
-    } catch (e) {
-      throw CustomException('Network error: ${e.toString()}');
     }
+    
+    throw CustomException('Network error after $maxRetries attempts: ${lastException?.toString()}');
   }
 }
 
