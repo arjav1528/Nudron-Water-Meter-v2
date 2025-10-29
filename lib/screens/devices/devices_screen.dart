@@ -219,8 +219,8 @@ class _DevicesPageState extends State<DevicesPage> {
                         data: dashboardBloc.devicesData,
                         key: UniqueKey(),
                         columnsToTakeHeaderWidthAndExtraPadding: {
-                          // Removed hardcoded padding values to allow dynamic width calculation
-                          // based on actual text content
+                          0: 30.responsiveSp.toInt(), // Increased padding for first column (Building)
+                          1: 20.responsiveSp.toInt(), // Added padding for second column (Flat)
                         },
                         frozenColumns: 2,
                         devicesTable: true,

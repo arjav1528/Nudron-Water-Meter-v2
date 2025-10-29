@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import '../../models/chartModels.dart';
 import '../../utils/pok.dart';
 import '../../utils/utils.dart';
@@ -106,12 +108,26 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       )..layout(minWidth: 0);
 
       // Increased padding to ensure text fits properly with adequate spacing
-      width = textPainter.width +
+      if(Platform.isAndroid || Platform.isIOS){
+        
+        width = textPainter.width +
+          8 +
+          3.minSp +
+          (hasDownloadButton
+              ? rowHeight
+              : 0.0); // Add small padding to account for edges
+        
+        if(width > 120.w){
+          width = 120.w;
+        }
+      }else{
+        width = textPainter.width +
           16 + // Increased horizontal padding from 8 to 16
           6.responsiveSp + // Increased responsive padding from 3 to 6
           (hasDownloadButton
               ? rowHeight
               : 0.0); // Add small padding to account for edges
+      }
     }
     
     // Cache the result
