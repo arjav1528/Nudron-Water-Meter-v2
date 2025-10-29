@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.nudron" "\0"
-            VALUE "FileDescription", "watermeter2" "\0"
+            VALUE "FileDescription", "Water Meter" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "watermeter2" "\0"
+            VALUE "InternalName", "Water Meter" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.nudron. All rights reserved." "\0"
-            VALUE "OriginalFilename", "watermeter2.exe" "\0"
-            VALUE "ProductName", "watermeter2" "\0"
+            VALUE "OriginalFilename", "Water Meter.exe" "\0"
+            VALUE "ProductName", "Water Meter" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,6 +1,6 @@
 {
-    "name": "watermeter2",
-    "short_name": "watermeter2",
+    "name": "Water Meter",
+    "short_name": "Water Meter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

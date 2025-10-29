@@ -81,13 +81,23 @@ dev_dependencies:
   build_runner: ^2.4.12
   msix: ^3.16.12 # Windows packaging
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icons/app_icon.png"
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icons/app_icon.png"
+  windows:
+    generate: true
+    image_path: "assets/icons/app_icon.png"
+  macos:
+    generate: true
+    image_path: "assets/icons/app_icon.png"
 
 msix_config:
-  display_name: "Water Meter: IoT Platform"
+  display_name: "Water Meter"
   publisher_display_name: Nudron IoT
   identity_name: NudronIoT.WaterMeterIoTPlatform
   publisher: CN=8FE2F31C-E1F8-43B3-9C3B-E15FE39392D0
