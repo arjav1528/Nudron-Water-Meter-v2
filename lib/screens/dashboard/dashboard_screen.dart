@@ -141,7 +141,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   int drawerIndex = 0;
   
   // Desktop-specific properties
-  final double _drawerWidth = 230.0;
+  final double _drawerWidth = 230.0.w;
   final bool _isDrawerCollapsed = true;
 
   List<IconData> icons = [
@@ -274,7 +274,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         },
         child: Container(
           height: 86.h,
-          padding: EdgeInsets.symmetric(horizontal: isCollapsed ? 8.0 : 16.0),
+          padding: EdgeInsets.zero,
           child: isCollapsed
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -298,7 +298,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                             : Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .inactiveBottomNavbarIconColor,
-                        fontSize: math.max(12.0, math.min(20.responsiveSp, 20.responsiveSp * (130.0.w / 200.0))),
+                        fontSize: 20.responsiveSp,
                         fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,
@@ -316,8 +316,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .inactiveBottomNavbarIconColor,
-                      width: 40.0,
-                      height: 40.0,
+                      width: 70.0.w,
+                      height: 70.0.w,
                     ),
                     SizedBox(width: 16.w),
                     Expanded(
@@ -329,8 +329,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                               : Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .inactiveBottomNavbarIconColor,
-                          fontSize: math.max(14.0, math.min(18.0.responsiveSp, 18.0.responsiveSp * (_drawerWidth / 300.0))),
-                          fontWeight: FontWeight.w500,
+                          fontSize: 16.responsiveSp,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
