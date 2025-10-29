@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
 
 
@@ -262,98 +263,101 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           height: 3.h,
           color: Color(0xFF14414e),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset('assets/icons/project.svg',
-                        color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                        height: 30.h,
-    
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        "SELECT PROJECT",
-                        style: GoogleFonts.robotoMono(
-                          fontSize: 18.responsiveSp,
-                          fontWeight: FontWeight.w500,
-                          color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
-                      ),
-                    ),
-                    ],
-                  ),
-                  // IconButton(
-                  //   onPressed: _showAddProjectDialog,
+        SizedBox(
+          width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width/3,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset('assets/icons/project.svg',
+                          color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                          height: 30.h,
               
-                  //   icon: Icon(
-                  //     Icons.add,
-                  //     color: theme.basicAdvanceTextColor,
-                  //     size: 24.responsiveSp,
-                  //   ),
-                  //   style: ButtonStyle(
-                  //     backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                  //     shape: MaterialStateProperty.all(
-                  //       RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(12.r),
-
-                  //         side: BorderSide(
-                  //           color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
-                  //           width: 2, // Border width
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // )
-                  GestureDetector(
-                    onTap: _showAddProjectDialog,
-                    child: Container(
-                      height: 30.h,
-                      width: 30.w,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.r),
-                        border: Border.all(
-                          color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
-                          width: 2, // Border width
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          "SELECT PROJECT",
+                          style: GoogleFonts.robotoMono(
+                            fontSize: 18.responsiveSp,
+                            fontWeight: FontWeight.w500,
+                            color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                         ),
                       ),
-                      child: Icon(
-                        Icons.add,
-                        color: theme.basicAdvanceTextColor,
-                        size: 24.h,
-                      ),
+                      ],
                     ),
-                  )
-                ],
-              ),
-              SizedBox(height: 15.h),
-              CustomDropdownButton2(
-                fieldName: "PROJECT",
-                value: selectedProject ?? (projects.length == 1 ? projects.first : null),
-                items: projects,
-                onChanged: (value) {
-                  setState(() {
-                    selectedProject = value;
-                  });
-                },
-                width1: 400.w,
-                width2: 360.w,
-                fieldNameVisible: false,
-              ),
-              SizedBox(height: 470.h),
-              CustomButton(
-                text: "DASHBOARD",
-                onPressed: _navigateToDashboard,
-                arrowWidget: true,
-                dynamicWidth: true,
-              ),
-              
-            ],
+                    // IconButton(
+                    //   onPressed: _showAddProjectDialog,
+                
+                    //   icon: Icon(
+                    //     Icons.add,
+                    //     color: theme.basicAdvanceTextColor,
+                    //     size: 24.responsiveSp,
+                    //   ),
+                    //   style: ButtonStyle(
+                    //     backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                    //     shape: MaterialStateProperty.all(
+                    //       RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(12.r),
+          
+                    //         side: BorderSide(
+                    //           color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
+                    //           width: 2, // Border width
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
+                    GestureDetector(
+                      onTap: _showAddProjectDialog,
+                      child: Container(
+                        height: 30.h,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.r),
+                          border: Border.all(
+                            color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
+                            width: 2, // Border width
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: theme.basicAdvanceTextColor,
+                          size: 24.h,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 15.h),
+                CustomDropdownButton2(
+                  fieldName: "PROJECT",
+                  value: selectedProject ?? (projects.length == 1 ? projects.first : null),
+                  items: projects,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedProject = value;
+                    });
+                  },
+                  width1: 400.w,
+                  width2: 360.w,
+                  fieldNameVisible: false,
+                ),
+                SizedBox(height: 470.h),
+                CustomButton(
+                  text: "DASHBOARD",
+                  onPressed: _navigateToDashboard,
+                  arrowWidget: true,
+                  dynamicWidth: true,
+                ),
+                
+              ],
+            ),
           ),
         ),
         Spacer(),

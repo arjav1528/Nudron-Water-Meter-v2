@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
 import 'package:watermeter2/widgets/custom_app_bar.dart';
 import '../../api/auth_service.dart';
@@ -200,6 +201,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 ),
                 SizedBox(
                   height: constraints.maxHeight - 6.h,
+                  width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width/3,
                   child: SingleChildScrollView(
                     physics: ClampingScrollPhysics(),
                     child: Container(

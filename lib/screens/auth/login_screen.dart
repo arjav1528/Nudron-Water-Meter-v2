@@ -10,6 +10,7 @@ import 'package:watermeter2/bloc/dashboard_bloc.dart';
 import 'package:watermeter2/bloc/auth_bloc.dart';
 import 'package:watermeter2/bloc/auth_event.dart';
 import 'package:watermeter2/bloc/auth_state.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
 
 import 'package:watermeter2/services/app_state_service.dart';
@@ -102,55 +103,64 @@ class _LoginPageState extends State<LoginPage> {
                           height: 3.h,
                           color: CommonColors.blue,
                         ),
-                        SizedBox(height: 20.h),
                         Center(
-                          child: Text(
-                            'Nudron IoT Solutions',
-                            style: GoogleFonts.roboto(
-                                fontSize: 37.responsiveSp,
-                                fontWeight: FontWeight.bold,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .loginTitleColor),
+                          child: SizedBox(
+                            width: PlatformUtils.isMobile ? 1.sw : 1.sw/3,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 20.h),
+                                Center(
+                                  child: Text(
+                                    'Nudron IoT Solutions',
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 37.responsiveSp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .loginTitleColor),
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                  child: Center(
+                                    child: Text(
+                                        "Welcome to Nudron's Water Metering Dashboard",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.roboto(
+                                            fontSize: ThemeNotifier.medium.responsiveSp,
+                                            color: Provider.of<ThemeNotifier>(context)
+                                                .currentTheme
+                                                .basicAdvanceTextColor)),
+                                  ),
+                                ),
+                                SizedBox(height: 20.h),
+                                Center(
+                                  child: ToggleButtonCustom(
+                                    key: UniqueKey(),
+                                    tabs: const ["SIGN IN", "REGISTER"],
+                                    backgroundColor: null,
+                                    selectedTextColor: Colors.white,
+                                    unselectedTextColor:
+                                        Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .basicAdvanceTextColor,
+                                    index: NudronRandomStuff.isSignIn.value ? 0 : 1,
+                                    onTap: (index) {
+                                      setState(() {
+                                        NudronRandomStuff.isSignIn.value = index == 0;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 40.h),
+                                IndexedStack(
+                                  index: NudronRandomStuff.isSignIn.value ? 0 : 1,
+                                  children: pages,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: Center(
-                            child: Text(
-                                "Welcome to Nudron's Water Metering Dashboard",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.medium.responsiveSp,
-                                    color: Provider.of<ThemeNotifier>(context)
-                                        .currentTheme
-                                        .basicAdvanceTextColor)),
-                          ),
-                        ),
-                        SizedBox(height: 20.h),
-                        Center(
-                          child: ToggleButtonCustom(
-                            key: UniqueKey(),
-                            tabs: const ["SIGN IN", "REGISTER"],
-                            backgroundColor: null,
-                            selectedTextColor: Colors.white,
-                            unselectedTextColor:
-                                Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .basicAdvanceTextColor,
-                            index: NudronRandomStuff.isSignIn.value ? 0 : 1,
-                            onTap: (index) {
-                              setState(() {
-                                NudronRandomStuff.isSignIn.value = index == 0;
-                              });
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 40.h),
-                        IndexedStack(
-                          index: NudronRandomStuff.isSignIn.value ? 0 : 1,
-                          children: pages,
                         ),
                       ],
                     ),
