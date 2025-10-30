@@ -264,7 +264,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           color: Color(0xFF14414e),
         ),
         SizedBox(
-          width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width/3,
+          width: PlatformUtils.isMobile
+              ? MediaQuery.of(context).size.width
+              : 400,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: PlatformUtils.isMobile ? 16.w : 0),
             child: Column(
@@ -277,14 +279,14 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                       children: [
                         SvgPicture.asset('assets/icons/project.svg',
                           color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                          height: 30.h,
+                          height: PlatformUtils.isMobile ? 30.h : 30.0,
               
                         ),
                         SizedBox(width: 8.w),
                         Text(
                           "SELECT PROJECT",
                           style: GoogleFonts.robotoMono(
-                            fontSize: 18.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 18.responsiveSp : 18.0,
                             fontWeight: FontWeight.w500,
                             color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                         ),
@@ -316,8 +318,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                     GestureDetector(
                       onTap: _showAddProjectDialog,
                       child: Container(
-                        height: 30.h,
-                        width: 30.w,
+                        height: PlatformUtils.isMobile ? 30.h : 30.0,
+                        width: PlatformUtils.isMobile ? 30.w : 30.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.r),
                           border: Border.all(
@@ -328,7 +330,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         child: Icon(
                           Icons.add,
                           color: theme.basicAdvanceTextColor,
-                          size: 24.h,
+                          size: PlatformUtils.isMobile ? 24.h : 24.0,
                         ),
                       ),
                     )
@@ -344,8 +346,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                       selectedProject = value;
                     });
                   },
-                  width1: 400.w,
-                  width2: 360.w,
+                  width1: PlatformUtils.isMobile ? 400 : 0,
+                  width2: PlatformUtils.isMobile ? 360 : 500,
+                  desktopDropdownWidth: 700,
                   fieldNameVisible: false,
                 ),
                 SizedBox(height: 470.h),

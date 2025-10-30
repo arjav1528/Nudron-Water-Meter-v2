@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                       fit: BoxFit.cover,
                       clipBehavior: Clip.hardEdge,
                       color: CommonColors.blue.withOpacity(0.25),
-                      width: 450.responsiveSp,
+                      width: PlatformUtils.isMobile ? 450.responsiveSp : 450.0,
                     ),
                   ),
                 ),
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Center(
                           child: SizedBox(
-                            width: PlatformUtils.isMobile ? 1.sw : 1.sw/3,
+                            width: PlatformUtils.isMobile ? 1.sw : 400,
                             child: Column(
                               children: [
                                 SizedBox(height: 20.h),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     'Nudron IoT Solutions',
                                     style: GoogleFonts.roboto(
-                                        fontSize: 37.responsiveSp,
+                                        fontSize: PlatformUtils.isMobile ? 37.responsiveSp : 37.0,
                                         fontWeight: FontWeight.bold,
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                                         "Welcome to Nudron's Water Metering Dashboard",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.roboto(
-                                            fontSize: ThemeNotifier.medium.responsiveSp,
+                                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : 16.0,
                                             color: Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
                                                 .basicAdvanceTextColor)),
@@ -260,9 +260,35 @@ class _SigninPageState extends State<SigninPage> {
             child: CustomTextField(
               key: UniqueKey(),
               controller: emailController,
-              iconPath: 'assets/icons/mail.svg',
+              iconPath: PlatformUtils.isMobile ? 'assets/icons/mail.svg' : null,
+              prefixIcon: PlatformUtils.isMobile
+                  ? null
+                  : Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: SvgPicture.asset(
+                        'assets/icons/mail.svg',
+                        height: 20.0,
+                        width: 24.0,
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
               hintText: 'Enter Email',
               keyboardType: TextInputType.emailAddress,
+              style: GoogleFonts.roboto(
+                  fontSize: PlatformUtils.isMobile
+                      ? ThemeNotifier.medium.responsiveSp
+                      : 18.0,
+                  color: Provider.of<ThemeNotifier>(context)
+                      .currentTheme
+                      .textfieldTextColor),
+              hintStyle: GoogleFonts.roboto(
+                fontSize: PlatformUtils.isMobile
+                    ? ThemeNotifier.medium.responsiveSp
+                    : 18.0,
+                color: Provider.of<ThemeNotifier>(context)
+                    .currentTheme
+                    .textfieldHintColor,
+              ),
             )),
         Visibility(
           visible: openForgotPasswordButtons,
@@ -327,6 +353,24 @@ class _SigninPageState extends State<SigninPage> {
                             left: 35.w, right: 35.w, top: 22.h),
                         child: PasswordTextField(
                           controller: passwordControllerObscure,
+                          style: GoogleFonts.roboto(
+                              fontSize: PlatformUtils.isMobile
+                                  ? ThemeNotifier.medium.responsiveSp
+                                  : 18.0,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .textfieldTextColor),
+                          hintStyle: GoogleFonts.roboto(
+                            fontSize: PlatformUtils.isMobile
+                                ? ThemeNotifier.medium.responsiveSp
+                                : 18.0,
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .textfieldHintColor,
+                          ),
+                          desktopPrefixIconHeight: 20.0,
+                          desktopPrefixIconWidth: 24.0,
+                          desktopSuffixIconSize: 18.0,
                         )),
                     Align(
                       alignment: Alignment.centerRight,
@@ -451,7 +495,7 @@ class _SigninPageState extends State<SigninPage> {
                           children: [
                             Icon(
                               Icons.fingerprint,
-                              size: 70.responsiveSp,
+                              size: PlatformUtils.isMobile ? 70.responsiveSp : 70.0,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .basicAdvanceTextColor,
@@ -464,7 +508,7 @@ class _SigninPageState extends State<SigninPage> {
                                     Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
-                                fontSize: ThemeNotifier.small.responsiveSp,
+                                fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 12.0,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,

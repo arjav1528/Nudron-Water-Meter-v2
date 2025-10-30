@@ -201,7 +201,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 ),
                 SizedBox(
                   height: constraints.maxHeight - 6.h,
-                  width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width/3,
+                  width: PlatformUtils.isMobile
+                      ? MediaQuery.of(context).size.width
+                      : 400,
                   child: SingleChildScrollView(
                     physics: ClampingScrollPhysics(),
                     child: Container(
@@ -228,7 +230,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   Text(
                                     "PROFILE",
                                     style: GoogleFonts.robotoMono(
-                                      fontSize: 18.responsiveSp,
+                                      fontSize: PlatformUtils.isMobile ? 18.responsiveSp : 18.0,
                                       fontWeight: FontWeight.w500,
                                       color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                                     ),

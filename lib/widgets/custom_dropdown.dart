@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import '../../constants/theme2.dart';
 import '../../utils/pok.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -62,7 +63,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   width: 10.w,
                 ),
                 SizedBox(
-                  width: widget.width1.w,
+                  width: PlatformUtils.isMobile ? widget.width1.w : widget.width1,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
@@ -97,7 +98,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     itemPadding: EdgeInsets.zero,
                     dropdownMaxHeight: 200.h,
                     dropdownWidth: widget.width2.w + 30.responsiveSp,
-                    buttonWidth: widget.width2.w + 30.responsiveSp,
+                    buttonWidth: (PlatformUtils.isMobile ? widget.width2.w : widget.width2) + (PlatformUtils.isMobile ? 30.responsiveSp : 30.0),
                     dropdownDecoration: BoxDecoration(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
@@ -118,14 +119,15 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       ),
                     ),
                     customButton: Container(
-                      width: widget.width2.w + 30.responsiveSp,
+                      width: (PlatformUtils.isMobile ? widget.width2.w : widget.width2) + (PlatformUtils.isMobile ? 30.responsiveSp : 30.0),
                       height: 40.h,
                       alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: 12.w, right: 8.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: (widget.width2 - 1).w,
+                            width: PlatformUtils.isMobile ? (widget.width2 - 1).w : (widget.width2 - 1),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Padding(
@@ -219,6 +221,7 @@ class CustomDropdownButton2 extends StatefulWidget {
   final double width1;
   final double width2;
   final bool fieldNameVisible;
+  final double? desktopDropdownWidth;
 
   const CustomDropdownButton2({
     super.key,
@@ -229,6 +232,7 @@ class CustomDropdownButton2 extends StatefulWidget {
     this.width1 = 80,
     this.width2 = 273,
     this.fieldNameVisible = true,
+    this.desktopDropdownWidth,
   });
 
   @override
