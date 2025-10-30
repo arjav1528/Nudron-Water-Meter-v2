@@ -117,9 +117,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               ? rowHeight
               : 0.0); // Add small padding to account for edges
         
-        if(width > 120.w){
-          width = 120.w;
-        }
+        
       }else{
         width = textPainter.width +
           16 + // Increased horizontal padding from 8 to 16
@@ -356,15 +354,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   TextStyle? _cachedTextStyle;
   
   TextStyle _getTextStyle(BuildContext context) {
-    if (_cachedTextStyle == null) {
-      _cachedTextStyle = GoogleFonts.robotoMono(
+    _cachedTextStyle ??= GoogleFonts.robotoMono(
         fontSize: ThemeNotifier.medium.responsiveSp,
         height: 1.2,
         fontWeight: FontWeight.normal,
         letterSpacing: 0.5,
         color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
       );
-    }
     return _cachedTextStyle!;
   }
 
