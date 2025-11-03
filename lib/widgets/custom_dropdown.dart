@@ -97,7 +97,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     iconSize: 30.responsiveSp,
                     itemPadding: EdgeInsets.zero,
                     dropdownMaxHeight: 200.h,
-                    dropdownWidth: widget.width2.w + 30.responsiveSp,
+                    dropdownWidth: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
                     buttonWidth: (PlatformUtils.isMobile ? widget.width2.w : widget.width2) + (PlatformUtils.isMobile ? 30.responsiveSp : 30.0),
                     dropdownDecoration: BoxDecoration(
                       color: Provider.of<ThemeNotifier>(context)
@@ -166,7 +166,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                         child: Column(
                           children: [
                             Container(
-                              width: widget.width2.w + 30.responsiveSp,
+                              width: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
                               height: 39.5.h,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
@@ -404,7 +404,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                   GestureDetector(
                     onTap: _toggleDropdown,
                     child: Container(
-                      width: widget.width2.w + 30.responsiveSp,
+                      width: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
                       height: 40.h,
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: 8.w),

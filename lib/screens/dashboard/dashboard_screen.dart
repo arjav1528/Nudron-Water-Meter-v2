@@ -273,7 +273,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           BlocProvider.of<DashboardBloc>(context).switchBottomNavPos(index);
         },
         child: Container(
-          height: 86.h,
+          height: 100.h,
           padding: EdgeInsets.zero,
           child: isCollapsed
               ? Column(

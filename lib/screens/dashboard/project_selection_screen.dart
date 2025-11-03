@@ -346,9 +346,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                       selectedProject = value;
                     });
                   },
-                  width1: PlatformUtils.isMobile ? 400 : 0,
-                  width2: PlatformUtils.isMobile ? 360 : 500,
-                  desktopDropdownWidth: 700,
+                  width1: PlatformUtils.isMobile ? 400.w : 0,
+                  width2: PlatformUtils.isMobile ? 360.w : 370,
+                  desktopDropdownWidth: 370,
                   fieldNameVisible: false,
                 ),
                 SizedBox(height: 470.h),
