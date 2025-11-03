@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,22 +54,23 @@ class _DashboardPageState extends State<DashboardPage> {
       BackgroundChart(),
     ];
 
-    return MultiProvider(
-      providers: [
-        BlocProvider(create: (context) => DashboardBloc()),
-      ],
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: BlocBuilder<DashboardBloc, DashboardState>(
-              buildWhen: (previous, current) {
-            if ((current is DashboardPageError ||
-                current is DashboardPageLoaded ||
-                current is ChangeScreen)) {
-              return true;
-            }
-            return false;
-          }, builder: (context, state) {
+    // Use the bloc from the parent context (provided at app level)
+    // No need to create a new bloc instance
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: BlocBuilder<DashboardBloc, DashboardState>(
+            buildWhen: (previous, current) {
+          // Include DashboardPageInitial to handle initial state properly
+          // This ensures the UI rebuilds when the bloc first loads
+          if ((current is DashboardPageInitial) ||
+              (current is DashboardPageError ||
+              current is DashboardPageLoaded ||
+              current is ChangeScreen)) {
+            return true;
+          }
+          return false;
+        }, builder: (context, state) {
             if (state is DashboardPageLoaded || state is ChangeScreen) {
               return GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
@@ -114,9 +114,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               );
             }
-            return const CustomLoader();
-          }),
-        ),
+          // Show loader for DashboardPageInitial or any other state
+          return const CustomLoader();
+        }),
       ),
     );
   }

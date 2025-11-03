@@ -550,8 +550,21 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   getFiltersAndSummaryForProject(String project) async {
-    return FilterAndSummaryForProject(
-        data: await DataPostRequests.getFilters(project: project));
+    // Use cache to avoid duplicate API calls
+    final cacheKey = 'filters_$project';
+    
+    dynamic filtersData;
+    if (_isCacheValid(cacheKey)) {
+      filtersData = _apiCache[cacheKey];
+    } else {
+      filtersData = await DataPostRequests.getFilters(project: project);
+      _apiCache[cacheKey] = filtersData;
+      _cacheTimestamps[cacheKey] = DateTime.now();
+      _cacheAccessOrder.add(cacheKey);
+      _evictLRUEntries();
+    }
+    
+    return FilterAndSummaryForProject(data: filtersData);
   }
 
   exportDataToExcel(
@@ -757,7 +770,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Future<void> _loadDevicesDataWithCache() async {
     if (currentFilters.isEmpty) return;
     
-    final cacheKey = 'devices_${currentFilters.first}';
+    final project = currentFilters.first;
+    final cacheKey = 'devices_$project';
     
     if (_isCacheValid(cacheKey)) {
       devicesData = _apiCache[cacheKey];
@@ -766,7 +780,21 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     try {
-      var response = await DataPostRequests.getFilters(project: currentFilters.first);
+      // Reuse filters data if already fetched (to avoid duplicate API call)
+      final filtersCacheKey = 'filters_$project';
+      dynamic response;
+      
+      if (_isCacheValid(filtersCacheKey)) {
+        // Reuse already fetched filters data
+        response = _apiCache[filtersCacheKey];
+      } else {
+        // Fetch filters if not cached (but this should rarely happen)
+        response = await DataPostRequests.getFilters(project: project);
+        _apiCache[filtersCacheKey] = response;
+        _cacheTimestamps[filtersCacheKey] = DateTime.now();
+        _cacheAccessOrder.add(filtersCacheKey);
+        _evictLRUEntries();
+      }
 
       if (response.length > 2 &&
           response[2] is List &&
@@ -899,16 +927,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     nudronChartData = NudronChartMap(newData);
   }
 
-  loadTrendsData(String? project) async {
-    if (project == null) {
-      return;
-    }
-
-    updateTrendsData(await DataPostRequests.getChartData(
-        project: project,
-        selectedLevels:
-            currentFilters.length > 1 ? currentFilters.sublist(1) : [""]));
-  }
+  // Removed loadTrendsData - use _loadTrendsDataWithCache instead to avoid duplicate API calls
 
   selectProject(int selectedIndex) async {
     if (selectedIndex < projects.length && selectedIndex >= 0) {

@@ -32,22 +32,20 @@ class _CustomLoaderState extends State<CustomLoader> {
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
-      child: Scaffold(
-        backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-        body: Center(
-          child: SizedBox(
-            height: 75.responsiveSp,
-            width: 75.responsiveSp,
-            child:LoadingAnimationWidget.hexagonDots(
-              size: 75.responsiveSp,
-              color: CommonColors.blue,
-            ),
-            // child: CircularProgressIndicator(
-            //   strokeWidth: 5,
-            //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            // ),
+    return  Scaffold(
+      backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+      body: Center(
+        child: SizedBox(
+          height: 75.responsiveSp,
+          width: 75.responsiveSp,
+          child:LoadingAnimationWidget.hexagonDots(
+            size: 75.responsiveSp,
+            color: CommonColors.blue,
           ),
+          // child: CircularProgressIndicator(
+          //   strokeWidth: 5,
+          //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          // ),
         ),
       ),
     );
