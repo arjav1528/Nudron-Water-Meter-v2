@@ -200,7 +200,8 @@ class AuthService {
   }
 
   /// Get user information
-  static Future<Map<String, dynamic>?> getUserInfo() async {
+  /// Optional timeout allows callers (e.g., initial auth check) to fail fast
+  static Future<Map<String, dynamic>?> getUserInfo({Duration? timeout}) async {
     try {
       if (ConfigurationCustom.skipAnyAuths) {
         return {
@@ -217,7 +218,7 @@ class AuthService {
       }
 
       const body = '07';
-      final response = await _makeRequest(body, url: _au3Url);
+      final response = await _makeRequest(body, url: _au3Url, timeout: timeout);
       return jsonDecode(response);
     } catch (e) {
       return null;

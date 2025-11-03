@@ -65,6 +65,23 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
   ValueNotifier<String> refreshPhoneCode = ValueNotifier<String>("");
 
+  @override
+  void dispose() {
+    // Dispose of the ValueNotifier we own
+    refreshPhoneCode.dispose();
+    // Dispose of text controllers
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    emailOtpFieldController.dispose();
+    phoneOtpFieldController.dispose();
+    deleteConfirmationFieldController.dispose();
+    newPasswordController.dispose();
+    oldPasswordController.dispose();
+    confirmNewPasswordController.dispose();
+    super.dispose();
+  }
+
   initControllers() {
     _nameController.text =
         BlocProvider.of<DashboardBloc>(context, listen: false).userInfo.name;
@@ -296,7 +313,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       ],
                                       prefixIcon: Container(
                                         padding:
-                                            EdgeInsets.only(left: 16.w - 8),
+                                            EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(10.r),

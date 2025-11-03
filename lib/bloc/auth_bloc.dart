@@ -29,7 +29,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       
       final isLoggedIn = await AuthService.isLoggedIn();
       if (isLoggedIn) {
-        final userInfo = await AuthService.getUserInfo();
+        // Fail fast on profile load to avoid hanging the app on slow networks
+        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
         final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
         
         emit(AuthAuthenticated(
@@ -52,7 +53,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await AuthService.login(event.email, event.password);
       
       if (result.success) {
-        final userInfo = await AuthService.getUserInfo();
+        // Don't block on user info; time out quickly
+        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
         final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
         
         emit(AuthAuthenticated(
@@ -101,7 +103,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await AuthService.login(email, password);
       
       if (result.success) {
-        final userInfo = await AuthService.getUserInfo();
+        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
         final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
         
         emit(AuthAuthenticated(
@@ -126,7 +128,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await AuthService.verifyTwoFactor(event.refCode, event.code);
       
       if (result.success) {
-        final userInfo = await AuthService.getUserInfo();
+        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
         final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
         
         emit(AuthAuthenticated(
@@ -223,7 +225,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final token = await AuthService.getAccessToken();
       if (token != null) {
         // Token refreshed successfully, emit current state
-        final userInfo = await AuthService.getUserInfo();
+        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
         final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
         
         emit(AuthAuthenticated(

@@ -39,6 +39,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
   List<String> priorityCountryCodes = ["IN", "GB", "SG", "MY"];
+  VoidCallback? _listener;
 
   // refresh(String selection) {
   //   selectedItem = allowedCountries.firstWhere(
@@ -100,9 +101,12 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
     allowedCountries = [...priorityCountries, ...otherCountries];
     refresh(widget.initialSelection ?? "+91");
     if (widget.refreshPhoneCode != null) {
-      widget.refreshPhoneCode!.addListener(() {
-        refresh(widget.refreshPhoneCode!.value);
-      });
+      _listener = () {
+        if (mounted && widget.refreshPhoneCode != null) {
+          refresh(widget.refreshPhoneCode!.value);
+        }
+      };
+      widget.refreshPhoneCode!.addListener(_listener!);
     }
     //in allowed countries check if initial selection is there. but only the initial part of the code is checked
   }
@@ -111,8 +115,9 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   void dispose() {
     _overlayEntry
         ?.remove(); // Make sure to remove the entry to prevent memory leaks.
-    if (widget.refreshPhoneCode != null) {
-      widget.refreshPhoneCode!.dispose();
+    // Remove the listener if it was added - don't dispose the ValueNotifier as it's owned by the parent
+    if (widget.refreshPhoneCode != null && _listener != null) {
+      widget.refreshPhoneCode!.removeListener(_listener!);
     }
     super.dispose();
   }

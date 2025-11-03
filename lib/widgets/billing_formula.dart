@@ -236,7 +236,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildDialogHeader(),
-                SizedBox(height: 20.h - 8),
+                SizedBox(height: (20.h - 8).clamp(0.0, double.infinity)),
                 Container(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme

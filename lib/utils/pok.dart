@@ -19,7 +19,7 @@ extension CustomScreenUtil on num {
         defaultTargetPlatform == TargetPlatform.macOS || 
         defaultTargetPlatform == TargetPlatform.linux) {
       // Increase font size by 20% for desktop
-      return (baseSize * 1).toDouble();
+      return (baseSize * 1.2).toDouble();
     }
     
     return baseSize;

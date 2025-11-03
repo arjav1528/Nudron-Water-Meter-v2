@@ -224,9 +224,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: _isDrawerCollapsed
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             height: 3.h,
@@ -298,7 +296,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                             : Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .inactiveBottomNavbarIconColor,
-                        fontSize: 20.responsiveSp,
+                        fontSize: 20.minSp,
                         fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,

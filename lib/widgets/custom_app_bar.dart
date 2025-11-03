@@ -90,8 +90,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             child: Padding(
                               padding: EdgeInsets.only(
                                 right: 11.w,
-                                top: (51.h - 28.responsiveSp) / 2,
-                                bottom: (51.h - 28.responsiveSp) / 2,
+                                top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                                bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
                                 left: 11.w,
                               ),
                               child: Icon(
@@ -131,8 +131,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                       right: 11.w,
-                                      top: (51.h - 28.responsiveSp) / 2,
-                                      bottom: (51.h - 28.responsiveSp) / 2,
+                                      top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                                      bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
                                       left: 11.w,
                                     ),
                                     child: SvgPicture.asset(

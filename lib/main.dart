@@ -23,16 +23,18 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  debugPrint('PlatformUtils.isDesktop: ${PlatformUtils.isDesktop}');
   
   if (PlatformUtils.isDesktop) {
     await DesktopInit.initialize();
   } else if (PlatformUtils.isMobile) {
     await MobileInit.initialize();
   }
-  
+  debugPrint('here');
   try {
     await ExcelHelper.deleteOldExportFiles();
   } catch (e) {
+    debugPrint('Error deleting old export files: $e');
     CustomAlert.showCustomScaffoldMessenger(
       mainNavigatorKey.currentContext!,
       "Error deleting old export files: $e",
@@ -54,7 +56,7 @@ void main() async {
       ],
       child: ChangeNotifierProvider(
         create: (_) => themeProvider,
-        child: const MyApp(),
+        child: MyApp(),
       ),
     ),
   );
@@ -86,12 +88,13 @@ class _MyAppState extends State<MyApp> {
     } else {
       designSize = const Size(1920, 1080);
     }
-
+    debugPrint('designSize: $designSize');
     return ScreenUtilInit(
         designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
+          debugPrint('context: $context');
           return MaterialApp(
             title: 'Meter Config',
             debugShowCheckedModeBanner: false,
@@ -111,6 +114,7 @@ class _MyAppState extends State<MyApp> {
                 }
                 return BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
+                    debugPrint('state: $state');
                     if (state is AuthAuthenticated) {
                       return const DashboardPage();
                     } else if (state is AuthLoading) {

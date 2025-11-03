@@ -66,8 +66,8 @@ class _BackgroundChartState extends State<BackgroundChart> {
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: 11.w,
-                      top: (51.h - 28.responsiveSp) / 2,
-                      bottom: (51.h - 28.responsiveSp) / 2,
+                      top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                      bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
                       left: 11.w,
                     ),
                     // child: Image.asset(
