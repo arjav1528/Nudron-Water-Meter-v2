@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,15 +30,29 @@ class AuthService {
   static Future<String?>? _tokenRefreshFuture;
   static DateTime? _lastTokenRefresh;
   static const Duration _tokenRefreshCooldown = Duration(minutes: 1);
+  
+  // Prevent infinite logout loop on 403 errors
+  static bool _isLoggingOut = false;
+  
+  // Callback to notify when user is logged out (for forced logouts like 403)
+  static void Function()? onLoggedOut;
 
   /// Check if user is currently logged in
   static Future<bool> isLoggedIn() async {
     try {
-      final token = await _secureStorage.read(key: _accessTokenKey);
+      // Add timeout to secure storage read as it can hang on some devices
+      final token = await _secureStorage.read(key: _accessTokenKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () {
+          print('Secure storage read (access_token) timed out during isLoggedIn check');
+          return null;
+        },
+      );
       if (token == null) return false;
       
       return !_isTokenExpired(token);
     } catch (e) {
+      print('Error in isLoggedIn: $e');
       return false;
     }
   }
@@ -122,20 +137,36 @@ class AuthService {
   /// Get valid access token (refresh if needed)
   static Future<String?> getAccessToken() async {
     try {
-      final token = await _secureStorage.read(key: _accessTokenKey);
+      // Add timeout to secure storage read as it can hang on some devices
+      final token = await _secureStorage.read(key: _accessTokenKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () {
+          print('Secure storage read (access_token) timed out in getAccessToken');
+          return null;
+        },
+      );
       if (token == null) return null;
 
       if (_isTokenExpired(token)) {
         return await _refreshAccessTokenOptimized();
       } else if (_isTokenExpiring(token)) {
         // Refresh token in background without blocking
-        _refreshAccessTokenOptimized();
+        _refreshAccessTokenOptimized().catchError((e) {
+          debugPrint('Background token refresh failed: $e');
+          return null;
+        });
         return token;
       }
       
       return token;
     } catch (e) {
-      await logout();
+      debugPrint('Error in getAccessToken: $e');
+      // Don't await logout to prevent blocking
+      if (!_isLoggingOut) {
+        logout().catchError((e) {
+          debugPrint('Error during logout in getAccessToken: $e');
+        });
+      }
       return null;
     }
   }
@@ -170,31 +201,54 @@ class AuthService {
 
   /// Refresh access token using refresh token
   static Future<String?> _refreshAccessToken() async {
+    // Don't try to refresh if we're in the process of logging out
+    if (_isLoggingOut) {
+      debugPrint('Cannot refresh token while logging out');
+      return null;
+    }
+    
     try {
-      final refreshToken = await _secureStorage.read(key: _refreshTokenKey);
+      final refreshToken = await _secureStorage.read(key: _refreshTokenKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () => null,
+      );
+      
       if (refreshToken == null) {
-        await logout();
+        debugPrint('No refresh token found');
+        if (!_isLoggingOut) {
+          logout().catchError((e) => debugPrint('Logout error: $e'));
+        }
         return null;
       }
 
       final body = '04$refreshToken';
-      final response = await _makeRequest(body, url: _au1Url);
+      final response = await _makeRequest(body, url: _au1Url, timeout: const Duration(seconds: 10));
       
       if (response == '0') {
-        await logout();
+        debugPrint('Token refresh returned 0 (invalid)');
+        if (!_isLoggingOut) {
+          logout().catchError((e) => debugPrint('Logout error: $e'));
+        }
         return null;
       }
 
       final splitResponse = response.split('|');
       if (splitResponse.length == 2) {
         await _storeTokens(splitResponse[0], splitResponse[1]);
+        debugPrint('Token refreshed successfully');
         return splitResponse[0];
       } else {
-        await logout();
+        debugPrint('Unexpected refresh response format');
+        if (!_isLoggingOut) {
+          logout().catchError((e) => debugPrint('Logout error: $e'));
+        }
         return null;
       }
     } catch (e) {
-      await logout();
+      debugPrint('Token refresh error: $e');
+      if (!_isLoggingOut && e.toString().contains('Session expired')) {
+        logout().catchError((e) => debugPrint('Logout error: $e'));
+      }
       return null;
     }
   }
@@ -218,7 +272,10 @@ class AuthService {
       }
 
       const body = '07';
+      debugPrint('getUserInfo body: $body');
       final response = await _makeRequest(body, url: _au3Url, timeout: timeout);
+      debugPrint('getUserInfo response: $response');
+      
       return jsonDecode(response);
     } catch (e) {
       return null;
@@ -247,31 +304,72 @@ class AuthService {
 
   /// Logout user
   static Future<void> logout() async {
+    // Prevent recursive logout calls
+    if (_isLoggingOut) {
+      debugPrint('Logout already in progress, skipping');
+      return;
+    }
+    
     try {
+      _isLoggingOut = true;
+      debugPrint('Logging out...');
+      
       // Call logout API if we have a token
-      final token = await _secureStorage.read(key: _accessTokenKey);
+      final token = await _secureStorage.read(key: _accessTokenKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () => null,
+      );
+      
       if (token != null) {
         try {
           const body = '08';
-          await _makeRequest(body, url: _au3Url);
+          // Use a short timeout and don't retry on failure
+          await _makeRequest(body, url: _au3Url, timeout: const Duration(seconds: 5));
         } catch (e) {
-          // Ignore logout API errors
+          debugPrint('Logout API call failed: $e (ignoring)');
+          // Ignore logout API errors - we'll clear local data anyway
         }
       }
     } finally {
       // Always clear local data
       await _clearAuthData();
+      _isLoggingOut = false;
+      debugPrint('Logout complete');
+      
+      // Notify listeners that user was logged out
+      if (onLoggedOut != null) {
+        debugPrint('Notifying logout listeners');
+        onLoggedOut!();
+      }
     }
   }
 
   /// Global logout (logout from all devices)
   static Future<void> globalLogout() async {
+    // Prevent recursive logout calls
+    if (_isLoggingOut) {
+      debugPrint('Global logout already in progress, skipping');
+      return;
+    }
+    
     try {
+      _isLoggingOut = true;
+      debugPrint('Global logout...');
+      
       const body = '09';
-      await _makeRequest(body, url: _au3Url);
+      await _makeRequest(body, url: _au3Url, timeout: const Duration(seconds: 5));
     } catch (e) {
+      debugPrint('Global logout API call failed: $e (ignoring)');
     } finally {
       await _clearAuthData();
+      _isLoggingOut = false;
+      debugPrint('Global logout complete');
+      
+      // Notify listeners that user was logged out
+      if (onLoggedOut != null) {
+        debugPrint('Notifying logout listeners');
+        onLoggedOut!();
+      }
     }
   }
 
@@ -295,9 +393,17 @@ class AuthService {
   /// Check if two-factor authentication is enabled
   static Future<bool> isTwoFactorEnabled() async {
     try {
-      final value = await _secureStorage.read(key: _twoFactorKey);
+      // Add timeout to secure storage read as it can hang on some devices
+      final value = await _secureStorage.read(key: _twoFactorKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () {
+          print('Secure storage read (two_factor) timed out in isTwoFactorEnabled');
+          return null;
+        },
+      );
       return value == 'true';
     } catch (e) {
+      print('Error in isTwoFactorEnabled: $e');
       return false;
     }
   }
@@ -343,8 +449,16 @@ class AuthService {
   /// Get stored email for biometric login
   static Future<String?> getStoredEmail() async {
     try {
-      return await _secureStorage.read(key: _emailKey);
+      // Add timeout to secure storage read as it can hang on some devices
+      return await _secureStorage.read(key: _emailKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () {
+          print('Secure storage read (email) timed out');
+          return null;
+        },
+      );
     } catch (e) {
+      print('Error in getStoredEmail: $e');
       return null;
     }
   }
@@ -352,8 +466,16 @@ class AuthService {
   /// Get stored password for biometric login
   static Future<String?> getStoredPassword() async {
     try {
-      return await _secureStorage.read(key: _passwordKey);
+      // Add timeout to secure storage read as it can hang on some devices
+      return await _secureStorage.read(key: _passwordKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () {
+          print('Secure storage read (password) timed out');
+          return null;
+        },
+      );
     } catch (e) {
+      print('Error in getStoredPassword: $e');
       return null;
     }
   }
@@ -507,9 +629,26 @@ class AuthService {
   }
 
   static Future<String> _makeRequest(String body, {String url = _au1Url, Duration? timeout}) async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      throw CustomException('No internet connection');
+    debugPrint('_makeRequest called: url=$url, timeout=$timeout');
+    
+    // Check connectivity with timeout - this can hang on some devices
+    try {
+      debugPrint('Checking connectivity...');
+      final connectivityResult = await Connectivity().checkConnectivity().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {
+          debugPrint('Connectivity check timed out, assuming connection exists');
+          return [ConnectivityResult.wifi]; // Assume we have connectivity
+        },
+      );
+      debugPrint('Connectivity result: $connectivityResult');
+      
+      if (connectivityResult.contains(ConnectivityResult.none) && connectivityResult.length == 1) {
+        throw CustomException('No internet connection');
+      }
+    } catch (e) {
+      debugPrint('Connectivity check error: $e, continuing anyway');
+      // Continue anyway - we'll fail at HTTP level if there's really no connection
     }
 
     // Retry configuration
@@ -517,13 +656,39 @@ class AuthService {
     const Duration initialRetryDelay = Duration(seconds: 1);
     final effectiveTimeout = timeout ?? const Duration(seconds: 30);
     
+    debugPrint('Effective timeout: $effectiveTimeout');
+    
     int attempt = 0;
     Exception? lastException;
     
     while (attempt < maxRetries) {
       try {
-        final jwt = (url == _au3Url) ? await getAccessToken() : null;
-        final userAgent = await DeviceInfoUtil.getUserAgent();
+        attempt++;
+        debugPrint('Request attempt $attempt of $maxRetries');
+        
+        // Get JWT with timeout to prevent hanging
+        debugPrint('Getting access token...');
+        final jwt = (url == _au3Url) 
+            ? await getAccessToken().timeout(
+                const Duration(seconds: 5),
+                onTimeout: () {
+                  debugPrint('getAccessToken timed out in _makeRequest');
+                  return null;
+                },
+              )
+            : null;
+        debugPrint('Access token obtained: ${jwt != null ? "yes" : "no"}');
+        
+        // Get user agent with timeout to prevent hanging
+        debugPrint('Getting user agent...');
+        final userAgent = await DeviceInfoUtil.getUserAgent().timeout(
+          const Duration(seconds: 3),
+          onTimeout: () {
+            debugPrint('getUserAgent timed out in _makeRequest');
+            return 'WaterMeteringApp/1.0';
+          },
+        );
+        debugPrint('User agent: $userAgent');
 
         final headers = {
           'User-Agent': userAgent,
@@ -534,27 +699,41 @@ class AuthService {
           if (url == _au1Url) 'clientID': "WaterMeteringMobile2",
         };
 
+        debugPrint('Preparing HTTP request...');
         final request = http.Request('POST', Uri.parse(url));
         request.body = body;
         request.headers.addAll(headers);
 
         // Send request with timeout
+        debugPrint('Sending HTTP request with timeout: $effectiveTimeout');
         final response = await request.send().timeout(effectiveTimeout);
 
+        debugPrint('HTTP response received: ${response.statusCode}');
+        
         if (response.statusCode == 200) {
           // Read response body with timeout
+          debugPrint('Reading response body...');
           final responseBody = await response.stream.bytesToString().timeout(effectiveTimeout);
+          debugPrint('Response body received (length: ${responseBody.length})');
           return responseBody;
         } else if (response.statusCode == 401 || response.statusCode == 403) {
-          await logout();
+          debugPrint('Auth error: ${response.statusCode}');
+          // Only logout if not already in logout process to prevent infinite loop
+          if (!_isLoggingOut) {
+            // Don't await logout to avoid blocking
+            logout().catchError((e) {
+              debugPrint('Error during logout after auth error: $e');
+            });
+          }
           throw CustomException('Session expired. Please login again.');
         } else {
+          debugPrint('Server error: ${response.statusCode}');
           final responseBody = await response.stream.bytesToString().timeout(const Duration(seconds: 5));
           throw CustomException(responseBody.isNotEmpty ? responseBody : 'Server error');
         }
       } on TimeoutException catch (e) {
+        debugPrint('Timeout exception on attempt $attempt: $e');
         lastException = e;
-        attempt++;
         if (attempt < maxRetries) {
           // Exponential backoff: 1s, 2s, 4s
           final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));

@@ -75,8 +75,12 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // Trigger initial authentication check
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
-      authBloc.add(AuthCheckLoginStatus());
+      try {
+        final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+        authBloc.add(AuthCheckLoginStatus());
+      } catch (e) {
+        debugPrint('Error triggering auth check: $e');
+      }
     });
   }
 
@@ -114,17 +118,29 @@ class _MyAppState extends State<MyApp> {
                 }
                 return BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
-                    debugPrint('state: $state');
+                    debugPrint('Auth state: $state');
+                    
                     if (state is AuthAuthenticated) {
+                      // User is authenticated, show dashboard
                       return const DashboardPage();
+                    } else if (state is AuthInitial) {
+                      // Initial state - show a minimal loading indicator
+                      // This should only appear for a split second
+                      return const Scaffold(
+                        body: Center(
+                          child: CustomLoader(),
+                        ),
+                      );
                     } else if (state is AuthLoading) {
-                      // Show loading screen while checking authentication
+                      // Loading during login/logout operations
+                      // Show loading screen
                       return const Scaffold(
                         body: Center(
                           child: CustomLoader(),
                         ),
                       );
                     } else {
+                      // AuthUnauthenticated or any other state - show login
                       return const LoginPage();
                     }
                   },
