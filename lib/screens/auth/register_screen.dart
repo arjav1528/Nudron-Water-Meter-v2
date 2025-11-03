@@ -177,6 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   text: "REGISTER",
                   // fontSize: 14,
                   // fontSize: 16,
+                  dynamicWidth: true,
                   // width: 147.64.w,
                   // height: 58.h,
                   onPressed: () async {

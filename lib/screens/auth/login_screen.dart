@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Center(
                           child: SizedBox(
-                            width: PlatformUtils.isMobile ? 1.sw : 400,
+                            width: PlatformUtils.isMobile ? 1.sw : 600,
                             child: Column(
                               children: [
                                 SizedBox(height: 20.h),
@@ -225,9 +225,15 @@ class _SigninPageState extends State<SigninPage> {
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
           
-          // Preload user info - the main app will handle navigation automatically
-          final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-          dashboardBloc.initUserInfo();
+          // Reload dashboard data after successful login
+          try {
+            final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+            dashboardBloc.loadInitialData();
+          } catch (e) {
+            // If dashboard initialization fails, log it but don't block the UI
+            // The dashboard will handle the error state
+            debugPrint('Error initializing dashboard after login: $e');
+          }
         } else if (state is AuthTwoFactorRequired) {
           // Two-factor authentication required
           CustomAlert.showCustomScaffoldMessenger(
@@ -419,6 +425,7 @@ class _SigninPageState extends State<SigninPage> {
                         // fontSize: 16,
                         // width: 147.64.w,
                         // height: 58.h,
+                        dynamicWidth: true,
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
                           
@@ -555,6 +562,16 @@ class _AutoLoginState extends State<AutoLogin> {
           // Login successful
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
+
+          // Reload dashboard data after successful biometric login
+          try {
+            final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+            dashboardBloc.loadInitialData();
+          } catch (e) {
+            // If dashboard initialization fails, log it but don't block the UI
+            // The dashboard will handle the error state
+            debugPrint('Error initializing dashboard after biometric login: $e');
+          }
 
           if (mounted) {
             Navigator.of(context).pop();

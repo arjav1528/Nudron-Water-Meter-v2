@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../api/auth_service.dart';
 import '../services/auth_service.dart';
 import '../utils/biometric_helper.dart';
 import 'auth_event.dart';
@@ -16,6 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthVerifyTwoFactor>(_onVerifyTwoFactor);
     on<AuthLogout>(_onLogout);
     on<AuthGlobalLogout>(_onGlobalLogout);
+    on<AuthDeleteAccount>(_onDeleteAccount);
     on<AuthForgotPassword>(_onForgotPassword);
     on<AuthEnableTwoFactor>(_onEnableTwoFactor);
     on<AuthDisableTwoFactor>(_onDisableTwoFactor);
@@ -27,21 +29,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(AuthLoading());
       
-      final isLoggedIn = await AuthService.isLoggedIn();
+      final isLoggedIn = await AuthService.isLoggedIn().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => false,
+      );
+      
       if (isLoggedIn) {
-        // Fail fast on profile load to avoid hanging the app on slow networks
-        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
-        final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
-        
-        emit(AuthAuthenticated(
-          userInfo: userInfo,
-          isTwoFactorEnabled: isTwoFactorEnabled,
-        ));
+        try {
+          // Refresh listeners to load biometric and 2FA state from secure storage
+          await LoginPostRequests.refreshListeners();
+          
+          // Fail fast on profile load to avoid hanging the app on slow networks
+          final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
+          final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
+          
+          emit(AuthAuthenticated(
+            userInfo: userInfo,
+            isTwoFactorEnabled: isTwoFactorEnabled,
+          ));
+        } catch (e) {
+          // If we can't get user info, but we're logged in, still proceed
+          // The app can try to fetch it later
+          emit(AuthAuthenticated(
+            userInfo: null,
+            isTwoFactorEnabled: false,
+          ));
+        }
       } else {
         emit(AuthUnauthenticated());
       }
     } catch (e) {
-      emit(AuthError('Failed to check login status: ${e.toString()}'));
+      // On any error during login check, default to unauthenticated
+      // This prevents the app from hanging
+      emit(AuthUnauthenticated());
     }
   }
 
@@ -50,17 +70,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(AuthLoading());
       
-      final result = await AuthService.login(event.email, event.password);
+      final result = await AuthService.login(event.email, event.password).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () => AuthResult.error('Login request timed out. Please check your internet connection.'),
+      );
       
       if (result.success) {
-        // Don't block on user info; time out quickly
-        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
-        final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
-        
-        emit(AuthAuthenticated(
-          userInfo: userInfo,
-          isTwoFactorEnabled: isTwoFactorEnabled,
-        ));
+        try {
+          // Refresh listeners to load biometric and 2FA state from secure storage
+          await LoginPostRequests.refreshListeners();
+          
+          // Don't block on user info; time out quickly
+          final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
+          final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
+          
+          emit(AuthAuthenticated(
+            userInfo: userInfo,
+            isTwoFactorEnabled: isTwoFactorEnabled,
+          ));
+        } catch (e) {
+          // If we can't get user info but login succeeded, still authenticate
+          emit(AuthAuthenticated(
+            userInfo: null,
+            isTwoFactorEnabled: false,
+          ));
+        }
       } else if (result.isTwoFactorRequired) {
         emit(AuthTwoFactorRequired(refCode: result.twoFactorRefCode!));
       } else {
@@ -78,13 +112,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       
       // Check if biometric is available
       final biometricHelper = BiometricHelper();
-      if (!await biometricHelper.isBiometricSetup()) {
+      final isBiometricSetup = await biometricHelper.isBiometricSetup().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => false,
+      );
+      
+      if (!isBiometricSetup) {
         emit(AuthError('Biometric authentication not available. Please enable biometrics on your device first.'));
         return;
       }
 
       // Verify biometric
-      final isCorrectBiometric = await biometricHelper.isCorrectBiometric();
+      final isCorrectBiometric = await biometricHelper.isCorrectBiometric().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () => false,
+      );
+      
       if (!isCorrectBiometric) {
         emit(AuthError('Biometric authentication failed'));
         return;
@@ -100,16 +143,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       // Login with stored credentials
-      final result = await AuthService.login(email, password);
+      final result = await AuthService.login(email, password).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () => AuthResult.error('Login request timed out. Please check your internet connection.'),
+      );
       
       if (result.success) {
-        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
-        final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
-        
-        emit(AuthAuthenticated(
-          userInfo: userInfo,
-          isTwoFactorEnabled: isTwoFactorEnabled,
-        ));
+        try {
+          // Refresh listeners to load biometric and 2FA state from secure storage
+          await LoginPostRequests.refreshListeners();
+          
+          final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
+          final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
+          
+          emit(AuthAuthenticated(
+            userInfo: userInfo,
+            isTwoFactorEnabled: isTwoFactorEnabled,
+          ));
+        } catch (e) {
+          // If we can't get user info but login succeeded, still authenticate
+          emit(AuthAuthenticated(
+            userInfo: null,
+            isTwoFactorEnabled: false,
+          ));
+        }
       } else if (result.isTwoFactorRequired) {
         emit(AuthTwoFactorRequired(refCode: result.twoFactorRefCode!));
       } else {
@@ -125,16 +182,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(AuthLoading());
       
-      final result = await AuthService.verifyTwoFactor(event.refCode, event.code);
+      final result = await AuthService.verifyTwoFactor(event.refCode, event.code).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () => AuthResult.error('Verification request timed out. Please check your internet connection.'),
+      );
       
       if (result.success) {
-        final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
-        final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
-        
-        emit(AuthAuthenticated(
-          userInfo: userInfo,
-          isTwoFactorEnabled: isTwoFactorEnabled,
-        ));
+        try {
+          // Refresh listeners to load biometric and 2FA state from secure storage
+          await LoginPostRequests.refreshListeners();
+          
+          final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
+          final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
+          
+          emit(AuthAuthenticated(
+            userInfo: userInfo,
+            isTwoFactorEnabled: isTwoFactorEnabled,
+          ));
+        } catch (e) {
+          // If we can't get user info but verification succeeded, still authenticate
+          emit(AuthAuthenticated(
+            userInfo: null,
+            isTwoFactorEnabled: true,
+          ));
+        }
       } else {
         emit(AuthError(result.error ?? 'Two-factor verification failed'));
       }
@@ -162,6 +233,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthUnauthenticated());
     } catch (e) {
       emit(AuthError('Global logout failed: ${e.toString()}'));
+    }
+  }
+
+  /// Delete account
+  Future<void> _onDeleteAccount(AuthDeleteAccount event, Emitter<AuthState> emit) async {
+    try {
+      emit(AuthLoading());
+      final result = await AuthService.deleteAccount();
+      
+      if (result.success) {
+        emit(AuthUnauthenticated());
+      } else {
+        emit(AuthError(result.error ?? 'Failed to delete account'));
+      }
+    } catch (e) {
+      emit(AuthError('Failed to delete account: ${e.toString()}'));
     }
   }
 

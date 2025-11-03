@@ -1,5 +1,4 @@
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -76,7 +75,6 @@ class BiometricHelper {
   static Future<String?> isBiometricEnabled() async {
     String? biometric = await const FlutterSecureStorage().read(key: 'biometric');
     String? email = await const FlutterSecureStorage().read(key: 'email');
-    if(kDebugMode)
     if (biometric != null && email != null && biometric == 'true' && LoginPostRequests.isLoggedIn==false) {
       return email;
     }

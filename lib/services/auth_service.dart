@@ -275,6 +275,23 @@ class AuthService {
     }
   }
 
+  /// Delete account
+  static Future<AuthResult> deleteAccount() async {
+    try {
+      const body = '05';
+      final response = await _makeRequest(body, url: _au3Url);
+      
+      if (response == '0') {
+        return AuthResult.error('Error processing request');
+      }
+      
+      await _clearAuthData();
+      return AuthResult.success(message: 'Account deleted successfully');
+    } catch (e) {
+      return AuthResult.error(_getErrorMessage(e));
+    }
+  }
+
   /// Check if two-factor authentication is enabled
   static Future<bool> isTwoFactorEnabled() async {
     try {
@@ -377,28 +394,63 @@ class AuthService {
 
   static Future<void> _clearAuthData() async {
     try {
-      // Check if biometric is enabled
+      // First, read all the data we want to preserve before deleting anything
       final biometricEnabled = await _secureStorage.read(key: _biometricKey);
       final themeMode = await _secureStorage.read(key: _themeModeKey);
+      final email = await _secureStorage.read(key: _emailKey);
+      final password = await _secureStorage.read(key: _passwordKey);
       
-      if (biometricEnabled == 'true') {
-        // Keep email, password, biometric, and theme settings
-        final email = await _secureStorage.read(key: _emailKey);
-        final password = await _secureStorage.read(key: _passwordKey);
-        
-        await _secureStorage.deleteAll();
-        
-        if (email != null) await _secureStorage.write(key: _emailKey, value: email);
-        if (password != null) await _secureStorage.write(key: _passwordKey, value: password);
-        await _secureStorage.write(key: _biometricKey, value: 'true');
-      } else {
-        await _secureStorage.deleteAll();
+      // Store what we need to preserve
+      final shouldPreserveBiometric = biometricEnabled == 'true';
+      
+      // Create a list of keys to delete (everything except what we want to preserve)
+      final allKeys = {
+        _accessTokenKey,
+        _refreshTokenKey,
+        _twoFactorKey,
+      };
+      
+      // Delete only authentication tokens and two-factor settings
+      for (final key in allKeys) {
+        try {
+          await _secureStorage.delete(key: key);
+        } catch (e) {
+          // Continue even if one key fails
+        }
       }
       
+      // If biometric is not enabled, also delete email and password
+      if (!shouldPreserveBiometric) {
+        try {
+          await _secureStorage.delete(key: _emailKey);
+          await _secureStorage.delete(key: _passwordKey);
+          await _secureStorage.delete(key: _biometricKey);
+        } catch (e) {
+          // Continue even if deletion fails
+        }
+      } else {
+        // Ensure biometric data is preserved by re-writing if needed
+        if (email != null && password != null) {
+          try {
+            await _secureStorage.write(key: _emailKey, value: email);
+            await _secureStorage.write(key: _passwordKey, value: password);
+            await _secureStorage.write(key: _biometricKey, value: 'true');
+          } catch (e) {
+            // Biometric data preservation failed
+          }
+        }
+      }
+      
+      // Always preserve theme mode
       if (themeMode != null) {
-        await _secureStorage.write(key: _themeModeKey, value: themeMode);
+        try {
+          await _secureStorage.write(key: _themeModeKey, value: themeMode);
+        } catch (e) {
+          // Theme preservation failed
+        }
       }
     } catch (e) {
+      // If anything fails, don't throw - we want logout to succeed
     }
   }
 

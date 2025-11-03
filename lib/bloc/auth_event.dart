@@ -29,6 +29,9 @@ class AuthLogout extends AuthEvent {}
 /// Global logout (logout from all devices)
 class AuthGlobalLogout extends AuthEvent {}
 
+/// Delete account
+class AuthDeleteAccount extends AuthEvent {}
+
 /// Forgot password
 class AuthForgotPassword extends AuthEvent {
   final String email;

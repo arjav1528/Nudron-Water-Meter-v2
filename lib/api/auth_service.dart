@@ -390,24 +390,64 @@ class LoginPostRequests {
 
   static deleteStoredData() async {
     isLoggedIn = false;
-    //check if biometric is enabled
-    String? biometricEnabled = await secureStorage.read(key: 'biometric');
-    String? themeMode = await secureStorage.read(key: 'themeMode');
-    if (biometricEnabled == 'true') {
-      //read key user and pwd
+    try {
+      // First, read all the data we want to preserve before deleting anything
+      String? biometricEnabled = await secureStorage.read(key: 'biometric');
+      String? themeMode = await secureStorage.read(key: 'themeMode');
       String? email = await secureStorage.read(key: 'email');
       String? password = await secureStorage.read(key: 'password');
-      //delete all except these 3 keys
-      await secureStorage.deleteAll();
-      //write back email and password
-      await secureStorage.write(key: 'email', value: email);
-      await secureStorage.write(key: 'password', value: password);
-      await secureStorage.write(key: 'biometric', value: 'true');
-    } else {
-      await secureStorage.deleteAll();
-    }
-    if (themeMode != null) {
-      await secureStorage.write(key: 'themeMode', value: themeMode);
+      
+      // Store what we need to preserve
+      final shouldPreserveBiometric = biometricEnabled == 'true';
+      
+      // Create a list of keys to delete (everything except what we want to preserve)
+      final allKeys = {
+        'access_token',
+        'refresh_token',
+        'two_factor',
+      };
+      
+      // Delete only authentication tokens and two-factor settings
+      for (final key in allKeys) {
+        try {
+          await secureStorage.delete(key: key);
+        } catch (e) {
+          // Continue even if one key fails
+        }
+      }
+      
+      // If biometric is not enabled, also delete email and password
+      if (!shouldPreserveBiometric) {
+        try {
+          await secureStorage.delete(key: 'email');
+          await secureStorage.delete(key: 'password');
+          await secureStorage.delete(key: 'biometric');
+        } catch (e) {
+          // Continue even if deletion fails
+        }
+      } else {
+        // Ensure biometric data is preserved by re-writing if needed
+        if (email != null && password != null) {
+          try {
+            await secureStorage.write(key: 'email', value: email);
+            await secureStorage.write(key: 'password', value: password);
+            await secureStorage.write(key: 'biometric', value: 'true');
+          } catch (e) {
+            // Biometric data preservation failed
+          }
+        }
+      }
+      
+      // Always preserve theme mode
+      if (themeMode != null) {
+        try {
+          await secureStorage.write(key: 'themeMode', value: themeMode);
+        } catch (e) {
+          // Theme preservation failed
+        }
+      }
+    } catch (e) {
+      // If anything fails, don't throw - we want logout to succeed
     }
   }
 
@@ -436,6 +476,18 @@ class LoginPostRequests {
   /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<int> globalLogout() async {
     const body = '09';
+    final response = await _makeRequest(body, url: au3Url);
+    if (response == '0') {
+      throw CustomException('Error processing request');
+    }
+    await deleteDataAndLogout();
+    return int.parse(response);
+  }
+
+  /// deleteAccount function
+  /// Returns: timestamp if successful, otherwise throws an CustomException
+  static Future<int> deleteAccount() async {
+    const body = '05';
     final response = await _makeRequest(body, url: au3Url);
     if (response == '0') {
       throw CustomException('Error processing request');

@@ -139,7 +139,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
 
   Widget _buildOption(CountryCode e) {
     return SizedBox(
-      width: 400,
+      width: 600,
       child: Flex(
         direction: Axis.horizontal,
         children: <Widget>[

@@ -1024,11 +1024,23 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   loadInitialData() async {
     try {
+      // Check if user is logged in before attempting to load data
+      final isLoggedIn = await AuthService.isLoggedIn();
+      if (!isLoggedIn) {
+        // User is not logged in, emit error state but don't throw
+        // This is expected behavior when the app first starts
+        if (kDebugMode) {
+          debugPrint('User is not logged in, skipping dashboard data load');
+        }
+        emit(DashboardPageError(message: 'User not authenticated'));
+        return;
+      }
+      
       await initUserInfo();
       emit(DashboardPageLoaded());
     } catch (e) {
       if (kDebugMode) {
-        debugPrint(e as String?);
+        debugPrint('Error loading dashboard data: ${e.toString()}');
       }
       emit(DashboardPageError(message: e.toString()));
     }

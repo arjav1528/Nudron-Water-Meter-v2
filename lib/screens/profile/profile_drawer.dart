@@ -220,7 +220,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   height: constraints.maxHeight - 6.h,
                   width: PlatformUtils.isMobile
                       ? MediaQuery.of(context).size.width
-                      : 400,
+                      : 600,
                   child: SingleChildScrollView(
                     physics: ClampingScrollPhysics(),
                     child: Container(
@@ -713,8 +713,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                         text: "CONFIRM",
                                                         onPressed: () {
                                                           if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
-                                                            // Use the new AuthBloc for global logout (delete account)
-                                                            BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
+                                                            // Use the new AuthBloc for delete account
+                                                            BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
                                                           } else {
                                                             CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
                                                           }

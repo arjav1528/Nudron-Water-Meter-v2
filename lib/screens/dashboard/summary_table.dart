@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
 
 import '../../bloc/dashboard_bloc.dart';
@@ -109,14 +110,18 @@ class _SummaryTableState extends State<SummaryTable> {
                 builder: (context, state) {
                   final data =
                       BlocProvider.of<DashboardBloc>(context).summaryData;
+                  
+                  final Map<int, int> desktopJson = {};
+                      final Map<int, int> mobileJson = {
+                        0: 30.responsiveSp.toInt(),
+                        1: 20.responsiveSp.toInt(),
+                      };
+                      final json = PlatformUtils.isDesktop ? desktopJson : mobileJson;
 
                   return DataGridWidget(
                     data: data,
                     key: UniqueKey(),
-                    columnsToTakeHeaderWidthAndExtraPadding: {
-                      0: 30.responsiveSp.toInt(), // Increased padding for first column (Building)
-                      1: 20.responsiveSp.toInt(), // Added padding for second column (Flat)
-                    },
+                    columnsToTakeHeaderWidthAndExtraPadding: json,
                     frozenColumns: 2,
                     location: 'billing',
                   );
