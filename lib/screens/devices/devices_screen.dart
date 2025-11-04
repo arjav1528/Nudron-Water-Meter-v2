@@ -219,14 +219,14 @@ class _DevicesPageState extends State<DevicesPage> {
                       final Map<int, int> desktopJson = {};
                       final Map<int, int> mobileJson = {
                         0: 30.responsiveSp.toInt(),
-                        1: 20.responsiveSp.toInt(),
+                        // 1: 20.responsiveSp.toInt(),
                       };
                       final json = PlatformUtils.isDesktop ? desktopJson : mobileJson;
                       return DataGridWidget(
                         data: dashboardBloc.devicesData,
                         key: UniqueKey(),
                         columnsToTakeHeaderWidthAndExtraPadding: json,
-                        frozenColumns: 2,
+                        frozenColumns: 1,
                         devicesTable: true,
                         location: 'devices',
                       );

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watermeter2/bloc/dashboard_bloc.dart';
@@ -23,7 +26,29 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  debugPrint('PlatformUtils.isDesktop: ${PlatformUtils.isDesktop}');
+  // debugPrint('PlatformUtils.isDesktop: ${PlatformUtils.isDesktop}');
+  // debugPrint('PlatformUtils.isMobile: ${PlatformUtils.isMobile}');
+  // debugPrint("Current os  : ${Platform.environment}");
+  if(Platform.isIOS){
+    final iosInfo = await DeviceInfoPlugin().iosInfo;
+    debugPrint('Running on ${iosInfo.utsname.machine}');
+  }
+  if(Platform.isAndroid){
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    final model = androidInfo.model?.toLowerCase() ?? '';
+    final features = androidInfo.systemFeatures?.join(',') ?? '';
+
+    // Heuristic: tablets often have no telephony and larger screens
+    final likelyTablet = !features.contains('android.hardware.telephony');
+
+    if (likelyTablet || model.contains('tablet') || model.startsWith('sm-x')) {
+      print('Running on Android tablet');
+    } else {
+      print('Running on Android phone');
+  }
+  }
+
   
   if (PlatformUtils.isDesktop) {
     await DesktopInit.initialize();
