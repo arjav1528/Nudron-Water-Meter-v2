@@ -636,7 +636,7 @@ class DataPostRequests {
         } else {
           responseBody = await response.stream.bytesToString().timeout(const Duration(seconds: 5));
           if (response.statusCode == 401 || response.statusCode == 403) {
-            await AuthService.logout();
+            await AuthService.logout(notifyListeners: true);
             throw CustomException('Redirecting to login page..Please login again');
           } else {
             throw CustomException(responseBody);

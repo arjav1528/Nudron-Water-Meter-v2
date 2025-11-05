@@ -303,7 +303,9 @@ class AuthService {
   }
 
   /// Logout user
-  static Future<void> logout() async {
+  /// [notifyListeners] - if true, calls the onLoggedOut callback (for forced logouts like 403)
+  /// if false, does not call the callback (for user-initiated logouts handled by AuthBloc)
+  static Future<void> logout({bool notifyListeners = false}) async {
     // Prevent recursive logout calls
     if (_isLoggingOut) {
       debugPrint('Logout already in progress, skipping');
@@ -336,8 +338,9 @@ class AuthService {
       _isLoggingOut = false;
       debugPrint('Logout complete');
       
-      // Notify listeners that user was logged out
-      if (onLoggedOut != null) {
+      // Notify listeners only for forced logouts (like 403 errors)
+      // For user-initiated logouts, AuthBloc handles the state change
+      if (notifyListeners && onLoggedOut != null) {
         debugPrint('Notifying logout listeners');
         onLoggedOut!();
       }
@@ -345,7 +348,9 @@ class AuthService {
   }
 
   /// Global logout (logout from all devices)
-  static Future<void> globalLogout() async {
+  /// [notifyListeners] - if true, calls the onLoggedOut callback (for forced logouts like 403)
+  /// if false, does not call the callback (for user-initiated logouts handled by AuthBloc)
+  static Future<void> globalLogout({bool notifyListeners = false}) async {
     // Prevent recursive logout calls
     if (_isLoggingOut) {
       debugPrint('Global logout already in progress, skipping');
@@ -365,8 +370,9 @@ class AuthService {
       _isLoggingOut = false;
       debugPrint('Global logout complete');
       
-      // Notify listeners that user was logged out
-      if (onLoggedOut != null) {
+      // Notify listeners only for forced logouts (like 403 errors)
+      // For user-initiated logouts, AuthBloc handles the state change
+      if (notifyListeners && onLoggedOut != null) {
         debugPrint('Notifying logout listeners');
         onLoggedOut!();
       }
@@ -721,7 +727,8 @@ class AuthService {
           // Only logout if not already in logout process to prevent infinite loop
           if (!_isLoggingOut) {
             // Don't await logout to avoid blocking
-            logout().catchError((e) {
+            // Pass notifyListeners: true for forced logouts to trigger callback
+            logout(notifyListeners: true).catchError((e) {
               debugPrint('Error during logout after auth error: $e');
             });
           }

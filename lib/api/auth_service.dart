@@ -474,8 +474,8 @@ class LoginPostRequests {
 
   static Future<void> deleteDataAndLogout() async {
     await deleteStoredData();
-    mainNavigatorKey.currentState
-        ?.pushNamedAndRemoveUntil('/login', (route) => false);
+    // Navigation is now handled by BlocBuilder in main.dart
+    // when AuthUnauthenticated state is emitted
   }
 
   /// logout function
