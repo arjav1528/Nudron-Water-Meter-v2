@@ -24,14 +24,12 @@ class CustomDateRangePicker extends StatefulWidget {
 class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
   DateTime? startDate;
   DateTime? endDate;
-  bool isDialogOpen = false; // Add this line
+  bool isDialogOpen = false;
 
   @override
   void initState() {
     super.initState();
-    // Set default date range to current month, ensuring it's within valid range
     super.initState();
-    // Initialize with bloc's selected dates if available, otherwise use current month
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _syncWithBlocDates();
     });
@@ -41,22 +39,18 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
     
     if (dashboardBloc.selectedStartDate != null && dashboardBloc.selectedEndDate != null) {
-      // Use the bloc's selected dates
       setState(() {
         startDate = dashboardBloc.selectedStartDate;
         endDate = dashboardBloc.selectedEndDate;
       });
     } else {
-      // Fallback to current month if bloc dates are not set
       final now = DateTime.now();
       final minDate = DateTime(2020, 1, 1);
       final maxDate = DateTime(now.year, now.month, now.day);
 
-      // Default to current month, but ensure it's within bounds
       DateTime defaultStart = DateTime(now.year, now.month, 1);
       DateTime defaultEnd = DateTime(now.year, now.month + 1, 0);
 
-      // Adjust if default dates are out of bounds
       if (defaultStart.isBefore(minDate)) {
         defaultStart = minDate;
       }
@@ -77,7 +71,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       builder: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
         if (dashboardBloc.selectedStartDate != null && dashboardBloc.selectedEndDate != null) {
-          // Only update if the dates are different to avoid unnecessary rebuilds
           if (startDate != dashboardBloc.selectedStartDate || endDate != dashboardBloc.selectedEndDate) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted) {
@@ -156,12 +149,10 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
   Future<void> _showDateRangePicker() async {
     try {
-      // Ensure dates are within valid range
       final now = DateTime.now();
       final minDate = DateTime(2020, 1, 1);
       final maxDate = DateTime(now.year, now.month, now.day);
 
-      // Validate and adjust current dates if needed
       DateTime? validStartDate = startDate;
       DateTime? validEndDate = endDate;
 
@@ -179,15 +170,12 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         validEndDate = maxDate;
       }
 
-      // Ensure end date is not before start date
       if (validStartDate != null && validEndDate != null && validEndDate.isBefore(validStartDate)) {
         validEndDate = validStartDate;
       }
 
-      // Only set selectedRange if both dates are valid and within bounds
       DateTimeRange? selectedRange;
       if (validStartDate != null && validEndDate != null) {
-        // Double-check that dates are within bounds
         if (validStartDate.isAfter(minDate) || validStartDate.isAtSameMomentAs(minDate)) {
           if (validStartDate.isBefore(maxDate) || validStartDate.isAtSameMomentAs(maxDate)) {
             if (validEndDate.isAfter(minDate) || validEndDate.isAtSameMomentAs(minDate)) {
@@ -202,7 +190,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
       final currentTheme = themeNotifier.currentTheme;
 
-      // Store the currently selected range in the dialog
       DateTimeRange? currentSelectedRange = selectedRange;
 
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
@@ -214,30 +201,21 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 backgroundColor: currentTheme.dialogBG,
                 elevation: 0,
                   child: Container(
-                    width: 380.w,
+                    width: 400.w,
                     constraints: BoxConstraints(
-                      maxHeight: 500.h,
+                      maxHeight: 650.h,
                     ),
                   decoration: BoxDecoration(
-                    color: currentTheme.dialogBG, // Match BillingFormula dialog BG
+                    color: currentTheme.dialogBG,
                     border: Border.all(
-                      color: currentTheme.gridLineColor, // Match BillingFormula border color
-                      width: 3.responsiveSp, // Match BillingFormula border width
+                      color: currentTheme.gridLineColor,
+                      width: 3.responsiveSp,
                     ),
-                    // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: currentTheme.profileBorderColor,
-                    //     blurRadius: 10.r,
-                    //     offset: Offset(0, 4.h),
-                    //   ),
-                    // ],
                   ),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                      // Custom Header
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,19 +238,19 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ],
                       ),
 
-                      // Date Picker Content
-                      SizedBox(
-                        width: 320.w,
-                        height: 300.h,
-                        
-                        child: RangeDatePicker(
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: 360.w,
+                          height: 300.h,
+                          child: RangeDatePicker(
                           minDate: minDate,
                           maxDate: maxDate,
                           initialDate: validStartDate ?? maxDate,
                           selectedRange: currentSelectedRange,
                           centerLeadingDate: true,
                       
-                          // Styling
                           currentDateDecoration: BoxDecoration(
                             color: Colors.transparent,
                             border: Border.all(
@@ -290,7 +268,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       
                           enabledCellsDecoration: BoxDecoration(
                             color: Colors.transparent,
-                              // shape: BoxShape.circle
                             borderRadius: BorderRadius.circular(100.r),
                           ),
                           enabledCellsTextStyle: TextStyle(
@@ -300,7 +277,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       
                           selectedCellsDecoration: BoxDecoration(
                             color: CommonColors.green.withOpacity(0.15),
-                            // borderRadius: BorderRadius.circular(20.r),
                           ),
                           selectedCellsTextStyle: TextStyle(
                             color: currentTheme.basicAdvanceTextColor,
@@ -310,7 +286,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       
                           singleSelectedCellDecoration: BoxDecoration(
                             color: CommonColors.green,
-                              // shape: BoxShape.circle
                             borderRadius: BorderRadius.circular(100.r),
                           ),
                           singleSelectedCellTextStyle: TextStyle(
@@ -342,50 +317,147 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
                           onStartDateChanged: (DateTime? date) {
                             if (date != null) {
-                              // Update the current selected range with the new start date
-                              currentSelectedRange = DateTimeRange(start: date, end: currentSelectedRange?.end ?? maxDate);
+                              final currentStart = currentSelectedRange?.start;
+                              final currentEnd = currentSelectedRange?.end;
+                              
+                              DateTimeRange? newRange;
+                              
+                              if (currentStart != null && currentEnd != null && 
+                                  !_areDatesEqual(currentStart, currentEnd)) {
+                                newRange = DateTimeRange(start: date, end: date);
+                              }
+                              else if (currentStart != null && currentEnd != null && 
+                                       _areDatesEqual(currentStart, currentEnd)) {
+                                if (date.isBefore(currentStart)) {
+                                  newRange = DateTimeRange(start: date, end: currentEnd);
+                                }
+                                else if (date.isAfter(currentStart)) {
+                                  newRange = DateTimeRange(start: currentStart, end: date);
+                                }
+                                else {
+                                  newRange = DateTimeRange(start: date, end: date);
+                                }
+                              }
+                              else {
+                                newRange = DateTimeRange(start: date, end: currentEnd ?? date);
+                              }
+                              
+                              final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
+                              if (daysDifference > 92) {
+                                CustomAlert.showCustomScaffoldMessenger(
+                                  context,
+                                  "Maximum date range is 92 days. Selected range is $daysDifference days.",
+                                  AlertType.error,
+                                );
+                                return;
+                              }
+                              
+                              currentSelectedRange = newRange;
                               setDialogState(() {
-                                // Update the dialog state to reflect the new selection
                               });
                             }
                           },
                           onEndDateChanged: (DateTime? date) {
                             if (date != null) {
-                              // Update the current selected range with the new end date
-                              currentSelectedRange = DateTimeRange(start: currentSelectedRange?.start ?? minDate, end: date);
+                              final currentStart = currentSelectedRange?.start;
+                              final currentEnd = currentSelectedRange?.end;
+                              
+                              DateTimeRange? newRange;
+                              
+                              if (currentStart != null && currentEnd != null && 
+                                  !_areDatesEqual(currentStart, currentEnd)) {
+                                newRange = DateTimeRange(start: date, end: date);
+                              }
+                              else if (currentStart != null && currentEnd != null && 
+                                       _areDatesEqual(currentStart, currentEnd)) {
+                                if (date.isBefore(currentStart)) {
+                                  newRange = DateTimeRange(start: date, end: currentEnd);
+                                }
+                                else if (date.isAfter(currentStart)) {
+                                  newRange = DateTimeRange(start: currentStart, end: date);
+                                }
+                                else {
+                                  newRange = DateTimeRange(start: date, end: date);
+                                }
+                              }
+                              else {
+                                newRange = DateTimeRange(start: currentStart ?? date, end: date);
+                              }
+                              
+                              final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
+                              if (daysDifference > 92) {
+                                CustomAlert.showCustomScaffoldMessenger(
+                                  context,
+                                  "Maximum date range is 92 days. Selected range is $daysDifference days.",
+                                  AlertType.error,
+                                );
+                                return;
+                              }
+                              
+                              currentSelectedRange = newRange;
                               setDialogState(() {
-                                // Update the dialog state to reflect the new selection
                               });
                             }
                           },
                       
                           onRangeSelected: (DateTimeRange? range) {
                             if (range != null) {
-                              // Check if the range exceeds 92 days
-                              final daysDifference = range.end.difference(range.start).inDays + 1;
+                              final currentStart = currentSelectedRange?.start;
+                              final currentEnd = currentSelectedRange?.end;
+                              final clickedStart = range.start;
+                              final clickedEnd = range.end;
+                              
+                              DateTimeRange? newRange;
+                              
+                              final isSingleDateClick = _areDatesEqual(clickedStart, clickedEnd);
+                              
+                              if (isSingleDateClick) {
+                                if (currentStart != null && currentEnd != null && 
+                                    !_areDatesEqual(currentStart, currentEnd)) {
+                                  newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+                                }
+                                else if (currentStart != null && currentEnd != null && 
+                                         _areDatesEqual(currentStart, currentEnd)) {
+                                  if (clickedStart.isBefore(currentStart)) {
+                                    newRange = DateTimeRange(start: clickedStart, end: currentEnd);
+                                  }
+                                  else if (clickedStart.isAfter(currentStart)) {
+                                    newRange = DateTimeRange(start: currentStart, end: clickedStart);
+                                  }
+                                  else {
+                                    newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+                                  }
+                                }
+                                else {
+                                  newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+                                }
+                              } else {
+                                newRange = range;
+                              }
+                              
+                              final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
                               if (daysDifference > 92) {
-                                // Show error message and don't update the selection
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Maximum date range is 92 days. Selected range is $daysDifference days.'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
+                                CustomAlert.showCustomScaffoldMessenger(
+                                  context,
+                                  "Maximum date range is 92 days. Selected range is $daysDifference days.",
+                                  AlertType.error,
                                 );
                                 return;
                               }
+                              
+                              currentSelectedRange = newRange;
+                              setDialogState(() {
+                              });
+                            } else {
+                              currentSelectedRange = null;
+                              setDialogState(() {
+                              });
                             }
-                            
-                            // Store the selected range but don't close the dialog
-                            currentSelectedRange = range;
-                            setDialogState(() {
-                              // Update the dialog state to reflect the new selection
-                            });
                           },
+                        ),
                         ),
                       ),
 
-                      // Selected Date Range Display
                       Container(
                         width: 300.w,
                         padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
@@ -412,7 +484,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                       ),
 
-                      // Tip Text
                       Container(
                         width: 300.w,
                         padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -427,7 +498,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                       ),
 
-                      // Action Buttons
                       Container(
                         padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
                         width: 300.w,
@@ -439,7 +509,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               isEnabled: true,
                               isRed: true,
                               onPressed: () {
-                                // Close dialog without applying changes
                                 Navigator.of(context).pop();
                               },
                               fontSize: ThemeNotifier.small.responsiveSp,
@@ -450,7 +519,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               isEnabled: true,
                               isRed: false,
                               onPressed: () {
-                                // Return the currently selected range
                                 Navigator.of(context).pop(currentSelectedRange);
                               },
                               fontSize: ThemeNotifier.small.responsiveSp,
@@ -475,25 +543,22 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
           endDate = pickedRange.end;
         });
 
-        // Apply the date range
         await _applyDateRange();
       }
     } catch (e) {
-      // Show error message to user
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error selecting date range: $e'),
-            backgroundColor: Colors.red,
-          ),
+        CustomAlert.showCustomScaffoldMessenger(
+          context,
+          "Error selecting date range: $e",
+          AlertType.error,
         );
+        
       }
     }
   }
 
   Future<void> _applyDateRange() async {
     if (startDate != null && endDate != null) {
-      // Get validated date range
       final validRange = _getValidDateRange();
 
       final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
@@ -511,7 +576,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       );
 
       if (shouldChange) {
-        // Update the displayed dates to the validated ones
         setState(() {
           startDate = validRange.start;
           endDate = validRange.end;
@@ -524,7 +588,12 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     }
   }
 
-  /// Validates and normalizes dates to ensure they're within the valid range
+  bool _areDatesEqual(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+           date1.month == date2.month &&
+           date1.day == date2.day;
+  }
+
   DateTimeRange _getValidDateRange() {
     final now = DateTime.now();
     final minDate = DateTime(2020, 1, 1);
@@ -533,7 +602,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     DateTime validStart = startDate ?? minDate;
     DateTime validEnd = endDate ?? maxDate;
 
-    // Ensure dates are within bounds
     if (validStart.isBefore(minDate)) {
       validStart = minDate;
     }
@@ -548,15 +616,12 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       validEnd = maxDate;
     }
 
-    // Ensure end date is not before start date
     if (validEnd.isBefore(validStart)) {
       validEnd = validStart;
     }
 
-    // Ensure the range doesn't exceed 92 days
     final daysDifference = validEnd.difference(validStart).inDays + 1;
     if (daysDifference > 92) {
-      // Adjust the end date to be exactly 92 days from the start date
       validEnd = validStart.add(Duration(days: 91));
     }
 

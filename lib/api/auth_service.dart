@@ -12,7 +12,6 @@ import 'package:sms_autofill/sms_autofill.dart';
 
 import '../bloc/dashboard_bloc.dart';
 import '../constants/app_config.dart';
-import '../main.dart';
 import '../services/app_state_service.dart';
 import '../utils/biometric_helper.dart';
 import '../utils/custom_exception.dart';

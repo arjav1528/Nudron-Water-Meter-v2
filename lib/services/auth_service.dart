@@ -44,7 +44,7 @@ class AuthService {
       final token = await _secureStorage.read(key: _accessTokenKey).timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          print('Secure storage read (access_token) timed out during isLoggedIn check');
+          debugPrint('Secure storage read (access_token) timed out during isLoggedIn check');
           return null;
         },
       );
@@ -52,7 +52,7 @@ class AuthService {
       
       return !_isTokenExpired(token);
     } catch (e) {
-      print('Error in isLoggedIn: $e');
+      debugPrint('Error in isLoggedIn: $e');
       return false;
     }
   }
@@ -141,7 +141,7 @@ class AuthService {
       final token = await _secureStorage.read(key: _accessTokenKey).timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          print('Secure storage read (access_token) timed out in getAccessToken');
+          debugPrint('Secure storage read (access_token) timed out in getAccessToken');
           return null;
         },
       );
@@ -403,13 +403,13 @@ class AuthService {
       final value = await _secureStorage.read(key: _twoFactorKey).timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          print('Secure storage read (two_factor) timed out in isTwoFactorEnabled');
+          debugPrint('Secure storage read (two_factor) timed out in isTwoFactorEnabled');
           return null;
         },
       );
       return value == 'true';
     } catch (e) {
-      print('Error in isTwoFactorEnabled: $e');
+      debugPrint('Error in isTwoFactorEnabled: $e');
       return false;
     }
   }
@@ -459,12 +459,12 @@ class AuthService {
       return await _secureStorage.read(key: _emailKey).timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          print('Secure storage read (email) timed out');
+          debugPrint('Secure storage read (email) timed out');
           return null;
         },
       );
     } catch (e) {
-      print('Error in getStoredEmail: $e');
+      debugPrint('Error in getStoredEmail: $e');
       return null;
     }
   }
@@ -476,12 +476,12 @@ class AuthService {
       return await _secureStorage.read(key: _passwordKey).timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          print('Secure storage read (password) timed out');
+          debugPrint('Secure storage read (password) timed out');
           return null;
         },
       );
     } catch (e) {
-      print('Error in getStoredPassword: $e');
+      debugPrint('Error in getStoredPassword: $e');
       return null;
     }
   }

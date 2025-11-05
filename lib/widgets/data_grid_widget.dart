@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/services/platform_utils.dart';
 import '../../models/chartModels.dart';
 import '../../utils/pok.dart';
 import '../../utils/utils.dart';
@@ -59,7 +58,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
     // Create cache key
-    final cacheKey = '${text}_${isHeader}_${hasDownloadButton}';
+    final cacheKey = '${text}_${isHeader}_$hasDownloadButton';
     
     // Return cached value if available
     if (_textWidthCache.containsKey(cacheKey)) {

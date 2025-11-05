@@ -271,11 +271,12 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           BlocProvider.of<DashboardBloc>(context).switchBottomNavPos(index);
         },
         child: Container(
-          height: 100.h,
+          height: 95.h,
           padding: EdgeInsets.zero,
           child: isCollapsed
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
                       "assets/icons/${bottomNavTabIcons[index]}.svg",

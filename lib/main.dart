@@ -36,16 +36,16 @@ void main() async {
   if(Platform.isAndroid){
     final deviceInfo = DeviceInfoPlugin();
     final androidInfo = await deviceInfo.androidInfo;
-    final model = androidInfo.model?.toLowerCase() ?? '';
-    final features = androidInfo.systemFeatures?.join(',') ?? '';
+    final model = androidInfo.model.toLowerCase();
+    final features = androidInfo.systemFeatures.join(',');
 
     // Heuristic: tablets often have no telephony and larger screens
     final likelyTablet = !features.contains('android.hardware.telephony');
 
     if (likelyTablet || model.contains('tablet') || model.startsWith('sm-x')) {
-      print('Running on Android tablet');
+      debugPrint('Running on Android tablet');
     } else {
-      print('Running on Android phone');
+      debugPrint('Running on Android phone');
   }
   }
 
