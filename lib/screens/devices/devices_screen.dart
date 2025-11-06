@@ -216,10 +216,12 @@ class _DevicesPageState extends State<DevicesPage> {
                       return false;
                     },
                     builder: (context, state) {
-                      final Map<int, int> desktopJson = {};
+                      final Map<int, int> desktopJson = {
+                        3: 0.responsiveSp.toInt(),
+                      };
                       final Map<int, int> mobileJson = {
                         0: 30.responsiveSp.toInt(),
-                        // 1: 20.responsiveSp.toInt(),
+                        // 3: 0.responsiveSp.toInt(),
                       };
                       final json = PlatformUtils.isDesktop ? desktopJson : mobileJson;
                       return DataGridWidget(
