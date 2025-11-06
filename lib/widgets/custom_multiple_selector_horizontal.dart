@@ -47,6 +47,8 @@ class _CustomMultipleSelectorHorizontalState
 
   @override
   void dispose() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     _animationController.dispose();
     super.dispose();
   }
@@ -130,26 +132,38 @@ class _CustomMultipleSelectorHorizontalState
   }
 
   void _openDropdown() {
+    if (!mounted) return;
     final overlay = Overlay.of(context);
     _overlayEntry = _createOverlayEntry();
     overlay.insert(_overlayEntry!);
     _animationController.forward();
-    setState(() {
-      _isDropdownOpen = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isDropdownOpen = true;
+      });
+    }
   }
 
   void _closeDropdown() {
     _animationController.reverse().then((_) {
       _overlayEntry?.remove();
-      setState(() {
-        _isDropdownOpen = false;
-      });
+      _overlayEntry = null;
+      if (mounted) {
+        setState(() {
+          _isDropdownOpen = false;
+        });
+      }
     });
   }
 
   OverlayEntry _createOverlayEntry() {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    if (!mounted) {
+      return OverlayEntry(builder: (_) => const SizedBox.shrink());
+    }
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.attached) {
+      return OverlayEntry(builder: (_) => const SizedBox.shrink());
+    }
     final size = renderBox.size;
 
     return OverlayEntry(
@@ -389,40 +403,46 @@ class _DropdownContentState extends State<DropdownContent> {
         dashboardBloc.selectProject(dashboardBloc.projects.indexOf(value!)),
       );
 
-      setState(() {
-        levels = ['Project', ...?filterData?.levels];
-        selectedFilters = [value, ...List.filled(levels.length - 1, null)];
+      if (mounted) {
+        setState(() {
+          levels = ['Project', ...?filterData?.levels];
+          selectedFilters = [value, ...List.filled(levels.length - 1, null)];
 
-        // ✅ Immediately check if level 1 has only 1 option
-        final items = _getFilterItems(1);
-        if (items.length == 1) {
-          selectedFilters[1] = items.first;
-        }
-      });
+          // ✅ Immediately check if level 1 has only 1 option
+          final items = _getFilterItems(1);
+          if (items.length == 1) {
+            selectedFilters[1] = items.first;
+          }
+        });
+      }
     } catch (e) {
-      CustomAlert.showCustomScaffoldMessenger(
-        context,
-        e.toString(),
-        AlertType.error,
-      );
+      if (mounted) {
+        CustomAlert.showCustomScaffoldMessenger(
+          context,
+          e.toString(),
+          AlertType.error,
+        );
+      }
     }
   } else {
     if (value == "-") value = null;
 
-    setState(() {
-      selectedFilters[index] = value;
+    if (mounted) {
+      setState(() {
+        selectedFilters[index] = value;
 
-      for (int i = index + 1; i < selectedFilters.length; i++) {
-        selectedFilters[i] = null;
-      }
-
-      if (value != null && index + 1 < levels.length) {
-        final nextItems = _getFilterItems(index + 1);
-        if (nextItems.length == 1) {
-          selectedFilters[index + 1] = nextItems.first;
+        for (int i = index + 1; i < selectedFilters.length; i++) {
+          selectedFilters[i] = null;
         }
-      }
-    });
+
+        if (value != null && index + 1 < levels.length) {
+          final nextItems = _getFilterItems(index + 1);
+          if (nextItems.length == 1) {
+            selectedFilters[index + 1] = nextItems.first;
+          }
+        }
+      });
+    }
   }
 }
 

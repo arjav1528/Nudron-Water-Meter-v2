@@ -46,17 +46,16 @@ class _CustomDropDownState extends State<CustomDropDown> {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          height: 50.91.h,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/basic_advance.png"),
-              fit: BoxFit.fill,
+        Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: RPSCustomPainter(),
+              ),
             ),
-          ),
-          child: SizedBox(
-            height: 50.91.h,
-            child: Row(
+            SizedBox(
+              height: 50.91.h,
+              child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
@@ -196,7 +195,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     }).toList(),
                     onChanged: (dynamic newValue) async {
                       bool toChange = await widget.onChanged(newValue);
-                      if (toChange) {
+                      if (toChange && mounted) {
                         setState(() {
                           selectedValue = newValue.toString();
                         });
@@ -207,6 +206,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
               ],
             ),
           ),
+          ],
         ),
       ],
     );
@@ -261,6 +261,13 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
     }
   }
 
+  @override
+  void dispose() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    super.dispose();
+  }
+
   void _toggleDropdown() {
     if (_isOpen) {
       _closeDropdown();
@@ -270,23 +277,35 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
   }
 
   void _openDropdown() {
+    if (!mounted) return;
     final overlay = Overlay.of(context);
     _overlayEntry = _createOverlayEntry();
     overlay.insert(_overlayEntry!);
-    setState(() {
-      _isOpen = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isOpen = true;
+      });
+    }
   }
 
   void _closeDropdown() {
     _overlayEntry?.remove();
-    setState(() {
-      _isOpen = false;
-    });
+    _overlayEntry = null;
+    if (mounted) {
+      setState(() {
+        _isOpen = false;
+      });
+    }
   }
 
   OverlayEntry _createOverlayEntry() {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    if (!mounted) {
+      return OverlayEntry(builder: (_) => const SizedBox.shrink());
+    }
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.attached) {
+      return OverlayEntry(builder: (_) => const SizedBox.shrink());
+    }
     final size = renderBox.size;
 
     return OverlayEntry(
@@ -364,58 +383,26 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 50.91.h,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/basic_advance.png"),
-                  fit: BoxFit.fill,
+            Stack(
+              children: [
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: RPSCustomPainter(),
+                  ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  widget.fieldNameVisible ? Row(
+                SizedBox(
+                  height: 50.91.h,
+                  child: Row(
                     children: [
-                      SizedBox(width: 10.w),
-                      SizedBox(
-                        width: widget.width1.w,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Text(
-                            widget.fieldName,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.robotoMono(
-                              fontSize: ThemeNotifier.small.responsiveSp,
-                              color: Provider.of<ThemeNotifier>(context)
-                                  .currentTheme
-                                  .basicAdvanceTextColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(width: 10.w),
-                      Container(
-                        height: 50.91.h,
-                        width: 1.w,
-                        color: CommonColors.blue,
-                      ),
-                    ],
-                  ) : Container(),
-                  GestureDetector(
-                    onTap: _toggleDropdown,
-                    child: Container(
-                      width: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
-                      height: 40.h,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      widget.fieldNameVisible ? Row(
                         children: [
-                          Expanded(
+                          SizedBox(width: 10.w),
+                          SizedBox(
+                            width: widget.width1.w,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Text(
-                                selectedValue ?? '-',
+                                widget.fieldName,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.robotoMono(
                                   fontSize: ThemeNotifier.small.responsiveSp,
@@ -426,25 +413,95 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                               ),
                             ),
                           ),
-                          Icon(
-                            _isOpen
-                                ? Icons.arrow_drop_up
-                                : Icons.arrow_drop_down,
-                            size: 30.responsiveSp,
-                            color: Provider.of<ThemeNotifier>(context)
-                                .currentTheme
-                                .basicAdvanceTextColor,
+                          Container(width: 10.w),
+                          Container(
+                            height: 50.91.h,
+                            width: 1.w,
+                            color: CommonColors.blue,
                           ),
                         ],
+                      ) : Container(),
+                      GestureDetector(
+                        onTap: _toggleDropdown,
+                        child: Container(
+                          width: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
+                          height: 40.h,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 15.w),
+                                    child: Text(
+                                      selectedValue ?? '-',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.robotoMono(
+                                        fontSize: ThemeNotifier.small.responsiveSp,
+                                        color: Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .basicAdvanceTextColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Icon(
+                                _isOpen
+                                    ? Icons.arrow_drop_up
+                                    : Icons.arrow_drop_down,
+                                size: 30.responsiveSp,
+                                color: Provider.of<ThemeNotifier>(context)
+                                    .currentTheme
+                                    .basicAdvanceTextColor,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class RPSCustomPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path path_0 = Path();
+    path_0.moveTo(size.width * 0.9797295, 0);
+    path_0.lineTo(size.width * 0.02027029, 0);
+    path_0.lineTo(0, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.02027029, size.height * 0.9982745);
+    path_0.lineTo(size.width * 0.9797295, size.height * 0.9982745);
+    path_0.lineTo(size.width, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.9797295, 0);
+    path_0.close();
+    path_0.moveTo(size.width * 0.9767254, size.height * 0.9223196);
+    path_0.lineTo(size.width * 0.02327328, size.height * 0.9223196);
+    path_0.lineTo(size.width * 0.006756762, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.02327328, size.height * 0.07595529);
+    path_0.lineTo(size.width * 0.9767254, size.height * 0.07595529);
+    path_0.lineTo(size.width * 0.9932418, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.9767254, size.height * 0.9223196);
+    path_0.close();
+
+    Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
+    paint_0_fill.color = Color(0xff145166).withOpacity(1.0);
+    canvas.drawPath(path_0, paint_0_fill);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

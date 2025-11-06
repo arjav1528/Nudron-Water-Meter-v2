@@ -44,6 +44,8 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
 
   @override
   void dispose() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     _animationController.dispose();
     super.dispose();
   }
@@ -114,26 +116,38 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
   }
 
   void _openDropdown() {
+    if (!mounted) return;
     final overlay = Overlay.of(context);
     _overlayEntry = _createOverlayEntry(context);
     overlay.insert(_overlayEntry!);
     _animationController.forward();
-    setState(() {
-      _isDropdownOpen = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isDropdownOpen = true;
+      });
+    }
   }
 
   void _closeDropdown() {
     _animationController.reverse().then((_) {
       _overlayEntry?.remove();
-      setState(() {
-        _isDropdownOpen = false;
-      });
+      _overlayEntry = null;
+      if (mounted) {
+        setState(() {
+          _isDropdownOpen = false;
+        });
+      }
     });
   }
 
   OverlayEntry _createOverlayEntry(BuildContext context) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    if (!mounted) {
+      return OverlayEntry(builder: (_) => const SizedBox.shrink());
+    }
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.attached) {
+      return OverlayEntry(builder: (_) => const SizedBox.shrink());
+    }
     final size = renderBox.size;
 
     return OverlayEntry(
@@ -199,17 +213,21 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
             .selectMonth(monthNumber)
             .then((_) => true)
             .catchError((e) {
-          CustomAlert.showCustomScaffoldMessenger(
-              context, "$e", AlertType.error);
+          if (mounted) {
+            CustomAlert.showCustomScaffoldMessenger(
+                context, "$e", AlertType.error);
+          }
           return false;
         }),
       );
-      if (shouldChange) {
+      if (shouldChange && mounted) {
         setState(() {
           selectedMonth = newValue;
         });
       }
-      _closeDropdown();
+      if (mounted) {
+        _closeDropdown();
+      }
     }
   }
 }
