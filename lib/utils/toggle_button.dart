@@ -72,17 +72,20 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
       // height: 50.91.h,
       child: Stack(
         children: [
-          SizedBox(
-            width: widget.width.w,
-            height: widget.height.h,
-            child: Image.asset(
-              widget.backgroundColor == null
-                  ? "assets/images/basic_advance.png"
-                  : "assets/icons/togglebg.png",
-              fit: BoxFit.fill,
-              color: widget.backgroundColor,
-            ),
-          ),
+          widget.backgroundColor == null
+              ? CustomPaint(
+                  size: Size(widget.width.w, widget.height.h),
+                  painter: RPSCustomPainter(),
+                )
+              : SizedBox(
+                  width: widget.width.w,
+                  height: widget.height.h,
+                  child: Image.asset(
+                    "assets/icons/togglebg.png",
+                    fit: BoxFit.fill,
+                    color: widget.backgroundColor,
+                  ),
+                ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -90,21 +93,23 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
             // Adjust for gap
             top: widget.verticalGap.h,
             // Adjust for vertical gap
-            child: SizedBox(
-              width: widget.smallerWidth.w,
-              height: widget.smallerHeight.h,
-              child: Image.asset(
-                getColor(selectedIndex) == CommonColors.red
-                    ? "assets/images/red_calibrate.png"
-                    : "assets/images/basic_advance2.png",
-                fit: BoxFit.fill,
-                width: widget.smallerWidth.w,
-                height: widget.smallerHeight.h,
-                color: getColor(selectedIndex) == CommonColors.red
-                    ? null
-                    : getColor(selectedIndex),
-              ),
-            ),
+            child: getColor(selectedIndex) == CommonColors.red
+                ? SizedBox(
+                    width: widget.smallerWidth.w,
+                    height: widget.smallerHeight.h,
+                    child: Image.asset(
+                      "assets/images/red_calibrate.png",
+                      fit: BoxFit.fill,
+                      width: widget.smallerWidth.w,
+                      height: widget.smallerHeight.h,
+                    ),
+                  )
+                : CustomPaint(
+                    size: Size(widget.smallerWidth.w, widget.smallerHeight.h),
+                    painter: RPSCustomPainter2(
+                      color: getColor(selectedIndex),
+                    ),
+                  ),
           ),
           SizedBox(
             width: widget.width.w,
@@ -150,5 +155,65 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
         ],
       ),
     );
+  }
+}
+
+class RPSCustomPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path path_0 = Path();
+    path_0.moveTo(size.width * 0.9797295, 0);
+    path_0.lineTo(size.width * 0.02027029, 0);
+    path_0.lineTo(0, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.02027029, size.height * 0.9982745);
+    path_0.lineTo(size.width * 0.9797295, size.height * 0.9982745);
+    path_0.lineTo(size.width, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.9797295, 0);
+    path_0.close();
+    path_0.moveTo(size.width * 0.9767254, size.height * 0.9223196);
+    path_0.lineTo(size.width * 0.02327328, size.height * 0.9223196);
+    path_0.lineTo(size.width * 0.006756762, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.02327328, size.height * 0.07595529);
+    path_0.lineTo(size.width * 0.9767254, size.height * 0.07595529);
+    path_0.lineTo(size.width * 0.9932418, size.height * 0.4991373);
+    path_0.lineTo(size.width * 0.9767254, size.height * 0.9223196);
+    path_0.close();
+
+    Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
+    paint_0_fill.color = Color(0xff145166).withOpacity(1.0);
+    canvas.drawPath(path_0, paint_0_fill);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class RPSCustomPainter2 extends CustomPainter {
+  final Color color;
+
+  RPSCustomPainter2({this.color = const Color(0xff145166)});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path path_0 = Path();
+    path_0.moveTo(size.width * 0.9754789, size.height);
+    path_0.lineTo(size.width, size.height * 0.5000000);
+    path_0.lineTo(size.width * 0.9754789, 0);
+    path_0.lineTo(size.width * 0.02452317, 0);
+    path_0.lineTo(0, size.height * 0.5000000);
+    path_0.lineTo(size.width * 0.02452317, size.height);
+    path_0.lineTo(size.width * 0.9754789, size.height);
+    path_0.close();
+
+    Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
+    paint_0_fill.color = color.withOpacity(1.0);
+    canvas.drawPath(path_0, paint_0_fill);
+  }
+
+  @override
+  bool shouldRepaint(covariant RPSCustomPainter2 oldDelegate) {
+    return color != oldDelegate.color;
   }
 }

@@ -453,13 +453,17 @@ class _DropdownContentState extends State<DropdownContent> {
       context,
       dashboardBloc.updateSelectedFilters(selectedFilters, filterData),
     ).then((value) {
-      widget.onClose();
+      if (mounted) {
+        widget.onClose();
+      }
     }).catchError((e) {
-      CustomAlert.showCustomScaffoldMessenger(
-        context,
-        e.toString(),
-        AlertType.error,
-      );
+      if (mounted) {
+        CustomAlert.showCustomScaffoldMessenger(
+          context,
+          e.toString(),
+          AlertType.error,
+        );
+      }
       throw e;
     });
   }
