@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -58,7 +57,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
     // Create cache key
-    final cacheKey = '${text}_${isHeader}_$hasDownloadButton';
+    final cacheKey = '${text}_${isHeader}_${hasDownloadButton}';
     
     // Return cached value if available
     if (_textWidthCache.containsKey(cacheKey)) {
@@ -107,24 +106,12 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       )..layout(minWidth: 0);
 
       // Increased padding to ensure text fits properly with adequate spacing
-      if(Platform.isAndroid || Platform.isIOS){
-        
-        width = textPainter.width +
-          8 +
-          3.minSp +
-          (hasDownloadButton
-              ? rowHeight
-              : 0.0); // Add small padding to account for edges
-        
-        
-      }else{
-        width = textPainter.width +
+      width = textPainter.width +
           16 + // Increased horizontal padding from 8 to 16
           6.responsiveSp + // Increased responsive padding from 3 to 6
           (hasDownloadButton
               ? rowHeight
               : 0.0); // Add small padding to account for edges
-      }
     }
     
     // Cache the result
@@ -353,13 +340,15 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   TextStyle? _cachedTextStyle;
   
   TextStyle _getTextStyle(BuildContext context) {
-    _cachedTextStyle ??= GoogleFonts.robotoMono(
+    if (_cachedTextStyle == null) {
+      _cachedTextStyle = GoogleFonts.robotoMono(
         fontSize: ThemeNotifier.medium.responsiveSp,
         height: 1.2,
         fontWeight: FontWeight.normal,
         letterSpacing: 0.5,
         color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
       );
+    }
     return _cachedTextStyle!;
   }
 
