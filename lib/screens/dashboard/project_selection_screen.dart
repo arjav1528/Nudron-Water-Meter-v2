@@ -250,6 +250,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
     final projects = dashboardBloc.projects;
+    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
 
     if (projects.isEmpty) {
       // Show loader while projects are being fetched
@@ -266,7 +267,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
         SizedBox(
           width: PlatformUtils.isMobile
               ? MediaQuery.of(context).size.width
-              : 400,
+              : width,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: PlatformUtils.isMobile ? 16.w : 0),
             child: Column(
@@ -286,7 +287,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         Text(
                           "SELECT PROJECT",
                           style: GoogleFonts.robotoMono(
-                            fontSize: PlatformUtils.isMobile ? 18.responsiveSp : 18.0,
+                            fontSize: PlatformUtils.isMobile ? 18.responsiveSp : width / 30,
                             fontWeight: FontWeight.w500,
                             color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                         ),
@@ -347,8 +348,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                     });
                   },
                   width1: PlatformUtils.isMobile ? 400.w : 0,
-                  width2: PlatformUtils.isMobile ? 360.w : 370,
-                  desktopDropdownWidth: 370,
+                  width2: PlatformUtils.isMobile ? 360.w : width - 30,
+                  desktopDropdownWidth: width - 30,
                   fieldNameVisible: false,
                 ),
                 SizedBox(height: 470.h),
