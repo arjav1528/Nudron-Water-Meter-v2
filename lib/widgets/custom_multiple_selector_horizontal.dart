@@ -109,7 +109,7 @@ class _CustomMultipleSelectorHorizontalState
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                          size: 30.responsiveSp,
+                          size: 35.responsiveSp,
                         )
                       ],
                     ),

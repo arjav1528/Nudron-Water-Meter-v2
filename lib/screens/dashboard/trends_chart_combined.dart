@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/utils/pok.dart';
 
@@ -63,48 +64,53 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               child: Row(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [
-                          CommonColors.yellow,
-                          CommonColors.yellow.withOpacity(0.6),
-                          Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(2.w),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacementNamed('/projectSelection');
-                        },
-                        icon: Transform.scale(
-                          scaleX: -1,
-                          child: Icon(
-                            Icons.arrow_right_alt,
-                            color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                            size: 24.responsiveSp,
+                        height: 30.h,
+                        width: 40.w,
+                        
+                        alignment: Alignment.center,
+                        
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8.r),
+                          color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                          
+                          border: GradientBoxBorder(
+                            gradient: LinearGradient(
+                              colors: [
+                                CommonColors.yellow,
+                                CommonColors.yellow.withOpacity(0.6),
+                                Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            width: 2.responsiveSp,
+                          )
+                        ),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushReplacementNamed('/projectSelection');
+                            },
+                            child: Transform.scale(
+                              scaleX: -1,
+                              child: Icon(
+                                Icons.arrow_right_alt,
+                                color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                size: 30.responsiveSp,
+                              ),
+                            ),
+                            // splashColor: Provider.of<ThemeNotifier>(context, listen: false)
+                            //       .currentTheme
+                            //       .splashColor,
+                            //   highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
+                            //       .currentTheme
+                            //       .splashColor,
+                              
                           ),
                         ),
-                        splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            .currentTheme
-                            .splashColor,
-                        highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            .currentTheme
-                            .splashColor,
-                        padding: EdgeInsets.all(4.w),
-                        constraints: BoxConstraints(),
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
+                      SizedBox(width: 12.w),
                   SvgPicture.asset('assets/icons/project.svg',
                     color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                     height: 30.h,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
@@ -62,49 +63,96 @@ class _SummaryTableState extends State<SummaryTable> {
                 children: [
                   Row(
                     children: [
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     shape: BoxShape.circle,
+                      //     gradient: LinearGradient(
+                      //       colors: [
+                      //         CommonColors.green,
+                      //         CommonColors.green.withOpacity(0.6),
+                      //         Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+                      //       ],
+                      //       begin: Alignment.topLeft,
+                      //       end: Alignment.bottomRight,
+                      //     ),
+                      //   ),
+                      //   child: Container(
+                      //     margin: EdgeInsets.all(2.w),
+                      //     decoration: BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                      //     ),
+                      //     child: IconButton(
+                      //       onPressed: () {
+                      //         Navigator.of(context).pushReplacementNamed('/projectSelection');
+                      //       },
+                      //       icon: Transform.scale(
+                      //         scaleX: -1,
+                      //         child: Icon(
+                      //           Icons.arrow_right_alt,
+                      //           color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                      //           size: 24.responsiveSp,
+                      //         ),
+                      //       ),
+                      //       splashColor: Provider.of<ThemeNotifier>(context, listen: false)
+                      //           .currentTheme
+                      //           .splashColor,
+                      //       highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
+                      //           .currentTheme
+                      //           .splashColor,
+                      //       padding: EdgeInsets.all(4.w),
+                      //       constraints: BoxConstraints(),
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
+                        height: 30.h,
+                        width: 40.w,
+                        
+                        alignment: Alignment.center,
+                        
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              CommonColors.green,
-                              CommonColors.green.withOpacity(0.6),
-                              Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8.r),
+                          color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                          
+                          border: GradientBoxBorder(
+                            gradient: LinearGradient(
+                              colors: [
+                                CommonColors.green,
+                                CommonColors.green.withOpacity(0.6),
+                                Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            width: 2.responsiveSp,
+                          )
                         ),
-                        child: Container(
-                          margin: EdgeInsets.all(2.w),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-                          ),
-                          child: IconButton(
-                            onPressed: () {
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
                               Navigator.of(context).pushReplacementNamed('/projectSelection');
                             },
-                            icon: Transform.scale(
+                            child: Transform.scale(
                               scaleX: -1,
                               child: Icon(
                                 Icons.arrow_right_alt,
                                 color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                size: 24.responsiveSp,
+                                size: 30.responsiveSp,
                               ),
                             ),
-                            splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                                .currentTheme
-                                .splashColor,
-                            highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                                .currentTheme
-                                .splashColor,
-                            padding: EdgeInsets.all(4.w),
-                            constraints: BoxConstraints(),
+                            // splashColor: Provider.of<ThemeNotifier>(context, listen: false)
+                            //       .currentTheme
+                            //       .splashColor,
+                            //   highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
+                            //       .currentTheme
+                            //       .splashColor,
+                              
                           ),
                         ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 12.w),
                       SvgPicture.asset('assets/icons/project.svg',
                         color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                         height: 30.h,
@@ -165,7 +213,7 @@ class _SummaryTableState extends State<SummaryTable> {
                     data: data,
                     key: UniqueKey(),
                     columnsToTakeHeaderWidthAndExtraPadding: json,
-                    frozenColumns: 2,
+                    frozenColumns : 2,
                     location: 'billing',
                   );
                 },

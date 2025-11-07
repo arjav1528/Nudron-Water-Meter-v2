@@ -150,20 +150,23 @@ class ChamferedTextWidget extends StatelessWidget {
                 child: Container(
                   height: height,
                   padding: EdgeInsets.only(
-                      right: triangleSize, top: isInverted?0:10.responsiveSp,bottom: isInverted?6.responsiveSp:0, left: 14.responsiveSp),
+                      right: triangleSize, top: isInverted?0:5.responsiveSp,bottom: isInverted?6.responsiveSp:0, left: 14.responsiveSp),
                   child: Transform(
                     alignment: Alignment.center,
                     transform:isInverted? (Matrix4.identity()..scale(-1.0, 1.0, 1.0)):Matrix4.identity(),
                     child: RotatedBox(
                       quarterTurns: isInverted ? 2 : 0,
-                      child: Text(
-                        text,
-                        // textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                            fontSize: ThemeNotifier.medium.responsiveSp,
-                            fontWeight: FontWeight.bold,
-                            color: textColor ?? borderColor,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 4.responsiveSp),
+                        child: Text(
+                          text,
+                          // textAlign: TextAlign.center,
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                              fontSize: ThemeNotifier.medium.responsiveSp,
+                              fontWeight: FontWeight.bold,
+                              color: textColor ?? borderColor,
+                            ),
                           ),
                         ),
                       ),

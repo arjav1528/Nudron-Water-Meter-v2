@@ -72,9 +72,10 @@ class CustomButton extends StatelessWidget {
                         if (arrowWidget) ...[
                           SizedBox(width: 8.w),
                           Icon(
-                            Icons.arrow_forward,
+                            Icons.arrow_right_alt,
+
                             color: Colors.white,
-                            size: (fontSize ?? ThemeNotifier.small).responsiveSp + 4,
+                            size: (fontSize ?? ThemeNotifier.large + 10).responsiveSp,
                           ),
                         ],
                       ],

@@ -73,6 +73,7 @@ dependencies:
   device_preview: ^1.2.0
   screenshot: ^3.0.0
   window_manager: ^0.4.3 # Desktop-only
+  gradient_borders: ^1.0.2
 
 dev_dependencies:
   flutter_test:

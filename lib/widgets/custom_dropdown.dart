@@ -453,7 +453,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                                 _isOpen
                                     ? Icons.arrow_drop_up
                                     : Icons.arrow_drop_down,
-                                size: 30.responsiveSp,
+                                size: 35.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
