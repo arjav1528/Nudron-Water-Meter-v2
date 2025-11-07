@@ -563,9 +563,13 @@ class _AutoLoginState extends State<AutoLogin> {
               context, "Successfully logged in!", AlertType.success);
 
           // Reload dashboard data after successful biometric login
+          // Only load if projects are empty to avoid unnecessary reloads
+          // The main.dart listener will also call loadInitialData if needed
           try {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-            dashboardBloc.loadInitialData();
+            if (dashboardBloc.projects.isEmpty) {
+              dashboardBloc.loadInitialData();
+            }
           } catch (e) {
             // If dashboard initialization fails, log it but don't block the UI
             // The dashboard will handle the error state

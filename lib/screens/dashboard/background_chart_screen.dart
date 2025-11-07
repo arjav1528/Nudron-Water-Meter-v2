@@ -108,28 +108,49 @@ class _BackgroundChartState extends State<BackgroundChart> {
           ),
         ),
         body: BlocBuilder<DashboardBloc, DashboardState>(
-          buildWhen: (previous, current) =>
-              current is DashboardPageLoaded ||
-              current is RefreshDashboard2 ||
-              current is RefreshDashboard ||
-              current is DashboardPageError,
+          buildWhen: (previous, current) {
+            final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+            final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
+                                  dashboardBloc.filterData != null;
+            
+            // Rebuild on state changes or when data becomes available
+            return current is DashboardPageLoaded ||
+                   current is RefreshDashboard2 ||
+                   current is RefreshDashboard ||
+                   current is DashboardPageError ||
+                   current is ChangeScreen ||
+                   current is ChangeDashBoardNav ||
+                   current is DashboardPageInitial ||
+                   hasDataLoaded;
+          },
           builder: (context, state) {
+            final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+            final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
+                                  dashboardBloc.filterData != null;
+            
+            // Show chart for all valid states or when data is loaded
             if (state is DashboardPageLoaded ||
                 state is RefreshDashboard2 ||
-                state is RefreshDashboard) {
+                state is RefreshDashboard ||
+                state is ChangeScreen ||
+                state is ChangeDashBoardNav ||
+                state is DashboardPageInitial ||
+                hasDataLoaded) {
               return Center(
                 child: RotatedBox(
                   quarterTurns: 1,
                   child: BlocBuilder<DashboardBloc, DashboardState>(
                       buildWhen: (previous, current) {
                     if (current is RefreshDashboard2 ||
-                        current is RefreshDashboard) {
+                        current is RefreshDashboard ||
+                        current is ChangeScreen ||
+                        current is ChangeDashBoardNav) {
                       return true;
                     }
                     return false;
                   }, builder: (context, state) {
                     GlobalKey key = GlobalKey();
-                    BlocProvider.of<DashboardBloc>(context).changeKey(key);
+                    dashboardBloc.changeKey(key);
                     return RepaintBoundary(
                       key: key,
                       child: Column(

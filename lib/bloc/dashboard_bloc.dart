@@ -1035,6 +1035,34 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       }
       
       await initUserInfo();
+      
+      // If a project is already selected, load its data
+      if (currentFilters.isNotEmpty && projects.isNotEmpty) {
+        final selectedProject = currentFilters.first;
+        if (projects.contains(selectedProject)) {
+          try {
+            // Get filter data for the selected project
+            final projectIndex = projects.indexOf(selectedProject);
+            final filterData = await selectProject(projectIndex);
+            
+            if (filterData != null) {
+              // Load the dashboard data for the selected project
+              await updateSelectedFilters([selectedProject], filterData);
+              // State is already emitted by updateSelectedFilters (ChangeDashBoardNav, RefreshDashboard)
+              // But we also emit DashboardPageLoaded to ensure the UI updates
+              emit(DashboardPageLoaded());
+              return;
+            }
+          } catch (e) {
+            if (kDebugMode) {
+              debugPrint('Error loading project data after init: ${e.toString()}');
+            }
+            // Continue and emit DashboardPageLoaded anyway - user can select project manually
+          }
+        }
+      }
+      
+      // No project selected or project data loading failed - just emit loaded state
       emit(DashboardPageLoaded());
     } catch (e) {
       if (kDebugMode) {

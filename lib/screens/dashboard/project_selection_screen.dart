@@ -77,6 +77,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
             // Update selected filters - this will load all data in parallel with caching
             await dashboardBloc.updateSelectedFilters([selectedProject], filterData);
             
+            // Reset screen index to 0 (normal view, not full screen)
+            dashboardBloc.screenIndex = 0;
+            
             // Set bottom nav position to trends tab (index 0)
             dashboardBloc.switchBottomNavPos(0);
           }

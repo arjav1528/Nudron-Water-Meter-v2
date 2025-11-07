@@ -344,11 +344,96 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
       DevicesPage(),
     ];
 
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(false);
+    // Wrap with full screen functionality
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      buildWhen: (previous, current) {
+        final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+        final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
+                              dashboardBloc.filterData != null;
+        
+        // Rebuild on state changes or when data becomes available
+        return current is DashboardPageLoaded ||
+               current is ChangeScreen ||
+               current is DashboardPageError ||
+               current is DashboardPageInitial ||
+               current is ChangeDashBoardNav ||
+               current is RefreshDashboard ||
+               current is RefreshDashboard2 ||
+               hasDataLoaded;
       },
-      child: PlatformUtils.isDesktop ? _buildDesktopLayout(context, contentPages) : _buildMobileLayout(context, contentPages),
+      builder: (context, state) {
+        final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+        
+        // Show dashboard for all valid states (loaded, refreshing, or changing screens)
+        // Also show if data is already loaded (fallback for edge cases)
+        final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
+                              dashboardBloc.filterData != null;
+        
+        if (state is DashboardPageLoaded || 
+            state is ChangeScreen ||
+            state is DashboardPageInitial ||
+            state is ChangeDashBoardNav ||
+            state is RefreshDashboard ||
+            state is RefreshDashboard2 ||
+            hasDataLoaded) {
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: IndexedStack(
+              index: dashboardBloc.screenIndex,
+              children: [
+                // Index 0: Normal dashboard view
+                WillPopScope(
+                  onWillPop: () {
+                    return Future.value(false);
+                  },
+                  child: PlatformUtils.isDesktop
+                      ? _buildDesktopLayout(context, contentPages)
+                      : _buildMobileLayout(context, contentPages),
+                ),
+                // Index 1: Full screen chart view
+                BackgroundChart(),
+              ],
+            ),
+          );
+        } else if (state is DashboardPageError) {
+          return Scaffold(
+            body: Center(
+              child: SizedBox(
+                height: 600.h,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("ERROR IN FETCHING DATA. REFRESH LATER",
+                        style: GoogleFonts.roboto(
+                          color: CommonColors.blue,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    SizedBox(height: 20.h),
+                    CustomButton(
+                      text: "REFRESH",
+                      onPressed: () {
+                        LoaderUtility.showLoader(
+                                context,
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .loadInitialData())
+                            .then((s) {})
+                            .catchError((e) {
+                          CustomAlert.showCustomScaffoldMessenger(context,
+                              "Error in loading data", AlertType.error);
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+        // Show loader for DashboardPageInitial or any other state
+        return const CustomLoader();
+      },
     );
   }
 
