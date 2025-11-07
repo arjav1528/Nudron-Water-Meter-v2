@@ -9,6 +9,8 @@ import 'package:watermeter2/utils/pok.dart';
 
 
 import '../../api/auth_service.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_state.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../utils/alert_message.dart';
@@ -17,6 +19,8 @@ import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/chamfered_text_widget.dart';
+import '../../widgets/custom_app_bar.dart';
+import '../profile/profile_drawer.dart';
 
 
 class ProjectSelectionPage extends StatefulWidget {
@@ -249,6 +253,35 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     );
   }
 
+  void showProfileDrawer(BuildContext context) async {
+    // Check if user is authenticated using AuthBloc
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    if (authBloc.state is! AuthAuthenticated) return;
+
+    final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+
+    // Simple push without animations to match the IndexedStack behavior
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: Duration.zero, // No animation
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return BlocProvider.value(
+            value: dashboardBloc,
+            child: SafeArea(
+              child: Scaffold(
+                body: ProfileDrawer(),
+              ),
+            ),
+          );
+        },
+        // No transition animations
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return child; // Return the child directly without animation
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
@@ -258,122 +291,105 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
 
     if (projects.isEmpty) {
       // Show loader while projects are being fetched
-      return const CustomLoader();
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: theme.bgColor,
+          body: const CustomLoader(),
+        ),
+      );
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 3.h,
-          color: Color(0xFF14414e),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: theme.bgColor,
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          choiceAction: (value) {
+            showProfileDrawer(context);
+          },
         ),
-        SizedBox(
-          width: PlatformUtils.isMobile
-              ? MediaQuery.of(context).size.width
-              : width,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: PlatformUtils.isMobile ? 16.w : 0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Center(
+            child: SizedBox(
+              width: PlatformUtils.isMobile
+                  ? MediaQuery.of(context).size.width
+                  : width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: PlatformUtils.isMobile ? 16.w : 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SvgPicture.asset('assets/icons/project.svg',
-                          color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                          height: PlatformUtils.isMobile ? 30.h : 30.0,
-              
+                        Row(
+                          children: [
+                            SvgPicture.asset('assets/icons/project.svg',
+                              color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                              height: PlatformUtils.isMobile ? 30.h : 30.0,
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              "SELECT PROJECT",
+                              style: GoogleFonts.robotoMono(
+                                fontSize: PlatformUtils.isMobile ? 18.responsiveSp : width / 30,
+                                fontWeight: FontWeight.w500,
+                                color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          "SELECT PROJECT",
-                          style: GoogleFonts.robotoMono(
-                            fontSize: PlatformUtils.isMobile ? 18.responsiveSp : width / 30,
-                            fontWeight: FontWeight.w500,
-                            color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
-                        ),
-                      ),
+                        GestureDetector(
+                          onTap: _showAddProjectDialog,
+                          child: Container(
+                            height: PlatformUtils.isMobile ? 30.h : 30.0,
+                            width: PlatformUtils.isMobile ? 30.w : 30.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.r),
+                              border: Border.all(
+                                color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
+                                width: 2, // Border width
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color: theme.basicAdvanceTextColor,
+                              size: PlatformUtils.isMobile ? 24.h : 24.0,
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                    // IconButton(
-                    //   onPressed: _showAddProjectDialog,
-                
-                    //   icon: Icon(
-                    //     Icons.add,
-                    //     color: theme.basicAdvanceTextColor,
-                    //     size: 24.responsiveSp,
-                    //   ),
-                    //   style: ButtonStyle(
-                    //     backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                    //     shape: MaterialStateProperty.all(
-                    //       RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(12.r),
-          
-                    //         side: BorderSide(
-                    //           color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
-                    //           width: 2, // Border width
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
-                    GestureDetector(
-                      onTap: _showAddProjectDialog,
-                      child: Container(
-                        height: PlatformUtils.isMobile ? 30.h : 30.0,
-                        width: PlatformUtils.isMobile ? 30.w : 30.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.r),
-                          border: Border.all(
-                            color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
-                            width: 2, // Border width
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: theme.basicAdvanceTextColor,
-                          size: PlatformUtils.isMobile ? 24.h : 24.0,
-                        ),
-                      ),
-                    )
+                    SizedBox(height: 15.h),
+                    CustomDropdownButton2(
+                      fieldName: "PROJECT",
+                      value: selectedProject ?? (projects.length == 1 ? projects.first : null),
+                      items: projects,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedProject = value;
+                        });
+                      },
+                      width1: PlatformUtils.isMobile ? 360.w : 0,
+                      width2: PlatformUtils.isMobile ? 350.w : width - 30,
+                      desktopDropdownWidth: width - 30,
+                      fieldNameVisible: false,
+                    ),
+                    SizedBox(height: 470.h),
+                    CustomButton(
+                      text: "DASHBOARD",
+                      onPressed: _navigateToDashboard,
+                      arrowWidget: true,
+                      dynamicWidth: true,
+                    ),
                   ],
                 ),
-                SizedBox(height: 15.h),
-                CustomDropdownButton2(
-                  fieldName: "PROJECT",
-                  value: selectedProject ?? (projects.length == 1 ? projects.first : null),
-                  items: projects,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedProject = value;
-                    });
-                  },
-                  width1: PlatformUtils.isMobile ? 360.w : 0,
-                  width2: PlatformUtils.isMobile ? 350.w : width - 30,
-                  desktopDropdownWidth: width - 30,
-                  fieldNameVisible: false,
-                ),
-                SizedBox(height: 470.h),
-                CustomButton(
-                  text: "DASHBOARD",
-                  onPressed: _navigateToDashboard,
-                  arrowWidget: true,
-                  dynamicWidth: true,
-                ),
-                
-              ],
+              ),
             ),
           ),
         ),
-        Spacer(),
-        Container(
-          height: 3.h,
-          color: Color(0xFF14414e),
-        )
-      ],
+      ),
     );
   }
 }

@@ -62,6 +62,30 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 8.h),
               child: Row(
                 children: [
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50.r),
+                      onTap: () {
+                        Navigator.of(context).pushReplacementNamed('/projectSelection');
+                      },
+                      splashColor: Provider.of<ThemeNotifier>(context, listen: false)
+                          .currentTheme
+                          .splashColor,
+                      highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
+                          .currentTheme
+                          .splashColor,
+                      child: Padding(
+                        padding: EdgeInsets.all(4.w),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                          size: 24.responsiveSp,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
                   SvgPicture.asset('assets/icons/project.svg',
                     color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                     height: 30.h,
