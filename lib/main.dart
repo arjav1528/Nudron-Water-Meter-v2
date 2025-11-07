@@ -28,9 +28,7 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // debugPrint('PlatformUtils.isDesktop: ${PlatformUtils.isDesktop}');
-  // debugPrint('PlatformUtils.isMobile: ${PlatformUtils.isMobile}');
-  // debugPrint("Current os  : ${Platform.environment}");
+  
   if(Platform.isIOS){
     final iosInfo = await DeviceInfoPlugin().iosInfo;
     debugPrint('Running on ${iosInfo.utsname.machine}');
@@ -41,7 +39,6 @@ void main() async {
     final model = androidInfo.model.toLowerCase();
     final features = androidInfo.systemFeatures.join(',');
 
-    // Heuristic: tablets often have no telephony and larger screens
     final likelyTablet = !features.contains('android.hardware.telephony');
 
     if (likelyTablet || model.contains('tablet') || model.startsWith('sm-x')) {
@@ -51,7 +48,6 @@ void main() async {
   }
   }
 
-  
   if (PlatformUtils.isDesktop) {
     await DesktopInit.initialize();
   } else if (PlatformUtils.isMobile) {
@@ -100,7 +96,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Trigger initial authentication check
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
@@ -131,36 +127,92 @@ class _MyAppState extends State<MyApp> {
               final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
               
               if (state is AuthUnauthenticated) {
-                // User logged out - clear dashboard state and navigate to root
+                
                 dashboardBloc.currentFilters.clear();
+                dashboardBloc.projects.clear();
                 dashboardBloc.filterData = null;
                 dashboardBloc.summaryData = null;
                 dashboardBloc.devicesData = null;
+                dashboardBloc.nudronChartData = null;
                 
-                // Navigate to root route to trigger BlocBuilder rebuild
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   final navigator = mainNavigatorKey.currentState;
                   if (navigator != null) {
-                    try {
-                      // Clear all routes and navigate to root, which will show LoginPage via BlocBuilder
-                      navigator.pushNamedAndRemoveUntil('/', (route) => false);
-                    } catch (e) {
-                      debugPrint('Navigation error during logout: $e');
-                      // Fallback: try to pop to root
+                    
+                    final currentRoute = ModalRoute.of(navigator.context)?.settings.name;
+                    
+                    if (currentRoute != '/') {
                       try {
-                        navigator.popUntil((route) => route.isFirst);
-                      } catch (e2) {
-                        debugPrint('Fallback navigation error: $e2');
+                        navigator.pushAndRemoveUntil(
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              if (ConfigurationCustom.isTest) {
+                                return ConfigurationCustom.testScreen;
+                              }
+                              return BlocBuilder<AuthBloc, AuthState>(
+                                buildWhen: (previous, current) => true,
+                                builder: (context, authState) {
+                                  if (authState is AuthAuthenticated) {
+                                    return BlocBuilder<DashboardBloc, DashboardState>(
+                                      buildWhen: (previous, current) {
+                                        return current is DashboardPageLoaded ||
+                                               current is DashboardPageInitial ||
+                                               current is DashboardPageError;
+                                      },
+                                      builder: (context, dashboardState) {
+                                        final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+                                        
+                                        if (dashboardState is DashboardPageInitial) {
+                                          return const Scaffold(
+                                            body: Center(child: CustomLoader()),
+                                          );
+                                        }
+                                        
+                                        if (dashboardState is DashboardPageError) {
+                                          if (dashboardBloc.projects.isNotEmpty) {
+                                            return const ProjectSelectionPage();
+                                          }
+                                          return const Scaffold(
+                                            body: Center(child: CustomLoader()),
+                                          );
+                                        }
+                                        
+                                        if (dashboardBloc.currentFilters.isNotEmpty && dashboardBloc.projects.isNotEmpty) {
+                                          return const MainDashboardPage();
+                                        } else if (dashboardBloc.projects.isNotEmpty) {
+                                          return const ProjectSelectionPage();
+                                        } else {
+                                          return const Scaffold(
+                                            body: Center(child: CustomLoader()),
+                                          );
+                                        }
+                                      },
+                                    );
+                                  } else if (authState is AuthInitial || authState is AuthLoading) {
+                                    return const Scaffold(
+                                      body: Center(child: CustomLoader()),
+                                    );
+                                  } else {
+                                    return const LoginPage();
+                                  }
+                                },
+                              );
+                            },
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                          (route) => false,
+                        );
+                      } catch (e) {
+                        debugPrint('Navigation error during logout: $e');
                       }
                     }
+                    
                   }
                 });
               } else if (state is AuthAuthenticated) {
-                // When user logs in, reload dashboard data to get projects list
-                // Only load if projects are empty to avoid unnecessary reloads
-                if (dashboardBloc.projects.isEmpty) {
-                  dashboardBloc.loadInitialData();
-                }
+                
+                dashboardBloc.loadInitialData();
               }
             },
             child: MaterialApp(
@@ -181,24 +233,27 @@ class _MyAppState extends State<MyApp> {
                   return ConfigurationCustom.testScreen;
                 }
                 return BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (previous, current) {
+                    
+                    return true;
+                  },
                   builder: (context, authState) {
-                    debugPrint('Auth state: $authState');
+                    debugPrint('Auth state changed: $authState');
                     
                     if (authState is AuthAuthenticated) {
-                      // User is authenticated, check if project is selected
-                      // Use BlocBuilder to listen to dashboard bloc changes
+                      
                       return BlocBuilder<DashboardBloc, DashboardState>(
                         buildWhen: (previous, current) {
-                          // Only rebuild on significant state changes, not on every navigation change
+                          
                           return current is DashboardPageLoaded ||
                                  current is DashboardPageInitial ||
                                  current is DashboardPageError;
-                          // Exclude ChangeDashBoardNav and RefreshDashboard to prevent infinite rebuilds
                         },
                         builder: (context, dashboardState) {
                           final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
                           
-                          // Show loader while initializing
+                          debugPrint('Dashboard state: $dashboardState, projects: ${dashboardBloc.projects.length}, filters: ${dashboardBloc.currentFilters.length}');
+                          
                           if (dashboardState is DashboardPageInitial) {
                             return const Scaffold(
                               body: Center(
@@ -207,34 +262,51 @@ class _MyAppState extends State<MyApp> {
                             );
                           }
                           
-                          // Check if project is selected
+                          if (dashboardState is DashboardPageError) {
+                            
+                            if (dashboardBloc.projects.isNotEmpty) {
+                              return const ProjectSelectionPage();
+                            }
+                            
+                            return const Scaffold(
+                              body: Center(
+                                child: CustomLoader(),
+                              ),
+                            );
+                          }
+                          
                           if (dashboardBloc.currentFilters.isNotEmpty && dashboardBloc.projects.isNotEmpty) {
-                            // Project is selected, show dashboard
+                            
                             return const MainDashboardPage();
-                          } else {
-                            // No project selected, show project selection screen
+                          } else if (dashboardBloc.projects.isNotEmpty) {
+                            
                             return const ProjectSelectionPage();
+                          } else {
+                            
+                            return const Scaffold(
+                              body: Center(
+                                child: CustomLoader(),
+                              ),
+                            );
                           }
                         },
                       );
                     } else if (authState is AuthInitial) {
-                      // Initial state - show a minimal loading indicator
-                      // This should only appear for a split second
+                      
                       return const Scaffold(
                         body: Center(
                           child: CustomLoader(),
                         ),
                       );
                     } else if (authState is AuthLoading) {
-                      // Loading during login/logout operations
-                      // Show loading screen
+                      
                       return const Scaffold(
                         body: Center(
                           child: CustomLoader(),
                         ),
                       );
                     } else {
-                      // AuthUnauthenticated or any other state - show login
+                      
                       return const LoginPage();
                     }
                   },
