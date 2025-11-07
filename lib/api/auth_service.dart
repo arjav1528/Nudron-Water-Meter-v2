@@ -13,6 +13,7 @@ import 'package:sms_autofill/sms_autofill.dart';
 import '../bloc/dashboard_bloc.dart';
 import '../constants/app_config.dart';
 import '../services/app_state_service.dart';
+import '../services/platform_utils.dart';
 import '../utils/biometric_helper.dart';
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
@@ -538,11 +539,11 @@ class LoginPostRequests {
 
         final headers = {
           'User-Agent': userAgent,
-          'medium': 'phone',
+          'medium': PlatformUtils.isDesktop ? 'desktop' : 'phone',
           'Content-Type': 'text/plain',
           if (jwt != null) 'Authorization': 'Bearer $jwt',
           if (url == au1Url) 'tenantID': "d14b3819-5e90-4b1e-8821-9fcb72684627",
-          if (url == au1Url) 'clientID': "WaterMeteringMobile2",
+          if (url == au1Url) 'clientID': "WaterMeteringMobile",
         };
         var request = http.Request('POST', Uri.parse(url));
         request.body = body;

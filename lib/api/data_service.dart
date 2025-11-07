@@ -9,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
 import '../services/auth_service.dart';
+import '../services/platform_utils.dart';
 
 
 class DataPostRequests {
@@ -617,7 +618,7 @@ class DataPostRequests {
         String userAgent = await DeviceInfoUtil.getUserAgent();
         final headers = {
           'User-Agent': userAgent,
-          'medium': 'phone',
+          'medium': PlatformUtils.isDesktop ? 'desktop' : 'phone',
           'Content-Type': 'text/plain',
           'Authorization': 'Bearer $jwt',
         };

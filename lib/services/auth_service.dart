@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../constants/app_config.dart';
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
+import 'platform_utils.dart';
 
 /// Modern authentication service with proper error handling and separation of concerns
 class AuthService {
@@ -698,11 +699,11 @@ class AuthService {
 
         final headers = {
           'User-Agent': userAgent,
-          'medium': 'phone',
+          'medium': PlatformUtils.isDesktop ? 'desktop' : 'phone',
           'Content-Type': 'text/plain',
           if (jwt != null) 'Authorization': 'Bearer $jwt',
           if (url == _au1Url) 'tenantID': "d14b3819-5e90-4b1e-8821-9fcb72684627",
-          if (url == _au1Url) 'clientID': "WaterMeteringMobile2",
+          if (url == _au1Url) 'clientID': "WaterMeteringMobile",
         };
 
         debugPrint('Preparing HTTP request...');
