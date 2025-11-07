@@ -15,7 +15,6 @@ import '../../widgets/customTextField.dart';
 import '../profile/country_code_picker.dart';
 import 'two_factor_signup_screen.dart';
 
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -107,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     prefixIcon: Container(
-                      // width: 60.w,
+                      
                       padding: EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
@@ -115,8 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             bottomLeft: Radius.circular(10.r),
                           ),
                           color: Colors.transparent),
-                      // width: 42.w,
-                      // height: 51.h,
+                      
                       child: CountryCodePicker2(
                         dropDownColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
@@ -135,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         getPhoneNumberWithoutCountryCode: (String phoneNumber) {
                           _phoneController.text = phoneNumber;
                         },
-                        // isEditable: false,
+                        
                         initialSelection: null,
                       ),
                     ),
@@ -146,7 +144,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: activationCodeController,
                     key: UniqueKey(),
 
-                    // iconPath: 'assets/icons/mail.svg',
                     hintText: 'Enter Activation Code',
                     prefixIcon: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -156,30 +153,15 @@ class _RegisterPageState extends State<RegisterPage> {
                               .currentTheme
                               .textfieldHintColor,
                         )),
-                    // suffixIcon: GestureDetector(
-                    //     //clipboard paste
-                    //     onTap: () {
-                    //       FlutterClipboard.paste().then((value) {
-                    //         String code = value.toString().split("=").last;
-                    //         activationCodeController.text = code;
-                    //       });
-                    //     },
-                    //     child: Icon(
-                    //       Icons.content_paste_go_outlined,
-                    //       color: Provider.of<ThemeNotifier>(context)
-                    //           .currentTheme
-                    //           .textfieldHintColor,
-                    //     )),
+                    
                   )),
               SizedBox(height: 40.h),
               Center(
                 child: CustomButton(
                   text: "REGISTER",
-                  // fontSize: 14,
-                  // fontSize: 16,
+                  
                   dynamicWidth: true,
-                  // width: 147.64.w,
-                  // height: 58.h,
+                  
                   onPressed: () async {
                     if (checkAllTextFields()) {
                       LoaderUtility.showLoader(
@@ -206,17 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
               ),
-              // SizedBox(height: 20.h),
-              // Text(
-              //     "If you are a customer of Nudron's smart meters and want access, please contact us at hello@nudron.com",
-              //     textAlign: TextAlign.center,
-              //     style: GoogleFonts.roboto(
-              //         fontSize: 15.responsiveSp,
-              //
-              //         // fontWeight: FontWeight.w500,
-              //         color: Provider.of<ThemeNotifier>(context)
-              //             .currentTheme
-              //             .basicAdvanceTextColor)),
+              
               SizedBox(height: 40.h),
             ],
           ),

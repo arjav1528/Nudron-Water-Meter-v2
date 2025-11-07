@@ -1,9 +1,3 @@
-/*
- * Created by AHMED ELSAYED on 30 Nov 2021.
- * email: ahmedelsaayid@gmail.com
- * Edits made on original source code by Flutter.
- * Copyright 2014 The Flutter Authors. All rights reserved.
-*/
 
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
@@ -49,9 +43,7 @@ class _DropdownMenuPainter extends CustomPainter {
                 )
                 .createBoxPainter() ??
             BoxDecoration(
-              // If you add an image here, you must provide a real
-              // configuration in the paint() function and you must provide some sort
-              // of onChanged callback here.
+              
               color: color,
               borderRadius: const BorderRadius.all(Radius.circular(2.0)),
               boxShadow: kElevationToShadow[elevation],
@@ -70,8 +62,7 @@ class _DropdownMenuPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Tween<double> top = Tween<double>(
-      //Begin at 0.0 instead of selectedItemOffset so that the menu open animation
-      //always start from top to bottom instead of starting from the selected item
+      
       begin: 0.0,
       end: 0.0,
     );
@@ -99,7 +90,6 @@ class _DropdownMenuPainter extends CustomPainter {
   }
 }
 
-// The widget that is the button wrapping the menu items.
 class _DropdownMenuItemButton<T> extends StatefulWidget {
   const _DropdownMenuItemButton({
     Key? key,
@@ -170,8 +160,7 @@ class _DropdownMenuItemButtonState<T>
 
   static const Map<ShortcutActivator, Intent> _webShortcuts =
       <ShortcutActivator, Intent>{
-    // On the web, up/down don't change focus, *except* in a <select>
-    // element, which is what a dropdown emulates.
+    
     SingleActivator(LogicalKeyboardKey.arrowDown):
         DirectionalFocusIntent(TraversalDirection.down),
     SingleActivator(LogicalKeyboardKey.arrowUp):
@@ -196,8 +185,7 @@ class _DropdownMenuItemButtonState<T>
           : widget.customItemsHeights![widget.itemIndex],
       child: widget.route.items[widget.itemIndex],
     );
-    // An [InkWell] is added to the item only if it is enabled
-    // isNoSelectedItem to avoid first item highlight when no item selected
+    
     if (dropdownMenuItem.enabled) {
       final isSelectedItem = !widget.route.isNoSelectedItem &&
           widget.itemIndex == widget.route.selectedIndex;
@@ -283,10 +271,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
   @override
   void initState() {
     super.initState();
-    // We need to hold these animations as state because of their curve
-    // direction. When the route's animation reverses, if we were to recreate
-    // the CurvedAnimation objects in build, we'd lose
-    // CurvedAnimation._curveDirection.
+    
     _fadeOpacity = CurvedAnimation(
       parent: widget.route.animation!,
       curve: const Interval(0.0, 0.25),
@@ -297,8 +282,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
       curve: const Interval(0.25, 0.5),
       reverseCurve: const Threshold(0.0),
     );
-    //If searchController is null, then it'll perform as a normal dropdown
-    //and search functions will not be executed.
+    
     if (widget.searchController == null) {
       _children = <Widget>[
         for (int index = 0; index < widget.route.items.length; ++index)
@@ -317,7 +301,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
     } else {
       _searchMatchFn = widget.searchMatchFn ?? _defaultSearchMatchFn;
       _children = _getSearchItems();
-      // Add listener to searchController (if it's used) to update the shown items.
+      
       widget.searchController?.addListener(_updateSearchItems);
     }
   }
@@ -356,14 +340,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
 
   @override
   Widget build(BuildContext context) {
-    // The menu is shown in three stages (unit timing in brackets):
-    // [0s - 0.25s] - Fade in a rect-sized menu container with the selected item.
-    // [0.25s - 0.5s] - Grow the otherwise empty menu container from the center
-    //   until it's big enough for as many items as we're going to show.
-    // [0.5s - 1.0s] Fade in the remaining visible items from top to bottom.
-    //
-    // When the menu is dismissed we just fade the entire thing out
-    // in the first 0.25s.
+    
     assert(debugCheckHasMaterialLocalizations(context));
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
@@ -386,7 +363,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
           explicitChildNodes: true,
           label: localizations.popupMenuLabel,
           child: ClipRRect(
-            //Prevent scrollbar, ripple effect & items from going beyond border boundaries when scrolling.
+            
             clipBehavior: widget.dropdownDecoration?.borderRadius != null
                 ? Clip.antiAlias
                 : Clip.none,
@@ -405,9 +382,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
                     child: Padding(
                       padding: widget.dropdownScrollPadding ?? EdgeInsets.zero,
                       child: ScrollConfiguration(
-                        // Dropdown menus should never overscroll or display an overscroll indicator.
-                        // Scrollbars are built-in below.
-                        // Platform must use Theme and ScrollPhysics must be Clamping.
+                        
                         behavior: ScrollConfiguration.of(context).copyWith(
                           scrollbars: false,
                           overscroll: false,
@@ -421,7 +396,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
                             thickness: widget.scrollbarThickness,
                             thumbVisibility: widget.scrollbarAlwaysShow,
                             child: ListView(
-                              // Ensure this always inherits the PrimaryScrollController
+                              
                               primary: true,
                               padding: widget.dropdownPadding ??
                                   kMaterialListPadding,
@@ -466,16 +441,12 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    // The maximum height of a simple menu should be one or more rows less than
-    // the view height. This ensures a tappable area outside of the simple menu
-    // with which to dismiss the menu.
-    //   -- https://material.io/design/components/menus.html#usage
+    
     double maxHeight = math.max(0.0, availableHeight - 2 * itemHeight);
     if (route.menuMaxHeight != null && route.menuMaxHeight! <= maxHeight) {
       maxHeight = route.menuMaxHeight!;
     }
-    // The width of a menu should be at most the view width. This ensures that
-    // the menu does not extend past the left and right edges of the screen.
+    
     final double width =
         math.min(constraints.maxWidth, itemWidth ?? buttonRect.width);
     return BoxConstraints(
@@ -493,9 +464,7 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
     assert(() {
       final Rect container = Offset.zero & size;
       if (container.intersect(buttonRect) == buttonRect) {
-        // If the button was entirely on-screen, then verify
-        // that the menu is also on-screen.
-        // If the button was a bit off-screen, then, oh well.
+        
         assert(menuLimits.top >= 0.0);
         assert(menuLimits.top + menuLimits.height <= size.height);
       }
@@ -549,9 +518,6 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
   }
 }
 
-// We box the return value so that the return value can be null. Otherwise,
-// canceling the route (which returns null) would get confused with actually
-// returning a real null value.
 @immutable
 class _DropdownRouteResult<T> {
   const _DropdownRouteResult(this.result);
@@ -663,9 +629,7 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
       Animation<double> secondaryAnimation) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        //Exclude BottomInset from maxHeight to avoid overlapping menu items
-        //with keyboard when using searchable dropdown.
-        //This will ensure menu is drawn in the actual available height.
+        
         final actualConstraints = constraints.copyWith(
             maxHeight: constraints.maxHeight -
                 MediaQuery.of(context).viewInsets.bottom);
@@ -723,10 +687,6 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
     return offset;
   }
 
-  // Returns the vertical extent of the menu and the initial scrollOffset
-  // for the ListView that contains the menu items. The vertical center of the
-  // selected item is aligned with the button's vertical center, as far as
-  // that's possible given availableHeight.
   _MenuLimits getMenuLimits(
       Rect buttonRect, double availableHeight, int index) {
     double computedMaxHeight = availableHeight - 2.0 * itemHeight;
@@ -742,10 +702,6 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
 
     final double innerWidgetHeight = searchInnerWidgetHeight ?? 0.0;
 
-    // If the button is placed on the bottom or top of the screen, its top or
-    // bottom may be less than itemHeight from the edge of the screen.
-    // In this case, we want to change the menu limits to align with the top
-    // or bottom edge of the button.
     final double topLimit = math.min(itemHeight, buttonTop);
     final double bottomLimit = math.max(availableHeight, buttonBottom);
     double menuTop =
@@ -758,16 +714,9 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
           itemHeights.reduce((double total, double height) => total + height);
     }
 
-    // If there are too many elements in the menu, we need to shrink it down
-    // so it is at most the computedMaxHeight.
     final double menuHeight = math.min(computedMaxHeight, preferredMenuHeight);
     double menuBottom = menuTop + menuHeight;
 
-    // If the computed top or bottom of the menu are outside of the range
-    // specified, we need to bring them into range. If the item height is larger
-    // than the button height and the button is at the very bottom or top of the
-    // screen, the menu will be aligned with the bottom or top of the button
-    // respectively.
     if (menuTop < topLimit) {
       menuTop = math.min(buttonTop, topLimit);
       menuBottom = menuTop + menuHeight;
@@ -779,25 +728,18 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
     }
 
     double scrollOffset = 0;
-    // If all of the menu items will not fit within availableHeight then
-    // compute the scroll offset that will line the selected menu item up
-    // with the select item. This is only done when the menu is first
-    // shown - subsequently we leave the scroll offset where the user left
-    // it. This scroll offset is only accurate for fixed height menu items
-    // (the default).
+    
     if (preferredMenuHeight > computedMaxHeight) {
-      //menuHeight & preferredMenuHeight without innerWidget's Height
+      
       final menuNetHeight = menuHeight - innerWidgetHeight;
       final preferredMenuNetHeight = preferredMenuHeight - innerWidgetHeight;
-      // The offset should be zero if the selected item is in view at the beginning
-      // of the menu. Otherwise, the scroll offset should center the item if possible.
+      
       scrollOffset = math.max(
           0.0,
           selectedItemOffset -
               (menuNetHeight / 2) +
               (itemHeights[selectedIndex] / 2));
-      // If the selected item's scroll offset is greater than the maximum scroll offset,
-      // set it instead to the maximum allowed scroll offset.
+      
       final maxScrollOffset = preferredMenuNetHeight - menuNetHeight;
       scrollOffset = math.min(scrollOffset, maxScrollOffset);
     }
@@ -869,12 +811,6 @@ class _DropdownRoutePage<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
 
-    // Computing the initialScrollOffset now, before the items have been laid
-    // out. This only works if the item heights are effectively fixed, i.e. either
-    // DropdownButton.itemHeight is specified or DropdownButton.itemHeight is null
-    // and all of the items' intrinsic heights are less than kMinInteractiveDimension.
-    // Otherwise the initialScrollOffset is just a rough approximation based on
-    // treating the items as if their heights were all equal to kMinInteractiveDimension.
     if (route.scrollController == null) {
       final _MenuLimits menuLimits =
           route.getMenuLimits(buttonRect, constraints.maxHeight, selectedIndex);
@@ -932,11 +868,6 @@ class _DropdownRoutePage<T> extends StatelessWidget {
   }
 }
 
-// This widget enables _DropdownRoute to look up the sizes of
-// each menu item. These sizes are used to compute the offset of the selected
-// item so that _DropdownRoutePage can align the vertical center of the
-// selected item lines up with the vertical center of the dropdown button,
-// as closely as possible.
 class _MenuItem<T> extends SingleChildRenderObjectWidget {
   const _MenuItem({
     Key? key,
@@ -971,34 +902,16 @@ class _RenderMenuItem extends RenderProxyBox {
   }
 }
 
-// The container widget for a menu item created by a [DropdownButton]. It
-// provides the default configuration for [DropdownMenuItem]s, as well as a
-// [DropdownButton]'s hint and disabledHint widgets.
 class _DropdownMenuItemContainer extends StatelessWidget {
-  /// Creates an item for a dropdown menu.
-  ///
-  /// The [child] argument is required.
+  
   const _DropdownMenuItemContainer({
     Key? key,
     this.alignment = AlignmentDirectional.centerStart,
     required this.child,
   }) : super(key: key);
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Typically a [Text] widget.
   final Widget child;
 
-  /// Defines how the item is positioned within the container.
-  ///
-  /// This property must not be null. It defaults to [AlignmentDirectional.centerStart].
-  ///
-  /// See also:
-  ///
-  ///  * [Alignment], a class with convenient constants typically used to
-  ///    specify an [AlignmentGeometry].
-  ///  * [AlignmentDirectional], like [Alignment] for specifying alignments
-  ///    relative to text direction.
   final AlignmentGeometry alignment;
 
   @override
@@ -1011,66 +924,8 @@ class _DropdownMenuItemContainer extends StatelessWidget {
   }
 }
 
-/// A Material Design button for selecting from a list of items.
-///
-/// A dropdown button lets the user select from a number of items. The button
-/// shows the currently selected item as well as an arrow that opens a menu for
-/// selecting another item.
-///
-/// One ancestor must be a [Material] widget and typically this is
-/// provided by the app's [Scaffold].
-///
-/// The type `T` is the type of the [value] that each dropdown item represents.
-/// All the entries in a given menu must represent values with consistent types.
-/// Typically, an enum is used. Each [DropdownMenuItem] in [items] must be
-/// specialized with that same type argument.
-///
-/// The [onChanged] callback should update a state variable that defines the
-/// dropdown's value. It should also call [State.setState] to rebuild the
-/// dropdown with the new value.
-///
-/// {@tool dartpad}
-/// This sample shows a `DropdownButton` with a large arrow icon,
-/// purple text style, and bold purple underline, whose value is one of "One",
-/// "Two", "Free", or "Four".
-///
-/// ![](https://flutter.github.io/assets-for-api-docs/assets/material/dropdown_button.png)
-///
-/// ** See code in examples/api/lib/material/dropdown/dropdown_button.0.dart **
-/// {@end-tool}
-///
-/// If the [onChanged] callback is null or the list of [items] is null
-/// then the dropdown button will be disabled, i.e. its arrow will be
-/// displayed in grey and it will not respond to input. A disabled button
-/// will display the [disabledHint] widget if it is non-null. However, if
-/// [disabledHint] is null and [hint] is non-null, the [hint] widget will
-/// instead be displayed.
-///
-/// Requires one of its ancestors to be a [Material] widget.
-///
-/// See also:
-///
-///  * [DropdownButtonFormField2], which integrates with the [Form] widget.
-///  * [DropdownMenuItem], the class used to represent the [items].
-///  * [DropdownButtonHideUnderline], which prevents its descendant dropdown buttons
-///    from displaying their underlines.
-///  * [ElevatedButton], [TextButton], ordinary buttons that trigger a single action.
-///  * <https://material.io/design/components/menus.html#dropdown-menu>
 class DropdownButton2<T> extends StatefulWidget {
-  /// Creates a DropdownButton2
-  /// It's customizable DropdownButton with steady dropdown menu and many other features.
-  ///
-  /// The [items] must have distinct values. If [value] isn't null then it
-  /// must be equal to one of the [DropdownMenuItem] values. If [items] or
-  /// [onChanged] is null, the button will be disabled, the down arrow
-  /// will be greyed out.
-  ///
-  /// If [value] is null and the button is enabled, [hint] will be displayed
-  /// if it is non-null.
-  ///
-  /// If [value] is null and the button is disabled, [disabledHint] will be displayed
-  /// if it is non-null. If [disabledHint] is null, then [hint] will be displayed
-  /// if it is non-null.
+  
   DropdownButton2({
     Key? key,
     required this.items,
@@ -1130,8 +985,7 @@ class DropdownButton2<T> extends StatefulWidget {
     this.searchInnerWidget,
     this.searchInnerWidgetHeight,
     this.searchMatchFn,
-    // When adding new arguments, consider adding similar arguments to
-    // DropdownButtonFormField.
+    
   })  : assert(
           items == null ||
               items.isEmpty ||
@@ -1247,307 +1101,120 @@ class DropdownButton2<T> extends StatefulWidget {
         ),
         super(key: key);
 
-  // Parameters added By Me
-
-  /// The height of the button.
   final double? buttonHeight;
 
-  /// The width of the button
   final double? buttonWidth;
 
-  /// The inner padding of the Button
   final EdgeInsetsGeometry? buttonPadding;
 
-  /// The decoration of the Button
   final BoxDecoration? buttonDecoration;
 
-  /// The elevation of the Button
   final int? buttonElevation;
 
-  /// The splash color of the button's InkWell
   final Color? buttonSplashColor;
 
-  /// The highlight color of the button's InkWell
   final Color? buttonHighlightColor;
 
-  /// The overlay color of the button's Inkwell
   final MaterialStateProperty<Color?>? buttonOverlayColor;
 
-  /// The padding of menu items
   final EdgeInsetsGeometry? itemPadding;
 
-  /// The splash color of the item's InkWell
   final Color? itemSplashColor;
 
-  /// The highlight color of the item's InkWell
   final Color? itemHighlightColor;
 
-  /// The width of the dropdown menu
   final double? dropdownWidth;
 
-  /// The inner padding of the dropdown menu
   final EdgeInsetsGeometry? dropdownPadding;
 
-  /// The inner padding of the dropdown menu including the scrollbar
   final EdgeInsetsGeometry? dropdownScrollPadding;
 
-  /// The decoration of the dropdown menu
   final BoxDecoration? dropdownDecoration;
 
-  /// The direction of the dropdown menu in relation to the button.
-  ///
-  /// Default is [DropdownDirection.textDirection]
   final DropdownDirection dropdownDirection;
 
-  /// The highlight color of the current selected item
   final Color? selectedItemHighlightColor;
 
-  /// The radius of the scrollbar's corners
   final Radius? scrollbarRadius;
 
-  /// The thickness of the scrollbar
   final double? scrollbarThickness;
 
-  /// Always show the scrollbar even when a scroll is not underway
   final bool? scrollbarAlwaysShow;
 
-  /// Changes the position of the dropdown menu
   final Offset? offset;
 
-  /// Uses custom widget like icon,image,etc.. instead of the default button
   final Widget? customButton;
 
-  /// Uses different predefined heights for the menu items (useful for adding dividers)
   final List<double>? customItemsHeights;
 
-  /// Opens the dropdown menu on long-pressing instead of tapping
   final bool openWithLongPress;
 
-  /// Opens the dropdown menu over the button instead of below it
   final bool dropdownOverButton;
 
-  /// Opens the dropdown menu in fullscreen mode (Above AppBar & TabBar)
   final bool dropdownFullScreen;
 
-  /// Shows different icon when dropdown menu open
   final Widget? iconOnClick;
 
-  /// Called when the dropdown menu is opened or closed.
   final _OnMenuStateChangeFn? onMenuStateChange;
 
-  /// Whether you can dismiss this route by tapping the modal barrier.
   final bool barrierDismissible;
 
-  /// The color to use for the modal barrier. If this is null, the barrier will
-  /// be transparent.
   final Color? barrierColor;
 
-  /// The semantic label used for a dismissible barrier.
-  ///
-  /// If the barrier is dismissible, this label will be read out if
-  /// accessibility tools (like VoiceOver on iOS) focus on the barrier.
   final String? barrierLabel;
 
-  /// The TextEditingController used for searchable dropdowns. If this is null,
-  /// then it'll perform as a normal dropdown without searching feature.
   final TextEditingController? searchController;
 
-  /// The widget to use for searchable dropdowns, such as search bar.
-  /// It will be shown at the top of the dropdown menu.
   final Widget? searchInnerWidget;
 
-  /// The height of the searchInnerWidget if used.
   final double? searchInnerWidgetHeight;
 
-  /// The match function used for searchable dropdowns. If this is null,
-  /// then _defaultSearchMatchFn will be used.
-  ///
-  /// _defaultSearchMatchFn = (item, searchValue) =>
-  ///     item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
   final _SearchMatchFn<T>? searchMatchFn;
 
-  /// The list of items the user can select.
-  ///
-  /// If the [onChanged] callback is null or the list of items is null
-  /// then the dropdown button will be disabled, i.e. its arrow will be
-  /// displayed in grey and it will not respond to input.
   final List<DropdownMenuItem<T>>? items;
 
-  /// The value of the currently selected [DropdownMenuItem].
-  ///
-  /// If [value] is null and the button is enabled, [hint] will be displayed
-  /// if it is non-null.
-  ///
-  /// If [value] is null and the button is disabled, [disabledHint] will be displayed
-  /// if it is non-null. If [disabledHint] is null, then [hint] will be displayed
-  /// if it is non-null.
   final T? value;
 
-  /// A placeholder widget that is displayed by the dropdown button.
-  ///
-  /// If [value] is null and the dropdown is enabled ([items] and [onChanged] are non-null),
-  /// this widget is displayed as a placeholder for the dropdown button's value.
-  ///
-  /// If [value] is null and the dropdown is disabled and [disabledHint] is null,
-  /// this widget is used as the placeholder.
   final Widget? hint;
 
-  /// A preferred placeholder widget that is displayed when the dropdown is disabled.
-  ///
-  /// If [value] is null, the dropdown is disabled ([items] or [onChanged] is null),
-  /// this widget is displayed as a placeholder for the dropdown button's value.
   final Widget? disabledHint;
 
-  /// {@template flutter.material.dropdownButton.onChanged}
-  /// Called when the user selects an item.
-  ///
-  /// If the [onChanged] callback is null or the list of [DropdownButton2.items]
-  /// is null then the dropdown button will be disabled, i.e. its arrow will be
-  /// displayed in grey and it will not respond to input. A disabled button
-  /// will display the [DropdownButton2.disabledHint] widget if it is non-null.
-  /// If [DropdownButton2.disabledHint] is also null but [DropdownButton2.hint] is
-  /// non-null, [DropdownButton2.hint] will instead be displayed.
-  /// {@endtemplate}
   final ValueChanged<T?>? onChanged;
 
-  /// A builder to customize the dropdown buttons corresponding to the
-  /// [DropdownMenuItem]s in [items].
-  ///
-  /// When a [DropdownMenuItem] is selected, the widget that will be displayed
-  /// from the list corresponds to the [DropdownMenuItem] of the same index
-  /// in [items].
-  ///
-  /// {@tool dartpad}
-  /// This sample shows a `DropdownButton` with a button with [Text] that
-  /// corresponds to but is unique from [DropdownMenuItem].
-  ///
-  /// ** See code in examples/api/lib/material/dropdown/dropdown_button.selected_item_builder.0.dart **
-  /// {@end-tool}
-  ///
-  /// If this callback is null, the [DropdownMenuItem] from [items]
-  /// that matches [value] will be displayed.
   final DropdownButtonBuilder? selectedItemBuilder;
 
-  /// The z-coordinate at which to place the menu when open.
-  ///
-  /// The following elevations have defined shadows: 1, 2, 3, 4, 6, 8, 9, 12,
-  /// 16, and 24. See [kElevationToShadow].
-  ///
-  /// Defaults to 8, the appropriate elevation for dropdown buttons.
   final int dropdownElevation;
 
-  /// The text style to use for text in the dropdown button and the dropdown
-  /// menu that appears when you tap the button.
-  ///
-  /// To use a separate text style for selected item when it's displayed within
-  /// the dropdown button, consider using [selectedItemBuilder].
-  ///
-  /// {@tool dartpad}
-  /// This sample shows a `DropdownButton` with a dropdown button text style
-  /// that is different than its menu items.
-  ///
-  /// ** See code in examples/api/lib/material/dropdown/dropdown_button.style.0.dart **
-  /// {@end-tool}
-  ///
-  /// Defaults to the [TextTheme.titleMedium] value of the current
-  /// [ThemeData.textTheme] of the current [Theme].
   final TextStyle? style;
 
-  /// The widget to use for drawing the drop-down button's underline.
-  ///
-  /// Defaults to a 0.0 width bottom border with color 0xFFBDBDBD.
   final Widget? underline;
 
-  /// The widget to use for the drop-down button's icon.
-  ///
-  /// Defaults to an [Icon] with the [Icons.arrow_drop_down] glyph.
   final Widget? icon;
 
-  /// The color of any [Icon] descendant of [icon] if this button is disabled,
-  /// i.e. if [onChanged] is null.
-  ///
-  /// Defaults to [MaterialColor.shade400] of [Colors.grey] when the theme's
-  /// [ThemeData.brightness] is [Brightness.light] and to
-  /// [Colors.white10] when it is [Brightness.dark]
   final Color? iconDisabledColor;
 
-  /// The color of any [Icon] descendant of [icon] if this button is enabled,
-  /// i.e. if [onChanged] is defined.
-  ///
-  /// Defaults to [MaterialColor.shade700] of [Colors.grey] when the theme's
-  /// [ThemeData.brightness] is [Brightness.light] and to
-  /// [Colors.white70] when it is [Brightness.dark]
   final Color? iconEnabledColor;
 
-  /// The size to use for the drop-down button's icon.
-  ///
-  /// Defaults to 24.0.
   final double iconSize;
 
-  /// Reduce the button's height.
-  ///
-  /// By default this button's height is the same as its menu items' heights.
-  /// If isDense is true, the button's height is reduced by about half. This
-  /// can be useful when the button is embedded in a container that adds
-  /// its own decorations, like [InputDecorator].
   final bool isDense;
 
-  /// Set the dropdown's inner contents to horizontally fill its parent.
-  ///
-  /// By default this button's inner width is the minimum size of its contents.
-  /// If [isExpanded] is true, the inner width is expanded to fill its
-  /// surrounding container.
   final bool isExpanded;
 
-  /// The default value is [kMinInteractiveDimension]
   final double itemHeight;
 
-  /// The color for the button's [Material] when it has the input focus.
   final Color? focusColor;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// The maximum height of the menu.
-  ///
-  /// The maximum height of the menu must be at least one row shorter than
-  /// the height of the app's view. This ensures that a tappable area
-  /// outside of the simple menu is present so the user can dismiss the menu.
-  ///
-  /// If this property is set above the maximum allowable height threshold
-  /// mentioned above, then the menu defaults to being padded at the top
-  /// and bottom of the menu by at one menu item's height.
   final double? dropdownMaxHeight;
 
-  /// Whether detected gestures should provide acoustic and/or haptic feedback.
-  ///
-  /// For example, on Android a tap will produce a clicking sound and a
-  /// long-press will produce a short vibration, when feedback is enabled.
-  ///
-  /// By default, platform-specific feedback is enabled.
-  ///
-  /// See also:
-  ///
-  ///  * [Feedback] for providing platform-specific feedback to certain actions.
   final bool? enableFeedback;
 
-  /// Defines how the hint or the selected item is positioned within the button.
-  ///
-  /// This property must not be null. It defaults to [AlignmentDirectional.centerStart].
-  ///
-  /// See also:
-  ///
-  ///  * [Alignment], a class with convenient constants typically used to
-  ///    specify an [AlignmentGeometry].
-  ///  * [AlignmentDirectional], like [Alignment] for specifying alignments
-  ///    relative to text direction.
   final AlignmentGeometry alignment;
 
-  /// Called when the dropdown menu is opened or closed in case of using
-  /// DropdownButtonFormField2 to update the FormField's focus.
   final _OnMenuStateChangeFn? formFieldCallBack;
 
   @override
@@ -1566,11 +1233,8 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
   late Map<Type, Action<Intent>> _actionMap;
   bool _isMenuOpen = false;
 
-  // Using ValueNotifier for the Rect of DropdownButton so the dropdown menu listen and
-  // update its position if DropdownButton's position has changed, as when keyboard open.
   final _rect = ValueNotifier<Rect?>(null);
 
-  // Only used if needed to create _internalNode.
   FocusNode _createFocusNode() {
     return FocusNode(debugLabel: '${widget.runtimeType}');
   }
@@ -1657,10 +1321,10 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
 
   @override
   void didChangeMetrics() {
-    //This fix the bug of calling didChangeMetrics() on iOS when app starts
+    
     if (_rect.value == null) return;
     final newRect = _getRect();
-    //This avoid unnecessary rebuilds if _rect position hasn't changed
+    
     if (_rect.value!.top == newRect.top) return;
     _rect.value = newRect;
   }
@@ -1698,14 +1362,7 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
         _MenuItem<T>(
           item: widget.items![index],
           onLayout: (Size size) {
-            // If [_dropdownRoute] is null and onLayout is called, this means
-            // that performLayout was called on a _DropdownRoute that has not
-            // left the widget tree but is already on its way out.
-            //
-            // Since onLayout is used primarily to collect the desired heights
-            // of each menu item before laying them out, not having the _DropdownRoute
-            // collect each item's height to lay out is fine since the route is
-            // already on its way out.
+            
             if (_dropdownRoute == null) return;
 
             _dropdownRoute!.itemHeights[index] = size.height;
@@ -1771,14 +1428,8 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
     widget.formFieldCallBack?.call(true);
   }
 
-  // This expose the _handleTap() to Allow opening the button programmatically using GlobalKey.
-  // Also, DropdownButton2State should be public as we need typed access to it through key.
   void callTap() => _handleTap();
 
-  // When isDense is true, reduce the height of this button from _kMenuItemHeight to
-  // _kDenseButtonHeight, but don't make it smaller than the text that it contains.
-  // Similarly, we don't reduce the height of the button so much that its icon
-  // would be clipped.
   double get _denseButtonHeight {
     final double textScaleFactor = MediaQuery.of(context).textScaleFactor;
     final double fontSize = _textStyle!.fontSize ??
@@ -1789,7 +1440,7 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
   }
 
   Color get _iconColor {
-    // These colors are not defined in the Material Design spec.
+    
     if (_enabled) {
       if (widget.iconEnabledColor != null) return widget.iconEnabledColor!;
 
@@ -1819,8 +1470,7 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
   Orientation _getOrientation(BuildContext context) {
     Orientation? result = MediaQuery.maybeOf(context)?.orientation;
     if (result == null) {
-      // If there's no MediaQuery, then use the window aspect to determine
-      // orientation.
+      
       final Size size = WidgetsBinding.instance.window.physicalSize;
       result = size.width > size.height
           ? Orientation.landscape
@@ -1840,11 +1490,6 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
       _lastOrientation = newOrientation;
     }
 
-    // The width of the button and the menu are defined by the widest
-    // item and the width of the hint.
-    // We should explicitly type the items list to be a list of <Widget>,
-    // otherwise, no explicit type adding items maybe trigger a crash/failure
-    // when hint and selectedItemBuilder are provided.
     final List<Widget> items = widget.selectedItemBuilder == null
         ? (widget.items != null ? List<Widget>.of(widget.items!) : <Widget>[])
         : List<Widget>.of(widget.selectedItemBuilder!(context));
@@ -1871,16 +1516,12 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
         ? _kAlignedButtonPadding
         : _kUnalignedButtonPadding;
 
-    // If value is null (then _selectedIndex is null) then we
-    // display the hint or nothing at all.
     final Widget innerItemsWidget;
     if (items.isEmpty) {
       innerItemsWidget = const SizedBox.shrink();
     } else {
       innerItemsWidget = Padding(
-        //When buttonWidth & dropdownWidth is null, their width will be calculated
-        //from the maximum width of menu items or the hint text (width of IndexedStack).
-        //We need to add MenuHorizontalPadding so menu width adapts to max items width with padding properly
+        
         padding: EdgeInsets.symmetric(
           horizontal: widget.buttonWidth == null && widget.dropdownWidth == null
               ? _getMenuHorizontalPadding()
@@ -2000,30 +1641,8 @@ class DropdownButton2State<T> extends State<DropdownButton2<T>>
   }
 }
 
-/// A [FormField] that contains a [DropdownButton2].
-///
-/// This is a convenience widget that wraps a [DropdownButton2] widget in a
-/// [FormField].
-///
-/// A [Form] ancestor is not required. The [Form] simply makes it easier to
-/// save, reset, or validate multiple fields at once. To use without a [Form],
-/// pass a [GlobalKey] to the constructor and use [GlobalKey.currentState] to
-/// save or reset the form field.
-///
-/// See also:
-///
-///  * [DropdownButton2], which is the underlying text field without the [Form]
-///    integration.
 class DropdownButtonFormField2<T> extends FormField<T> {
-  /// Creates a [DropdownButton2] widget that is a [FormField], wrapped in an
-  /// [InputDecorator].
-  ///
-  /// For a description of the `onSaved`, `validator`, or `autovalidateMode`
-  /// parameters, see [FormField]. For the rest (other than [decoration]), see
-  /// [DropdownButton2].
-  ///
-  /// The `items`, `elevation`, `iconSize`, `isDense`, `isExpanded`,
-  /// `autofocus`, and `decoration`  parameters must not be null.
+  
   DropdownButtonFormField2({
     Key? key,
     this.dropdownButtonKey,
@@ -2137,8 +1756,6 @@ class DropdownButtonFormField2<T> extends FormField<T> {
 
             bool hasFocus = false;
 
-            // An unFocusable Focus widget so that this widget can detect if its
-            // descendants have focus or not.
             return Focus(
               canRequestFocus: false,
               skipTraversal: true,
@@ -2222,22 +1839,10 @@ class DropdownButtonFormField2<T> extends FormField<T> {
           },
         );
 
-  /// The key of DropdownButton2 child widget
-  ///
-  /// This allows accessing DropdownButton2State.
-  /// It is useful for some cases, i.e: calling callTap() method to open the menu programmatically
   final Key? dropdownButtonKey;
 
-  /// {@macro flutter.material.dropdownButton.onChanged}
   final ValueChanged<T?>? onChanged;
 
-  /// The decoration to show around the dropdown button form field.
-  ///
-  /// By default, draws a horizontal line under the dropdown button field but
-  /// can be configured to show an icon, label, hint text, and error text.
-  ///
-  /// If not specified, an [InputDecorator] with the `focusColor` set to the
-  /// supplied `focusColor` (if any) will be used.
   final InputDecoration decoration;
 
   @override

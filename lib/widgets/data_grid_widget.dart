@@ -46,20 +46,17 @@ class _DataGridWidgetState extends State<DataGridWidget> {
 
   List<double> columnWidths = [];
   
-  // Cache for text width calculations to avoid repeated calculations
   final Map<String, double> _textWidthCache = {};
   
-  // Cache for processed data to avoid repeated processing
   List<List<dynamic>>? _cachedProcessedData;
 
   final double rowHeight = 41.h;
 
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
-    // Create cache key
+    
     final cacheKey = '${text}_${isHeader}_${hasDownloadButton}';
     
-    // Return cached value if available
     if (_textWidthCache.containsKey(cacheKey)) {
       return _textWidthCache[cacheKey]!;
     }
@@ -67,7 +64,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     double width;
     
     if (isHeader && text[0] == '!') {
-      // Calculate dynamic width for special headers instead of hardcoded 60.w
+      
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
           text: Utils.cleanFieldName(text),
@@ -91,8 +88,8 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               ? GoogleFonts.robotoMono(
                   fontSize: ThemeNotifier.medium.responsiveSp,
                   fontWeight: FontWeight.bold,
-                  height: 1.2, // Reduced line height
-                  letterSpacing: 0.5, // Matching spacing with the Text widget
+                  height: 1.2, 
+                  letterSpacing: 0.5, 
                 )
               : GoogleFonts.robotoMono(
                   fontSize: ThemeNotifier.medium.responsiveSp,
@@ -105,16 +102,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         textDirection: TextDirection.ltr,
       )..layout(minWidth: 0);
 
-      // Increased padding to ensure text fits properly with adequate spacing
       width = textPainter.width +
-          16 + // Increased horizontal padding from 8 to 16
-          6.responsiveSp + // Increased responsive padding from 3 to 6
+          16 + 
+          6.responsiveSp + 
           (hasDownloadButton
               ? rowHeight
-              : 0.0); // Add small padding to account for edges
+              : 0.0); 
     }
     
-    // Cache the result
     _textWidthCache[cacheKey] = width;
     return width;
   }
@@ -122,21 +117,19 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   num dummyRows = 0;
 
   void init(double height) {
-    // Only recalculate if data has changed
+    
     if (_cachedProcessedData == null || 
         _cachedProcessedData!.length != widget.data![1].length) {
       calculateColumnWidths();
       _cachedProcessedData = List.from(widget.data![1]);
     }
     
-    // Optimize dummy row generation for large datasets
     final dataLength = widget.data![1].length;
     final visibleRows = (height / rowHeight).ceil();
     
     if (height > rowHeight * dataLength) {
       dummyRows = visibleRows - dataLength - 1;
       
-      // Only add dummy rows if we have a reasonable number and haven't added them yet
       if (dummyRows > 0 && dummyRows < 1000 && 
           widget.data![1].length == dataLength) {
         final columnCount = widget.data![1][0].length;
@@ -154,10 +147,8 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       var headers = widget.data![0];
       var rows = widget.data![1];
 
-      // Pre-allocate column widths list for better performance
       columnWidths = List<double>.filled(headers.length, 0.0);
       
-      // Process columns with optimized width calculation
       for (int index = 0; index < headers.length; index++) {
         double headerWidth = calculateTextWidth(headers[index].toString(),
             isHeader: true, hasDownloadButton: index == 0);
@@ -168,15 +159,12 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           continue;
         }
 
-        // Optimize data width calculation with sampling for large datasets
         double maxDataWidth = 0.0;
         
-        // For devices table, always check all rows for column 0 (Label) to avoid truncation
         bool shouldCheckAllRows = (widget.devicesTable == true && index == 0);
         
-        // For very large datasets, use sampling to improve performance
         if (rows.length > 1000 && !shouldCheckAllRows) {
-          // Sample every nth row to get representative width
+          
           final sampleSize = min<int>(100, rows.length);
           final step = (rows.length ~/ sampleSize) as int;
           
@@ -185,19 +173,19 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               double cellWidth = calculateTextWidth(rows[i][index].toString());
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
-                // Early termination if we've found a very wide cell
+                
                 if (maxDataWidth > headerWidth * 2) break;
               }
             }
           }
         } else {
-          // For smaller datasets or Label column in devices table, check all rows
+          
           for (var row in rows) {
             if (row[index] != null) {
               double cellWidth = calculateTextWidth(row[index].toString());
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
-                // Skip early termination for Label column in devices table
+                
                 if (!shouldCheckAllRows && maxDataWidth > headerWidth * 2) break;
               }
             }
@@ -211,13 +199,12 @@ class _DataGridWidgetState extends State<DataGridWidget> {
 
   @override
   void dispose() {
-    // Clean up scroll controllers
+    
     _verticalScrollController1.dispose();
     _verticalScrollController2.dispose();
     _horizontalScrollController1.dispose();
     _horizontalScrollController2.dispose();
     
-    // Clear caches to free memory
     _textWidthCache.clear();
     _cachedProcessedData = null;
     
@@ -339,7 +326,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     );
   }
 
-  // Cache for text styles to avoid repeated style creation
   TextStyle? _cachedTextStyle;
   
   TextStyle _getTextStyle(BuildContext context) {
@@ -406,7 +392,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           behavior: NoBounceScrollBehavior(),
           child: GestureDetector(
             onPanUpdate: (details) {
-              // Vertical scroll
+              
               final newOffsetV1 =
                   _verticalScrollController1.offset - details.delta.dy;
               if (_verticalScrollController1.hasClients) {
@@ -429,7 +415,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                 );
               }
 
-              // Horizontal scroll
               final newOffsetH1 =
                   _horizontalScrollController1.offset - details.delta.dx;
               if (_horizontalScrollController1.hasClients) {
@@ -458,7 +443,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header Row including the top-left cell
+                    
                     Row(
                       children: [
                         if (widget.frozenColumns > 0)
@@ -498,8 +483,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 2.h, horizontal: 7.w),
-                                      // height: rowHeight,
-                                      // width: rowHeight,
+                                      
                                       child: Icon(
                                         Icons.download,
                                         size: 30.responsiveSp,
@@ -568,12 +552,12 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                         )
                       ],
                     ),
-                    // Main Grid Content with Scrollable Rows
+                    
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // First Column (Scrollable Vertically)
+                          
                           SingleChildScrollView(
                             controller: _verticalScrollController1,
                             scrollDirection: Axis.vertical,
@@ -590,7 +574,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                               }),
                             ),
                           ),
-                          // Main Grid Content (excluding first column)
+                          
                           Expanded(
                             child: SingleChildScrollView(
                               controller: _verticalScrollController2,

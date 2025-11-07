@@ -5,7 +5,6 @@ class DeviceInfoUtil {
   static String _deviceName = 'WaterMeteringMobile2';
   static String _deviceVersion = 'Unknown';
 
-  // A private method to get device info, only called on first-time access
   static Future<void> _initDeviceInfo() async {
     try {
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -22,7 +21,7 @@ class DeviceInfoUtil {
       } else if (Platform.isWindows) {
         WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
         _deviceName = windowsInfo.computerName;
-        _deviceVersion = windowsInfo.editionId; // Customize as needed
+        _deviceVersion = windowsInfo.editionId; 
       } else if (Platform.isMacOS) {
         MacOsDeviceInfo macInfo = await deviceInfo.macOsInfo;
         _deviceName = macInfo.model;
@@ -36,13 +35,12 @@ class DeviceInfoUtil {
         _deviceVersion = 'Fuchsia';
       }
     } catch (e) {
-      // If any error occurs, keep the default values
+      
       _deviceName = 'WaterMeteringMobile2';
       _deviceVersion = 'Unknown';
     }
   }
 
-  // Static method to get device name
   static Future<String> getUserAgent() async {
     if (_deviceName == 'WaterMeteringMobile2' || _deviceName == 'Unknown') {
       await _initDeviceInfo();

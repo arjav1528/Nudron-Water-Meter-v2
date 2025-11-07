@@ -52,13 +52,7 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   bool isLargerTextField = ConfigurationCustom.isLargerTextField;
   final FocusNode _focusNode = FocusNode();
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _focusNode = FocusNode();
-  // }
-
+  
   @override
   void dispose() {
     _focusNode.dispose();
@@ -88,7 +82,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           controller: widget.controller,
           focusNode: _focusNode,
           onSubmitted: widget.onChanged,
-          //how to disable copy paste
+          
           enableInteractiveSelection: widget.enableInteractiveSelection,
           keyboardType: widget.keyboardType,
           inputFormatters: widget.inputFormatters,
@@ -153,7 +147,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             contentPadding: EdgeInsets.symmetric(
                 vertical: isLargerTextField
                     ? 22.h
-                    : 10.h), // Adjust vertical padding to fill the space
+                    : 10.h), 
           ),
         ),
       ),

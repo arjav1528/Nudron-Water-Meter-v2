@@ -15,12 +15,11 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool isProfile;
   const CustomAppBar({super.key, required this.choiceAction, this.isProfile = false});
 
-
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(50.h); // Default, will be overridden in build
+  Size get preferredSize => Size.fromHeight(50.h); 
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
@@ -36,7 +35,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           color: Colors.transparent,
           child: Column(
             children: [
-              // Add padding for system UI (notch, status bar)
+              
               Container(
                 height: topPadding,
                 color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
@@ -62,7 +61,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                         SizedBox(width: 10.w),
                         Text("WATER METERING",
-                            // textAlign: TextAlign.center,
+                            
                             style: GoogleFonts.robotoMono(
                               fontSize: 24.responsiveSp,
                               fontWeight: FontWeight.w500,
@@ -74,11 +73,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                     Row(
                       children: [
-                        // Theme toggle button
+                        
                         Material(
                           color: Colors.transparent,
-                          // Set this to transparent to only show the splash
-                                    
+                          
                           child: InkWell(
                             borderRadius: BorderRadius.circular(50.r),
                             onTap: Provider.of<ThemeNotifier>(context)
@@ -88,13 +86,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 .currentTheme
                                 .splashColor,
                                     
-                            // Customize the splash color
                             highlightColor: Provider.of<ThemeNotifier>(
                                 context,
                                 listen: false)
                                 .currentTheme
                                 .splashColor,
-                            // Customize the highlight color
+                            
                             child: Padding(
                               padding: EdgeInsets.only(
                                 right: 11.w,
@@ -124,7 +121,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   borderRadius: BorderRadius.circular(50.r),
                                   onTap: () {
                                     if (widget.choiceAction != null) {
-                                      widget.choiceAction!(0); // 0 is for profile
+                                      widget.choiceAction!(0); 
                                     }
                                   },
                                   splashColor: Provider.of<ThemeNotifier>(context,
@@ -162,133 +159,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           },
                         ),
                                     
-                                    
-                        // if (widget.choiceAction == null)
-                        //   Container(width: 5.w)
-                        // else
-                        //   Container(
-                        //     color: Colors.transparent,
-                        //     child: Center(
-                        //       child: Material(
-                        //         color: Colors.transparent,
-                        //         // borderRadius: BorderRadius.circular(5.r),
-                        //         child: Theme(
-                        //           data: Theme.of(context).copyWith(
-                        //             splashColor:
-                        //             Provider.of<ThemeNotifier>(context, listen: false)
-                        //                 .currentTheme
-                        //                 .splashColor,
-                        //             splashFactory: InkRipple.splashFactory,
-                        //             // Customize the splash color
-                        //             highlightColor:
-                        //             Provider.of<ThemeNotifier>(context, listen: false)
-                        //                 .currentTheme
-                        //                 .splashColor,
-                        //           ),
-                        //           child: PopupMenuButton(
-                        //               // enableFeedback: true,
-                        //               // shape: RoundedRectangleBorder(
-                        //               //     borderRadius:
-                        //               //         BorderRadius.circular(50)),
-                        //               // splashRadius: 50,
-                        //               offset: Offset(0, (51.h)),
-                        //               padding: EdgeInsets.zero,
-                        //               color: Provider.of<ThemeNotifier>(
-                        //                       context)
-                        //                   .currentTheme
-                        //                   .dropDownColor,
-                        //               onSelected: widget.choiceAction,
-                        //               //rectangle border with color
-                        //               shape: RoundedRectangleBorder(
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(0),
-                        //                   side: BorderSide(
-                        //                       width: 2.responsiveSp,
-                        //                       color: CommonColors.blue)),
-                        //               itemBuilder: (context2) {
-                        //                 return <PopupMenuEntry>[
-                        //                   PopupMenuItem(
-                        //                     value: 0,
-                        //                     height: 0,
-                        //                     padding: EdgeInsets.only(
-                        //                         top: 16.h - 8,
-                        //                         right: 12,
-                        //                         bottom: 10.5.h,
-                        //                         left: 12),
-                        //                     child: Text('PROFILE',
-                        //                         style:
-                        //                             GoogleFonts.robotoMono(
-                        //                           fontSize: ThemeNotifier
-                        //                               .small.responsiveSp,
-                        //                           fontWeight:
-                        //                               FontWeight.w500,
-                        //                           color: Provider.of<
-                        //                                       ThemeNotifier>(
-                        //                                   context,
-                        //                                   listen: false)
-                        //                               .currentTheme
-                        //                               .tableText,
-                        //                         )),
-                        //                   ),
-                        //                   PopupMenuItem(
-                        //                     value: 1,
-                        //                     height: 0,
-                        //                     padding: EdgeInsets.only(
-                        //                         top: 10.5.h,
-                        //                         right: 12,
-                        //                         bottom: 5.h,
-                        //                         left: 12),
-                        //                     child: Text('LOGOUT',
-                        //                         style:
-                        //                             GoogleFonts.robotoMono(
-                        //                           fontSize: ThemeNotifier
-                        //                               .small.responsiveSp,
-                        //                           fontWeight:
-                        //                               FontWeight.w500,
-                        //                           color: Provider.of<
-                        //                                       ThemeNotifier>(
-                        //                                   context,
-                        //                                   listen: false)
-                        //                               .currentTheme
-                        //                               .tableText,
-                        //                         )),
-                        //                   ),
-                        //                 ];
-                        //               },
-                        //               child: Container(
-                        //                 padding: EdgeInsets.only(
-                        //                   right: 16.w,
-                        //                   left: 11.w,
-                        //                   top: (51.h - 28.responsiveSp) / 2,
-                        //                   bottom: (51.h - 28.responsiveSp) / 2,
-                        //                 ),
-                        //                 child: SvgPicture.asset(
-                        //                   "assets/icons/hamburger.svg",
-                        //                   width: 26.responsiveSp,
-                        //                   height: 26.responsiveSp,
-                        //                   color: Provider.of<ThemeNotifier>(
-                        //                           context)
-                        //                       .currentTheme
-                        //                       .loginTitleColor,
-                        //                 ),
-                        //               )),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
                       ],
                     )
                   ],
                 ),
               ),
-              //line
-              // Padding(
-              //   padding: const EdgeInsets.all(0.0),
-              //   child: Container(
-              //     height: 2.h,
-              //     color: const Color(0xFFB3B3B3),
-              //   ),
-              // ),
+              
             ],
           ),
         ));

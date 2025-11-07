@@ -11,7 +11,6 @@ import '../../constants/theme2.dart';
 import '../../utils/loader.dart';
 import 'trends_chart.dart';
 
-
 class BackgroundChart extends StatefulWidget {
   const BackgroundChart({super.key});
 
@@ -60,12 +59,11 @@ class _BackgroundChartState extends State<BackgroundChart> {
                           .currentTheme
                           .splashColor,
 
-                  // Customize the splash color
                   highlightColor:
                       Provider.of<ThemeNotifier>(context, listen: false)
                           .currentTheme
                           .splashColor,
-                  // Customize the highlight color
+                  
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: 11.w,
@@ -73,14 +71,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                       bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
                       left: 11.w,
                     ),
-                    // child: Image.asset(
-                    //   "assets/icons/themetoggle.png",
-                    //   width: 28.responsiveSp,
-                    //   height: 28.responsiveSp,
-                    //   color: Provider.of<ThemeNotifier>(context)
-                    //       .currentTheme
-                    //       .loginTitleColor,
-                    // ),
+                    
                     child: Icon(
                       Icons.contrast,
                       size: 28.responsiveSp,
@@ -102,10 +93,10 @@ class _BackgroundChartState extends State<BackgroundChart> {
                 )),
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(3.0),
-              // Define the height of the line
+              
               child: Container(
-                color: CommonColors.yellow, // The color of the line
-                height: 3.responsiveSp, // Define the thickness of the line
+                color: CommonColors.yellow, 
+                height: 3.responsiveSp, 
               ),
             ),
           ),
@@ -116,7 +107,6 @@ class _BackgroundChartState extends State<BackgroundChart> {
             final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
                                   dashboardBloc.filterData != null;
             
-            // Rebuild on state changes or when data becomes available
             return current is DashboardPageLoaded ||
                    current is RefreshDashboard2 ||
                    current is RefreshDashboard ||
@@ -131,7 +121,6 @@ class _BackgroundChartState extends State<BackgroundChart> {
             final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
                                   dashboardBloc.filterData != null;
             
-            // Show chart for all valid states or when data is loaded
             if (state is DashboardPageLoaded ||
                 state is RefreshDashboard2 ||
                 state is RefreshDashboard ||
@@ -159,7 +148,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                       child: Column(
                         children: [
                           Container(
-                            height: 3.responsiveSp, // Divider
+                            height: 3.responsiveSp, 
                             color: CommonColors.yellow,
                           ),
                           Expanded(
@@ -182,7 +171,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                 ),
               );
             }
-            // Show loader while fetching
+            
             return CustomLoader();
           },
         ),

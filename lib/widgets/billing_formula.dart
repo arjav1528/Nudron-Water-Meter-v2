@@ -77,7 +77,6 @@ class _BillingFormulaState extends State<BillingFormula> {
               },
             );
 
-            // Reset color when dialog closes
             if (mounted) {
               setState(() {
                 isDialogOpen = false;
@@ -195,7 +194,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
 
     for (int i = 1; i < tiers.length; i++) {
       if (i == tiers.length - 1) {
-        // For the last tier, just append the amount without adding a threshold
+        
         formula += '<${amountControllers[i].text}';
       } else {
         String threshold = tierControllers[i].text;
@@ -334,7 +333,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
   double rightpaddingconstant = 30.responsiveSp + 8.w;
 
   Widget _buildEditableTierCell(int index) {
-    // Handle the first tier (Fixed)
+    
     if (index == 0) {
       return Padding(
         padding: EdgeInsets.only(right: rightpaddingconstant),
@@ -346,7 +345,6 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
       );
     }
 
-    // Handle the last tier separately to add a plus sign
     if (index == tiers.length - 1) {
       return Padding(
         padding: EdgeInsets.only(right: rightpaddingconstant),
@@ -359,14 +357,13 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
       );
     }
 
-    // Default case for all other tiers
     return Row(
       children: [
         Expanded(
           child: _buildTableCellTextField(
             tierControllers[index - 1],
             editable: false,
-            textAlign: TextAlign.right, // Right align the left `TextField`
+            textAlign: TextAlign.right, 
           ),
         ),
         Text(" to ",
@@ -378,9 +375,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
             )),
         Expanded(
           child: _buildTableCellTextField(
-            tierControllers[index], // Editable right `TextField`
+            tierControllers[index], 
             editable: true,
-            textAlign: TextAlign.left, // Left align the right `TextField`
+            textAlign: TextAlign.left, 
           ),
         ),
       ],
@@ -415,7 +412,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                       .basicAdvanceTextColor,
                   decoration: editable
                       ? TextDecoration.underline
-                      : null, // Only underline if it's editable
+                      : null, 
                   decorationColor: editable
                       ? Provider.of<ThemeNotifier>(context)
                           .currentTheme
@@ -427,7 +424,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                 textAlign: textAlign,
                 decoration: InputDecoration(
                   isDense: true,
-                  // contentPadding: EdgeInsets.symmetric(vertical: 8.h),
+                  
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: CommonColors.blue,
@@ -435,7 +432,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                   ),
                   border: editable
                       ? UnderlineInputBorder()
-                      : InputBorder.none, // No border if not editable
+                      : InputBorder.none, 
                 ),
                 readOnly: !editable,
                 maxLines: 1,
@@ -446,7 +443,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
               ValueListenableBuilder(
                 valueListenable: controller,
                 builder: (context, TextEditingValue value, child) {
-                  // Measure the width of the text
+                  
                   final textSpan = TextSpan(
                     text: value.text,
                     style: GoogleFonts.robotoMono(
@@ -468,14 +465,14 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                   double plusPosition;
 
                   if (textWidth < availableWidth) {
-                    // Center the `+` sign relative to the text
+                    
                     plusPosition =
                         ((availableWidth - ThemeNotifier.medium.responsiveSp + 2) /
                                 2) -
                             (textWidth / 2) +
                             textWidth;
                   } else {
-                    // Keep the `+` sign at the end if text exceeds available width
+                    
                     plusPosition = availableWidth - ThemeNotifier.medium.responsiveSp;
                   }
 
@@ -519,7 +516,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           color: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor,
-          decoration: TextDecoration.underline, // Underline the text itself
+          decoration: TextDecoration.underline, 
           decorationColor: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor
@@ -527,12 +524,12 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         ),
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
-        // Center align the amount `TextField`
+        
         decoration: InputDecoration(
           isDense: true,
           contentPadding: EdgeInsets.symmetric(vertical: 8.h),
-          border: InputBorder.none, // Remove the standard underline
-          focusedBorder: InputBorder.none, // No border when focused
+          border: InputBorder.none, 
+          focusedBorder: InputBorder.none, 
         ),
       ),
     );
@@ -572,7 +569,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                             tierControllers.removeAt(i);
                             focusNodes.removeAt(i);
                           });
-                          //remove the row i
+                          
                         },
                         iconData: Icons.delete,
                         bgColor: CommonColors.red)
@@ -602,22 +599,20 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           text: "SUBMIT",
           onPressed: () {
             String newFormula = _buildBillingFormula();
-            // debugPrint("New formula: $newFormula");
-            // return;
+            
             LoaderUtility.showLoader(
               context,
               BlocProvider.of<DashboardBloc>(context)
                   .setBillingFormula(newFormula),
             ).then((s) {
               if (mounted) {
-                // Show the success message before popping the dialog
+                
                 CustomAlert.showCustomScaffoldMessenger(
                   mainNavigatorKey.currentContext!,
                   "Billing formula set successfully",
                   AlertType.success,
                 );
 
-                // Delay the pop to ensure ScaffoldMessenger has time to display the snack bar
                 Future.microtask(() {
                   if (mounted) {
                     Navigator.of(context).pop();
@@ -626,14 +621,13 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
               }
             }).catchError((error) {
               if (mounted) {
-                // Show the error message before popping the dialog
+                
                 CustomAlert.showCustomScaffoldMessenger(
                   mainNavigatorKey.currentContext!,
                   error.toString(),
                   AlertType.error,
                 );
 
-                // Delay the pop to ensure ScaffoldMessenger has time to display the snack bar
                 Future.microtask(() {
                   if (mounted) {
                     Navigator.of(context).pop();
@@ -651,9 +645,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     return Container(
       height: 40.h,
       padding: EdgeInsets.only(right: padding),
-      // color: Colors.green,
+      
       alignment: Alignment.center,
-      // padding: EdgeInsets.symmetric(vertical: 8.h),
+      
       child: Center(
         child: Text(
           text,

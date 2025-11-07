@@ -19,7 +19,6 @@ import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/password_controller.dart';
 
-
 class EnterTwoFacCodeSignUp extends StatefulWidget {
   EnterTwoFacCodeSignUp(
       {required this.activationCode, required this.changePage, super.key});
@@ -112,7 +111,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(0.w),
-                    // Ensures no extra padding
+                    
                     child: TextField(
                       controller: _obscureText
                           ? passwordControllerObscure
@@ -156,7 +155,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                         hintText: 'New password',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            // Choose the icon based on the visibility status
+                            
                             _obscureText
                                 ? Icons.visibility
                                 : Icons.visibility_off,
@@ -232,7 +231,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(0.w),
-                    // Ensures no extra padding
+                    
                     child: TextField(
                       controller: _obscureText2
                           ? passwordControllerObscure2
@@ -276,7 +275,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                         hintText: 'Re-enter New password',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            // Choose the icon based on the visibility status
+                            
                             _obscureText2
                                 ? Icons.visibility
                                 : Icons.visibility_off,
@@ -408,7 +407,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
 
   @override
   void dispose() {
-    cancel(); // Dispose the listener
+    cancel(); 
     super.dispose();
   }
 }
@@ -454,23 +453,14 @@ class _CustomPincodeState extends State<CustomPincode> {
                 horizontal: 8.w, vertical: (isLargerTextField ? 8 : 0).h),
             width: double.infinity,
             decoration: BoxDecoration(
-              // color: Provider.of<ThemeNotifier>(context)
-              //     .currentTheme
-              //     .textFieldFillColor,
+              
               borderRadius: BorderRadius.all(Radius.circular(10.r)),
               border: Border.all(
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .profileBorderColor,
               ),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.black.withOpacity(0.25),
-              //     spreadRadius: 0,
-              //     blurRadius: 4,
-              //     offset: const Offset(0, 4),
-              //   ),
-              // ],
+              
             ),
             child: PinCodeTextField(
               length: 6,
@@ -505,22 +495,19 @@ class _CustomPincodeState extends State<CustomPincode> {
                 inactiveColor: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
-                // inactiveColor: Theme.of(context).drawerTheme.backgroundColor,
+                
                 selectedFillColor:
                     Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
               ),
               animationDuration: const Duration(milliseconds: 300),
-              // backgroundColor: Provider.of<ThemeNotifier>(context)
-              //     .currentTheme
-              //     .textFieldFillColor,
+              
               controller: widget.controller,
               onCompleted: (v) {
                 if (kDebugMode) {
                 }
               },
               beforeTextPaste: (text) {
-                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                
                 return true;
               },
               appContext: context,

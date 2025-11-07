@@ -41,7 +41,7 @@ class CustomThemeData {
   Color calibrateTabBGColor;
   Color iconColor;
   Color splashColor;
-  Color shadowColor; // Added shadow color property
+  Color shadowColor; 
 
   CustomThemeData(
       {required this.bgColor,
@@ -81,10 +81,7 @@ class CustomThemeData {
 }
 
 class CommonColors {
-  // const Color(0xff45b4d9),
-  // const Color(0xff00bc8a),
-  // const Color(0xffe3b039),
-
+  
   static const Color blue = Color(0xFF145166);
   static const Color red = Color(0xFFFF5353);
   static const Color green = Color(0xFF00bc8a);
@@ -132,11 +129,10 @@ class ThemeNotifier with ChangeNotifier {
       toggleColor: const Color(0xFFCECACA),
       textfieldCursorColor: const Color(0xFFA9A9A9),
       splashColor: const Color(0x66c8c8c8).withOpacity(1),
-      shadowColor: Colors.black.withOpacity(0.16), // Light theme shadow - subtle
+      shadowColor: Colors.black.withOpacity(0.16), 
       textfieldHintColor: const Color(0xFFAEAEAE),
       textfieldTextColor: const Color(0xFF646464));
       
-
   static final CustomThemeData _darkTheme = CustomThemeData(
       bottomNavColor: const Color(0xFF353535),
       tableText: const Color(0xFFEEE0CB),
@@ -168,7 +164,7 @@ class ThemeNotifier with ChangeNotifier {
       drawerHeadingColor: const Color(0xFFCDCDCD),
       numberWheelSelectedBG: const Color(0xFF4F4F4F),
       textfieldCursorColor: const Color(0xFFA9A9A9),
-      shadowColor: Colors.black.withOpacity(0.3), // Dark theme shadow - more pronounced
+      shadowColor: Colors.black.withOpacity(0.3), 
       textfieldHintColor: const Color(0xFFAEAEAE),
       dropDownColor: const Color(0xff393939),
       textfieldTextColor: Colors.white);

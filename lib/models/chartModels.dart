@@ -55,12 +55,9 @@ class NudronChartMap {
       {String format = 'dd-MMM-yy'}) {
     try {
       int days = int.parse(daysSince2020);
-      // First get the DateTime object using the existing function
+      
       DateTime date = DateTime.utc(2020, 1, 1).add(Duration(days: days));
-      // if (date == DateTime(2020, 1, 1)) {
-      //   return "NA";
-      // }
-      // Then format it using DateFormat from intl package
+      
       return DateFormat(format).format(date);
     } catch (e) {
       return "";
@@ -124,7 +121,7 @@ class NudronChartMap {
     List<dynamic> values = [];
 
     List<int> years = getYearKeys();
-    //sort descending
+    
     years.sort((a, b) => b.compareTo(a));
     for (var year in years) {
       for (var month in _dataMap[year]!.keys) {
@@ -148,12 +145,12 @@ class NudronChartMap {
         [...headers]
       ];
       List<int> years = getYearKeys();
-      //sort descending
+      
       List<dynamic> values = [];
       years.sort((a, b) => b.compareTo(a));
       for (var year in years) {
         List<int> months = _dataMap[year]!.keys.toList();
-        //sort descending
+        
         months.sort();
         for (var month in months) {
           values.add([getMMMYY(month, year), ..._dataMap[year]![month]![0]!]);
@@ -169,7 +166,7 @@ class NudronChartMap {
       List<dynamic> values = [];
 
       List<int> years = getYearKeys();
-      //sort descending
+      
       years.sort((a, b) => b.compareTo(a));
       for (var year in years) {
         if (!_dataMap[year]!.containsKey(selectedMonth.value)) {
@@ -191,10 +188,9 @@ class NudronChartMap {
   }
 
   void _initializeDataMap(List<dynamic> chartData) {
-    // Pre-allocate maps for better performance
+    
     final Map<int, Map<int, Map<int, List<dynamic>>>> tempDataMap = {};
     
-    // Process data in batches for better memory management
     const int batchSize = 1000;
     for (int i = 0; i < chartData.length; i += batchSize) {
       final endIndex = (i + batchSize < chartData.length) ? i + batchSize : chartData.length;
@@ -206,30 +202,24 @@ class NudronChartMap {
         final month = date.month;
         final day = date.day;
 
-        // Use putIfAbsent for better performance
         tempDataMap.putIfAbsent(year, () => {});
         tempDataMap[year]!.putIfAbsent(month, () => {});
         
-        // Store data directly
         tempDataMap[year]![month]![day] = entry.sublist(1);
       }
     }
     
-    // Copy to main data map
     _dataMap.addAll(tempDataMap);
 
-    // Optimize aggregation with pre-calculated lengths
     for (var year in _dataMap.keys) {
       for (var month in _dataMap[year]!.keys) {
         final monthData = _dataMap[year]![month]!;
         if (monthData.isEmpty) continue;
         
-        // Get length from first entry
         final firstEntry = monthData.values.first;
         final length = firstEntry.length;
         final aggregatedData = List<dynamic>.filled(length, 0);
 
-        // Use for-in loop for better performance
         for (var dayData in monthData.values) {
           for (int i = 0; i < length; i++) {
             aggregatedData[i] += dayData[i];
@@ -240,7 +230,6 @@ class NudronChartMap {
     }
   }
 
-  // Method to retrieve data for a specific day
   List<dynamic>? getDayData(int year, int month, int day) {
     return _dataMap[year]?[month]?[day];
   }
@@ -277,17 +266,14 @@ class NudronChartMap {
     return data.length;
   }
 
-  // Example method to get aggregated data for a month
   List<dynamic>? getMonthData(int year, int month) {
     return _dataMap[year]?[month]?[0];
   }
 
   getDateFromDayNumber(int dayNumber) {
-    // var date = DateTime.now().subtract(Duration(days: dayNumber));
-    // return "${date.year}-${date.month}-${date.day}";
-    //day number is day from 1/1/2020
+    
     var date = DateTime.utc(2020, 1, 1).add(Duration(days: dayNumber));
-    //DATE FORMAT: 01-01-2020
+    
     return date;
   }
 }
@@ -310,10 +296,9 @@ class Entries {
   final int alerts;
   final int usages;
   final String
-      x; // Day of the month or // Month (with special marking for the current month)
-  final String x2; // Year
+      x; 
+  final String x2; 
 
-  // Debugging print function
   void printClass() {
   }
 }

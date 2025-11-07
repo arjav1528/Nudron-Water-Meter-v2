@@ -5,5 +5,3 @@ class DashboardPageRequested extends DashboardEvent {
 
   DashboardPageRequested({this.nfcData});
 }
-
-

@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 class NoBounceScrollBehavior extends ScrollBehavior {
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child; // Removes the overscroll effect (e.g., glow or bounce)
+    return child; 
   }
 
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
-    return const ClampingScrollPhysics(); // Prevents the bounce effect on iOS
+    return const ClampingScrollPhysics(); 
   }
 }
-
 
 class BouncingScrollBehavior extends ScrollBehavior {
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
-    return BouncingScrollPhysics(); // Enable bouncing physics
+    return BouncingScrollPhysics(); 
   }
 }

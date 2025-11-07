@@ -5,28 +5,22 @@ import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
 import '../services/auth_service.dart';
 import '../services/platform_utils.dart';
 
-
 class DataPostRequests {
-  
   
   static const String wm1Url = 'https://api.nudron.com/prod/dashboard/wm1';
   static FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   
-  // Request deduplication cache with improved performance
   static final Map<String, Future<dynamic>> _pendingRequests = {};
   static final Map<String, DateTime> _lastRequestTime = {};
-  static const Duration _requestThrottle = Duration(milliseconds: 300); // Reduced throttle time
+  static const Duration _requestThrottle = Duration(milliseconds: 300); 
   
-  // Request timeout configuration - increased for mobile networks
   static const Duration _fastTimeout = Duration(seconds: 30);
   
-  // Retry configuration
   static const int _maxRetries = 3;
   static const Duration _initialRetryDelay = Duration(seconds: 1);
 
@@ -79,20 +73,18 @@ class DataPostRequests {
   }
 
   static Future<void> printJson(Map<dynamic, dynamic> data, int number) async {
-    // Convert map to JSON string
+    
     String jsonString = jsonEncode(data);
 
-    // Check if the JSON string is too long for the console
     if (jsonString.length > 1000) {
-      // Print in chunks
+      
       const int chunkSize = 1000;
       for (int i = 0; i < jsonString.length; i += chunkSize) {
       }
     } else {
-      // Print directly if the string is short enough
+      
     }
 
-    // Dummy wait for 2 seconds
     await Future.delayed(const Duration(seconds: 2));
   }
 
@@ -384,8 +376,6 @@ class DataPostRequests {
   static getDummyBillingData() async {
     await Future.delayed(const Duration(seconds: 1));
 
-    // return '''[["Building","  Flat  ","Usage"," #AL ","!Al0","!Al1","!Al2","!Al3","!Al4","!Al5","!Al6","!Al7"," #ST ","!St1","!St2","!St3","!St7","US:00-02","US:02-04","US:04-06","US:06-08","US:08-10","US:10-12","US:12-14","US:14-16","US:16-18","US:18-20","US:20-22","US:22-24"],[["Gitaneel Arcade","5\u00266 Floor",112269,104,0,0,60,6,38,0,0,0,0,0,0,0,0,949,967,3512,9548,11905,12872,13460,12965,16881,18583,9453,1174],["Gitaneel Arcade","3rd Floor",9313,0,0,0,0,0,0,0,0,0,0,0,0,0,0,26,15,218,795,875,516,526,1252,1554,1799,1577,160],["Gitaneel Arcade","Ground Floor",89808,38,0,0,0,10,28,0,0,0,0,0,0,0,0,1889,1879,1987,5005,10433,10753,9753,10507,10049,8578,8831,4114],["Gitaneel Arcade","1st Floor",80208,30,0,0,0,0,30,0,0,0,0,0,0,0,0,6173,5628,7931,7962,6581,6861,7283,7371,6147,5411,5917,6943],["Gitaneel Arcade","Basement",41626,11,0,0,0,0,11,0,0,0,0,0,0,0,0,515,503,674,7165,10860,2361,4869,4834,3581,3711,1991,562]]]''';
-
     return '''[
   [ "Building", "Flat", "Usage", "#Al", "!Al0", "!Al1", "!Al2", "!Al3", "!Al4", "!Al5", "!Al6", "!Al7", "#Status", "!St1", "!St2", "!St3", "!St7" ],
   [
@@ -411,12 +401,10 @@ class DataPostRequests {
   static Future<dynamic> getFilters({required String project}) async {
     final cacheKey = 'filters_$project';
     
-    // Check for pending request
     if (_pendingRequests.containsKey(cacheKey)) {
       return await _pendingRequests[cacheKey]!;
     }
     
-    // Throttle rapid requests
     final now = DateTime.now();
     if (_lastRequestTime.containsKey(cacheKey)) {
       final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
@@ -457,12 +445,10 @@ class DataPostRequests {
       {required String project, required List<String> selectedLevels}) async {
     final cacheKey = 'chart_${project}_${selectedLevels.join('>')}';
     
-    // Check for pending request
     if (_pendingRequests.containsKey(cacheKey)) {
       return await _pendingRequests[cacheKey]!;
     }
     
-    // Throttle rapid requests
     final now = DateTime.now();
     if (_lastRequestTime.containsKey(cacheKey)) {
       final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
@@ -503,12 +489,10 @@ class DataPostRequests {
       {required String project, required int monthNumber}) async {
     final cacheKey = 'billing_${project}_$monthNumber';
     
-    // Check for pending request
     if (_pendingRequests.containsKey(cacheKey)) {
       return await _pendingRequests[cacheKey]!;
     }
     
-    // Throttle rapid requests
     final now = DateTime.now();
     if (_lastRequestTime.containsKey(cacheKey)) {
       final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
@@ -547,12 +531,10 @@ class DataPostRequests {
       {required String project, required int startDayNum, required int endDayNum}) async {
     final cacheKey = 'billing_range_${project}_${startDayNum}_$endDayNum';
     
-    // Check for pending request
     if (_pendingRequests.containsKey(cacheKey)) {
       return await _pendingRequests[cacheKey]!;
     }
     
-    // Throttle rapid requests
     final now = DateTime.now();
     if (_lastRequestTime.containsKey(cacheKey)) {
       final timeSinceLastRequest = now.difference(_lastRequestTime[cacheKey]!);
@@ -605,10 +587,8 @@ class DataPostRequests {
       throw CustomException('No internet connection');
     }
     
-    // Use optimized timeout based on request type
     final effectiveTimeout = timeout ?? _fastTimeout;
     
-    // Retry logic with exponential backoff
     int attempt = 0;
     Exception? lastException;
     
@@ -626,10 +606,8 @@ class DataPostRequests {
         request.body = requestBody;
         request.headers.addAll(headers);
 
-        // Send request with timeout
         http.StreamedResponse response = await request.send().timeout(effectiveTimeout);
 
-        // Read response body with timeout
         String responseBody;
         if (response.statusCode == 200) {
           responseBody = await response.stream.bytesToString().timeout(effectiveTimeout);
@@ -647,7 +625,7 @@ class DataPostRequests {
         lastException = e;
         attempt++;
         if (attempt < _maxRetries) {
-          // Exponential backoff: 1s, 2s, 4s
+          
           final delay = Duration(seconds: _initialRetryDelay.inSeconds * (1 << (attempt - 1)));
           await Future.delayed(delay);
           continue;
@@ -657,14 +635,14 @@ class DataPostRequests {
         lastException = e;
         attempt++;
         if (attempt < _maxRetries) {
-          // Exponential backoff for connection errors
+          
           final delay = Duration(seconds: _initialRetryDelay.inSeconds * (1 << (attempt - 1)));
           await Future.delayed(delay);
           continue;
         }
         throw CustomException('Network connection failed: ${e.message}');
       } catch (e) {
-        // For non-retryable errors (like 401/403), throw immediately
+        
         if (e is CustomException && e.message.contains('login')) {
           rethrow;
         }

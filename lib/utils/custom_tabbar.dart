@@ -50,13 +50,13 @@ class _CustomTabBarState extends State<CustomTabBar> {
                 ),
                 child: Container(
                   margin: const EdgeInsets.all(4),
-                  // Adjust the padding between the red part and the indicator
+                  
                   width: (MediaQuery.of(context).size.width - 32) /
                           widget.tabTitles.length -
                       8,
                   height: 38.h,
                   decoration: BoxDecoration(
-                    color: widget.tabBgColor, // Alternate shades of red
+                    color: widget.tabBgColor, 
                     borderRadius: BorderRadius.circular(6.responsiveSp),
                   ),
                 ),

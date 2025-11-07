@@ -7,7 +7,6 @@ import '../../screens/profile/profile_drawer.dart';
 import '../../constants/theme2.dart';
 import '../../widgets/custom_app_bar.dart';
 
-
 class DrawerWithAlert extends StatefulWidget {
   final int drawerIndex;
   final List<String> drawerName;
@@ -25,7 +24,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
   @override
   Widget build(BuildContext context) {
     List<Widget> list = [
-      // ProfileDrawer(),
+      
       const ProfileDrawer(),
     ];
     return GestureDetector(
@@ -36,7 +35,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
         backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         body: Column(
           children: [
-          // CustomAppBar outside the scrollable region
+          
           CustomAppBar(choiceAction: null),
           
           Expanded(
@@ -71,8 +70,6 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
                             ),
                           ),
           
-          
-          
                           Padding(
                             padding: EdgeInsets.all(8.w),
                             child: Center(
@@ -93,13 +90,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
                       ),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(0.0),
-                  //   child: Container(
-                  //     height: 1.h,
-                  //     color: Color(0xFFB3B3B3),
-                  //   ),
-                  // ),
+                  
                   widget.drawerIndex >= 1 ? Container() : list[widget.drawerIndex],
                 ],
               ),

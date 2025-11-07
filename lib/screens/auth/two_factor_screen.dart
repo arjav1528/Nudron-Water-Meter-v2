@@ -19,7 +19,6 @@ import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_app_bar.dart';
 
-
 class EnterTwoFacCode extends StatefulWidget {
   EnterTwoFacCode({super.key, required this.referenceCode});
 
@@ -43,8 +42,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
 
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-    // SystemChrome.setPreferredOrientations(
-    //     [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    
     super.initState();
   }
 
@@ -128,7 +126,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             ),
                             SizedBox(height: 25.h),
                             PinCodeTextField(
-                              // key: UniqueKey(),
+                              
                               length: 6,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -161,7 +159,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 inactiveColor: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
-                                // inactiveColor: Theme.of(context).drawerTheme.backgroundColor,
+                                
                                 selectedFillColor:
                                     Provider.of<ThemeNotifier>(context)
                                         .currentTheme
@@ -178,8 +176,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 }
                               },
                               beforeTextPaste: (text) {
-                                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                
                                 return true;
                               },
                               appContext: context,
@@ -187,7 +184,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             ),
                             SizedBox(height: 40.h),
                             SizedBox(
-                              // width: double.infinity,
+                              
                               child: CustomButton(
                                 text: "VERIFY",
                                 onPressed: () async {
@@ -248,7 +245,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
 
   @override
   void dispose() {
-    cancel(); // Dispose the listener
+    cancel(); 
     super.dispose();
   }
 }

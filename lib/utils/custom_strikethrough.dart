@@ -21,7 +21,6 @@ class CustomStrikethrough extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // Measure the width of the oldValue text
     final textPainter = TextPainter(
       text: TextSpan(
         text: oldValue.toString(),
@@ -60,11 +59,11 @@ class CustomStrikethrough extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 13.responsiveSp, // Adjust the position as needed
+          top: 13.responsiveSp, 
           left: 0,
           child: Container(
-            height: 2, // Thickness of the strikethrough line
-            width: textWidth, // Set the width to the measured text width
+            height: 2, 
+            width: textWidth, 
             color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
           ),
         ),

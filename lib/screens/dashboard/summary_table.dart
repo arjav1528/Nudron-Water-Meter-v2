@@ -36,7 +36,6 @@ class _SummaryTableState extends State<SummaryTable> {
             ? dashboardBloc.currentFilters.first
             : null;
         
-        // Only rebuild if project actually changed
         if (mounted && _lastProject != currentProject) {
           _lastProject = currentProject;
           setState(() {});
@@ -45,7 +44,6 @@ class _SummaryTableState extends State<SummaryTable> {
       builder: (context, state){
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
 
-        // Check if we have any filters selected
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
@@ -63,48 +61,7 @@ class _SummaryTableState extends State<SummaryTable> {
                 children: [
                   Row(
                     children: [
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     shape: BoxShape.circle,
-                      //     gradient: LinearGradient(
-                      //       colors: [
-                      //         CommonColors.green,
-                      //         CommonColors.green.withOpacity(0.6),
-                      //         Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-                      //       ],
-                      //       begin: Alignment.topLeft,
-                      //       end: Alignment.bottomRight,
-                      //     ),
-                      //   ),
-                      //   child: Container(
-                      //     margin: EdgeInsets.all(2.w),
-                      //     decoration: BoxDecoration(
-                      //       shape: BoxShape.circle,
-                      //       color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-                      //     ),
-                      //     child: IconButton(
-                      //       onPressed: () {
-                      //         Navigator.of(context).pushReplacementNamed('/projectSelection');
-                      //       },
-                      //       icon: Transform.scale(
-                      //         scaleX: -1,
-                      //         child: Icon(
-                      //           Icons.arrow_right_alt,
-                      //           color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                      //           size: 24.responsiveSp,
-                      //         ),
-                      //       ),
-                      //       splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                      //           .currentTheme
-                      //           .splashColor,
-                      //       highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                      //           .currentTheme
-                      //           .splashColor,
-                      //       padding: EdgeInsets.all(4.w),
-                      //       constraints: BoxConstraints(),
-                      //     ),
-                      //   ),
-                      // ),
+                      
                       Container(
                         height: 30.h,
                         width: 40.w,
@@ -142,13 +99,7 @@ class _SummaryTableState extends State<SummaryTable> {
                                 size: 30.responsiveSp,
                               ),
                             ),
-                            // splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            //       .currentTheme
-                            //       .splashColor,
-                            //   highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            //       .currentTheme
-                            //       .splashColor,
-                              
+                            
                           ),
                         ),
                       ),
@@ -172,7 +123,6 @@ class _SummaryTableState extends State<SummaryTable> {
                   ),
                   const BillingFormula(),
 
-                  
                 ],
               ),
             ),
@@ -181,14 +131,12 @@ class _SummaryTableState extends State<SummaryTable> {
               color: CommonColors.green,
             ),
 
-
             const CustomDateRangePicker(),
             Container(
               height: 3.responsiveSp,
               color: CommonColors.green,
             ),
 
-            // BlocBuilder takes the remaining space
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
                 buildWhen: (previous, current) {

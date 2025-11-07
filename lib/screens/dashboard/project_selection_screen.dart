@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
 
-
 import '../../api/auth_service.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_state.dart';
@@ -21,7 +20,6 @@ import '../../widgets/custom_dropdown.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../profile/profile_drawer.dart';
-
 
 class ProjectSelectionPage extends StatefulWidget {
   const ProjectSelectionPage({super.key});
@@ -49,9 +47,6 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     }
   }
 
-  
-
-  // Add a separate method for dashboard button navigation
   void _navigateToDashboard() async {
     if (selectedProject == null) {
       CustomAlert.showCustomScaffoldMessenger(
@@ -65,22 +60,19 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       await LoaderUtility.showLoader(
         context,
         () async {
-          // Clear current filters and data
+          
           dashboardBloc.currentFilters.clear();
           dashboardBloc.filterData = null;
           dashboardBloc.summaryData = null;
           dashboardBloc.devicesData = null;
 
-          // Select project and get filter data
           var filterData = await dashboardBloc.selectProject(dashboardBloc.projects.indexOf(selectedProject ?? ""));
           if (filterData != null) {
-            // Update selected filters - this will load all data in parallel with caching
+            
             await dashboardBloc.updateSelectedFilters([selectedProject], filterData);
             
-            // Reset screen index to 0 (normal view, not full screen)
             dashboardBloc.screenIndex = 0;
             
-            // Set bottom nav position to trends tab (index 0)
             dashboardBloc.switchBottomNavPos(0);
           }
         }(),
@@ -94,14 +86,12 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       return;
     }
 
-    // Check if project was successfully selected
     if (dashboardBloc.currentFilters.isEmpty) {
       CustomAlert.showCustomScaffoldMessenger(
           context, "Error loading project data", AlertType.error);
       return;
     }
     
-    // Navigate to dashboard page
     Navigator.of(context).pushReplacementNamed('/homePage');
   }
 
@@ -119,19 +109,12 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
               maxHeight: 500.h,
             ),
             decoration: BoxDecoration(
-                color: currentTheme.dialogBG, // Match BillingFormula dialog BG
+                color: currentTheme.dialogBG, 
                 border: Border.all(
-                  color: currentTheme.gridLineColor, // Match BillingFormula border color
-                  width: 3.responsiveSp, // Match BillingFormula border width
+                  color: currentTheme.gridLineColor, 
+                  width: 3.responsiveSp, 
                 ),
-                // Remove or comment out the boxShadow if you want it to look exactly like BillingFormula
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: currentTheme.profileBorderColor,
-                //     blurRadius: 10.r,
-                //     offset: Offset(0, 4.h),
-                //   ),
-                // ],
+                
               ),
             child: Padding(
               padding: EdgeInsets.only(bottom: 24.h),
@@ -236,7 +219,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                 BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
                                 activationCodeController.clear();
                                 Navigator.of(context).pop();
-                                setState(() {}); // Refresh project list
+                                setState(() {}); 
                               } catch (e) {
                                 CustomAlert.showCustomScaffoldMessenger(
                                     context, e.toString(), AlertType.error);
@@ -257,16 +240,15 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
   }
 
   void showProfileDrawer(BuildContext context) async {
-    // Check if user is authenticated using AuthBloc
+    
     final authBloc = BlocProvider.of<AuthBloc>(context);
     if (authBloc.state is! AuthAuthenticated) return;
 
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
 
-    // Simple push without animations to match the IndexedStack behavior
     Navigator.of(context).push(
       PageRouteBuilder(
-        transitionDuration: Duration.zero, // No animation
+        transitionDuration: Duration.zero, 
         pageBuilder: (context, animation, secondaryAnimation) {
           return BlocProvider.value(
             value: dashboardBloc,
@@ -275,9 +257,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
             ),
           );
         },
-        // No transition animations
+        
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child; // Return the child directly without animation
+          return child; 
         },
       ),
     );
@@ -291,7 +273,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
 
     if (projects.isEmpty) {
-      // Show loader while projects are being fetched
+      
       return Scaffold(
         backgroundColor: theme.bgColor,
         body: const CustomLoader(),
@@ -352,8 +334,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.r),
                                   border: Border.all(
-                                    color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), // Border color
-                                    width: 2, // Border width
+                                    color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), 
+                                    width: 2, 
                                   ),
                                 ),
                                 child: Icon(

@@ -25,7 +25,6 @@ import 'background_chart_screen.dart';
 import 'summary_table.dart';
 import 'trends_chart_combined.dart';
 
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -53,14 +52,11 @@ class _DashboardPageState extends State<DashboardPage> {
       BackgroundChart(),
     ];
 
-    // Use the bloc from the parent context (provided at app level)
-    // No need to create a new bloc instance
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
-          // Include DashboardPageInitial to handle initial state properly
-          // This ensures the UI rebuilds when the bloc first loads
+          
           if ((current is DashboardPageInitial) ||
               (current is DashboardPageError ||
               current is DashboardPageLoaded ||
@@ -112,7 +108,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               );
             }
-          // Show loader for DashboardPageInitial or any other state
+          
           return const CustomLoader();
         }),
     );
@@ -121,7 +117,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
 class MainDashboardPage extends StatefulWidget {
   static List<String> bottomNavTabs = [
-    // 'project', // Move project to 0th index
+    
     'trends',
     'billing',
     'activity',
@@ -137,7 +133,6 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int drawerIndex = 0;
   
-  // Desktop-specific properties
   final double _drawerWidth = 230.0.w;
   final bool _isDrawerCollapsed = true;
 
@@ -148,15 +143,14 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   ];
 
   List<Color> selectedColor = [
-    // CommonColors.blue,
+    
     CommonColors.yellow,
     CommonColors.green,
     CommonColors.red,
   ];
 
-  // Always use static tabs
   List<String> bottomNavTabIcons = [
-    // 'project', // Move project to 0th index
+    
     'trends',
     'billing',
     'activity',
@@ -165,29 +159,19 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   @override
   void initState() {
     super.initState();
-    // Remove dynamic tab update
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     MainDashboardPage.bottomNavTabs =
-    //         (await DashboardBloc.updateBottomNavTabs(
-    //             project: BlocProvider.of<DashboardBloc>(context)
-    //                 .currentFilters
-    //                 .firstOrNull))!;
-    //   },
-    // );
+    
   }
 
   void showProfileDrawer(BuildContext context) async {
-    // Check if user is authenticated using AuthBloc
+    
     final authBloc = BlocProvider.of<AuthBloc>(context);
     if (authBloc.state is! AuthAuthenticated) return;
 
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
 
-    // Simple push without animations to match the IndexedStack behavior
     Navigator.of(context).push(
       PageRouteBuilder(
-        transitionDuration: Duration.zero, // No animation
+        transitionDuration: Duration.zero, 
         pageBuilder: (context, animation, secondaryAnimation) {
           return BlocProvider.value(
             value: dashboardBloc,
@@ -196,15 +180,14 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             ),
           );
         },
-        // No transition animations
+        
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child; // Return the child directly without animation
+          return child; 
         },
       ),
     );
   }
 
-  // Desktop sidebar navigation
   Widget _buildDesktopSideNav(BuildContext context, int currentNavPos, List<String> visibleTabs) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
@@ -338,20 +321,18 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> contentPages = [
-      // ProjectSelectionPage(),
+      
       TrendsChartCombined(key: UniqueKey()),
       SummaryTable(key: UniqueKey()),
       DevicesPage(),
     ];
 
-    // Wrap with full screen functionality
     return BlocBuilder<DashboardBloc, DashboardState>(
       buildWhen: (previous, current) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
                               dashboardBloc.filterData != null;
         
-        // Rebuild on state changes or when data becomes available
         return current is DashboardPageLoaded ||
                current is ChangeScreen ||
                current is DashboardPageError ||
@@ -364,8 +345,6 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
       builder: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         
-        // Show dashboard for all valid states (loaded, refreshing, or changing screens)
-        // Also show if data is already loaded (fallback for edge cases)
         final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
                               dashboardBloc.filterData != null;
         
@@ -381,7 +360,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             child: IndexedStack(
               index: dashboardBloc.screenIndex,
               children: [
-                // Index 0: Normal dashboard view
+                
                 WillPopScope(
                   onWillPop: () {
                     return Future.value(false);
@@ -390,7 +369,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                       ? _buildDesktopLayout(context, contentPages)
                       : _buildMobileLayout(context, contentPages),
                 ),
-                // Index 1: Full screen chart view
+                
                 BackgroundChart(),
               ],
             ),
@@ -431,13 +410,12 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             ),
           );
         }
-        // Show loader for DashboardPageInitial or any other state
+        
         return const CustomLoader();
       },
     );
   }
 
-  // Desktop layout with sidebar navigation
   Widget _buildDesktopLayout(BuildContext context, List<Widget> contentPages) {
     return Focus(
       autofocus: true,
@@ -457,10 +435,9 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               builder: (context, state) {
                 final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
                 int currentNavPos = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
-                // Always show all 3 tabs (trends, billing, activity)
+                
                 List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
 
-                // Ensure drawerIndex stays in sync with bloc state
                 final clampedNavPos = currentNavPos.clamp(0, selectedColor.length - 1);
                 if (drawerIndex != clampedNavPos) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -494,7 +471,6 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
     );
   }
 
-  // Mobile layout with bottom navigation bar
   Widget _buildMobileLayout(BuildContext context, List<Widget> contentPages) {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
@@ -508,7 +484,6 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
             int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
 
-            // Always show all 3 tabs (trends, billing, activity)
             List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
 
             return Row(
@@ -517,7 +492,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               children: List.generate(
                 visibleTabs.length,
                 (index) {
-                  // Clamp index to ensure it's within bounds
+                  
                   final safeIndex = index.clamp(0, bottomNavTabIcons.length - 1);
                   return GestureDetector(
                     child: Container(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'country_code.dart';
 import 'country_localizations.dart';
 
-/// selection dialog used for selection of the country code
 class SelectionDialog extends StatefulWidget {
   final List<CountryCode> elements;
   final bool? showCountryOnly;
@@ -19,13 +18,10 @@ class SelectionDialog extends StatefulWidget {
   final bool hideSearch;
   final Icon? closeIcon;
 
-  /// Background color of SelectionDialog
   final Color? backgroundColor;
 
-  /// Boxshaow color of SelectionDialog that matches CountryCodePicker barrier color
   final Color? barrierColor;
 
-  /// elements passed as favorite
   final List<CountryCode> favoriteElements;
 
   SelectionDialog(
@@ -56,7 +52,7 @@ class SelectionDialog extends StatefulWidget {
 }
 
 class _SelectionDialogState extends State<SelectionDialog> {
-  /// this is useful for filtering purpose
+  
   late List<CountryCode> filteredElements;
 
   @override
@@ -76,7 +72,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
                     color: widget.barrierColor ?? Colors.grey.withOpacity(1),
                     spreadRadius: 5,
                     blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), 
                   ),
                 ],
               ),

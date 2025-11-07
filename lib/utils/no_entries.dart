@@ -26,16 +26,7 @@ class NoEntries extends StatelessWidget {
                 color:
                 Provider.of<ThemeNotifier>(context).currentTheme.noEntriesColor,
               ),
-              // SizedBox(height: 20.responsiveSp),
-              // Text(
-              //   "NO ENTRIES FOUND",
-              //   style: GoogleFonts.robotoMono(
-              //       fontSize: ThemeNotifier.small.responsiveSp,
-              //       color: Provider.of<ThemeNotifier>(context)
-              //           .currentTheme
-              //           .noEntriesColor,
-              //       fontWeight: FontWeight.w400),
-              // )
+              
             ],
           ),
         );

@@ -16,7 +16,6 @@ import '../../utils/no_entries.dart';
 import '../../utils/performance_monitor.dart';
 import '../../widgets/export_to_excel.dart';
 
-
 List<Color> listOfBarColor = [
   const Color(0xffa31420),
   const Color(0xffe42030),
@@ -57,7 +56,7 @@ TooltipBehavior createCustomTooltipBehavior({
     enable: true,
     shouldAlwaysShow: false,
     animationDuration: 100,
-    // duration: 100,
+    
     builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
         int seriesIndex) {
       if (dataMap == null) return Container();
@@ -68,9 +67,9 @@ TooltipBehavior createCustomTooltipBehavior({
       int xNumeric;
 
       if (indexMonth != null) {
-        xNumeric = int.parse(x); // Parse day as integer
+        xNumeric = int.parse(x); 
       } else {
-        // Convert month abbreviation to month number
+        
         xNumeric = monthFormatter.parse(x.replaceAll('*', '')).month;
       }
 
@@ -90,8 +89,6 @@ TooltipBehavior createCustomTooltipBehavior({
               .add("AL '${year.toString().substring(2)}: ${yearData.alerts}");
         }
       }
-
-      // tooltipContent.sort((a, b) => b.compareTo(a));
 
       if (tooltipContent.isEmpty) {
         return Container(
@@ -186,15 +183,13 @@ class _MonthlyChartState extends State<MonthlyChart> {
     List<CartesianSeries<Entries, String>> series = [];
     String currentMonth = DateFormat('MM').format(DateTime.now());
 
-    // Pre-allocate maps for better performance
     final Map<int, List<Entries>> allEntries = {};
     int maxAlerts = 0;
     int maxUsages = 0;
 
     List<int> years = dataMap.getYearKeys();
-    Set<int> doneMonths = {}; // To keep track of months that have data across all years
+    Set<int> doneMonths = {}; 
 
-    // Collect data entries for all years without adding missing months
     for (int year in years) {
       List<Entries> monthlyEntries = [];
       int check = 0;
@@ -215,7 +210,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
           check++;
         }
         if (monthData != null) {
-          // Add data if available
+          
           monthlyEntries.add(Entries(
             alerts: monthData.alerts,
             usages: monthData.usage,
@@ -223,7 +218,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
             x2: year.toString(),
           ));
           check++;
-          doneMonths.add(month); // Track months that have data
+          doneMonths.add(month); 
           maxAlerts =
               monthData.alerts > maxAlerts ? monthData.alerts : maxAlerts;
           maxUsages = monthData.usage > maxUsages ? monthData.usage : maxUsages;
@@ -232,47 +227,6 @@ class _MonthlyChartState extends State<MonthlyChart> {
 
       allEntries[year] = monthlyEntries;
     }
-
-    // if (doneMonths.isNotEmpty) {
-    //   int firstMonthWithData = doneMonths.reduce((a, b) => a < b ? a : b);
-    //   int lastMonthWithData = doneMonths.reduce((a, b) => a > b ? a : b);
-    //
-    //   // Find all months between the first and last month with data
-    //   Set<int> monthsToFill = Set.from(List.generate(
-    //       lastMonthWithData - firstMonthWithData + 1,
-    //       (index) => firstMonthWithData + index));
-    //   Set<int> missingMonths = monthsToFill.difference(doneMonths);
-    //
-    //   // Add missing months to the first year in the list
-    //   int firstYear = years.first;
-    //   List<Entries>? firstYearEntries = allEntries[firstYear];
-    //
-    //   if (missingMonths.isNotEmpty && firstYearEntries != null) {
-    //     for (int month in missingMonths) {
-    //       String monthLabel = NudronChartMap.getMonthName(month) +
-    //           (month == int.parse(currentMonth) ? "*" : "");
-    //       // Add dummy entry for the missing month
-    //       firstYearEntries.add(Entries(
-    //         alerts: 0, // No data, so zero alerts
-    //         usages: 0, // No data, so zero usage
-    //         x: monthLabel,
-    //         x2: firstYear.toString(),
-    //       ));
-    //     }
-    //
-    //     // Sort the entries by month index to ensure the correct order
-    //     firstYearEntries.sort((a, b) {
-    //       int monthA =
-    //           dataMap.getMonthNumberFromName(a.x.replaceAll('*', '').trim());
-    //       int monthB =
-    //           dataMap.getMonthNumberFromName(b.x.replaceAll('*', '').trim());
-    //       return monthA.compareTo(monthB);
-    //     });
-    //
-    //     // Update the allEntries map with the sorted data
-    //     allEntries[firstYear] = firstYearEntries;
-    //   }
-    // }
 
     alertMaximum = customRound(maxAlerts.toDouble() * 3);
     usageMaximum = customRound(maxUsages.toDouble() * 1.1);
@@ -295,33 +249,16 @@ class _MonthlyChartState extends State<MonthlyChart> {
         xValueMapper: (Entries data, _) => data.x,
         yValueMapper: (Entries data, _) => 0,
         isVisibleInLegend: false,
-        // visible: false,
+        
         color: Colors.transparent,
-        // Fully transparent color
+        
         enableTooltip: false,
         name: '',
-        // No label
-        markerSettings: MarkerSettings(isVisible: false), // No marker
+        
+        markerSettings: MarkerSettings(isVisible: false), 
       ));
     }
-    // series.add(ColumnSeries(
-    //   animationDuration: animationDuration,
-    //   onPointDoubleTap: (ChartPointDetails details) async {
-    //     final selectedMonthLabel = details.dataPoints![details.pointIndex!].x;
-    //     final monthName = selectedMonthLabel.replaceAll('*', '').trim();
-    //     int selectedMonth = NudronChartMap.getMonthNumberFromName(monthName);
-    //     widget.onMonthSelected(selectedMonth);
-    //   },
-    //   dataSource: [Entries(alerts: 0, usages: 0, x: 'Jan', x2: '2024')],
-    //   xValueMapper: (Entries data, _) => data.x,
-    //   yValueMapper: (Entries data, _) => data.alerts,
-    //   name: getLabelName(2024, true, widget.isFullScreen),
-    //   yAxisName: 'alert',
-    //   color: listOfBarColor[colorIndex % listOfBarColor.length],
-    //   // width: (allEntries.length == 1) ? 0.04 : 0.7,
-    // ));
-    // Generate the series from the allEntries map
-
+    
     allEntries.forEach((year, entries) {
       series.add(ColumnSeries<Entries, String>(
         animationDuration: animationDuration,
@@ -337,7 +274,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
         name: getLabelName(year, true, widget.isFullScreen),
         yAxisName: 'alert',
         color: listOfBarColor[colorIndex % listOfBarColor.length],
-        // width: (allEntries.length == 1) ? 0.04 : 0.7,
+        
       ));
       colorIndex++;
     });
@@ -369,8 +306,6 @@ class _MonthlyChartState extends State<MonthlyChart> {
       ));
       colorIndex++;
     });
-
-    
 
     setState(() {
       monthlySeries = series;
@@ -405,7 +340,7 @@ class _MonthlyChartState extends State<MonthlyChart> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      // No specific month, for monthly view
+      
       isDaily: false,
     );
   }
@@ -421,15 +356,12 @@ double customRound(double value) {
     return ((value / 4).ceil()) * 4.toDouble();
   }
 
-  // Calculate the base for rounding based on the number of digits
   int base = pow(10, numDigits - 1).toInt();
 
-  // If numDigits is odd, multiply base by 5 (to handle cases like 500, 5000, etc.)
   if (numDigits % 2 == 0) {
     base = base ~/ 2.0;
   }
 
-  // Round down to the nearest multiple of the calculated base
   var a = ((value / base).ceil() * base).toDouble();
   return a;
 }
@@ -467,14 +399,14 @@ class _DailyChartState extends State<DailyChart> {
 
   @override
   void dispose() {
-    clearData(); // Clear the series when the widget is disposed
+    clearData(); 
     super.dispose();
   }
 
   clearData() {
     dailySeries.clear();
     dailySeries =
-        []; // This helps to ensure that the list is completely dereferenced
+        []; 
   }
 
   bool isShowingState = false;
@@ -483,20 +415,6 @@ class _DailyChartState extends State<DailyChart> {
     clearData();
     setState(() {});
   }
-
-  // @override
-  // void dispose() {
-  //   Provider.of<MonthNotifier>(context, listen: false)
-  //       .removeListener(_handleMonthChange);
-  //   super.dispose();
-  // }
-
-  // void _handleMonthChange(int month) {
-  //   if (month != -1)
-  //     _getSeriesDaily(month);
-  //   else
-  //     clearDailySeries();
-  // }
 
   void _getSeriesDaily(int indexMonth) async {
     if (indexMonth == -1) {
@@ -509,7 +427,7 @@ class _DailyChartState extends State<DailyChart> {
     if (dataMap == null) return;
 
     List<CartesianSeries<Entries, String>> series = [];
-    Map<int, List<Entries>> allEntries = {}; // Keyed by year
+    Map<int, List<Entries>> allEntries = {}; 
 
     int maxAlerts = 0;
     int maxUsages = 0;
@@ -542,8 +460,6 @@ class _DailyChartState extends State<DailyChart> {
           check++;
         }
 
-        // int todayDate=
-        // String dayLabel = day.toString();
         if (dayData != null) {
           yearEntries.add(Entries(
             alerts: dayData.alerts,
@@ -552,13 +468,11 @@ class _DailyChartState extends State<DailyChart> {
             x2: year.toString(),
           ));
           check++;
-          // Update maximum values
+          
           maxAlerts = dayData.alerts > maxAlerts ? dayData.alerts : maxAlerts;
           maxUsages = dayData.usage > maxUsages ? dayData.usage : maxUsages;
         }
       }
-
-     
 
       if (yearEntries.isNotEmpty) {
         allEntries[year] = yearEntries;
@@ -587,21 +501,20 @@ class _DailyChartState extends State<DailyChart> {
         xValueMapper: (Entries data, _) => data.x,
         yValueMapper: (Entries data, _) => 0,
         isVisibleInLegend: false,
-        // Transparent at 0
+        
         color: Colors.transparent,
-        // Fully transparent color
+        
         enableTooltip: false,
         name: '',
-        // No label
-        markerSettings: MarkerSettings(isVisible: false), // No marker
+        
+        markerSettings: MarkerSettings(isVisible: false), 
       ));
     }
 
-    // Generate the series for each year
     int seriesIndex = 0;
 
     allEntries.forEach((year, entries) {
-      // Column series for alerts
+      
       series.add(ColumnSeries<Entries, String>(
         animationDuration: animationDuration,
         dataSource: entries,
@@ -615,7 +528,7 @@ class _DailyChartState extends State<DailyChart> {
     });
     seriesIndex = 0;
     allEntries.forEach((year, entries) {
-      // Line series for usages
+      
       series.add(LineSeries<Entries, String>(
         animationDuration: animationDuration,
         dataSource: (entries.length == 2 &&
@@ -636,10 +549,7 @@ class _DailyChartState extends State<DailyChart> {
       ));
       seriesIndex++;
     });
-    // TODO: Make the adjustment for daily data when only one data point is available
-
-   
-
+    
     setState(() {
       isShowingState = true;
       dailySeries = series;
@@ -795,36 +705,30 @@ class BasicChart extends StatelessWidget {
       },
       child: LayoutBuilder(
         builder: (context, constriants) {
-          // Calculate responsive visible months based on screen width
+          
           double screenWidth = constriants.maxWidth;
           int totalMonths = series.isNotEmpty ? (series.first.dataSource?.length ?? 12) : 12;
           int visibleMonths;
           
           if (isFullScreen) {
-            // In full screen, show all months
+            
             visibleMonths = totalMonths;
           } else {
             if (isDaily) {
-              // For daily view, calculate based on available width
-              // Each day needs approximately 30-40 pixels for proper display
+              
               double minWidthPerDay = 35.0;
               visibleMonths = (screenWidth / minWidthPerDay).floor();
-              visibleMonths = visibleMonths > 31 ? 31 : visibleMonths; // Max 31 days
-              visibleMonths = visibleMonths < 7 ? 7 : visibleMonths; // Min 7 days
+              visibleMonths = visibleMonths > 31 ? 31 : visibleMonths; 
+              visibleMonths = visibleMonths < 7 ? 7 : visibleMonths; 
             } else {
-              // For monthly view, calculate based on available width
-              // Each month needs approximately 50-70 pixels for proper display
+              
               double minWidthPerMonth = 55.0;
               visibleMonths = (screenWidth / minWidthPerMonth).floor();
               
-              // Ensure we don't exceed total available months
               visibleMonths = visibleMonths > totalMonths ? totalMonths : visibleMonths;
               
-              // Set minimum visible months to 4 for better readability
               visibleMonths = visibleMonths < 4 ? 4 : visibleMonths;
               
-              // If we have more data than can fit comfortably, show all months
-              // This ensures the chart contracts to fit all data when needed
               if (totalMonths <= visibleMonths) {
                 visibleMonths = totalMonths;
               }
@@ -927,59 +831,6 @@ class BasicChart extends StatelessWidget {
                                       BlocProvider.of<DashboardBloc>(context)
                                           .changeScreen();
                       
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context2) =>
-                                      //         BlocProvider.value(
-                                      //       value:
-                                      //           BlocProvider.of<DashboardBloc>(
-                                      //               context),
-                                      //       child: Scaffold(
-                                      //         backgroundColor:
-                                      //             Provider.of<ThemeNotifier>(
-                                      //                     context)
-                                      //                 .currentTheme
-                                      //                 .bgColor,
-                                      //         appBar: AppBar(
-                                      //           backgroundColor:
-                                      //               Provider.of<ThemeNotifier>(
-                                      //                       context)
-                                      //                   .currentTheme
-                                      //                   .bgColor,
-                                      //           leading: IconButton(
-                                      //             icon: Icon(
-                                      //               Icons.arrow_back,
-                                      //               color: Provider.of<
-                                      //                           ThemeNotifier>(
-                                      //                       context)
-                                      //                   .currentTheme
-                                      //                   .basicAdvanceTextColor,
-                                      //             ),
-                                      //             onPressed: () {
-                                      //               Navigator.pop(context2);
-                                      //             },
-                                      //           ),
-                                      //           title: Text('Fullscreen Chart',
-                                      //               style: TextStyle(
-                                      //                   color: Provider.of<
-                                      //                               ThemeNotifier>(
-                                      //                           context)
-                                      //                       .currentTheme
-                                      //                       .basicAdvanceTextColor)),
-                                      //         ),
-                                      //         body: Center(
-                                      //           child: RotatedBox(
-                                      //             quarterTurns: 1,
-                                      //             // Rotate 90 degrees
-                                      //             child: TrendsChart(
-                                      //                 isFullScreen: true),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // );
                                     },
                                   ),
                                 ),
@@ -997,16 +848,14 @@ class BasicChart extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // width: isFullScreen
-                      //     ? constriants.maxWidth
-                      //     : constriants.maxWidth * 1.5,
+                      
                       Expanded(
-                        // height: constriants.maxHeight -25,
+                        
                         child: isDaily && series.isEmpty
                             ? NoEntries()
                             : SfCartesianChart(
                                 onAxisLabelTapped: (args) {
-                                  // var a=DateTime.now();
+                                  
                                   if (args.axisName == 'primaryXAxis') {
                                     if (!isDaily && switchToDaily != null) {
                                       final monthName =
@@ -1017,7 +866,7 @@ class BasicChart extends StatelessWidget {
                                       switchToDaily!(selectedMonth);
                                     }
                                   }
-                                  // var b=DateTime.now();
+                                  
                                 },
                                 plotAreaBorderWidth: 0,
                                 margin: EdgeInsets.only(top: 0.h),
@@ -1043,14 +892,11 @@ class BasicChart extends StatelessWidget {
                                   enableSelectionZooming: false,
                                 ),
                                 primaryXAxis: CategoryAxis(
-                                  // plotOffset: 10,
-
-                                  // placeLabelsNearAxisLine: true,
+                                  
                                   initialVisibleMinimum: isFullScreen
                                       ? null
                                       : (series.isNotEmpty ? -0.5 : 0),
 
-                                  // labelAlignment: LabelAlignment.start,
                                   initialVisibleMaximum: isFullScreen
                                       ? null
                                       : visibleMonths.toDouble(),
@@ -1074,19 +920,7 @@ class BasicChart extends StatelessWidget {
                                       color: Provider.of<ThemeNotifier>(context)
                                           .currentTheme
                                           .gridLineColor),
-                                  // minimum: 0,
-                                  // maximum: isDaily
-                                  //     ? DateTime(
-                                  //                 2020,
-                                  //                 NudronChartMap
-                                  //                         .selectedMonth.value +
-                                  //                     1,
-                                  //                 0)
-                                  //             .day
-                                  //             .toDouble() -
-                                  //         1
-                                  //     : 11,
-                                  // Adjusted for daily or monthly
+                                  
                                   interval: 1,
                                 ),
                                 primaryYAxis: NumericAxis(
@@ -1112,7 +946,7 @@ class BasicChart extends StatelessWidget {
                                   opposedPosition: false,
                                   name: 'waterUsage',
                                   minimum: 0,
-                                  // maximumLabels: 3,
+                                  
                                   maximum: usageMaximum,
                                   title: AxisTitle(
                                     text: '',
@@ -1136,12 +970,12 @@ class BasicChart extends StatelessWidget {
                                     numberFormat: NumberFormat.compact(),
                                     opposedPosition: true,
                                     desiredIntervals: 4,
-                                    // labelAlignment: LabelAlignment.end,
+                                    
                                     name: 'alert',
                                     autoScrollingMode: AutoScrollingMode.start,
                                     minimum: 0,
                                     maximum: alertMaximum,
-                                    // maximumLabels: 3,
+                                    
                                     majorGridLines: MajorGridLines(
                                         width: 0.w,
                                         color:

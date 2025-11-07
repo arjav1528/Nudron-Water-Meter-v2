@@ -63,7 +63,7 @@ class CustomDropdownButton2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
-        //To avoid long text overflowing.
+        
         isExpanded: true,
         hint: Container(
           alignment: hintAlignment,
@@ -114,7 +114,7 @@ class CustomDropdownButton2 extends StatelessWidget {
         buttonElevation: buttonElevation,
         itemHeight: itemHeight ?? 40,
         itemPadding: itemPadding ?? const EdgeInsets.only(left: 14, right: 14),
-        //Max height for the dropdown menu & becoming scrollable if there are more items. If you pass Null it will take max height possible for the items.
+        
         dropdownMaxHeight: dropdownHeight ?? 200,
         dropdownWidth: dropdownWidth ?? 140,
         dropdownPadding: dropdownPadding,
@@ -126,9 +126,9 @@ class CustomDropdownButton2 extends StatelessWidget {
         scrollbarRadius: scrollbarRadius ?? const Radius.circular(40),
         scrollbarThickness: scrollbarThickness,
         scrollbarAlwaysShow: scrollbarAlwaysShow,
-        //Null or Offset(0, 0) will open just under the button. You can edit as you want.
+        
         offset: offset,
-        dropdownOverButton: false, //Default is false to show menu below button
+        dropdownOverButton: false, 
       ),
     );
   }

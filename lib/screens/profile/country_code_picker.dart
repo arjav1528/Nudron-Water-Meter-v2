@@ -41,32 +41,15 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   List<String> priorityCountryCodes = ["IN", "GB", "SG", "MY"];
   VoidCallback? _listener;
 
-  // refresh(String selection) {
-  //   selectedItem = allowedCountries.firstWhere(
-  //     (country) => selection.startsWith(country.code!),
-  //     orElse: () => allowedCountries.first,
-  //   );
-  //   widget.onChanged(selectedItem!);
-  //   //remove selected item.dialcode from the initialSelection
-  //   widget.getPhoneNumberWithoutCountryCode(
-  //       selectedItem!.dialCode!.length < selection.length
-  //           ? selection.substring(selectedItem!.dialCode!.length)
-  //           : '');
-  //   if (mounted) setState(() {});
-  // }
-
   refresh(String fullNumber) {
 
-    // Find the selected country code from allowedCountries
     selectedItem = allowedCountries.firstWhere(
       (country) => fullNumber.startsWith(country.dialCode ?? ''),
       orElse: () => allowedCountries.first,
     );
 
-
     widget.onChanged(selectedItem!);
 
-    // Remove country code from phone number
     String purePhoneNumber =
         fullNumber.replaceFirst(selectedItem!.dialCode ?? '', '');
 
@@ -78,12 +61,11 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   @override
   void initState() {
     super.initState();
-    // Convert the top countries to a list of CountryCode objects
+    
     List<CountryCode> priorityCountries = priorityCountryCodes
         .map((countryCode) => CountryCode.fromCountryCode(countryCode))
         .toList();
 
-    // Convert all countries to a list of CountryCode objects
     List<CountryCode> allCountries = codes.map((country) {
       return CountryCode(
         name: country['name'],
@@ -92,12 +74,10 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       );
     }).toList();
 
-    // Filter out the priority countries from the all countries list
     List<CountryCode> otherCountries = allCountries
         .where((country) => !priorityCountryCodes.contains(country.code))
         .toList();
 
-    // Combine the lists with priority countries first, followed by others
     allowedCountries = [...priorityCountries, ...otherCountries];
     refresh(widget.initialSelection ?? "+91");
     if (widget.refreshPhoneCode != null) {
@@ -108,14 +88,14 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       };
       widget.refreshPhoneCode!.addListener(_listener!);
     }
-    //in allowed countries check if initial selection is there. but only the initial part of the code is checked
+    
   }
 
   @override
   void dispose() {
     _overlayEntry
-        ?.remove(); // Make sure to remove the entry to prevent memory leaks.
-    // Remove the listener if it was added - don't dispose the ValueNotifier as it's owned by the parent
+        ?.remove(); 
+    
     if (widget.refreshPhoneCode != null && _listener != null) {
       widget.refreshPhoneCode!.removeListener(_listener!);
     }
@@ -127,7 +107,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       _overlayEntry = _createOverlayEntry(context);
       Overlay.of(context).insert(_overlayEntry!);
     } else {
-      // Close the overlay if it is already open
+      
       _overlayEntry?.remove();
       _overlayEntry = null;
     }
@@ -144,7 +124,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
           link: _layerLink,
           showWhenUnlinked: false,
           offset: Offset(0.0, size.height),
-          // Adjust the offset if needed
+          
           child: Material(
             color: widget.dropDownColor,
             elevation: 4.0,
@@ -165,7 +145,6 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
   List<Widget> _buildDropdownItems() {
     List<Widget> dropdownItems = [];
 
-    // Helper function to create a dropdown item
     Widget buildDropdownItem(CountryCode country) {
       return GestureDetector(
         onTap: () {
@@ -199,14 +178,12 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       );
     }
 
-    // Add priority countries
     dropdownItems.addAll(
       allowedCountries
           .sublist(0, priorityCountryCodes.length)
           .map(buildDropdownItem),
     );
 
-    // Add divider after priority countries
     dropdownItems.add(
       Container(
         height: 1.responsiveSp,
@@ -215,7 +192,6 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       ),
     );
 
-    // Add the remaining countries
     dropdownItems.addAll(
       allowedCountries
           .sublist(priorityCountryCodes.length)

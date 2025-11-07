@@ -9,9 +9,8 @@ class NudronRandomStuff {
   static ValueNotifier<bool> isSignIn = ValueNotifier(true);
 
   static Future<void> logout() async {
-    // try {
+    
       await LoginPostRequests.logout();
-    // } catch (e) {
-    // }
+    
   }
 }

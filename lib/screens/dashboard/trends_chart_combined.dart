@@ -16,7 +16,6 @@ import '../../widgets/custom_multiple_selector_horizontal.dart';
 import 'trends_chart.dart';
 import 'trends_table.dart';
 
-
 class TrendsChartCombined extends StatefulWidget {
   const TrendsChartCombined({super.key});
 
@@ -38,7 +37,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
           ? dashboardBloc.currentFilters.first
           : null;
         
-        // Only rebuild if project actually changed
         if (mounted && _lastProject != currentProject) {
           _lastProject = currentProject;
           setState(() {});
@@ -47,7 +45,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
       builder: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         
-        // Check if we have any filters selected
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
           ? dashboardBloc.currentFilters.first.toUpperCase()
           : "NO PROJECT SELECTED";
@@ -100,13 +97,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                                 size: 30.responsiveSp,
                               ),
                             ),
-                            // splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            //       .currentTheme
-                            //       .splashColor,
-                            //   highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            //       .currentTheme
-                            //       .splashColor,
-                              
+                            
                           ),
                         ),
                       ),
@@ -147,7 +138,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                   key: UniqueKey(),
                 );
 
-                // return Container();
               }),
             ),
             Container(
@@ -163,9 +153,9 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                 return false;
               }, builder: (context, state) {
                 return TrendsTable(
-                    // key: UniqueKey(),
+                    
                     );
-                // return Container();
+                
               }),
             ),
             Container(
@@ -183,7 +173,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
     super.didUpdateWidget(oldWidget);
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
     if (dashboardBloc.currentFilters.isNotEmpty && mounted) {
-      setState(() {}); // Ensure UI updates when widget updates
+      setState(() {}); 
     }
   }
 }

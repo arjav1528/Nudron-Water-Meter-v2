@@ -35,19 +35,19 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   void initState() {
     super.initState();
-    // Add a listener to update the state when the obscuring changes
+    
     widget.controller.addListener(_updateObscureText);
   }
 
   @override
   void dispose() {
-    // Remove the listener to prevent memory leaks
+    
     widget.controller.removeListener(_updateObscureText);
     super.dispose();
   }
 
   void _updateObscureText() {
-    setState(() {}); // Trigger a rebuild to reflect the updated obscure state
+    setState(() {}); 
   }
 
   void _toggleObscureText() {
@@ -91,7 +91,6 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     );
   }
 }
-
 
 class ObscuringTextEditingController extends TextEditingController {
   bool isObscuring = true;

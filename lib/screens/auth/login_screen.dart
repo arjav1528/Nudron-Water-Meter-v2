@@ -28,7 +28,6 @@ import '../../widgets/password_controller.dart';
 import 'register_screen.dart';
 import 'two_factor_screen.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -41,14 +40,11 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-    // SystemChrome.setPreferredOrientations(
-    //     [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    
     NudronRandomStuff.isSignIn.addListener(() {
       setState(() {});
     });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _showEmailConfirmationDialog(context);
-    // });
+    
     super.initState();
   }
 
@@ -70,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         resizeToAvoidBottomInset: false,
-        // Prevents resize when the keyboard appears
+        
         body: Column(
           children: [
             Container(
@@ -82,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Align(
                     alignment: Alignment.bottomCenter,
-                    // Keeps the icon at the bottom center
+                    
                     child: Transform.rotate(
                       angle: 0,
                       child: SvgPicture.asset(
@@ -186,7 +182,7 @@ class _SigninPageState extends State<SigninPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      // Prevents the dialog from being dismissed by tapping outside
+      
       builder: (BuildContext dialogContext) {
         return AutoLogin(email: emailBiometricSaved!);
       },
@@ -218,23 +214,21 @@ class _SigninPageState extends State<SigninPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
-          // Loading is handled by main.dart BlocBuilder - no need to show additional loader
+          
         } else if (state is AuthAuthenticated) {
-          // Login successful
+          
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
           
-          // Reload dashboard data after successful login
           try {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
             dashboardBloc.loadInitialData();
           } catch (e) {
-            // If dashboard initialization fails, log it but don't block the UI
-            // The dashboard will handle the error state
+            
             debugPrint('Error initializing dashboard after login: $e');
           }
         } else if (state is AuthTwoFactorRequired) {
-          // Two-factor authentication required
+          
           CustomAlert.showCustomScaffoldMessenger(
               context,
               "Please enter the code sent to your authenticator app/sms",
@@ -245,11 +239,11 @@ class _SigninPageState extends State<SigninPage> {
                     referenceCode: state.refCode,
                   )));
         } else if (state is AuthError) {
-          // Show error message
+          
           CustomAlert.showCustomScaffoldMessenger(
               context, state.message, AlertType.error);
         } else if (state is AuthForgotPasswordSent) {
-          // Forgot password email sent
+          
           CustomAlert.showCustomScaffoldMessenger(
               context, state.message, AlertType.info);
           
@@ -334,7 +328,7 @@ class _SigninPageState extends State<SigninPage> {
                       width: 130.w,
                       text: "SEND EMAIL",
                       onPressed: () async {
-                        // Trigger forgot password using AuthBloc
+                        
                         final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
                         authBloc.add(AuthForgotPassword(email: emailController.text));
                       },
@@ -421,14 +415,11 @@ class _SigninPageState extends State<SigninPage> {
                     Center(
                       child: CustomButton(
                         text: "SIGN IN",
-                        // fontSize: 16,
-                        // width: 147.64.w,
-                        // height: 58.h,
+                        
                         dynamicWidth: true,
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
                           
-                          // Validate inputs
                           if (ConfigurationCustom.skipAnyAuths == false) {
                             if (emailController.text.isEmpty || getPassword().isEmpty) {
                               CustomAlert.showCustomScaffoldMessenger(
@@ -447,7 +438,6 @@ class _SigninPageState extends State<SigninPage> {
                             }
                           }
       
-                          // Trigger login using AuthBloc
                           final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
                           authBloc.add(AuthLogin(
                             email: emailController.text,
@@ -459,14 +449,11 @@ class _SigninPageState extends State<SigninPage> {
                     Container(height: 40.h),
                   ],
                 ),
-                // Container(height: 70.h),
-                // ((emailBiometricSaved == null) ||
-                //         (emailBiometricSaved!.isEmpty))
-                //     ? Container()
+                
                 Column(
                   children: [
                     Material(
-                      //make the splash blue color
+                      
                       color: Colors.transparent,
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -480,9 +467,9 @@ class _SigninPageState extends State<SigninPage> {
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed)) {
                                 return CommonColors.blue
-                                    .withOpacity(0.25); // Custom splash color
+                                    .withOpacity(0.25); 
                               }
-                              return null; // Default splash color
+                              return null; 
                             },
                           ),
                         ),
@@ -531,7 +518,7 @@ class _SigninPageState extends State<SigninPage> {
             ),
           );
         }),
-        // SizedBox(height: 38.h),
+        
       ],
             ),
     );
@@ -558,21 +545,17 @@ class _AutoLoginState extends State<AutoLogin> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          // Login successful
+          
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
 
-          // Reload dashboard data after successful biometric login
-          // Only load if projects are empty to avoid unnecessary reloads
-          // The main.dart listener will also call loadInitialData if needed
           try {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
             if (dashboardBloc.projects.isEmpty) {
               dashboardBloc.loadInitialData();
             }
           } catch (e) {
-            // If dashboard initialization fails, log it but don't block the UI
-            // The dashboard will handle the error state
+            
             debugPrint('Error initializing dashboard after biometric login: $e');
           }
 
@@ -580,13 +563,13 @@ class _AutoLoginState extends State<AutoLogin> {
             Navigator.of(context).pop();
           }
         } else if (state is AuthTwoFactorRequired) {
-          // Two-factor authentication required
+          
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => EnterTwoFacCode(
                     referenceCode: state.refCode,
                   )));
         } else if (state is AuthError) {
-          // Show error message
+          
           CustomAlert.showCustomScaffoldMessenger(
               context, state.message, AlertType.error);
           Navigator.of(context).pop();
@@ -664,7 +647,7 @@ class _AutoLoginState extends State<AutoLogin> {
                 CustomButton(
                   text: "YES",
                   onPressed: () async {
-                    // Trigger biometric login using AuthBloc
+                    
                     final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
                     authBloc.add(AuthLoginWithBiometric());
                   },

@@ -31,7 +31,6 @@ import 'active_devices.dart';
 import 'country_code_picker.dart';
 import 'two_factor_disabled.dart';
 
-
 class ProfileDrawer extends StatefulWidget {
   const ProfileDrawer({super.key});
 
@@ -56,7 +55,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   TextEditingController deleteConfirmationFieldController = TextEditingController();
   bool deleteAccountVisible = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -67,9 +65,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
   @override
   void dispose() {
-    // Dispose of the ValueNotifier we own
+    
     refreshPhoneCode.dispose();
-    // Dispose of text controllers
+    
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
@@ -103,7 +101,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
     for (var country in countries) {
       if (country.dialCode == dialCode) {
-        return country; // Returns the country code like "IN", "US"
+        return country; 
       }
     }
     return CountryCode(code: "IN", dialCode: "+91", name: "India");
@@ -114,7 +112,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     oldPasswordController.clear();
     confirmNewPasswordController.clear();
   }
-
 
   bool emailChanged() {
     return _emailController.text !=
@@ -175,10 +172,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthUnauthenticated) {
-          // User has been logged out, close the profile drawer
+          
           Navigator.of(context).pop();
         } else if (state is AuthError) {
-          // Show error message
+          
           CustomAlert.showCustomScaffoldMessenger(
             context, 
             state.message, 
@@ -522,9 +519,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                           CustomButton(
                                             text: "LOGOUT",
                                             dynamicWidth: true,
-                                            // width: 154.w,
+                                            
                                             onPressed: () async {
-                                              // Use the new AuthBloc for logout
+                                              
                                               BlocProvider.of<AuthBloc>(context).add(AuthLogout());
                                             },
                                             isRed: true,
@@ -532,8 +529,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         ],
                                       )),
 
-                                  // const MenuBarContainer(
-                                  //     "Global Logout", double.infinity, 36.19),
                                 ],
                               ),
                               SizedBox(
@@ -595,9 +590,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                 CustomButton(
                                                   text: "GLOBAL LOGOUT",
                                                   dynamicWidth: true,
-                                                  // width: 154.w,
+                                                  
                                                   onPressed: () async {
-                                                    // Use the new AuthBloc for global logout
+                                                    
                                                     BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
                                                   },
                                                   isRed: true,
@@ -608,8 +603,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         ),
                                       )),
 
-                                  // const MenuBarContainer(
-                                  //     "Global Logout", double.infinity, 36.19),
                                 ],
                               ),
                               SizedBox(
@@ -667,7 +660,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               CustomButton(
                                                 text: "DELETE",
                                                 dynamicWidth: true,
-                                                // width: 154.w,
+                                                
                                                 onPressed: () async {
                                                   setState(() {
                                                     deleteAccountVisible = true;
@@ -708,7 +701,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                           setState(() {
                                                             deleteAccountVisible = false;
                                                           });
-                                                          // Perform cancel action
+                                                          
                                                         },
                                                       ),
                                                   
@@ -716,7 +709,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                         text: "CONFIRM",
                                                         onPressed: () {
                                                           if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
-                                                            // Use the new AuthBloc for delete account
+                                                            
                                                             BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
                                                           } else {
                                                             CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
@@ -733,8 +726,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         ],
                                       )),
 
-                                  // const MenuBarContainer(
-                                  //     "Global Logout", double.infinity, 36.19),
                                 ],
                               ),
                               SizedBox(
@@ -1006,7 +997,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
     if (isSetup) {
       await biometricHelper.isCorrectBiometric().then((value) async {
         if (value) {
-          // showDisableConfirm = false;
+          
           await biometricHelper.toggleBiometric(false);
           CustomAlert.showCustomScaffoldMessenger(
               context, "Biometric Authentication Disabled", AlertType.success);
@@ -1023,10 +1014,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
       });
     } else {
       await biometricHelper.toggleBiometric(false);
-      // CustomAlert.showCustomScaffoldMessenger(
-      //     context,
-      //     "Biometric Authentication is not set up on this device. Removing 2FA",
-      //     AlertType.error);
+      
       return true;
     }
     return false;

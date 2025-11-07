@@ -8,7 +8,6 @@ import '../api/auth_service.dart';
 class BiometricHelper {
   final LocalAuthentication _localAuth = LocalAuthentication();
 
-  // Function to check if the device supports biometric authentication
   Future<bool> isBiometricSupported() async {
     try {
       return await _localAuth.canCheckBiometrics;
@@ -17,7 +16,6 @@ class BiometricHelper {
     }
   }
 
-  // Function to check if biometric authentication is set up on the device
   Future<bool> isBiometricSetup() async {
     try {
       bool canCheckBiometrics = await isBiometricSupported();
@@ -36,7 +34,6 @@ class BiometricHelper {
     return await const FlutterSecureStorage().read(key: 'password') ?? '';
   }
 
-  // Function to authenticate the user using biometrics
   Future<bool> authenticateWithBiometrics(
       {String reason = 'Authenticate to proceed'}) async {
     try {
@@ -56,7 +53,6 @@ class BiometricHelper {
     }
   }
 
-  // Function to check if biometric authentication was successful
   Future<bool> isCorrectBiometric() async {
     try {
       return await authenticateWithBiometrics(

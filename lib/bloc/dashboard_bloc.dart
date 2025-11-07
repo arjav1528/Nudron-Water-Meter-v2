@@ -26,7 +26,6 @@ import '../utils/excel_helpers.dart';
 import '../utils/performance_monitor.dart';
 import 'dashboard_event.dart';
 
-
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   static ChangeNotifier toUpdateProfile = ChangeNotifier();
 
@@ -48,216 +47,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   var allDevices;
   NudronChartMap? nudronChartData;
   int screenIndex = 0;
-  GlobalKey repaintBoundaryKey = GlobalKey(); // Define a global key
+  GlobalKey repaintBoundaryKey = GlobalKey(); 
   changeKey(GlobalKey key) {
     repaintBoundaryKey = key;
   }
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
-
-  // Future<void> captureSS(BuildContext context) async {
-  //   try {
-  //     // Show loading indicator
-  //     showDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       builder: (BuildContext context) {
-  //         return Center(
-  //           child: Container(
-  //             padding: EdgeInsets.all(16),
-  //             decoration: BoxDecoration(
-  //               color:
-  //                   Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
-  //               borderRadius: BorderRadius.circular(8),
-  //             ),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 CircularProgressIndicator(
-  //                   valueColor: AlwaysStoppedAnimation<Color>(
-  //                     Provider.of<ThemeNotifier>(context)
-  //                         .currentTheme
-  //                         .loginTitleColor,
-  //                   ),
-  //                 ),
-  //                 SizedBox(height: 16),
-  //                 Text(
-  //                   "Preparing chart...",
-  //                   style: TextStyle(
-  //                     color: Provider.of<ThemeNotifier>(context)
-  //                         .currentTheme
-  //                         .basicAdvanceTextColor,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     );
-  //
-  //     final screenshotController = ScreenshotController();
-  //
-  //     // Get necessary providers and data
-  //     final mediaQuery = MediaQuery.of(context);
-  //     final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
-  //     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-  //
-  //     // Create widget with proper dimensions and rotation
-  //     final screenWidth = mediaQuery.size.height;
-  //     final screenHeight = mediaQuery.size.width;
-  //
-  //     final widgetToCapture = ScreenUtilInit(
-  //       designSize: Size(screenWidth, screenHeight),
-  //       minTextAdapt: true,
-  //       splitScreenMode: true,
-  //       builder: (_, child) => MultiBlocProvider(
-  //         providers: [
-  //           BlocProvider.value(value: dashboardBloc),
-  //         ],
-  //         child: MultiProvider(
-  //           providers: [
-  //             ChangeNotifierProvider.value(value: themeNotifier),
-  //           ],
-  //           child: MaterialApp(
-  //             debugShowCheckedModeBanner: false,
-  //             builder: (context, child) => MediaQuery(
-  //               data: mediaQuery.copyWith(
-  //                 size: Size(screenWidth, screenHeight),
-  //                 devicePixelRatio: mediaQuery.devicePixelRatio,
-  //               ),
-  //               child: Scaffold(
-  //                 backgroundColor: themeNotifier.currentTheme.bgColor,
-  //                 body: BackgroundChart(),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     );
-  //
-  //     // Capture with a delay to ensure proper rendering
-  //     final capturedImage = await screenshotController.captureFromWidget(
-  //       widgetToCapture,
-  //       delay: const Duration(milliseconds: 300),
-  //       targetSize: Size(screenWidth, screenHeight),
-  //       context: context,
-  //       pixelRatio: mediaQuery.devicePixelRatio,
-  //     );
-  //
-  //     // Remove loading dialog
-  //     if (context.mounted) {
-  //       Navigator.of(context).pop();
-  //     }
-  //
-  //     // Request storage permission
-  //     final permissionStatus = await Permission.storage.request();
-  //     if (!permissionStatus.isGranted) {
-  //       if (context.mounted) {
-  //         CustomAlert.showCustomScaffoldMessenger(
-  //           context,
-  //           "Storage permission required to save screenshot",
-  //           AlertType.error,
-  //         );
-  //       }
-  //       return;
-  //     }
-  //
-  //     // Get appropriate directory
-  //     Directory? directory;
-  //     if (Platform.isAndroid) {
-  //       directory = await getExternalStorageDirectory();
-  //     } else if (Platform.isIOS) {
-  //       directory = await getApplicationDocumentsDirectory();
-  //     } else {
-  //       throw UnsupportedError("Unsupported platform");
-  //     }
-  //
-  //     if (directory == null) {
-  //       throw Exception("Error: External storage directory not available");
-  //     }
-  //
-  //     // Generate unique filename with timestamp and date
-  //     final now = DateTime.now();
-  //     final formattedDate =
-  //         "${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}";
-  //     final timestamp = now.millisecondsSinceEpoch;
-  //     final filePath =
-  //         "${directory.path}/chart_${formattedDate}_$timestamp.png";
-  //
-  //     // Save the file
-  //     final file = File(filePath);
-  //     await file.create(recursive: true);
-  //     await file.writeAsBytes(capturedImage);
-  //
-  //     if (context.mounted) {
-  //       // Show success message
-  //       CustomAlert.showCustomScaffoldMessenger(
-  //         context,
-  //         "Chart saved successfully",
-  //         AlertType.success,
-  //       );
-  //
-  //       // Open the saved file
-  //       await OpenFile.open(filePath, linuxByProcess: true);
-  //     }
-  //   } catch (e) {
-  //     // Remove loading dialog if still showing
-  //     if (context.mounted && Navigator.of(context).canPop()) {
-  //       Navigator.of(context).pop();
-  //     }
-  //
-  //     if (context.mounted) {
-  //       CustomAlert.showCustomScaffoldMessenger(
-  //         context,
-  //         "Error saving chart: ${e.toString()}",
-  //         AlertType.error,
-  //       );
-  //     }
-  //   }
-  // }
-
-  // Future<void> captureSS() async {
-  //   try {
-  //     ScreenshotController screenshotController = ScreenshotController();
-  //
-  //     screenshotController
-  //         .captureFromWidget(BackgroundChart())
-  //         .then((capturedImage) async {
-  //       await Permission.storage.request();
-  //
-  //       Directory? directory;
-  //       if (Platform.isAndroid) {
-  //         directory = await getExternalStorageDirectory();
-  //       } else if (Platform.isIOS) {
-  //         directory = await getApplicationDocumentsDirectory();
-  //       } else {
-  //         String errorMsg = "Unsupported platform";
-  //         CustomAlert.showCustomScaffoldMessenger(
-  //             mainNavigatorKey.currentContext!, errorMsg, AlertType.error);
-  //         throw UnsupportedError(errorMsg);
-  //       }
-  //
-  //       if (directory == null) {
-  //         throw Exception("Error: External storage directory not available");
-  //       }
-  //
-  //       String filePath = "${directory.path}/chart.png";
-  //       File file = File(filePath);
-  //       await file.create(recursive: true);
-  //       await file.writeAsBytes(capturedImage);
-  //
-  //       // Open the saved file
-  //       OpenFile.open(filePath, linuxByProcess: true);
-  //     });
-  //   } catch (e) {
-  //     CustomAlert.showCustomScaffoldMessenger(
-  //       mainNavigatorKey.currentContext!,
-  //       "Error in capturing screenshot: ${e.toString()}",
-  //       AlertType.error,
-  //     );
-  //   }
-  // }
 
   Future<void> captureSS() async {
     if (Platform.isAndroid) {
@@ -283,12 +78,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
           Uint8List pngBytes = byteData.buffer.asUint8List();
 
-          // Request storage permission only for mobile platforms
           if (Platform.isAndroid || Platform.isIOS) {
             try {
               await Permission.storage.request();
             } catch (e) {
-              // Continue with file operations even if permission request fails
+              
             }
           }
 
@@ -302,7 +96,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           await file.create(recursive: true);
           await file.writeAsBytes(pngBytes);
 
-          // Open the saved file
           OpenFile.open(filePath, linuxByProcess: true);
         });
       } catch (e) {
@@ -319,15 +112,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           emit(ChangeScreen());
         }
 
-        // Allow some time for the UI to render fully
-        // await Future.delayed(Duration(milliseconds: 50));
-
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          // await Future.delayed(Duration(milliseconds: 20000));
+          
           RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext!
               .findRenderObject() as RenderRepaintBoundary;
-
-          // Try to capture the screenshot
 
           ui.Image image = await boundary.toImage(pixelRatio: 3);
           screenIndex = 0;
@@ -341,12 +129,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
           Uint8List pngBytes = byteData.buffer.asUint8List();
 
-          // Request storage permission only for mobile platforms
           if (Platform.isAndroid || Platform.isIOS) {
             try {
               await Permission.storage.request();
             } catch (e) {
-              // Continue with file operations even if permission request fails
+              
             }
           }
 
@@ -357,7 +144,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           await file.create(recursive: true);
           await file.writeAsBytes(pngBytes);
 
-          // Open the saved file
           OpenFile.open(filePath, linuxByProcess: true);
         });
       } catch (e) {
@@ -408,13 +194,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     selectedMonth = month;
 
     int baseYear = 2020 + (month) ~/ 12;
-    int baseMonth = (month) % 12 + 1; // month is 0-based relative, convert to 1-12
+    int baseMonth = (month) % 12 + 1; 
     final firstDay = DateTime(baseYear, baseMonth, 1);
     final lastDay = DateTime(baseYear, baseMonth + 1, 0);
     selectedStartDate = firstDay;
     selectedEndDate = lastDay;
 
-    // Use cached data loading
     await _loadSummaryDataWithCache();
     refreshSummaryPage();
   }
@@ -432,7 +217,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     selectedStartDate = startDate;
     selectedEndDate = endDate;
 
-    // Use cache for date range data
     final cacheKey = 'summary_${project}_${startDayNum}_$endDayNum';
     
     if (_isCacheValid(cacheKey)) {
@@ -455,7 +239,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           "Please select a project in the TRENDS page first.");
     }
 
-    // Use cached data loading
     await _loadDevicesDataWithCache();
     refreshDevicesPage();
   }
@@ -463,8 +246,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   filterDevices(String query) {
     debugPrint("Query is : $query");
 
-    List header = allDevices[0]; // Save the header
-    List dataToFilter = allDevices[1]; // Get the data array to filter
+    List header = allDevices[0]; 
+    List dataToFilter = allDevices[1]; 
 
     List filteredData = dataToFilter.where((device) {
       if (device is! List || device.length < 2) {
@@ -472,8 +255,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         return false;
       }
 
-      String id = device[0].toString().toLowerCase(); // ID is at index 0
-      String label = device[1].toString().toLowerCase(); // Label is at index 1
+      String id = device[0].toString().toLowerCase(); 
+      String label = device[1].toString().toLowerCase(); 
       return id.contains(query.toLowerCase()) ||
           label.contains(query.toLowerCase());
     }).toList();
@@ -506,9 +289,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   List<String> getMonthNumbers() {
     int currentMonthNumber =
-        getCurrentMonth(); // (currentDate.year - startDate.year) * 12 + currentDate.month;
+        getCurrentMonth(); 
 
-    // Generate the last 12 months
     List<int> months = [];
     for (int i = 1; i < 13; i++) {
       months.add(currentMonthNumber - i);
@@ -517,19 +299,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   String convertMonthNumberToText(String monthNumber) {
-    // Try to parse the string to an integer
+    
     int? monthNum = int.tryParse(monthNumber);
 
-    // If parsing fails, return the original text
     if (monthNum == null) {
       return monthNumber;
     }
 
-    // Calculate the year and month based on the parsed month number
     int year = 2020 + (monthNum) ~/ 12;
     int month = (monthNum) % 12;
 
-    // Define month names
     List<String> monthNames = [
       "January",
       "February",
@@ -545,12 +324,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       "December"
     ];
 
-    // Convert to "Month-Year" format
     return "${monthNames[month]} $year";
   }
 
   getFiltersAndSummaryForProject(String project) async {
-    // Use cache to avoid duplicate API calls
+    
     final cacheKey = 'filters_$project';
     
     dynamic filtersData;
@@ -579,7 +357,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       AlertType.info,
     );
 
-    // Validate data format
     bool isValidSheetData(dynamic sheetData) {
       return sheetData is List &&
              sheetData.length >= 2 &&
@@ -625,7 +402,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     if (path != null) {
-      // Show the directory in the ScaffoldMessenger
+      
       final directory = File(path).parent.path;
       CustomAlert.showCustomScaffoldMessenger(
         mainNavigatorKey.currentContext!,
@@ -642,13 +419,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Enhanced cache for API responses to prevent duplicate calls
   final Map<String, dynamic> _apiCache = {};
   final Map<String, DateTime> _cacheTimestamps = {};
   final Map<String, Future<dynamic>> _pendingRequests = {};
   static const Duration _cacheExpiry = Duration(minutes: 15);
   
-  // Memory-efficient cache with size limits
   static const int _maxCacheSize = 50;
   final List<String> _cacheAccessOrder = [];
 
@@ -659,7 +434,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     bool toRefreshSummaryPage = true;
 
     try {
-      // Remove dynamic tab update, always use static tabs
+      
       await updateBottomNavTabs(project: currentFilters.first);
       emit(ChangeDashBoardNav());
     } catch (e) {
@@ -668,10 +443,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       return null;
     }
 
-    // Load data in parallel to improve performance
     final List<Future<void>> dataLoadingTasks = [];
     
-    // Only load trends data once
     if (currentFilters.isNotEmpty) {
       dataLoadingTasks.add(_loadTrendsDataWithCache(currentFilters.firstOrNull));
     }
@@ -681,7 +454,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       dataLoadingTasks.add(_loadDevicesDataWithCache());
     }
 
-    // Execute all data loading tasks in parallel
     try {
       await Future.wait(dataLoadingTasks);
     } catch (e) {
@@ -690,14 +462,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       return null;
     }
 
-    // Emit refresh states only once at the end
     refreshSummaryPage();
     refreshDashboard();
     
     return filterData;
   }
 
-  // Helper method to load trends data with enhanced caching and deduplication
   Future<void> _loadTrendsDataWithCache(String? project) async {
     if (project == null) return;
     
@@ -705,7 +475,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     
     final cacheKey = 'trends_${project}_${currentFilters.length > 1 ? currentFilters.sublist(1).join('>') : ""}';
     
-    // Check if there's already a pending request for this data
     if (_pendingRequests.containsKey(cacheKey)) {
       final data = await _pendingRequests[cacheKey]!;
       updateTrendsData(data);
@@ -719,7 +488,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       return;
     }
 
-    // Create the future and store it to prevent duplicate requests
     final future = _loadTrendsDataInternal(project);
     _pendingRequests[cacheKey] = future;
     
@@ -744,7 +512,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         selectedLevels: currentFilters.length > 1 ? currentFilters.sublist(1) : [""]);
   }
 
-  // Helper method to load summary data with caching
   Future<void> _loadSummaryDataWithCache() async {
     if (currentFilters.isEmpty) return;
     
@@ -766,7 +533,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Helper method to load devices data with caching
   Future<void> _loadDevicesDataWithCache() async {
     if (currentFilters.isEmpty) return;
     
@@ -780,15 +546,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     try {
-      // Reuse filters data if already fetched (to avoid duplicate API call)
+      
       final filtersCacheKey = 'filters_$project';
       dynamic response;
       
       if (_isCacheValid(filtersCacheKey)) {
-        // Reuse already fetched filters data
+        
         response = _apiCache[filtersCacheKey];
       } else {
-        // Fetch filters if not cached (but this should rarely happen)
+        
         response = await DataPostRequests.getFilters(project: project);
         _apiCache[filtersCacheKey] = response;
         _cacheTimestamps[filtersCacheKey] = DateTime.now();
@@ -820,7 +586,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Check if cache is valid with LRU eviction
   bool _isCacheValid(String cacheKey) {
     if (!_apiCache.containsKey(cacheKey) || !_cacheTimestamps.containsKey(cacheKey)) {
       return false;
@@ -830,7 +595,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     final isValid = DateTime.now().difference(cacheTime) < _cacheExpiry;
     
     if (isValid) {
-      // Update access order for LRU
+      
       _cacheAccessOrder.remove(cacheKey);
       _cacheAccessOrder.add(cacheKey);
     }
@@ -838,7 +603,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     return isValid;
   }
 
-  // Clear cache when needed with LRU eviction
   void clearCache() {
     _apiCache.clear();
     _cacheTimestamps.clear();
@@ -846,7 +610,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     _cacheAccessOrder.clear();
   }
   
-  // Evict least recently used cache entries
   void _evictLRUEntries() {
     while (_apiCache.length > _maxCacheSize && _cacheAccessOrder.isNotEmpty) {
       final oldestKey = _cacheAccessOrder.removeAt(0);
@@ -855,7 +618,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Clear cache for specific project
   void clearProjectCache(String project) {
     final keysToRemove = _apiCache.keys.where((key) => key.contains(project)).toList();
     for (final key in keysToRemove) {
@@ -863,7 +625,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       _cacheTimestamps.remove(key);
     }
     
-    // Also clear any pending requests for this project
     final pendingKeysToRemove = _pendingRequests.keys.where((key) => key.contains(project)).toList();
     for (final key in pendingKeysToRemove) {
       _pendingRequests.remove(key);
@@ -872,60 +633,24 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   static Future<List<String>?> updateBottomNavTabs(
       {required String? project}) async {
-    // Always return 3 fixed tabs (trends, billing, activity)
+    
     List<String> standardTabs = ['trends', 'billing', 'activity'];
     MainDashboardPage.bottomNavTabs = standardTabs;
     return standardTabs;
     
-    // Original dynamic code commented out
-    // try {
-    //   // Fetch the response from API
-    //   dynamic response = await DataPostRequests.getFilters(project: project);
-    //   List<String> bottomNavTabs = [];
-    //   // Ensure the response is a list
-    //   if (response is List) {
-    //     // Extract the first element (title) from each top-level list
-    //     bottomNavTabs = response
-    //         .map((item) {
-    //           if (item is List && item.isNotEmpty && item[0] is String) {
-    //             return item[0].toLowerCase(); // Convert to lowercase
-    //           }
-    //           return null;
-    //         })
-    //         .whereType<String>()
-    //         .toList(); // Remove null values
-    //   }
-    //   debugPrint("Updated bottomNavTabs: $bottomNavTabs");
-    //   MainDashboardPage.bottomNavTabs = bottomNavTabs;
-    //   return bottomNavTabs; // Debug debugPrint
-    // } catch (e) {
-    //   debugPrint("Error fetching bottomNavTabs: $e");
-    //   return ["trends", "billing", "activity"];
-    // }
   }
 
   getDateFromDayNumber(int dayNumber) {
-    // var date = DateTime.now().subtract(Duration(days: dayNumber));
-    // return "${date.year}-${date.month}-${date.day}";
-    //day number is day from 1/1/2020
+    
     var date = DateTime.utc(2020, 1, 1).add(Duration(days: dayNumber));
-    //DATE FORMAT: 01-01-2020
+    
     return DateFormat('dd-MMM-yy').format(date);
   }
 
   updateTrendsData(var newData) {
-    // nudronChartData = NudronChartMap((newData[1] == null ||
-    //         (newData[1].runtimeType is String && newData[1] == "null") ||
-    //         (newData[1].runtimeType is List && newData[1].isEmpty))
-    //     ? []
-    //     : trendsData[1]
-    //         .map<List<dynamic>>((item) => [item[0], item[1].toInt(), item[2]])
-    //         .toList());
-
+    
     nudronChartData = NudronChartMap(newData);
   }
-
-  // Removed loadTrendsData - use _loadTrendsDataWithCache instead to avoid duplicate API calls
 
   selectProject(int selectedIndex) async {
     if (selectedIndex < projects.length && selectedIndex >= 0) {
@@ -935,20 +660,17 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         return filterData;
       }
       
-      // Clear cache for the previous project if switching projects
       if (currentFilters.isNotEmpty && currentFilters.first != selectedProject) {
         clearProjectCache(currentFilters.first);
       }
       
-      // Reset bottom nav position to trends tab if clearing the project
       if (selectedIndex == -1) {
-        switchBottomNavPos(0); // Trends tab
+        switchBottomNavPos(0); 
       }
       
       return await getFiltersAndSummaryForProject(selectedProject);
     }
     
-    // If no project selected, ensure we're on the trends tab
     switchBottomNavPos(0);
     return null;
   }
@@ -966,7 +688,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         throw Exception("Failed to get user info");
       }
       
-      // Clear cache when user info is refreshed
       clearCache();
       
       this.projects.clear();
@@ -986,7 +707,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       }
 
       userInfo = UserInfo.fromJson(json["profile"]);
-      // Two-factor authentication is now handled by AuthService
+      
     } catch (e) {
       throw ("Error in getting user info $e");
     }
@@ -1004,7 +725,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   void switchBottomNavPos(int pos) {
     bottomNavPos = pos;
     emit(ChangeDashBoardNav());
-    if (pos == 1 && currentFilters.isNotEmpty) { // If switching to trends tab
+    if (pos == 1 && currentFilters.isNotEmpty) { 
       emit(RefreshDashboard());
     }
   }
@@ -1022,11 +743,13 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   loadInitialData() async {
     try {
-      // Check if user is logged in before attempting to load data
+      debugPrint('loadInitialData called, current state: $state');
+      
+      emit(DashboardPageInitial());
+      
       final isLoggedIn = await AuthService.isLoggedIn();
       if (!isLoggedIn) {
-        // User is not logged in, emit error state but don't throw
-        // This is expected behavior when the app first starts
+        
         if (kDebugMode) {
           debugPrint('User is not logged in, skipping dashboard data load');
         }
@@ -1034,22 +757,24 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         return;
       }
       
+      debugPrint('User is logged in, loading user info...');
       await initUserInfo();
+      debugPrint('User info loaded, projects: ${projects.length}');
       
-      // If a project is already selected, load its data
       if (currentFilters.isNotEmpty && projects.isNotEmpty) {
         final selectedProject = currentFilters.first;
         if (projects.contains(selectedProject)) {
           try {
-            // Get filter data for the selected project
+            debugPrint('Loading data for selected project: $selectedProject');
+            
             final projectIndex = projects.indexOf(selectedProject);
             final filterData = await selectProject(projectIndex);
             
             if (filterData != null) {
-              // Load the dashboard data for the selected project
+              
               await updateSelectedFilters([selectedProject], filterData);
-              // State is already emitted by updateSelectedFilters (ChangeDashBoardNav, RefreshDashboard)
-              // But we also emit DashboardPageLoaded to ensure the UI updates
+              
+              debugPrint('Project data loaded successfully');
               emit(DashboardPageLoaded());
               return;
             }
@@ -1057,12 +782,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             if (kDebugMode) {
               debugPrint('Error loading project data after init: ${e.toString()}');
             }
-            // Continue and emit DashboardPageLoaded anyway - user can select project manually
+            
           }
         }
       }
       
-      // No project selected or project data loading failed - just emit loaded state
+      debugPrint('No project selected, emitting DashboardPageLoaded');
       emit(DashboardPageLoaded());
     } catch (e) {
       if (kDebugMode) {
@@ -1074,9 +799,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   DashboardBloc() : super(DashboardPageInitial()) {
     toUpdateProfile.addListener(updateProfile);
-    loadInitialData();
     
-    // Log performance summary periodically in debug mode
     if (kDebugMode) {
       Timer.periodic(const Duration(minutes: 5), (timer) {
         PerformanceMonitor.logPerformanceSummary();

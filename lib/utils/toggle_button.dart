@@ -68,8 +68,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     return SizedBox(
       width: widget.width.w,
       height: widget.height.h,
-      // width: 244.w,
-      // height: 50.91.h,
+      
       child: Stack(
         children: [
           widget.backgroundColor == null
@@ -90,9 +89,9 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             left: selectedIndex * (widget.smallerWidth.w) + widget.leftGap.w,
-            // Adjust for gap
+            
             top: widget.verticalGap.h,
-            // Adjust for vertical gap
+            
             child: getColor(selectedIndex) == CommonColors.red
                 ? SizedBox(
                     width: widget.smallerWidth.w,

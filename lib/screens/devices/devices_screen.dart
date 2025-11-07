@@ -52,7 +52,6 @@ class _DevicesPageState extends State<DevicesPage> {
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
 
-
         return GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -61,17 +60,7 @@ class _DevicesPageState extends State<DevicesPage> {
             resizeToAvoidBottomInset: false,
             backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-            // body: Center(
-            //   child: Container(
-            //     child: Column(
-            //       children: [
-            //         Text("Devices Page Remaining"),
-            //         Text("Devices Page Remaining"),
-                   
-            //       ],
-            //     ),
-            //   ),  
-            // ),
+            
             body: Column(
               children: [
                 Container(
@@ -119,13 +108,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                 size: 30.responsiveSp,
                               ),
                             ),
-                            // splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            //       .currentTheme
-                            //       .splashColor,
-                            //   highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                            //       .currentTheme
-                            //       .splashColor,
-                              
+                            
                           ),
                         ),
                       ),
@@ -156,10 +139,7 @@ class _DevicesPageState extends State<DevicesPage> {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    // Container(
-                    //   width: 16.responsiveSp,
-                    //   color: CommonColors.red,
-                    // ),
+                    
                     Expanded(
                       child: Material(
                         color: Colors.transparent,
@@ -187,8 +167,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                   padding:
                                   EdgeInsets.fromLTRB(12.w, 0.h, 0.w, 0.h),
                                   child: TextField(
-                                    // textAlign: TextAlign
-                                    //     .center, // Centers input text & hint horizontally
+                                    
                                     controller: _searchController,
                                     keyboardType: TextInputType.text,
                                     inputFormatters: [
@@ -214,7 +193,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                       suffixIcon: Padding(
                                         padding: EdgeInsets.only(
                                             right:
-                                            8.w), // Adjust padding if needed
+                                            8.w), 
                                         child: Icon(
                                           Icons.search,
                                           color:
@@ -225,18 +204,17 @@ class _DevicesPageState extends State<DevicesPage> {
                                         ),
                                       ),
                                       border: InputBorder
-                                          .none, // Removesg default border
+                                          .none, 
             
-                                      // Key Fix for Vertical Centering
                                       contentPadding: EdgeInsets.symmetric(
                                         vertical: 0,
-                                        // horizontal: 4.0,
+                                        
                                       ),
                                       isCollapsed:
-                                      true, // Prevents excessive internal padding
+                                      true, 
                                     ),
                                     textAlignVertical: TextAlignVertical
-                                        .center, // Ensures vertical centering
+                                        .center, 
                                     onChanged: (query) {
                                       dashboardBloc
                                           .filterDevices(_searchController.text);
@@ -254,7 +232,7 @@ class _DevicesPageState extends State<DevicesPage> {
                   height: 3.responsiveSp,
                   color: CommonColors.red,
                 ),
-                // SizedBox(height: 16),
+                
                 Expanded(
                   child: BlocBuilder<DashboardBloc, DashboardState>(
                     buildWhen: (previous, current) {

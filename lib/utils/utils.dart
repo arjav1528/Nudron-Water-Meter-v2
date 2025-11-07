@@ -9,16 +9,15 @@ class Utils {
     data.sort((a, b) {
       DateTime dateA = parseMMMYYToDate(a[0]);
       DateTime dateB = parseMMMYYToDate(b[0]);
-      return dateB.compareTo(dateA); // Descending order
+      return dateB.compareTo(dateA); 
     });
 
     return [tableData[0], data];
   }
 
-  /// Converts "MMM YYYY" (e.g., "Jan 2025") to a DateTime object
   static DateTime parseMMMYYToDate(String dateStr) {
     List<String> parts = dateStr.split(' ');
-    if (parts.length != 2) return DateTime(1900); // Fallback for errors
+    if (parts.length != 2) return DateTime(1900); 
 
     String monthStr = parts[0];
     int year = int.tryParse(parts[1]) ?? 1900;
@@ -52,7 +51,6 @@ class Utils {
         return "";
       }
 
-      // Convert to integer
       int ms = (milliseconds is int)
           ? milliseconds
           : int.tryParse(milliseconds.toString()) ?? 0;

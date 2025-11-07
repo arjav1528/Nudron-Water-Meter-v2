@@ -17,7 +17,6 @@ class PerformanceMonitor {
       _measurements.putIfAbsent(operation, () => []).add(duration);
       _startTimes.remove(operation);
       
-      // Log slow operations
       if (duration.inMilliseconds > 100) {
         developer.log('Performance: $operation took ${duration.inMilliseconds}ms');
       }

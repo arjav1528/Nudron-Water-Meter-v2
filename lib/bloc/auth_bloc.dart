@@ -9,7 +9,6 @@ import '../utils/biometric_helper.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
-/// Authentication Bloc for managing authentication state
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<AuthCheckLoginStatus>(_onCheckLoginStatus);
@@ -24,21 +23,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthDisableTwoFactor>(_onDisableTwoFactor);
     on<AuthRefreshToken>(_onRefreshToken);
     
-    // Register callback for forced logouts (like 403 errors)
     AuthService.onLoggedOut = () {
       debugPrint('Forced logout detected, emitting AuthUnauthenticated');
       add(AuthLogout());
     };
   }
 
-  /// Check if user is currently logged in
-  /// This method is called on app startup and should be FAST
-  /// We don't emit AuthLoading to avoid blocking the UI
   Future<void> _onCheckLoginStatus(AuthCheckLoginStatus event, Emitter<AuthState> emit) async {
     try {
       debugPrint('Checking login status...');
       
-      // Quick check with aggressive timeout - fail fast
       final isLoggedIn = await AuthService.isLoggedIn().timeout(
         const Duration(seconds: 2),
         onTimeout: () {
@@ -54,11 +48,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
       
-      // User is logged in, try to load additional data
-      // But don't block - emit authenticated immediately if anything fails
       try {
         debugPrint('Calling refreshListeners...');
-        // Try to refresh listeners with short timeout
+        
         await LoginPostRequests.refreshListeners().timeout(
           const Duration(seconds: 2),
           onTimeout: () {
@@ -70,7 +62,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         debugPrint('refreshListeners error: $e, continuing anyway');
       }
       
-      // Try to get user info and 2FA status with aggressive timeout
       Map<String, dynamic>? userInfo;
       bool isTwoFactorEnabled = false;
       
@@ -88,11 +79,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         debugPrint('2FA status: $isTwoFactorEnabled');
       } catch (e) {
         debugPrint('Error loading user details: $e, proceeding without them');
-        // Continue anyway - we'll load them later
+        
       }
       
       debugPrint('Emitting AuthAuthenticated state...');
-      // Emit authenticated state - the user is logged in
+      
       emit(AuthAuthenticated(
         userInfo: userInfo,
         isTwoFactorEnabled: isTwoFactorEnabled,
@@ -101,12 +92,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       debugPrint('Login status check complete: authenticated');
     } catch (e) {
       debugPrint('Fatal error during login check: $e, defaulting to unauthenticated');
-      // On any catastrophic error, assume not logged in
+      
       emit(AuthUnauthenticated());
     }
   }
 
-  /// Login with email and password
   Future<void> _onLogin(AuthLogin event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -118,7 +108,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       
       if (result.success) {
         try {
-          // Refresh listeners to load biometric and 2FA state from secure storage
+          
           await LoginPostRequests.refreshListeners().timeout(
             const Duration(seconds: 3),
             onTimeout: () {
@@ -126,7 +116,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             },
           );
           
-          // Don't block on user info; time out quickly
           final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
           final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
           
@@ -136,7 +125,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ));
         } catch (e) {
           debugPrint('Error loading user info during login: $e');
-          // If we can't get user info but login succeeded, still authenticate
+          
           emit(AuthAuthenticated(
             userInfo: null,
             isTwoFactorEnabled: false,
@@ -152,12 +141,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Login with biometric authentication
   Future<void> _onLoginWithBiometric(AuthLoginWithBiometric event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
       
-      // Check if biometric is available
       final biometricHelper = BiometricHelper();
       final isBiometricSetup = await biometricHelper.isBiometricSetup().timeout(
         const Duration(seconds: 3),
@@ -169,7 +156,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      // Verify biometric
       final isCorrectBiometric = await biometricHelper.isCorrectBiometric().timeout(
         const Duration(seconds: 30),
         onTimeout: () => false,
@@ -180,7 +166,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      // Get stored credentials
       final email = await AuthService.getStoredEmail();
       final password = await AuthService.getStoredPassword();
       
@@ -189,7 +174,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      // Login with stored credentials
       final result = await AuthService.login(email, password).timeout(
         const Duration(seconds: 30),
         onTimeout: () => AuthResult.error('Login request timed out. Please check your internet connection.'),
@@ -197,7 +181,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       
       if (result.success) {
         try {
-          // Refresh listeners to load biometric and 2FA state from secure storage
+          
           await LoginPostRequests.refreshListeners().timeout(
             const Duration(seconds: 3),
             onTimeout: () {
@@ -214,7 +198,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ));
         } catch (e) {
           debugPrint('Error loading user info during biometric login: $e');
-          // If we can't get user info but login succeeded, still authenticate
+          
           emit(AuthAuthenticated(
             userInfo: null,
             isTwoFactorEnabled: false,
@@ -230,7 +214,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Verify two-factor authentication code
   Future<void> _onVerifyTwoFactor(AuthVerifyTwoFactor event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -242,7 +225,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       
       if (result.success) {
         try {
-          // Refresh listeners to load biometric and 2FA state from secure storage
+          
           await LoginPostRequests.refreshListeners().timeout(
             const Duration(seconds: 3),
             onTimeout: () {
@@ -259,7 +242,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ));
         } catch (e) {
           debugPrint('Error loading user info during 2FA verification: $e');
-          // If we can't get user info but verification succeeded, still authenticate
+          
           emit(AuthAuthenticated(
             userInfo: null,
             isTwoFactorEnabled: true,
@@ -273,7 +256,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Logout user
   Future<void> _onLogout(AuthLogout event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -284,7 +266,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Global logout (logout from all devices)
   Future<void> _onGlobalLogout(AuthGlobalLogout event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -295,7 +276,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Delete account
   Future<void> _onDeleteAccount(AuthDeleteAccount event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -311,7 +291,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Forgot password
   Future<void> _onForgotPassword(AuthForgotPassword event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -328,7 +307,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Enable two-factor authentication
   Future<void> _onEnableTwoFactor(AuthEnableTwoFactor event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -348,7 +326,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Disable two-factor authentication
   Future<void> _onDisableTwoFactor(AuthDisableTwoFactor event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
@@ -365,12 +342,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Refresh access token
   Future<void> _onRefreshToken(AuthRefreshToken event, Emitter<AuthState> emit) async {
     try {
       final token = await AuthService.getAccessToken();
       if (token != null) {
-        // Token refreshed successfully, emit current state
+        
         final userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 5));
         final isTwoFactorEnabled = await AuthService.isTwoFactorEnabled();
         
@@ -379,7 +355,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isTwoFactorEnabled: isTwoFactorEnabled,
         ));
       } else {
-        // Token refresh failed, logout user
+        
         emit(AuthUnauthenticated());
       }
     } catch (e) {
@@ -389,7 +365,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   
   @override
   Future<void> close() {
-    // Clean up the callback
+    
     AuthService.onLoggedOut = null;
     return super.close();
   }

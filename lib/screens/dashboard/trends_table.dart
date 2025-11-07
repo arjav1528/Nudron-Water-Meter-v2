@@ -26,8 +26,7 @@ class _TrendsTableState extends State<TrendsTable> {
                         ?.getCurrentTableData()),
             exportToIncludeWholeData: true,
             columnsToTakeHeaderWidthAndExtraPadding: {
-              // Removed hardcoded padding to allow dynamic width calculation
-              // based on actual text content
+              
             },
             key: UniqueKey(),
           );

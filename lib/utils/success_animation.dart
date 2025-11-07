@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../constants/theme2.dart';
 import '../utils/pok.dart';
 
-
 class SuccessAnimation extends StatefulWidget {
   final bool isFailure;
   const SuccessAnimation({super.key, this.isFailure = false});
@@ -40,11 +39,10 @@ class _SuccessAnimationState extends State<SuccessAnimation>
 
   @override
   void dispose() {
-    _controller.stop(); // Stop any ongoing animation
+    _controller.stop(); 
     _controller.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +54,7 @@ class _SuccessAnimationState extends State<SuccessAnimation>
           children: [
             for (int i = 0; i < 8; i++)
               Transform.rotate(
-                angle: i * 0.785398, // 45 degrees in radians
+                angle: i * 0.785398, 
                 child: Transform.translate(
                   offset: Offset(0, -85 - 50 * _animation.value),
                   child: Container(
@@ -90,4 +88,3 @@ class FailureAnimation extends StatelessWidget {
     return SuccessAnimation(isFailure: true);
   }
 }
-

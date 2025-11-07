@@ -319,7 +319,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
             elevation: 4,
             child: Container(
               constraints: BoxConstraints(
-                maxHeight: 4.6 * 50.h, // Adjust height based on item count
+                maxHeight: 4.6 * 50.h, 
               ),
               decoration: BoxDecoration(
                 color: Provider.of<ThemeNotifier>(context)
@@ -333,7 +333,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                physics: ClampingScrollPhysics(), // Prevents bounce effect
+                physics: ClampingScrollPhysics(), 
                 itemCount: widget.items.length,
                 itemBuilder: (context, index) {
                   return Column(

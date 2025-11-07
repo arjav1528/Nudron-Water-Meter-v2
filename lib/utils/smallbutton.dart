@@ -26,7 +26,7 @@ class _SmallButtonState extends State<SmallButton> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(right: 8.w),
-      // color: Colors.green,
+      
       child: Material(
         color: Colors.transparent,
         child: RawMaterialButton(
@@ -43,15 +43,15 @@ class _SmallButtonState extends State<SmallButton> {
             side: BorderSide(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
-                  .gridLineColor, // Set border color
-              width: 1.responsiveSp, // Set border width
+                  .gridLineColor, 
+              width: 1.responsiveSp, 
             ),
           ),
           child: Center(
             child: Icon(
               widget.iconData,
               size: 20.responsiveSp,
-              color: Colors.white, // Set the icon color
+              color: Colors.white, 
             ),
           ),
         ),

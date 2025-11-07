@@ -13,23 +13,7 @@ class CustomLoader extends StatefulWidget {
 }
 
 class _CustomLoaderState extends State<CustomLoader> {
-  // @override
-  // void initState() {
-  //   timer = Timer(const Duration(seconds: 30), () {
-  //     setState(() {
-  //       isError = true;
-  //     });
-  //   });
-  //
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   timer.cancel();
-  //   super.dispose();
-  // }
-
+  
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -42,10 +26,7 @@ class _CustomLoaderState extends State<CustomLoader> {
             size: 75.responsiveSp,
             color: CommonColors.blue,
           ),
-          // child: CircularProgressIndicator(
-          //   strokeWidth: 5,
-          //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-          // ),
+          
         ),
       ),
     );

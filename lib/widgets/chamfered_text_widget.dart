@@ -28,40 +28,6 @@ class ChamferedTextWidgetInverted extends StatelessWidget {
       fillColor: fillColor,
     );
 
-    // return LayoutBuilder(
-    //   builder: (context, constraints) {
-    //     final double height = 45.responsiveSp;
-    //     final double triangleSize = height;
-    //
-    //     return Container(
-    //       height: height,
-    //       // color: Colors.green,
-    //       child: CustomPaint(
-    //         child: Container(
-    //           height: height,
-    //           padding: EdgeInsets.only(
-    //               right: triangleSize,
-    //               top: 8.h,
-    //               bottom: 8.h,
-    //               left: 14.responsiveSp),
-    //           child: Text(
-    //             text,
-    //             style: GoogleFonts.roboto(
-    //               textStyle: TextStyle(
-    //                 fontSize: ThemeNotifier.medium.responsiveSp,
-    //                 fontWeight: FontWeight.bold,
-    //                 color: borderColor,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //         size: Size(triangleSize, height),
-    //         painter: InvertedChamferedLinePainter(
-    //             borderColor: borderColor, fillColor: bgColor),
-    //       ),
-    //     );
-    //   },
-    // );
   }
 }
 
@@ -74,35 +40,29 @@ class InvertedChamferedLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Paint for the fill color
+    
     final fillPaint = Paint()
       ..color = fillColor
       ..style = PaintingStyle.fill;
 
-    // Paint for the border color
     final borderPaint = Paint()
       ..color = borderColor
       ..strokeWidth = 3.responsiveSp
       ..style = PaintingStyle.stroke;
 
-    // Path for the filled area
     final fillPath = Path();
     fillPath.moveTo(0, 0);
     fillPath.lineTo(0, size.height);
     fillPath.lineTo(size.width-size.height, size.height);
     fillPath.lineTo(size.width, 0);
 
-    // Path for the border
     final borderPath = Path();
     borderPath.moveTo(0, size.height);
     borderPath.lineTo(size.width-size.height, size.height);
     borderPath.lineTo(size.width, 0);
 
-
-    // Draw the filled area
     canvas.drawPath(fillPath, fillPaint);
 
-    // Draw the border on top
     canvas.drawPath(borderPath, borderPaint);
   }
 
@@ -160,7 +120,7 @@ class ChamferedTextWidget extends StatelessWidget {
                         padding: EdgeInsets.only(top: 4.responsiveSp),
                         child: Text(
                           text,
-                          // textAlign: TextAlign.center,
+                          
                           style: GoogleFonts.roboto(
                             textStyle: TextStyle(
                               fontSize: ThemeNotifier.medium.responsiveSp,
@@ -193,18 +153,16 @@ class ChamferedLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Paint for the fill color
+    
     final fillPaint = Paint()
       ..color = fillColor
       ..style = PaintingStyle.fill;
 
-    // Paint for the border color
     final borderPaint = Paint()
       ..color = borderColor
       ..strokeWidth = 3.responsiveSp
       ..style = PaintingStyle.stroke;
 
-    // Path for the filled area
     final fillPath = Path();
 
     fillPath.moveTo(1.5.responsiveSp, size.height);
@@ -213,7 +171,6 @@ class ChamferedLinePainter extends CustomPainter {
     fillPath.lineTo(size.width, size.height);
     fillPath.close();
 
-    // Path for the border
     final borderPath = Path();
     if(!isInverted) {
       borderPath.moveTo(1.5.responsiveSp, size.height);
@@ -222,10 +179,8 @@ class ChamferedLinePainter extends CustomPainter {
     borderPath.lineTo(size.width - size.height, 0);
     borderPath.lineTo(size.width, size.height+1.5.responsiveSp);
 
-    // Draw the filled area
     canvas.drawPath(fillPath, fillPaint);
 
-    // Draw the border on top
     canvas.drawPath(borderPath, borderPaint);
   }
 

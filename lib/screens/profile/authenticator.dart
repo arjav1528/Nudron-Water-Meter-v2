@@ -23,10 +23,7 @@ class AuthenticatorPage extends StatefulWidget {
 class _AuthenticatorPageState extends State<AuthenticatorPage> {
   void launchAuthenticatorApp() async {
     Uri uri = Uri.parse(utf8.decode(base64Decode(widget.url)));
-    // Uri uri2= Uri.parse("otpauth://totp/Nudron:wefwfewfew@gmail.com?secret=sdvsdvsdvw&issuer=dvvv");
-    // await launch(utf8.decode(base64Decode(widget.url)));
-    //
-    // Uri uri2= Uri.parse("https://www.google.com");
+    
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.platformDefault);
     } else {
@@ -41,14 +38,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
       return Column(
         children: [
            SizedBox(height: 10.h),
-          // const Padding(
-          //   padding: EdgeInsets.all(8.0),
-          //   child: Text(
-          //     'Set up Authenticator',
-          //     style: TextStyle(fontSize: 25),
-          //     textAlign: TextAlign.center,
-          //   ),
-          // ),
+          
           Align(
             alignment: Alignment.center,
             child: Padding(
@@ -76,76 +66,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
               ),
             ),
           ),
-          // const Align(
-          //   alignment: Alignment.center,
-          //   child: Padding(
-          //     padding: EdgeInsets.all(8.0),
-          //     child: Text(
-          //       'Press cancel to set up later',
-          //       style: TextStyle(fontSize: 15, color: Colors.grey),
-          //       textAlign: TextAlign.center,
-          //     ),
-          //   ),
-          // ),
-          //next and cancel buttons
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: [
-          //       SizedBox(
-          //         width: 71.13,
-          //         height: 30.78,
-          //         child: ElevatedButton(
-          //           style: ElevatedButton.styleFrom(
-          //               elevation: 0,
-          //               primary: const Color(0xff2186a9),
-          //               padding: EdgeInsets.zero),
-          //           onPressed: () async {
-          //             widget.closeFunction(true);
-          //           },
-          //           child: const Text(
-          //             "Proceed",
-          //             style: TextStyle(
-          //                 fontFamily: 'Roboto',
-          //                 color: Color(0xffffffff),
-          //                 fontSize: 12.8),
-          //           ),
-          //         ),
-          //       ),
-          //       const SizedBox(
-          //         width: 10,
-          //       ),
-          //       SizedBox(
-          //         width: 71.13,
-          //         height: 30.78,
-          //         child: ElevatedButton(
-          //           style: ElevatedButton.styleFrom(
-          //               elevation: 0,
-          //               primary: const Color(0xffff5b5b),
-          //               padding: EdgeInsets.zero),
-          //           onPressed: () async {
-          //             try {
-          //               await LoginViewModel.disableTwoFactorAuth();
-          //               widget.closeFunction(false);
-          //             } catch (e) {
-          //               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //                   content: Text("Could not disable 2FA : $e")));
-          //               widget.closeFunction(true);
-          //             }
-          //           },
-          //           child: const Text(
-          //             "Cancel",
-          //             style: TextStyle(
-          //                 fontFamily: 'Roboto',
-          //                 color: Color(0xffffffff),
-          //                 fontSize: 12.8),
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
+          
            SizedBox(
             height: 10.h,
           ),

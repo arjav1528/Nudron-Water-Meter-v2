@@ -50,35 +50,6 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
     return false;
   }
 
-  // Future<void> enableBiometric() async {
-  //   BiometricHelper biometricHelper = BiometricHelper();
-  //   bool isSetup = await biometricHelper.isBiometricSetup();
-  //   if (isSetup) {
-  //     await biometricHelper.authenticateWithBiometrics().then((value) async {
-  //       if (value) {
-  //         await biometricHelper.toggleBiometric(true);
-  //         CustomAlert.showCustomScaffoldMessenger(
-  //             mainNavigatorKey.currentContext!,
-  //             "Biometric Authentication Enabled",
-  //             AlertType.success);
-  //       } else {
-  //         CustomAlert.showCustomScaffoldMessenger(
-  //             mainNavigatorKey.currentContext!,
-  //             "Biometric Authentication Failed",
-  //             AlertType.error);
-  //       }
-  //     }).catchError((e) {
-  //       CustomAlert.showCustomScaffoldMessenger(
-  //           mainNavigatorKey.currentContext!, e.toString(), AlertType.error);
-  //     });
-  //   } else {
-  //     CustomAlert.showCustomScaffoldMessenger(
-  //         mainNavigatorKey.currentContext!,
-  //         "Biometric Authentication is not set up on this device",
-  //         AlertType.error);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -344,16 +315,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
   String url = "";
   bool showCancelConfirmBiometric = false;
   LocalAuthentication localAuthentication = LocalAuthentication();
-  // bool faceIDLogin = true;
-
-  // @override
-  // initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
-  //     faceIDLogin = await checkForFaceID() ? true : false;
-  //   });
-  // }
-
+  
   reset() {
     setState(() {
       showCancelConfirmBiometric = false;
@@ -366,7 +328,6 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
 
     BiometricType tobeUsedBiometric = availableBiometrics[0];
 
-    // return availableBiometrics.contains(BiometricType.face);
     return (tobeUsedBiometric == BiometricType.face);
   }
 
@@ -424,10 +385,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
             title: "Fingerprint / Face ID",
             subtitle:
                 "Log in without a password using your Fingerprint or Face ID",
-            // icon: faceIDLogin ? Icons.mood : Icons.fingerprint,
-            // title: faceIDLogin ? "Face ID" : "Fingerprint ",
-            // subtitle:
-            //     faceIDLogin ? "Login with Face ID" : "Login with Fingerprint",
+            
             onTap: () async {
               setState(() {
                 showCancelConfirmBiometric = !showCancelConfirmBiometric;

@@ -21,16 +21,7 @@ class ActiveDevices extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   'Active Devices',
-        //   style: GoogleFonts.roboto(
-        //     fontSize: ThemeNotifier.large.responsiveSp,
-        //     color: Provider.of<ThemeNotifier>(context)
-        //         .currentTheme
-        //         .basicAdvanceTextColor,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
+        
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(
@@ -44,7 +35,7 @@ class ActiveDevices extends StatelessWidget {
                       bottom: (index == sessions.length - 1) ? 8.h : 8.h),
                   child: SessionWidget(session: sessions[index]),
                 ),
-                // if (index != sessions.length - 1)
+                
                 Container(
                   height: 1,
                   color: Provider.of<ThemeNotifier>(context)

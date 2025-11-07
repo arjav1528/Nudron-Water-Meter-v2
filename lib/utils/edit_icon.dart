@@ -30,8 +30,8 @@ class EditIcon extends StatelessWidget {
           side: BorderSide(
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
-                .gridLineColor, // Set border color
-            width: 1.responsiveSp, // Set border width
+                .gridLineColor, 
+            width: 1.responsiveSp, 
           ),
         ),
         child: Center(
@@ -40,7 +40,7 @@ class EditIcon extends StatelessWidget {
             size: 20.responsiveSp,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
-                .editIconColor, // Set the icon color
+                .editIconColor, 
           ),
         ),
       ),

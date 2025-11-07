@@ -14,7 +14,6 @@ class PolygonContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
     
-    // Calculate text width
     final TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: text,
@@ -26,13 +25,11 @@ class PolygonContainer extends StatelessWidget {
       textDirection: TextDirection.ltr,
     )..layout();
 
-    // Calculate container dimensions
     final double textWidth = textPainter.width;
-    final double horizontalPadding = 12.w;  // Reduced padding
+    final double horizontalPadding = 12.w;  
     final double height = 40.h;
-    final double slope = height; // 45-degree slope
+    final double slope = height; 
     
-    // Remove buffer space to make borders flush
     final double totalWidth = textWidth + (horizontalPadding * 2) + slope;
 
     return CustomPaint(
@@ -77,17 +74,15 @@ class PolygonPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final path = Path()
-      ..moveTo(size.width, 0) // Top right (minus slope)
-      ..lineTo(size.width - slope, size.height) // Bottom right
+      ..moveTo(size.width, 0) 
+      ..lineTo(size.width - slope, size.height) 
       ..lineTo(0, size.height);
 
-    // Draw fill
     final fillPaint = Paint()
       ..color = fillColor
       ..style = PaintingStyle.fill;
     canvas.drawPath(path, fillPaint);
     
-    // Draw border
     final borderPaint = Paint()
       ..color = borderColor
       ..style = PaintingStyle.stroke

@@ -78,7 +78,6 @@ class _CustomMultipleSelectorHorizontalState
                         width: 3.responsiveSp,
                       ),
                       
-                      
                     )
                 ),
                 child: Padding(
@@ -174,11 +173,11 @@ class _CustomMultipleSelectorHorizontalState
               onTap: _closeDropdown,
               behavior: HitTestBehavior.opaque,
               child: Container(
-                color: Colors.transparent, // This makes the container invisible
+                color: Colors.transparent, 
               ),
             ),
           ),
-          // This Positioned widget will hold your dropdown content
+          
           Positioned(
             width: size.width,
             child: CompositedTransformFollower(
@@ -189,7 +188,7 @@ class _CustomMultipleSelectorHorizontalState
                 opacity: _fadeAnimation,
                 child: Material(
                   elevation: 4,
-                  // borderRadius: BorderRadius.circular(8),
+                  
                   child: Container(
                     constraints: BoxConstraints(
                       minHeight: 100.h,
@@ -199,10 +198,10 @@ class _CustomMultipleSelectorHorizontalState
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .dialogBG,
-                      // borderRadius: BorderRadius.circular(8),
+                      
                       border: Border.all(
-                      color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor, // Match BillingFormula border color
-                      width: 3.responsiveSp, // Match BillingFormula border width
+                      color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor, 
+                      width: 3.responsiveSp, 
                 ),
                     ),
                     child: GestureDetector(
@@ -210,7 +209,7 @@ class _CustomMultipleSelectorHorizontalState
                       child: DropdownContent(
                         context: context,
                         onProjectSelected: (project, filters) {
-                          // Handle selection
+                          
                         },
                         onClose: _closeDropdown,
                       ),
@@ -271,7 +270,6 @@ class _CustomMultipleSelectorHorizontalState
       }
     }
 
-    // Ensure we always return at least one breadcrumb item to prevent the assertion error
     if (breadcrumbItems.isEmpty) {
       breadcrumbItems.add(
         BreadCrumbItem(
@@ -290,7 +288,6 @@ class _CustomMultipleSelectorHorizontalState
 
     return breadcrumbItems;
   }
-
 
 }
 
@@ -317,7 +314,6 @@ class _DropdownContentState extends State<DropdownContent> {
 
   late DashboardBloc dashboardBloc;
 
-
   @override
   void initState() {
     super.initState();
@@ -334,9 +330,6 @@ class _DropdownContentState extends State<DropdownContent> {
 
     filterData = dashboardBloc.filterData;
   }
-
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -366,26 +359,18 @@ class _DropdownContentState extends State<DropdownContent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // SizedBox(
-            //   width: 273.w + 30.responsiveSp, // Match dropdown width
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-                  
-            //     ],
-            //   ),
-            // ),
+            
             CustomButton(
               text: 'CANCEL',
               isRed: true,
               onPressed: widget.onClose,
-              width: 120.w, // Fixed width for each button
+              width: 120.w, 
             ),
             SizedBox(width: 160.w),
             CustomButton(
               text: 'CONFIRM',
               onPressed: _onConfirm,
-              width: 120.w, // Fixed width for each button
+              width: 120.w, 
             ),
           ],
         ),
@@ -408,7 +393,6 @@ class _DropdownContentState extends State<DropdownContent> {
           levels = ['Project', ...?filterData?.levels];
           selectedFilters = [value, ...List.filled(levels.length - 1, null)];
 
-          // ✅ Immediately check if level 1 has only 1 option
           final items = _getFilterItems(1);
           if (items.length == 1) {
             selectedFilters[1] = items.first;
@@ -446,15 +430,12 @@ class _DropdownContentState extends State<DropdownContent> {
   }
 }
 
-
   void _onConfirm() {
-    // Store parent context before closing dropdown (it remains valid after dropdown closes)
+    
     final parentContext = widget.context;
     
-    // Close dropdown immediately
     widget.onClose();
     
-    // Show loader and perform async operation using parent context
     widget.onProjectSelected(selectedFilters.first, selectedFilters);
     LoaderUtility.showLoader(
       parentContext,
@@ -480,15 +461,13 @@ class _DropdownContentState extends State<DropdownContent> {
       if (items.isNotEmpty) {
         items = ["-", ...items];
 
-        // Auto-preselect if only one valid option and not selected yet
         if (items.length == 2 && selectedFilters[level] == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               setState(() {
-                selectedFilters[level] = items[1]; // auto-select first option
+                selectedFilters[level] = items[1]; 
               });
 
-              // Persist auto-selection into Bloc
               dashboardBloc.updateSelectedFilters(selectedFilters, filterData);
             }
           });
@@ -498,10 +477,6 @@ class _DropdownContentState extends State<DropdownContent> {
       return items;
     }
   }
-
-
-
-
 
   List<String> _getFilterItems(int level) {
     if (selectedFilters[0] == null || filterData == null) {
@@ -515,12 +490,12 @@ class _DropdownContentState extends State<DropdownContent> {
     }
 
     for (int i = 1; i < level; i++) {
-      // Start loop from 1 since we already handled level 0
+      
       var selectedValue = selectedFilters[i];
       if (selectedValue != null && currentLevel != null) {
         currentLevel = currentLevel[selectedValue];
       } else {
-        return []; // If selected value is null or invalid, return an empty list
+        return []; 
       }
     }
 
@@ -547,10 +522,8 @@ class CustomMultipleSelectorHorizontal2 extends StatefulWidget {
 class _CustomMultipleSelectorHorizontal2State
     extends State<CustomMultipleSelectorHorizontal2> {
 
-
   @override
   Widget build(BuildContext context) {
-
 
     return Material(
       color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
@@ -559,7 +532,7 @@ class _CustomMultipleSelectorHorizontal2State
           border: Border(
             left: BorderSide(
               color: CommonColors.yellow,
-              width: 12, // Use static width here
+              width: 12, 
             ),
           ),
         ),
@@ -591,7 +564,6 @@ class _CustomMultipleSelectorHorizontal2State
     );
   }
 
-  // Mocking the breadcrumb items
   List<BreadCrumbItem> _buildBreadcrumbItems(
     BuildContext context, DashboardBloc dashboardBloc) {
     final selectedFilters = dashboardBloc.currentFilters;

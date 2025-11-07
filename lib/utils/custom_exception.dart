@@ -23,4 +23,3 @@ class SilentException implements Exception {
     return "$message";
   }
 }
-

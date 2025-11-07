@@ -18,7 +18,6 @@ import '../utils/biometric_helper.dart';
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
 
-
 class LoginPostRequests {
   static const String au1Url = 'https://api.nudron.com/prod/au1';
   static const String au3Url = 'https://api.nudron.com/prod/au3';
@@ -77,7 +76,7 @@ class LoginPostRequests {
 
   static Future<void> refreshListeners() async {
     try {
-      // Add timeout to secure storage reads as they can hang on some devices
+      
       String? twoFactorEnabled = await secureStorage.read(key: 'two_factor').timeout(
         const Duration(seconds: 2),
         onTimeout: () {
@@ -103,7 +102,7 @@ class LoginPostRequests {
       if (kDebugMode) {
         debugPrint('Error in refreshListeners: $e');
       }
-      // Silently fail - these are just UI preferences
+      
     }
   }
 
@@ -151,22 +150,20 @@ class LoginPostRequests {
     Map<String, dynamic> tokenData = json.decode(decodedToken);
     int expiryTime = tokenData['exp'];
 
-    // Return the expiry time as a DateTime object
     return DateTime.fromMillisecondsSinceEpoch(expiryTime * 1000);
   }
 
   static bool isTokenExpired(String accessToken) {
     DateTime expiryDateTime = getExpiryTime(accessToken);
-    DateTime now = DateTime.now(); // use UTC time for comparisons
-    // return now.add(const Duration(seconds: 30)).isAfter(expiryDateTime);
-
+    DateTime now = DateTime.now(); 
+    
     return now.add(const Duration(seconds: 0)).isAfter(expiryDateTime);
   }
 
   static bool isTokenExpiring(String accessToken) {
-    // return true;
+    
     DateTime expiryDateTime = getExpiryTime(accessToken);
-    DateTime now = DateTime.now(); // use UTC time for comparisons
+    DateTime now = DateTime.now(); 
     return now.add(const Duration(minutes: 30)).isAfter(expiryDateTime);
   }
 
@@ -175,8 +172,6 @@ class LoginPostRequests {
     return refreshToken;
   }
 
-  /// signUp function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<int> signUp(
       String actCode, String fullName, String email, String phone) async {
     final body = '00$actCode|$fullName|$email|$phone';
@@ -192,8 +187,6 @@ class LoginPostRequests {
     return int.parse(response);
   }
 
-  /// contactVerification function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<String> contactVerification(
       String actCode, String pass, String emCode, String phCode) async {
     if (pass.length < 8) {
@@ -209,15 +202,11 @@ class LoginPostRequests {
     return response;
   }
 
-  /// login function
-  /// Stores access_token and refresh_token using Flutter Secure Storage if successful,
-  /// otherwise throws an CustomException
-
   static Future<String?> login(String email, String password) async {
     if (ConfigurationCustom.skipAnyAuths) {
       return null;
     }
-    //convert password to base64
+    
     final passwordBase64 = base64.encode(utf8.encode(password));
 
     final body = '02$email|$passwordBase64';
@@ -249,14 +238,6 @@ class LoginPostRequests {
     return null;
   }
 
-  // static Future<void> acceptTwoFactorCode(String twoFactorCode)
-  // {
-  //
-  // }
-
-  /// sendTwoFactorCode function
-  /// Stores access_token and refresh_token using Flutter Secure Storage if successful,
-  /// otherwise throws an CustomException
   static Future<void> sendTwoFactorCode(
       String refCode, String twoFactorCode) async {
     final body = '03$refCode|$twoFactorCode';
@@ -276,13 +257,10 @@ class LoginPostRequests {
     }
   }
 
-  /// getNewAccessToken function
-  /// Stores new access_token and refresh_token using Flutter Secure Storage if successful,
-  /// otherwise throws an CustomException
   static Future<String> getNewAccessToken() async {
     String? refToken = await getRefreshToken();
     if (refToken == null) {
-      // If refresh token is missing, force logout
+      
       await deleteDataAndLogout();
       throw CustomException('Session expired. Please login again.');
     }
@@ -294,7 +272,7 @@ class LoginPostRequests {
       await deleteDataAndLogout();
       throw CustomException('Session expired. Please login again.');
     } else if (splitResponse.length == 2) {
-      // Always save both tokens after refresh
+      
       await secureStorage.write(key: 'access_token', value: splitResponse[0]);
       await secureStorage.write(key: 'refresh_token', value: splitResponse[1]);
       DashboardBloc.toUpdateProfile.notifyListeners();
@@ -305,8 +283,6 @@ class LoginPostRequests {
     }
   }
 
-  /// forgotPassword function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<int> forgotPassword(String email) async {
     final body = '05$email';
     final response = await _makeRequest(body);
@@ -316,8 +292,6 @@ class LoginPostRequests {
     return int.parse(response);
   }
 
-  /// updateInfo function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<String> updateInfo(String oldPass, String fullName,
       String email, String phone, String newPass) async {
     final oldPassB64 = base64.encode(utf8.encode(oldPass));
@@ -341,18 +315,12 @@ class LoginPostRequests {
     final body = '04$activationCode';
     final response = await _makeRequest(body, url: au3Url);
 
-    
     if (response == '0') {
       throw CustomException('Incorrect activation code. Please check again');
     } else {
       return response;
     }
   }
-
-  /// verifyEmailPhone function
-  /// Returns: a string representing the verification status (00, 01, 02, or 10),
-  ///  (0-incorrect code, 1-correct, 2-expired)
-  /// otherwise throws an CustomException
 
   static Future<String> verifyEmailPhone(String emCode, String phCode) async {
     final body = '10$emCode|$phCode';
@@ -378,10 +346,6 @@ class LoginPostRequests {
     return response;
   }
 
-  /// enableTwoFactorAuth function
-  /// Returns: a Base64-encoded PNG image string (for app) or timestamp (for SMS) if successful,
-  /// otherwise throws an CustomException
-  /// mode: 2 for SMS, 10(light)/11(dark) for app
   static Future<List<String?>> enableTwoFactorAuth(int mode) async {
     final body = '02$mode';
     final response = await _makeRequest(body, url: au3Url);
@@ -392,17 +356,14 @@ class LoginPostRequests {
     twoFAToggleVal(true);
 
     if (mode == 2) {
-      return [null, null]; // Return null values if mode is 0
+      return [null, null]; 
     }
 
-    // Split the response by '|' and return the resulting list. first is the base64 image, second is the clickable url
     List<String?> responseValues = response.split('|');
     
     return responseValues;
   }
 
-  /// disableTwoFactorAuth function
-  /// Returns: void, throws an CustomException if there's an issue with the request
   static Future<void> disableTwoFactorAuth() async {
     const body = '03';
     await _makeRequest(body, url: au3Url);
@@ -412,74 +373,66 @@ class LoginPostRequests {
   static deleteStoredData() async {
     isLoggedIn = false;
     try {
-      // First, read all the data we want to preserve before deleting anything
+      
       String? biometricEnabled = await secureStorage.read(key: 'biometric');
       String? themeMode = await secureStorage.read(key: 'themeMode');
       String? email = await secureStorage.read(key: 'email');
       String? password = await secureStorage.read(key: 'password');
       
-      // Store what we need to preserve
       final shouldPreserveBiometric = biometricEnabled == 'true';
       
-      // Create a list of keys to delete (everything except what we want to preserve)
       final allKeys = {
         'access_token',
         'refresh_token',
         'two_factor',
       };
       
-      // Delete only authentication tokens and two-factor settings
       for (final key in allKeys) {
         try {
           await secureStorage.delete(key: key);
         } catch (e) {
-          // Continue even if one key fails
+          
         }
       }
       
-      // If biometric is not enabled, also delete email and password
       if (!shouldPreserveBiometric) {
         try {
           await secureStorage.delete(key: 'email');
           await secureStorage.delete(key: 'password');
           await secureStorage.delete(key: 'biometric');
         } catch (e) {
-          // Continue even if deletion fails
+          
         }
       } else {
-        // Ensure biometric data is preserved by re-writing if needed
+        
         if (email != null && password != null) {
           try {
             await secureStorage.write(key: 'email', value: email);
             await secureStorage.write(key: 'password', value: password);
             await secureStorage.write(key: 'biometric', value: 'true');
           } catch (e) {
-            // Biometric data preservation failed
+            
           }
         }
       }
       
-      // Always preserve theme mode
       if (themeMode != null) {
         try {
           await secureStorage.write(key: 'themeMode', value: themeMode);
         } catch (e) {
-          // Theme preservation failed
+          
         }
       }
     } catch (e) {
-      // If anything fails, don't throw - we want logout to succeed
+      
     }
   }
 
   static Future<void> deleteDataAndLogout() async {
     await deleteStoredData();
-    // Navigation is now handled by BlocBuilder in main.dart
-    // when AuthUnauthenticated state is emitted
+    
   }
 
-  /// logout function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<int> logout() async {
     const body = '08';
     if (kDebugMode) {
@@ -493,8 +446,6 @@ class LoginPostRequests {
     return int.parse(response);
   }
 
-  /// globalLogout function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<int> globalLogout() async {
     const body = '09';
     final response = await _makeRequest(body, url: au3Url);
@@ -505,8 +456,6 @@ class LoginPostRequests {
     return int.parse(response);
   }
 
-  /// deleteAccount function
-  /// Returns: timestamp if successful, otherwise throws an CustomException
   static Future<int> deleteAccount() async {
     const body = '05';
     final response = await _makeRequest(body, url: au3Url);
@@ -524,7 +473,6 @@ class LoginPostRequests {
       throw CustomException('No internet connection');
     }
     
-    // Retry configuration
     const int maxRetries = 3;
     const Duration initialRetryDelay = Duration(seconds: 1);
     final effectiveTimeout = timeout ?? const Duration(seconds: 30);
@@ -549,12 +497,11 @@ class LoginPostRequests {
         request.body = body;
         request.headers.addAll(headers);
         
-        // Send request with timeout
         http.StreamedResponse response = 
             await request.send().timeout(effectiveTimeout);
 
         if (response.statusCode == 200) {
-          // Read response body with timeout
+          
           var resp = await response.stream.bytesToString().timeout(effectiveTimeout);
           return resp;
         } else if (response.statusCode == 401 || response.statusCode == 403) {
@@ -568,7 +515,7 @@ class LoginPostRequests {
         lastException = e;
         attempt++;
         if (attempt < maxRetries) {
-          // Exponential backoff: 1s, 2s, 4s
+          
           final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));
           await Future.delayed(delay);
           continue;
@@ -578,14 +525,14 @@ class LoginPostRequests {
         lastException = e;
         attempt++;
         if (attempt < maxRetries) {
-          // Exponential backoff for connection errors
+          
           final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));
           await Future.delayed(delay);
           continue;
         }
         throw CustomException('Network connection failed: ${e.message}');
       } catch (e) {
-        // For non-retryable errors (like 401/403), throw immediately
+        
         if (e is CustomException && e.message.contains('login')) {
           rethrow;
         }
