@@ -448,18 +448,21 @@ class _DropdownContentState extends State<DropdownContent> {
 
 
   void _onConfirm() {
+    // Store parent context before closing dropdown (it remains valid after dropdown closes)
+    final parentContext = widget.context;
+    
+    // Close dropdown immediately
+    widget.onClose();
+    
+    // Show loader and perform async operation using parent context
     widget.onProjectSelected(selectedFilters.first, selectedFilters);
     LoaderUtility.showLoader(
-      context,
+      parentContext,
       dashboardBloc.updateSelectedFilters(selectedFilters, filterData),
-    ).then((value) {
-      if (mounted) {
-        widget.onClose();
-      }
-    }).catchError((e) {
+    ).catchError((e) {
       if (mounted) {
         CustomAlert.showCustomScaffoldMessenger(
-          context,
+          parentContext,
           e.toString(),
           AlertType.error,
         );

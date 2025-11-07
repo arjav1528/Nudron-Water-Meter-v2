@@ -347,8 +347,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                       selectedProject = value;
                     });
                   },
-                  width1: PlatformUtils.isMobile ? 400.w : 0,
-                  width2: PlatformUtils.isMobile ? 360.w : width - 30,
+                  width1: PlatformUtils.isMobile ? 360.w : 0,
+                  width2: PlatformUtils.isMobile ? 350.w : width - 30,
                   desktopDropdownWidth: width - 30,
                   fieldNameVisible: false,
                 ),
