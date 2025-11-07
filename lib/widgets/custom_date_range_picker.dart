@@ -118,7 +118,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                     Expanded(
                       child: Text(
                         startDate != null && endDate != null
-                            ? "${DateFormat('MMM dd').format(startDate!)} - ${DateFormat('MMM dd, yyyy').format(endDate!)}"
+                            ? "${DateFormat('MMM dd, yyyy').format(startDate!)} - ${DateFormat('MMM dd, yyyy').format(endDate!)}"
                             : "Select Month Range",
                         style: GoogleFonts.robotoMono(
                           fontSize: ThemeNotifier.small.responsiveSp,
@@ -471,7 +471,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                         child: Text(
                           currentSelectedRange != null
-                              ? '${DateFormat('MMM dd').format(currentSelectedRange!.start)} - ${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.end)}'
+                              ? '${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.start)} - ${DateFormat('MMM dd, yyyy').format(currentSelectedRange!.end)}'
                               : 'No date range selected',
                           style: TextStyle(
                             color: currentSelectedRange != null 
