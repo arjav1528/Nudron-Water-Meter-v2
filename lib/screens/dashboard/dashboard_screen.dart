@@ -22,7 +22,6 @@ import '../../widgets/custom_app_bar.dart';
 import '../devices/devices_screen.dart';
 import '../profile/profile_drawer.dart';
 import 'background_chart_screen.dart';
-import 'project_selection_screen.dart';
 import 'summary_table.dart';
 import 'trends_chart_combined.dart';
 
@@ -124,7 +123,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
 class MainDashboardPage extends StatefulWidget {
   static List<String> bottomNavTabs = [
-    'project', // Move project to 0th index
+    // 'project', // Move project to 0th index
     'trends',
     'billing',
     'activity',
@@ -151,7 +150,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   ];
 
   List<Color> selectedColor = [
-    CommonColors.blue,
+    // CommonColors.blue,
     CommonColors.yellow,
     CommonColors.green,
     CommonColors.red,
@@ -159,7 +158,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
 
   // Always use static tabs
   List<String> bottomNavTabIcons = [
-    'project', // Move project to 0th index
+    // 'project', // Move project to 0th index
     'trends',
     'billing',
     'activity',
@@ -343,7 +342,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> contentPages = [
-      ProjectSelectionPage(),
+      // ProjectSelectionPage(),
       TrendsChartCombined(key: UniqueKey()),
       SummaryTable(key: UniqueKey()),
       DevicesPage(),
@@ -376,14 +375,16 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
               builder: (context, state) {
                 final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-                int currentNavPos = dashboardBloc.bottomNavPos;
-                List<String> visibleTabs = currentNavPos == 0 ? [MainDashboardPage.bottomNavTabs.first] : MainDashboardPage.bottomNavTabs;
+                int currentNavPos = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
+                // Always show all 3 tabs (trends, billing, activity)
+                List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
 
                 // Ensure drawerIndex stays in sync with bloc state
-                if (drawerIndex != currentNavPos) {
+                final clampedNavPos = currentNavPos.clamp(0, selectedColor.length - 1);
+                if (drawerIndex != clampedNavPos) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     setState(() {
-                      drawerIndex = currentNavPos;
+                      drawerIndex = clampedNavPos;
                     });
                   });
                 }
@@ -424,12 +425,10 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
           builder: (context, state) {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-            int currentPositionOfBottomNav = dashboardBloc.bottomNavPos;
+            int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
 
-            // If "Project" tab is selected, show only "Project" tab
-            List<String> visibleTabs = currentPositionOfBottomNav == 0
-                ? [MainDashboardPage.bottomNavTabs.first] // Only "project"
-                : MainDashboardPage.bottomNavTabs;        // All tabs
+            // Always show all 3 tabs (trends, billing, activity)
+            List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
 
             return Row(
               mainAxisSize: MainAxisSize.max,
@@ -437,7 +436,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               children: List.generate(
                 visibleTabs.length,
                 (index) {
-                  int actualTabIndex = MainDashboardPage.bottomNavTabs.indexOf(visibleTabs[index]);
+                  // Clamp index to ensure it's within bounds
+                  final safeIndex = index.clamp(0, bottomNavTabIcons.length - 1);
                   return GestureDetector(
                     child: Container(
                       color: Provider.of<ThemeNotifier>(context)
@@ -448,9 +448,9 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            "assets/icons/${bottomNavTabIcons[actualTabIndex]}.svg",
-                            color: currentPositionOfBottomNav == actualTabIndex
-                                ? selectedColor[actualTabIndex % selectedColor.length]
+                            "assets/icons/${bottomNavTabIcons[safeIndex]}.svg",
+                            color: currentPositionOfBottomNav == index
+                                ? selectedColor[safeIndex % selectedColor.length]
                                 : Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .inactiveBottomNavbarIconColor,
@@ -460,8 +460,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                           Text(
                             visibleTabs[index].toUpperCase(),
                             style: GoogleFonts.robotoMono(
-                              color: currentPositionOfBottomNav == actualTabIndex
-                                  ? selectedColor[actualTabIndex % selectedColor.length]
+                              color: currentPositionOfBottomNav == index
+                                  ? selectedColor[safeIndex % selectedColor.length]
                                   : Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .inactiveBottomNavbarIconColor,
@@ -473,7 +473,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                       ),
                     ),
                     onTap: () {
-                      dashboardBloc.switchBottomNavPos(actualTabIndex);
+                      dashboardBloc.switchBottomNavPos(index);
                     },
                   );
                 },

@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watermeter2/bloc/dashboard_bloc.dart';
+import 'package:watermeter2/bloc/dashboard_state.dart';
 import 'package:watermeter2/bloc/auth_bloc.dart';
 import 'package:watermeter2/bloc/auth_state.dart';
 import 'package:watermeter2/bloc/auth_event.dart';
@@ -13,6 +14,7 @@ import 'package:watermeter2/services/mobile/mobile_init.dart';
 import 'package:watermeter2/services/desktop/desktop_init.dart';
 import 'package:watermeter2/constants/theme2.dart';
 import 'package:watermeter2/screens/dashboard/dashboard_screen.dart';
+import 'package:watermeter2/screens/dashboard/project_selection_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/constants/app_config.dart';
@@ -124,11 +126,48 @@ class _MyAppState extends State<MyApp> {
         splitScreenMode: true,
         builder: (context, child) {
           debugPrint('context: $context');
-          return MaterialApp(
-            title: 'Meter Config',
-            debugShowCheckedModeBanner: false,
-            navigatorKey: mainNavigatorKey,
-            scaffoldMessengerKey: scaffoldMessengerKey,
+          return BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+              
+              if (state is AuthUnauthenticated) {
+                // User logged out - clear dashboard state and navigate to root
+                dashboardBloc.currentFilters.clear();
+                dashboardBloc.filterData = null;
+                dashboardBloc.summaryData = null;
+                dashboardBloc.devicesData = null;
+                
+                // Navigate to root route to trigger BlocBuilder rebuild
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final navigator = mainNavigatorKey.currentState;
+                  if (navigator != null) {
+                    try {
+                      // Clear all routes and navigate to root, which will show LoginPage via BlocBuilder
+                      navigator.pushNamedAndRemoveUntil('/', (route) => false);
+                    } catch (e) {
+                      debugPrint('Navigation error during logout: $e');
+                      // Fallback: try to pop to root
+                      try {
+                        navigator.popUntil((route) => route.isFirst);
+                      } catch (e2) {
+                        debugPrint('Fallback navigation error: $e2');
+                      }
+                    }
+                  }
+                });
+              } else if (state is AuthAuthenticated) {
+                // When user logs in, reload dashboard data to get projects list
+                // Only load if projects are empty to avoid unnecessary reloads
+                if (dashboardBloc.projects.isEmpty) {
+                  dashboardBloc.loadInitialData();
+                }
+              }
+            },
+            child: MaterialApp(
+              title: 'Meter Config',
+              debugShowCheckedModeBanner: false,
+              navigatorKey: mainNavigatorKey,
+              scaffoldMessengerKey: scaffoldMessengerKey,
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context)
@@ -142,13 +181,43 @@ class _MyAppState extends State<MyApp> {
                   return ConfigurationCustom.testScreen;
                 }
                 return BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, state) {
-                    debugPrint('Auth state: $state');
+                  builder: (context, authState) {
+                    debugPrint('Auth state: $authState');
                     
-                    if (state is AuthAuthenticated) {
-                      // User is authenticated, show dashboard
-                      return const DashboardPage();
-                    } else if (state is AuthInitial) {
+                    if (authState is AuthAuthenticated) {
+                      // User is authenticated, check if project is selected
+                      // Use BlocBuilder to listen to dashboard bloc changes
+                      return BlocBuilder<DashboardBloc, DashboardState>(
+                        buildWhen: (previous, current) {
+                          // Only rebuild on significant state changes, not on every navigation change
+                          return current is DashboardPageLoaded ||
+                                 current is DashboardPageInitial ||
+                                 current is DashboardPageError;
+                          // Exclude ChangeDashBoardNav and RefreshDashboard to prevent infinite rebuilds
+                        },
+                        builder: (context, dashboardState) {
+                          final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+                          
+                          // Show loader while initializing
+                          if (dashboardState is DashboardPageInitial) {
+                            return const Scaffold(
+                              body: Center(
+                                child: CustomLoader(),
+                              ),
+                            );
+                          }
+                          
+                          // Check if project is selected
+                          if (dashboardBloc.currentFilters.isNotEmpty && dashboardBloc.projects.isNotEmpty) {
+                            // Project is selected, show dashboard
+                            return const MainDashboardPage();
+                          } else {
+                            // No project selected, show project selection screen
+                            return const ProjectSelectionPage();
+                          }
+                        },
+                      );
+                    } else if (authState is AuthInitial) {
                       // Initial state - show a minimal loading indicator
                       // This should only appear for a split second
                       return const Scaffold(
@@ -156,7 +225,7 @@ class _MyAppState extends State<MyApp> {
                           child: CustomLoader(),
                         ),
                       );
-                    } else if (state is AuthLoading) {
+                    } else if (authState is AuthLoading) {
                       // Loading during login/logout operations
                       // Show loading screen
                       return const Scaffold(
@@ -172,9 +241,11 @@ class _MyAppState extends State<MyApp> {
                 );
               },
               '/login': (context) => const LoginPage(),
-              '/homePage': (context) => const DashboardPage(),
+              '/homePage': (context) => const MainDashboardPage(),
+              '/projectSelection': (context) => const ProjectSelectionPage(),
             },
             initialRoute: "/",
+            ),
           );
         });
   }

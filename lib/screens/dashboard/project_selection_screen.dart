@@ -49,8 +49,11 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
 
   // Add a separate method for dashboard button navigation
   void _navigateToDashboard() async {
-
-    if (selectedProject == null) return;
+    if (selectedProject == null) {
+      CustomAlert.showCustomScaffoldMessenger(
+          context, "Please select a project", AlertType.error);
+      return;
+    }
 
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
 
@@ -69,10 +72,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           if (filterData != null) {
             // Update selected filters - this will load all data in parallel with caching
             await dashboardBloc.updateSelectedFilters([selectedProject], filterData);
-
-            setState(() {
-              selectedProject = selectedProject;
-            });
+            
+            // Set bottom nav position to trends tab (index 0)
+            dashboardBloc.switchBottomNavPos(0);
           }
         }(),
       );
@@ -82,16 +84,18 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
         "Error selecting project: ${e.toString()}",
         AlertType.error
       );
+      return;
     }
 
-    if (selectedProject == null && dashboardBloc.currentFilters.isEmpty) {
+    // Check if project was successfully selected
+    if (dashboardBloc.currentFilters.isEmpty) {
       CustomAlert.showCustomScaffoldMessenger(
-          context, "Please select a project", AlertType.error);
+          context, "Error loading project data", AlertType.error);
       return;
     }
     
-    // Switch to trends tab and emit navigation event
-    dashboardBloc.switchBottomNavPos(1);
+    // Navigate to dashboard page
+    Navigator.of(context).pushReplacementNamed('/homePage');
   }
 
   void _showAddProjectDialog() {

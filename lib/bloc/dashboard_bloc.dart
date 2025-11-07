@@ -872,10 +872,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   static Future<List<String>?> updateBottomNavTabs(
       {required String? project}) async {
-    if (project == null || project.isEmpty) return ["project"];
-    
-    // Always use these fixed tabs when a project is selected
-    List<String> standardTabs = ['project', 'trends', 'billing', 'activity'];
+    // Always return 3 fixed tabs (trends, billing, activity)
+    List<String> standardTabs = ['trends', 'billing', 'activity'];
     MainDashboardPage.bottomNavTabs = standardTabs;
     return standardTabs;
     
@@ -902,7 +900,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     //   return bottomNavTabs; // Debug debugPrint
     // } catch (e) {
     //   debugPrint("Error fetching bottomNavTabs: $e");
-    //   return ["project"];
+    //   return ["trends", "billing", "activity"];
     // }
   }
 
@@ -942,15 +940,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         clearProjectCache(currentFilters.first);
       }
       
-      // Reset bottom nav position to Project tab if clearing the project
+      // Reset bottom nav position to trends tab if clearing the project
       if (selectedIndex == -1) {
-        switchBottomNavPos(0); // Project tab
+        switchBottomNavPos(0); // Trends tab
       }
       
       return await getFiltersAndSummaryForProject(selectedProject);
     }
     
-    // If no project selected, ensure we're on the Project tab
+    // If no project selected, ensure we're on the trends tab
     switchBottomNavPos(0);
     return null;
   }
