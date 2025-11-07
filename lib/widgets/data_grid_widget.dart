@@ -171,8 +171,11 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         // Optimize data width calculation with sampling for large datasets
         double maxDataWidth = 0.0;
         
+        // For devices table, always check all rows for column 0 (Label) to avoid truncation
+        bool shouldCheckAllRows = (widget.devicesTable == true && index == 0);
+        
         // For very large datasets, use sampling to improve performance
-        if (rows.length > 1000) {
+        if (rows.length > 1000 && !shouldCheckAllRows) {
           // Sample every nth row to get representative width
           final sampleSize = min<int>(100, rows.length);
           final step = (rows.length ~/ sampleSize) as int;
@@ -188,14 +191,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
             }
           }
         } else {
-          // For smaller datasets, check all rows
+          // For smaller datasets or Label column in devices table, check all rows
           for (var row in rows) {
             if (row[index] != null) {
               double cellWidth = calculateTextWidth(row[index].toString());
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
-                // Early termination if we've found a very wide cell
-                if (maxDataWidth > headerWidth * 2) break;
+                // Skip early termination for Label column in devices table
+                if (!shouldCheckAllRows && maxDataWidth > headerWidth * 2) break;
               }
             }
           }
