@@ -28,8 +28,8 @@ class _BackgroundChartState extends State<BackgroundChart> {
         return Future.value(false);
       },
       child: Scaffold(
-        backgroundColor:
-            Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+          backgroundColor:
+              Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(49.h),
           child: AppBar(

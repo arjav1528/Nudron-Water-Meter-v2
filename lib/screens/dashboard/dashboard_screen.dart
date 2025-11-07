@@ -55,10 +55,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
     // Use the bloc from the parent context (provided at app level)
     // No need to create a new bloc instance
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: BlocBuilder<DashboardBloc, DashboardState>(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           // Include DashboardPageInitial to handle initial state properly
           // This ensures the UI rebuilds when the bloc first loads
@@ -116,7 +115,6 @@ class _DashboardPageState extends State<DashboardPage> {
           // Show loader for DashboardPageInitial or any other state
           return const CustomLoader();
         }),
-      ),
     );
   }
 }
@@ -193,10 +191,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         pageBuilder: (context, animation, secondaryAnimation) {
           return BlocProvider.value(
             value: dashboardBloc,
-            child: SafeArea(
-              child: Scaffold(
-                body: ProfileDrawer(),
-              ),
+            child: Scaffold(
+              body: ProfileDrawer(),
             ),
           );
         },

@@ -20,19 +20,27 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   _CustomAppBarState createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(51.h);
+  Size get preferredSize => Size.fromHeight(50.h); // Default, will be overridden in build
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
   
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final topPadding = mediaQuery.padding.top;
+    
     return PreferredSize(
-        preferredSize: Size.fromHeight(50.h),
+        preferredSize: Size.fromHeight(50.h + topPadding),
         child: Container(
           color: Colors.transparent,
           child: Column(
             children: [
+              // Add padding for system UI (notch, status bar)
+              Container(
+                height: topPadding,
+                color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+              ),
               Container(
                 height: 50.h,
                 color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,

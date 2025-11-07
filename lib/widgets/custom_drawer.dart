@@ -28,15 +28,14 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
       // ProfileDrawer(),
       const ProfileDrawer(),
     ];
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-          body: Column(
-                      children: [
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+        body: Column(
+          children: [
           // CustomAppBar outside the scrollable region
           CustomAppBar(choiceAction: null),
           
@@ -103,8 +102,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
               ),
             ),
           ),
-                      ],
-                    ),
+          ],
         ),
       ),
     );

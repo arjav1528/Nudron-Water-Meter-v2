@@ -63,46 +63,41 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: CustomAppBar(
-            choiceAction: null,
-          ),
-          backgroundColor:
-              Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-          resizeToAvoidBottomInset: false,
-          // Prevents resize when the keyboard appears
-          body: SizedBox(
-            // color:Colors.green,
-            height: 1.sh - 51.h,
-            width: 1.sw,
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  // Keeps the icon at the bottom center
-                  child: Transform.rotate(
-                    angle: 0,
-                    child: SvgPicture.asset(
-                      'assets/icons/nfcicon.svg',
-                      fit: BoxFit.cover,
-                      clipBehavior: Clip.hardEdge,
-                      color: CommonColors.blue.withOpacity(0.25),
-                      width: PlatformUtils.isMobile ? 450.responsiveSp : 450.0,
+      child: Scaffold(
+        appBar: CustomAppBar(
+          choiceAction: null,
+        ),
+        backgroundColor:
+            Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+        resizeToAvoidBottomInset: false,
+        // Prevents resize when the keyboard appears
+        body: Column(
+          children: [
+            Container(
+              height: 3.h,
+              color: CommonColors.blue,
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    // Keeps the icon at the bottom center
+                    child: Transform.rotate(
+                      angle: 0,
+                      child: SvgPicture.asset(
+                        'assets/icons/nfcicon.svg',
+                        fit: BoxFit.cover,
+                        clipBehavior: Clip.hardEdge,
+                        color: CommonColors.blue.withOpacity(0.25),
+                        width: PlatformUtils.isMobile ? 450.responsiveSp : 450.0,
+                      ),
                     ),
                   ),
-                ),
-                Scaffold(
-                  backgroundColor: Colors.transparent,
-                  resizeToAvoidBottomInset: true,
-                  body: SingleChildScrollView(
+                  SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 3.h,
-                          color: CommonColors.blue,
-                        ),
                         Center(
                           child: SizedBox(
                             width: PlatformUtils.isMobile ? 1.sw : 600,
@@ -165,10 +160,14 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+            Container(
+              height: 3.h,
+              color: CommonColors.blue,
+            ),
+          ],
         ),
       ),
     );
