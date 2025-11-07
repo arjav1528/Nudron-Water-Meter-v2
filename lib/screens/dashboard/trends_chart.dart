@@ -673,13 +673,16 @@ class _DailyChartState extends State<DailyChart> {
                         child: SizedBox(
                           height: 41.responsiveSp,
                           width: 41.responsiveSp,
-                          child: Icon(
-                            Icons.arrow_back_sharp,
-                            size: 30.responsiveSp,
-                            color: Provider.of<ThemeNotifier>(context)
-                                .currentTheme
-                                .basicAdvanceTextColor
-                                .withOpacity(0.8),
+                          child: Transform.scale(
+                            scaleX: -1,
+                            child: Icon(
+                              Icons.arrow_right_alt,
+                              size: 30.responsiveSp,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .basicAdvanceTextColor
+                                  .withOpacity(0.8),
+                            ),
                           ),
                         ),
                         onTap: () async {

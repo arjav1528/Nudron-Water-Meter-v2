@@ -238,9 +238,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               child: Row(
                                 children: [
                                   IconButton(
-                                    icon: Icon(
-                                      Icons.arrow_back,
-                                      color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
+                                    icon: Transform.scale(
+                                      scaleX: -1,
+                                      child: Icon(
+                                        Icons.arrow_right_alt,
+                                        color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
+                                      ),
                                     ),
                                     onPressed: () => Navigator.of(context).pop(),
                                   ),

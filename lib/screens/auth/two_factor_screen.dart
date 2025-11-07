@@ -79,10 +79,15 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: Icon(Icons.arrow_back,
+                              icon: Transform.scale(
+                                scaleX: -1,
+                                child: Icon(
+                                  Icons.arrow_right_alt,
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .basicAdvanceTextColor),
+                                ),
+                              
                               onPressed: () => Navigator.of(context).pop(),
                             ),
                             SizedBox(width: 10.w),

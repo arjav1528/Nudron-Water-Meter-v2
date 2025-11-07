@@ -36,11 +36,14 @@ class _BackgroundChartState extends State<BackgroundChart> {
             backgroundColor:
                 Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
             leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Provider.of<ThemeNotifier>(context)
+              icon: Transform.scale(
+                scaleX: -1,
+                child: Icon(
+                  Icons.arrow_right_alt,
+                  color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
+                )
               ),
               onPressed: () {
                 BlocProvider.of<DashboardBloc>(context).changeScreen();

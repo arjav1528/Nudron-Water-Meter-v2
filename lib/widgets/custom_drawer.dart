@@ -55,12 +55,15 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
                           Align(
                             alignment: Alignment.topLeft,
                             child: IconButton(
-                              icon: Icon(
-                                Icons.arrow_back_ios,
+                              icon: Transform.scale(
+                                scaleX: -1,
+                                child: Icon(
+                                Icons.arrow_right_alt,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .drawerHeadingColor,
                                 size: 24.responsiveSp,
+                              ),
                               ),
                               onPressed: () {
                                 Navigator.pop(context);

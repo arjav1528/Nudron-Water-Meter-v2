@@ -96,7 +96,7 @@ class CustomDropdownButton2 extends StatelessWidget {
             .toList(),
         onChanged: onChanged,
         selectedItemBuilder: selectedItemBuilder,
-        icon: icon ?? const Icon(Icons.arrow_forward_ios_outlined),
+        icon: icon ?? const Icon(Icons.arrow_right_alt),
         iconSize: iconSize ?? 12,
         iconEnabledColor: iconEnabledColor,
         iconDisabledColor: iconDisabledColor,
