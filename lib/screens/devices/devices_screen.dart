@@ -81,26 +81,45 @@ class _DevicesPageState extends State<DevicesPage> {
                   padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 8.h),
                   child: Row(
                     children: [
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(50.r),
-                          onTap: () {
-                            Navigator.of(context).pushReplacementNamed('/projectSelection');
-                          },
-                          splashColor: Provider.of<ThemeNotifier>(context, listen: false)
-                              .currentTheme
-                              .splashColor,
-                          highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
-                              .currentTheme
-                              .splashColor,
-                          child: Padding(
-                            padding: EdgeInsets.all(4.w),
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                              size: 24.responsiveSp,
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [
+                              CommonColors.red,
+                              CommonColors.red.withOpacity(0.6),
+                              Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(2.w),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacementNamed('/projectSelection');
+                            },
+                            icon: Transform.scale(
+                              scaleX: -1,
+                              child: Icon(
+                                Icons.arrow_right_alt,
+                                color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                size: 24.responsiveSp,
+                              ),
                             ),
+                            splashColor: Provider.of<ThemeNotifier>(context, listen: false)
+                                .currentTheme
+                                .splashColor,
+                            highlightColor: Provider.of<ThemeNotifier>(context, listen: false)
+                                .currentTheme
+                                .splashColor,
+                            padding: EdgeInsets.all(4.w),
+                            constraints: BoxConstraints(),
                           ),
                         ),
                       ),
