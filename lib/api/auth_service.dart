@@ -539,11 +539,11 @@ class LoginPostRequests {
 
         final headers = {
           'User-Agent': userAgent,
-          'medium': PlatformUtils.isDesktop ? 'desktop' : 'phone',
+          'medium': 'phone',
           'Content-Type': 'text/plain',
           if (jwt != null) 'Authorization': 'Bearer $jwt',
           if (url == au1Url) 'tenantID': "d14b3819-5e90-4b1e-8821-9fcb72684627",
-          if (url == au1Url) 'clientID': "WaterMeteringMobile",
+          if (url == au1Url) 'clientID': PlatformUtils.isDesktop ? 'WaterMeteringDesktop' : 'WaterMeteringMobile2',
         };
         var request = http.Request('POST', Uri.parse(url));
         request.body = body;

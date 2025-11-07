@@ -703,7 +703,7 @@ class AuthService {
           'Content-Type': 'text/plain',
           if (jwt != null) 'Authorization': 'Bearer $jwt',
           if (url == _au1Url) 'tenantID': "d14b3819-5e90-4b1e-8821-9fcb72684627",
-          if (url == _au1Url) 'clientID': "WaterMeteringMobile",
+          if (url == _au1Url) 'clientID': PlatformUtils.isDesktop ? 'WaterMeteringDesktop' : 'WaterMeteringMobile2',
         };
 
         debugPrint('Preparing HTTP request...');
