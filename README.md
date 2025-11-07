@@ -56,6 +56,54 @@ lib/
    flutter pub run flutter_launcher_icons
    ```
 
+4. **Apply package modifications:**
+   
+   This project requires a modification to the `date_picker_plus` package to display month names in uppercase in the date range picker. After running `flutter pub get`, you need to manually apply this change:
+   
+   **File to modify:**
+   ```
+   ~/.pub-cache/hosted/pub.dev/date_picker_plus-4.2.0/lib/src/range/range_days_picker.dart
+   ```
+   
+   **Change required:**
+   
+   Find the `displayedDate` property (around line 406-417) and add `.toUpperCase()` at the end of the chain:
+   
+   **Before:**
+   ```dart
+   displayedDate: MaterialLocalizations.of(context)
+       .formatMonthYear(_displayedMonth!)
+       .replaceAll('٩', '9')
+       .replaceAll('٨', '8')
+       .replaceAll('٧', '7')
+       .replaceAll('٦', '6')
+       .replaceAll('٥', '5')
+       .replaceAll('٤', '4')
+       .replaceAll('٣', '3')
+       .replaceAll('٢', '2')
+       .replaceAll('١', '1')
+       .replaceAll('٠', '0'),
+   ```
+   
+   **After:**
+   ```dart
+   displayedDate: MaterialLocalizations.of(context)
+       .formatMonthYear(_displayedMonth!)
+       .replaceAll('٩', '9')
+       .replaceAll('٨', '8')
+       .replaceAll('٧', '7')
+       .replaceAll('٦', '6')
+       .replaceAll('٥', '5')
+       .replaceAll('٤', '4')
+       .replaceAll('٣', '3')
+       .replaceAll('٢', '2')
+       .replaceAll('١', '1')
+       .replaceAll('٠', '0')
+       .toUpperCase(),
+   ```
+   
+   **Note:** This modification is required for the billing section's date range picker to display month names in uppercase (e.g., "NOVEMBER 2025" instead of "November 2025"). You'll need to reapply this change if you run `flutter pub get` again or if the package cache is cleared.
+
 ### Running the App
 
 #### Mobile Platforms
@@ -89,13 +137,13 @@ flutter run -d web
 #### Mobile
 ```bash
 # Android APK
-flutter build apk
+flutter build apk --releas
 
 # Android App Bundle
-flutter build appbundle
+flutter build appbundle --release
 
 # iOS
-flutter build ios
+flutter build ios --release
 ```
 
 #### Desktop
@@ -156,6 +204,7 @@ The app supports both light and dark themes with platform-specific optimizations
 2. **Platform-specific features**: Ensure you're running on the correct platform
 3. **Dependencies**: Run `flutter pub get` after any pubspec.yaml changes
 4. **Build issues**: Clean and rebuild with `flutter clean && flutter pub get`
+5. **Date picker showing lowercase months**: If the date range picker shows "November" instead of "NOVEMBER", you need to apply the package modification documented in the Installation section. The modification must be reapplied after running `flutter pub get` or clearing the package cache.
 
 ### Debug Mode
 ```bash
