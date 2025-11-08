@@ -959,13 +959,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 selectedTextColor: Colors.white,
                 unselectedTextColor:
                     Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-                width: PlatformUtils.isMobile ? 112 : width / 5,
-                height: PlatformUtils.isMobile ? 30 : width / 18,
-                smallerHeight: PlatformUtils.isMobile ? 25 : (width / 5) / 2.24,
-                smallerWidth: PlatformUtils.isMobile ? 53 : (width / 5) / 2.11,
-                fontSize: PlatformUtils.isMobile ? ThemeNotifier.extrasmall : width / 30,
-                leftGap: PlatformUtils.isMobile ? 3 : 3 * (width / 5) / 112,
-                verticalGap: PlatformUtils.isMobile ? 2.5 : 2.5 * (width / 5) / 112,
+                
                 tabColor: CommonColors.red,
                 tabColor2: const Color(0xFF00BC8A),
               ),
@@ -1204,13 +1198,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   unselectedTextColor: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .tableText,
-                  width: PlatformUtils.isMobile ? 112 : width / 5,
-                  height: PlatformUtils.isMobile ? 30 : width / 18,
-                  smallerHeight: PlatformUtils.isMobile ? 25 : (width / 5) / 2.24,
-                  smallerWidth: PlatformUtils.isMobile ? 53 : (width / 5) / 2.11,
-                  fontSize: PlatformUtils.isMobile ? ThemeNotifier.extrasmall : width / 30,
-                  leftGap: PlatformUtils.isMobile ? 3 : 3 * (width / 5) / 112,
-                  verticalGap: PlatformUtils.isMobile ? 2.5 : 2.5 * (width / 5) / 112,
+                  
                   tabColor: CommonColors.red,
                   tabColor2: const Color(0xFF00BC8A),
                 ),
