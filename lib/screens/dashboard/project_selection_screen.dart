@@ -225,7 +225,12 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                               BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
                               activationCodeController.clear();
                               Navigator.of(context).pop();
-                              setState(() {}); 
+                              setState(() {});
+                              CustomAlert.showCustomScaffoldMessenger(
+                                context,
+                                "Project added successfully!",
+                                AlertType.success,
+                              );
                             } catch (e) {
                               CustomAlert.showCustomScaffoldMessenger(
                                   context, e.toString(), AlertType.error);

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
@@ -54,6 +57,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   TextEditingController phoneOtpFieldController = TextEditingController();
   TextEditingController deleteConfirmationFieldController = TextEditingController();
   bool deleteAccountVisible = false;
+  bool _isLoggingOut = false;
+  bool _isGlobalLoggingOut = false;
+  bool _isLoaderShowing = false;
 
   @override
   void initState() {
@@ -172,10 +178,65 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthUnauthenticated) {
+        if (state is AuthLoading) {
+          if ((_isLoggingOut || _isGlobalLoggingOut) && !_isLoaderShowing) {
+            _isLoaderShowing = true;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return PopScope(
+                  canPop: false,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                    child: Container(
+                      alignment: FractionalOffset.center,
+                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                      child: SizedBox(
+                        width: 75.responsiveSp,
+                        height: 75.responsiveSp,
+                        child: LoadingAnimationWidget.hexagonDots(
+                          size: 75.responsiveSp,
+                          color: CommonColors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        } else if (state is AuthUnauthenticated) {
+          if (_isLoaderShowing) {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
+            _isLoaderShowing = false;
+          }
+          
+          if (_isLoggingOut) {
+            CustomAlert.showCustomScaffoldMessenger(
+              context,
+              "Successfully logged out!",
+              AlertType.success,
+            );
+            _isLoggingOut = false;
+          } else if (_isGlobalLoggingOut) {
+            CustomAlert.showCustomScaffoldMessenger(
+              context,
+              "Successfully logged out from all devices!",
+              AlertType.success,
+            );
+            _isGlobalLoggingOut = false;
+          }
           
           Navigator.of(context).pop();
         } else if (state is AuthError) {
+          if (_isLoaderShowing) {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
+            _isLoaderShowing = false;
+          }
+          
+          _isLoggingOut = false;
+          _isGlobalLoggingOut = false;
           
           CustomAlert.showCustomScaffoldMessenger(
             context, 
@@ -527,7 +588,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             dynamicWidth: true,
                                             fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                                             onPressed: () async {
-                                              
+                                              setState(() {
+                                                _isLoggingOut = true;
+                                              });
                                               BlocProvider.of<AuthBloc>(context).add(AuthLogout());
                                             },
                                             isRed: true,
@@ -598,7 +661,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   dynamicWidth: true,
                                                   fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                                                   onPressed: () async {
-                                                    
+                                                    setState(() {
+                                                      _isGlobalLoggingOut = true;
+                                                    });
                                                     BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
                                                   },
                                                   isRed: true,
