@@ -569,17 +569,20 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 8.w),
-                                            child: Text(
-                                              "Log out from this app",
-                                              style: GoogleFonts.roboto(
-                                                fontSize:
-                                                    PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
-                                                color: Provider.of<ThemeNotifier>(
-                                                        context)
-                                                    .currentTheme
-                                                    .basicAdvanceTextColor,
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                                              child: Text(
+                                                "Log out from this app",
+                                                style: GoogleFonts.roboto(
+                                                  fontSize:
+                                                      PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                                  color: Provider.of<ThemeNotifier>(
+                                                          context)
+                                                      .currentTheme
+                                                      .basicAdvanceTextColor,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
                                           ),
@@ -645,15 +648,21 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text(
-                                                  "Log out from all devices",
-                                                  style: GoogleFonts.roboto(
-                                                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
-                                                    color: Provider.of<
-                                                                ThemeNotifier>(
-                                                            context)
-                                                        .currentTheme
-                                                        .basicAdvanceTextColor,
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(right: 8.w),
+                                                    child: Text(
+                                                      "Log out from all devices",
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                                        color: Provider.of<
+                                                                    ThemeNotifier>(
+                                                                context)
+                                                            .currentTheme
+                                                            .basicAdvanceTextColor,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
                                                   ),
                                                 ),
                                                 CustomButton(
@@ -715,17 +724,20 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 8.w),
-                                                child: Text(
-                                                  "Delete your account",
-                                                  style: GoogleFonts.roboto(
-                                                    fontSize:
-                                                        PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
-                                                    color: Provider.of<ThemeNotifier>(
-                                                            context)
-                                                        .currentTheme
-                                                        .basicAdvanceTextColor,
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                                                  child: Text(
+                                                    "Delete your account",
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize:
+                                                          PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                                      color: Provider.of<ThemeNotifier>(
+                                                              context)
+                                                          .currentTheme
+                                                          .basicAdvanceTextColor,
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                               ),
@@ -766,32 +778,35 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      
-                                                      CustomButton(
-                                                        dynamicWidth: true,
-                                                        text: "CANCEL",
-                                                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            deleteAccountVisible = false;
-                                                          });
-                                                          
-                                                        },
-                                                      ),
-                                                  
-                                                      CustomButton(
-                                                        dynamicWidth: true,
-                                                        text: "CONFIRM",
-                                                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
-                                                        onPressed: () {
-                                                          if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
+                                                      Expanded(
+                                                        child: CustomButton(
+                                                          dynamicWidth: true,
+                                                          text: "CANCEL",
+                                                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              deleteAccountVisible = false;
+                                                            });
                                                             
-                                                            BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
-                                                          } else {
-                                                            CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
-                                                          }
-                                                        },
-                                                        isRed: true,
+                                                          },
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 8.w),
+                                                      Expanded(
+                                                        child: CustomButton(
+                                                          dynamicWidth: true,
+                                                          text: "CONFIRM",
+                                                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                                          onPressed: () {
+                                                            if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
+                                                              
+                                                              BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
+                                                            } else {
+                                                              CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
+                                                            }
+                                                          },
+                                                          isRed: true,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -919,15 +934,18 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 8.w),
-                child: Text(
-                  "Two Factor Authentication",
-                  style: GoogleFonts.roboto(
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
-                    color: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .basicAdvanceTextColor,
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                  child: Text(
+                    "Two Factor Authentication",
+                    style: GoogleFonts.roboto(
+                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                      color: Provider.of<ThemeNotifier>(context)
+                          .currentTheme
+                          .basicAdvanceTextColor,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -959,7 +977,13 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 selectedTextColor: Colors.white,
                 unselectedTextColor:
                     Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-                
+                width: PlatformUtils.isMobile ? 120 : (width / 3.5).clamp(110.0, 135.0),
+                height: 30.55,
+                smallerWidth: PlatformUtils.isMobile ? 57 : ((width / 3.5).clamp(110.0, 135.0) * 0.475),
+                smallerHeight: 21,
+                verticalGap: 4.8,
+                leftGap: 3.6,
+                fontSize: PlatformUtils.isMobile ? 12 : 11.5,
                 tabColor: CommonColors.red,
                 tabColor2: const Color(0xFF00BC8A),
               ),
@@ -1157,15 +1181,18 @@ class _BiometricWidgetState extends State<BiometricWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 8.w),
-                  child: Text(
-                    "Biometric Login",
-                    style: GoogleFonts.roboto(
-                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
-                      color: Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .basicAdvanceTextColor,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                    child: Text(
+                      "Biometric Login",
+                      style: GoogleFonts.roboto(
+                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                        color: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .basicAdvanceTextColor,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
@@ -1198,7 +1225,13 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   unselectedTextColor: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .tableText,
-                  
+                  width: PlatformUtils.isMobile ? 120 : (width / 3.5).clamp(110.0, 135.0),
+                  height: 30.55,
+                  smallerWidth: PlatformUtils.isMobile ? 57 : ((width / 3.5).clamp(110.0, 135.0) * 0.475),
+                  smallerHeight: 21,
+                  verticalGap: 4.8,
+                  leftGap: 3.6,
+                  fontSize: PlatformUtils.isMobile ? 12 : 11.5,
                   tabColor: CommonColors.red,
                   tabColor2: const Color(0xFF00BC8A),
                 ),

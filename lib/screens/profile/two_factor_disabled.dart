@@ -5,6 +5,7 @@ import 'package:watermeter2/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../services/app_state_service.dart';
@@ -52,7 +53,9 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
 
   @override
   Widget build(BuildContext context) {
+    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
     return Container(
+      width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.r),
       ),
@@ -73,11 +76,11 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                         text: "Recommended! ",
                         style: GoogleFonts.roboto(
                           color: const Color(0xFF00BC8A),
-                          fontSize: ThemeNotifier.small.responsiveSp,
+                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                         )),
                     TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: ThemeNotifier.small.responsiveSp,
+                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -99,6 +102,8 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                 SizedBox(height: 15.h),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   CustomButton(
+                    dynamicWidth: true,
+                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -109,6 +114,8 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                   ),
                   SizedBox(width: 40.w),
                   CustomButton(
+                    dynamicWidth: true,
+                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                     text: "CONFIRM",
                     onPressed: () async {
                       if (!await checkIfAlreadyEnabled()) {
@@ -176,6 +183,8 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomButton(
+                    dynamicWidth: true,
+                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -186,6 +195,8 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                   ),
                   SizedBox(width: 40.w),
                   CustomButton(
+                    dynamicWidth: true,
+                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                     text: "CONFIRM",
                     onPressed: () async {
                       if (await checkIfAlreadyEnabled()) return;
@@ -244,6 +255,7 @@ class CustomtwofacRow extends StatefulWidget {
 class _CustomtwofacRowState extends State<CustomtwofacRow> {
   @override
   Widget build(BuildContext context) {
+    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
     return GestureDetector(
       onTap: () {
         widget.onTap();
@@ -277,7 +289,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                     Text(
                       widget.subtitle,
                       style: GoogleFonts.roboto(
-                        fontSize: ThemeNotifier.small.responsiveSp,
+                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -371,6 +383,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
 
   @override
   Widget build(BuildContext context) {
+    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.r),
@@ -400,6 +413,8 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomButton(
+                    dynamicWidth: true,
+                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -410,6 +425,8 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
                   ),
                   SizedBox(width: 40.w),
                   CustomButton(
+                    dynamicWidth: true,
+                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
                     text: "CONFIRM",
                     onPressed: () async {
                       if (await checkIfAlreadyEnabled()) return;
