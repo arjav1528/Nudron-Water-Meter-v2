@@ -42,6 +42,14 @@ class _CustomDropDownState extends State<CustomDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate font size gradient for desktop
+    final totalWidth = PlatformUtils.isMobile 
+        ? null 
+        : (widget.width1 + widget.width2 + 30.0 + 20.0); // width1 + width2 + icon space + padding
+    final fontSize = PlatformUtils.isMobile 
+        ? ThemeNotifier.small.responsiveSp 
+        : (totalWidth ?? 400) / 30;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -69,7 +77,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       widget.fieldName,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.robotoMono(
-                        fontSize: ThemeNotifier.small.responsiveSp,
+                        fontSize: fontSize,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -138,7 +146,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.robotoMono(
-                                    fontSize: ThemeNotifier.small.responsiveSp,
+                                    fontSize: fontSize,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -178,7 +186,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                                     : widget.valueConvertor!(value),
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.robotoMono(
-                                  fontSize: ThemeNotifier.small.responsiveSp,
+                                  fontSize: fontSize,
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .basicAdvanceTextColor,
@@ -308,6 +316,14 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
     }
     final size = renderBox.size;
 
+    // Calculate font size gradient for desktop
+    final totalWidth = PlatformUtils.isMobile 
+        ? null 
+        : (widget.width1 + widget.width2 + 30.0 + 20.0);
+    final fontSize = PlatformUtils.isMobile 
+        ? ThemeNotifier.small.responsiveSp 
+        : (totalWidth ?? 400) / 30;
+
     return OverlayEntry(
       builder: (context) => Positioned(
         width: size.width,
@@ -345,7 +361,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                           widget.items[index],
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(
-                            fontSize: ThemeNotifier.small.responsiveSp,
+                            fontSize: fontSize,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
@@ -376,6 +392,14 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate font size gradient for desktop
+    final totalWidth = PlatformUtils.isMobile 
+        ? null 
+        : (widget.width1 + widget.width2 + 30.0 + 20.0); // width1 + width2 + icon space + padding
+    final fontSize = PlatformUtils.isMobile 
+        ? ThemeNotifier.small.responsiveSp 
+        : (totalWidth ?? 400) / 30;
+    
     return GestureDetector(
       onTap: _toggleDropdown,
       child: CompositedTransformTarget(
@@ -401,14 +425,17 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                             width: widget.width1.w,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Text(
-                                widget.fieldName,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.robotoMono(
-                                  fontSize: ThemeNotifier.small.responsiveSp,
-                                  color: Provider.of<ThemeNotifier>(context)
-                                      .currentTheme
-                                      .basicAdvanceTextColor,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.w),
+                                child: Text(
+                                  widget.fieldName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.robotoMono(
+                                    fontSize: fontSize,
+                                    color: Provider.of<ThemeNotifier>(context)
+                                        .currentTheme
+                                        .basicAdvanceTextColor,
+                                  ),
                                 ),
                               ),
                             ),
@@ -440,7 +467,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                                       selectedValue ?? '-',
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.robotoMono(
-                                        fontSize: ThemeNotifier.small.responsiveSp,
+                                        fontSize: fontSize,
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .basicAdvanceTextColor,

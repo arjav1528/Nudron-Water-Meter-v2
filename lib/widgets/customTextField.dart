@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../utils/pok.dart';
 import '../../constants/theme2.dart';
 import '../constants/app_config.dart';
+import '../../services/platform_utils.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField({
@@ -61,6 +62,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final fontSize = PlatformUtils.isMobile 
+        ? ThemeNotifier.medium.responsiveSp 
+        : width / 30;
+    
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -88,7 +94,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           inputFormatters: widget.inputFormatters,
           style: widget.style ??
               GoogleFonts.roboto(
-                fontSize: ThemeNotifier.medium.responsiveSp,
+                fontSize: fontSize,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .textfieldTextColor,
@@ -134,7 +140,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             hintText: widget.hintText,
             hintStyle: widget.hintStyle ??
                 GoogleFonts.roboto(
-                  fontSize: ThemeNotifier.medium.responsiveSp,
+                  fontSize: fontSize,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .textfieldHintColor,

@@ -10,12 +10,14 @@ class ChamferedTextWidgetInverted extends StatelessWidget {
   final Color borderColor;
   final Color fillColor;
   final Color bgColor;
+  final double? fontSize;
 
   const ChamferedTextWidgetInverted({super.key, 
     required this.text,
     required this.borderColor,
     this.bgColor = Colors.transparent,
     this.fillColor = Colors.transparent,
+    this.fontSize,
   });
 
   @override
@@ -26,6 +28,7 @@ class ChamferedTextWidgetInverted extends StatelessWidget {
       isInverted: true,
       bgColor: bgColor,
       fillColor: fillColor,
+      fontSize: fontSize,
     );
 
   }
@@ -79,6 +82,7 @@ class ChamferedTextWidget extends StatelessWidget {
   final Color bgColor;
   final Color? textColor;
   final bool isInverted;
+  final double? fontSize;
 
   const ChamferedTextWidget(
       {super.key, required this.text,
@@ -86,7 +90,8 @@ class ChamferedTextWidget extends StatelessWidget {
       required this.bgColor,
         this.isInverted = false,
       this.fillColor = Colors.transparent,
-      this.textColor});
+      this.textColor,
+      this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +128,7 @@ class ChamferedTextWidget extends StatelessWidget {
                           
                           style: GoogleFonts.roboto(
                             textStyle: TextStyle(
-                              fontSize: ThemeNotifier.medium.responsiveSp,
+                              fontSize: fontSize ?? ThemeNotifier.medium.responsiveSp,
                               fontWeight: FontWeight.bold,
                               color: textColor ?? borderColor,
                             ),

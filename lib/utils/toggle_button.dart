@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/utils/pok.dart';
 
 import '../constants/theme2.dart';
+import '../services/platform_utils.dart';
 class ToggleButtonCustom extends StatefulWidget {
   final List<String> tabs;
   final Function onTap;
@@ -65,20 +66,28 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = PlatformUtils.isMobile;
+    final finalWidth = isMobile ? widget.width.w : widget.width;
+    final finalHeight = isMobile ? widget.height.h : widget.height;
+    final finalSmallerWidth = isMobile ? widget.smallerWidth.w : widget.smallerWidth;
+    final finalSmallerHeight = isMobile ? widget.smallerHeight.h : widget.smallerHeight;
+    final finalLeftGap = isMobile ? widget.leftGap.w : widget.leftGap;
+    final finalVerticalGap = isMobile ? widget.verticalGap.h : widget.verticalGap;
+    
     return SizedBox(
-      width: widget.width.w,
-      height: widget.height.h,
+      width: finalWidth,
+      height: finalHeight,
       
       child: Stack(
         children: [
           widget.backgroundColor == null
               ? CustomPaint(
-                  size: Size(widget.width.w, widget.height.h),
+                  size: Size(finalWidth, finalHeight),
                   painter: RPSCustomPainter(),
                 )
               : SizedBox(
-                  width: widget.width.w,
-                  height: widget.height.h,
+                  width: finalWidth,
+                  height: finalHeight,
                   child: Image.asset(
                     "assets/icons/togglebg.png",
                     fit: BoxFit.fill,
@@ -88,31 +97,31 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            left: selectedIndex * (widget.smallerWidth.w) + widget.leftGap.w,
+            left: selectedIndex * finalSmallerWidth + finalLeftGap,
             
-            top: widget.verticalGap.h,
+            top: finalVerticalGap,
             
             child: getColor(selectedIndex) == CommonColors.red
                 ? SizedBox(
-                    width: widget.smallerWidth.w,
-                    height: widget.smallerHeight.h,
+                    width: finalSmallerWidth,
+                    height: finalSmallerHeight,
                     child: Image.asset(
                       "assets/images/red_calibrate.png",
                       fit: BoxFit.fill,
-                      width: widget.smallerWidth.w,
-                      height: widget.smallerHeight.h,
+                      width: finalSmallerWidth,
+                      height: finalSmallerHeight,
                     ),
                   )
                 : CustomPaint(
-                    size: Size(widget.smallerWidth.w, widget.smallerHeight.h),
+                    size: Size(finalSmallerWidth, finalSmallerHeight),
                     painter: RPSCustomPainter2(
                       color: getColor(selectedIndex),
                     ),
                   ),
           ),
           SizedBox(
-            width: widget.width.w,
-            height: widget.height.h,
+            width: finalWidth,
+            height: finalHeight,
             child: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -131,7 +140,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
                     },
                     child: Container(
                       color: Colors.transparent,
-                      width: widget.smallerWidth.w,
+                      width: finalSmallerWidth,
                       child: Center(
                         child: Text(
                           widget.tabs[index],
@@ -139,8 +148,11 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
                             color: selectedIndex == index
                                 ? widget.selectedTextColor
                                 : widget.unselectedTextColor,
-                            fontSize:
-                            (widget.fontSize ?? ThemeNotifier.small).responsiveSp,
+                            fontSize: PlatformUtils.isMobile
+                                ? (widget.fontSize ?? ThemeNotifier.small).responsiveSp
+                                : (widget.fontSize != null && widget.fontSize! > 10 
+                                    ? widget.fontSize! 
+                                    : (widget.fontSize ?? ThemeNotifier.small).responsiveSp),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

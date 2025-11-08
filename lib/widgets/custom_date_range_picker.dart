@@ -13,6 +13,7 @@ import '../../constants/theme2.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
+import '../../services/platform_utils.dart';
 
 class CustomDateRangePicker extends StatefulWidget {
   const CustomDateRangePicker({super.key});
@@ -191,6 +192,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       final currentTheme = themeNotifier.currentTheme;
 
       DateTimeRange? currentSelectedRange = selectedRange;
+      final dialogWidth = PlatformUtils.isMobile ? 400.w : 600.0;
 
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
         context: context,
@@ -201,7 +203,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 backgroundColor: currentTheme.dialogBG,
                 elevation: 0,
                   child: Container(
-                    width: 400.w,
+                    width: dialogWidth,
                     constraints: BoxConstraints(
                       maxHeight: 650.h,
                     ),
@@ -225,6 +227,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             borderColor: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .gridLineColor,
+                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : dialogWidth / 30,
                           ),
                           IconButton(
                             icon: Icon(Icons.close,
@@ -242,7 +245,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.topCenter,
                         child: SizedBox(
-                          width: 360.w,
+                          width: PlatformUtils.isMobile ? 360.w : (dialogWidth - 40),
                           height: 300.h,
                           child: RangeDatePicker(
                           minDate: minDate,
@@ -261,7 +264,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                           currentDateTextStyle: TextStyle(
                             color: CommonColors.green,
-                            fontSize: 14.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
                             fontWeight: FontWeight.w600,
                       
                           ),
@@ -272,7 +275,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                           enabledCellsTextStyle: TextStyle(
                             color: currentTheme.basicAdvanceTextColor,
-                            fontSize: 14.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
                           ),
                       
                           selectedCellsDecoration: BoxDecoration(
@@ -280,7 +283,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                           selectedCellsTextStyle: TextStyle(
                             color: currentTheme.basicAdvanceTextColor,
-                            fontSize: 14.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
                             fontWeight: FontWeight.w500,
                           ),
                       
@@ -290,23 +293,23 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                           singleSelectedCellTextStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 14.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
                             fontWeight: FontWeight.w600,
                           ),
                       
                           daysOfTheWeekTextStyle: TextStyle(
                             color: currentTheme.gridHeadingColor,
-                            fontSize: 12.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 12.responsiveSp : 14.0,
                             fontWeight: FontWeight.w500,
                           ),
                       
                           disabledCellsTextStyle: TextStyle(
                             color: currentTheme.noEntriesColor,
-                            fontSize: 14.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
                           ),
                       
                           leadingDateTextStyle: GoogleFonts.robotoMono(
-                            fontSize: 18.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 18.responsiveSp : 20.0,
                             fontWeight: FontWeight.w600,
                             color: currentTheme.basicAdvanceTextColor,
                           ),
@@ -459,7 +462,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       Container(
-                        width: 300.w,
+                        width: PlatformUtils.isMobile ? 300.w : (dialogWidth - 100),
                         padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
                         decoration: BoxDecoration(
                           color: currentTheme.dropDownColor,
@@ -477,7 +480,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             color: currentSelectedRange != null 
                                 ? CommonColors.green 
                                 : currentTheme.noEntriesColor,
-                            fontSize: 13.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 13.responsiveSp : 15.0,
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
@@ -485,13 +488,13 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       Container(
-                        width: 300.w,
+                        width: PlatformUtils.isMobile ? 300.w : (dialogWidth - 100),
                         padding: EdgeInsets.symmetric(vertical: 8.h),
                         child: Text(
                           'Tip: Select start and end dates. Max range: 92 days.',
                           style: TextStyle(
                             color: currentTheme.gridHeadingColor,
-                            fontSize: 12.responsiveSp,
+                            fontSize: PlatformUtils.isMobile ? 12.responsiveSp : 14.0,
                             fontStyle: FontStyle.italic,
                           ),
                           textAlign: TextAlign.center,
@@ -500,7 +503,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
                       Container(
                         padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
-                        width: 300.w,
+                        width: PlatformUtils.isMobile ? 300.w : (dialogWidth - 100),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -511,7 +514,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              fontSize: ThemeNotifier.small.responsiveSp,
+                              fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 16.0,
                               dynamicWidth: true,
                             ),
                             CustomButton(
@@ -521,7 +524,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               onPressed: () {
                                 Navigator.of(context).pop(currentSelectedRange);
                               },
-                              fontSize: ThemeNotifier.small.responsiveSp,
+                              fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 16.0,
                               dynamicWidth: true,
                             ),
                           ],

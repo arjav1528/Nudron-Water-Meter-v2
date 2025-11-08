@@ -99,12 +99,14 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     showDialog(
       context: context,
       builder: (context) {
+        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
         final currentTheme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
+        final dialogWidth = PlatformUtils.isMobile ? 350.w : width;
         return Dialog(
           backgroundColor: currentTheme.dialogBG,
             elevation: 0,
           child: Container(
-            width: 350.w,
+            width: dialogWidth,
             constraints: BoxConstraints(
               maxHeight: 500.h,
             ),
@@ -131,6 +133,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         borderColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .gridLineColor,
+                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
                       ),
                       IconButton(
                         icon: Icon(Icons.close,
@@ -167,6 +170,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           hintStyle: TextStyle(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.textfieldHintColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
+                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
                           ),
                           filled: true,
                           fillColor: Provider.of<ThemeNotifier>(context).currentTheme.textFieldFillColor,
@@ -179,6 +183,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         ),
                         style: TextStyle(
                           color: Provider.of<ThemeNotifier>(context).currentTheme.textfieldTextColor,
+                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
                         ),
                       ),
                     ),
@@ -188,44 +193,44 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                     padding: EdgeInsets.only(left: 24.w,right: 24.w),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: CustomButton(
-                            text: "CANCEL",
-                            isRed: true,
-                            onPressed: () {
+                        CustomButton(
+                          text: "CANCEL",
+                          isRed: true,
+                          dynamicWidth: true,
+                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                          onPressed: () {
+                            activationCodeController.clear();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        // SizedBox(width: 12.w),
+                        CustomButton(
+                          text: "CONFIRM",
+                          dynamicWidth: true,
+                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                          onPressed: () async {
+                            FocusScope.of(context).unfocus();
+                            if (activationCodeController.text.isEmpty) {
+                              CustomAlert.showCustomScaffoldMessenger(
+                                  context, "Activation code cannot be empty", AlertType.error);
+                              return;
+                            }
+                            try {
+                              var result = await LoaderUtility.showLoader(
+                                context,
+                                LoginPostRequests.addProject(activationCodeController.text),
+                              );
+                              BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
                               activationCodeController.clear();
                               Navigator.of(context).pop();
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: CustomButton(
-                            text: "CONFIRM",
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-                              if (activationCodeController.text.isEmpty) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                    context, "Activation code cannot be empty", AlertType.error);
-                                return;
-                              }
-                              try {
-                                var result = await LoaderUtility.showLoader(
-                                  context,
-                                  LoginPostRequests.addProject(activationCodeController.text),
-                                );
-                                BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
-                                activationCodeController.clear();
-                                Navigator.of(context).pop();
-                                setState(() {}); 
-                              } catch (e) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                    context, e.toString(), AlertType.error);
-                              }
-                            },
-                          ),
+                              setState(() {}); 
+                            } catch (e) {
+                              CustomAlert.showCustomScaffoldMessenger(
+                                  context, e.toString(), AlertType.error);
+                            }
+                          },
                         ),
                       ],
                     ),

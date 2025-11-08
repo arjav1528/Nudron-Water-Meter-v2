@@ -71,35 +71,31 @@ class _DevicesPageState extends State<DevicesPage> {
                   padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 8.h),
                   child: Row(
                     children: [
-                      Container(
-                        height: 30.h,
-                        width: 40.w,
-                        
-                        alignment: Alignment.center,
-                        
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(8.r),
-                          color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-                          
-                          border: GradientBoxBorder(
-                            gradient: LinearGradient(
-                              colors: [
-                                CommonColors.red,
-                                CommonColors.red.withOpacity(0.6),
-                                Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            width: 2.responsiveSp,
-                          )
-                        ),
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushReplacementNamed('/projectSelection');
-                            },
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushReplacementNamed('/projectSelection');
+                        },
+                        child: Container(
+                          height: 35.h,
+                          width: 45.w,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(8.r),
+                              color: Colors.transparent,
+                              border: GradientBoxBorder(
+                                width: 2.responsiveSp,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    CommonColors.red,
+                                    CommonColors.red.withOpacity(0.6),
+                                    Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                              )
+                          ),
+                          child: Center(
                             child: Transform.scale(
                               scaleX: -1,
                               child: Icon(
@@ -108,7 +104,6 @@ class _DevicesPageState extends State<DevicesPage> {
                                 size: 30.responsiveSp,
                               ),
                             ),
-                            
                           ),
                         ),
                       ),

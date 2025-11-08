@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../utils/pok.dart';
 
 import '../../constants/theme2.dart';
+import '../../services/platform_utils.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -34,6 +35,11 @@ class CustomButton extends StatelessWidget {
         ? (isRed ? CommonColors.red : CommonColors.blue)
         : Colors.grey;
     final chamferHeight = (44.h) / 3;
+    final drawerWidth = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final calculatedFontSize = fontSize ?? ThemeNotifier.medium;
+    final finalFontSize = PlatformUtils.isMobile 
+        ? calculatedFontSize.responsiveSp 
+        : (fontSize != null ? fontSize! : drawerWidth / 30);
 
     return ClipPath(
       clipper: ChamferClipper(chamferHeight: chamferHeight),
@@ -62,7 +68,7 @@ class CustomButton extends StatelessWidget {
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(
-                            fontSize: (fontSize ?? ThemeNotifier.medium).responsiveSp,
+                            fontSize: finalFontSize,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -73,7 +79,9 @@ class CustomButton extends StatelessWidget {
                             Icons.arrow_right_alt,
 
                             color: Colors.white,
-                            size: (fontSize ?? ThemeNotifier.large + 10).responsiveSp,
+                            size: PlatformUtils.isMobile 
+                                ? (calculatedFontSize + 10).responsiveSp 
+                                : (fontSize != null ? fontSize! + 10 : drawerWidth / 30 + 10),
                           ),
                         ],
                       ],

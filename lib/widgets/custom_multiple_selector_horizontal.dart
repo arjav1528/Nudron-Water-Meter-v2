@@ -14,6 +14,7 @@ import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/customButton.dart';
+import '../../services/platform_utils.dart';
 
 class CustomMultipleSelectorHorizontal extends StatefulWidget {
   const CustomMultipleSelectorHorizontal({super.key});
@@ -55,6 +56,11 @@ class _CustomMultipleSelectorHorizontalState
 
   @override
   Widget build(BuildContext context) {
+    final width = PlatformUtils.isMobile 
+        ? null 
+        : (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final iconSize = PlatformUtils.isMobile ? 35.responsiveSp : width! / 15.7;
+    
     return Material(
       color: Colors.transparent,
       child: Ink(
@@ -90,7 +96,7 @@ class _CustomMultipleSelectorHorizontalState
                         Expanded(
                           child: BreadCrumb(
                             items: _buildBreadcrumbItems(context,
-                                BlocProvider.of<DashboardBloc>(context)),
+                                BlocProvider.of<DashboardBloc>(context), width),
                             divider: Icon(
                               Icons.chevron_right,
                               color: Provider.of<ThemeNotifier>(context)
@@ -108,7 +114,7 @@ class _CustomMultipleSelectorHorizontalState
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                          size: 35.responsiveSp,
+                          size: iconSize,
                         )
                       ],
                     ),
@@ -225,8 +231,11 @@ class _CustomMultipleSelectorHorizontalState
   }
 
   List<BreadCrumbItem> _buildBreadcrumbItems(
-    BuildContext context, DashboardBloc dashboardBloc) {
+    BuildContext context, DashboardBloc dashboardBloc, double? width) {
     final selectedFilters = dashboardBloc.currentFilters;
+    final fontSize = PlatformUtils.isMobile 
+        ? ThemeNotifier.small.responsiveSp 
+        : (width ?? 400) / 30;
 
     List<BreadCrumbItem> breadcrumbItems = [];
 
@@ -238,7 +247,7 @@ class _CustomMultipleSelectorHorizontalState
             content: Text(
               filter.toUpperCase(),
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.small.responsiveSp,
+                fontSize: fontSize,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
@@ -259,7 +268,7 @@ class _CustomMultipleSelectorHorizontalState
             content: Text(
               buildings.first.toUpperCase(),
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.small.responsiveSp,
+                fontSize: fontSize,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
@@ -276,7 +285,7 @@ class _CustomMultipleSelectorHorizontalState
           content: Text(
             "NO FILTER SELECTED",
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.small.responsiveSp,
+              fontSize: fontSize,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -334,49 +343,65 @@ class _DropdownContentState extends State<DropdownContent> {
   @override
   Widget build(BuildContext context) {
     final projects = dashboardBloc.projects;
+    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(height: 12.h),
-        for (int index = 1; index < levels.length; index++)
-          Builder(
-            builder: (context) {
-              var items = _getItemsForLevel(index, projects);
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: PlatformUtils.isMobile ? 12.w : 0,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 12.h),
+          for (int index = 1; index < levels.length; index++)
+            Builder(
+              builder: (context) {
+                var items = _getItemsForLevel(index, projects);
 
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.h),
-                child: CustomDropdownButton2(
-                  fieldName: levels[index],
-                  value: selectedFilters[index],
-                  items: items,
-                  onChanged: (value) => _onFilterChanged(index, value),
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: CustomDropdownButton2(
+                    width1: PlatformUtils.isMobile ? 60.w : 0.33 * width,
+                    width2: PlatformUtils.isMobile ? 273.w : 0.66 * width,
+                    // desktopDropdownWidth: PlatformUtils.isMobile ? null : width,
+                    // desktopDropdownWidth: width - 30,
+                    fieldName: levels[index],
+                    value: selectedFilters[index],
+                    items: items,
+                    onChanged: (value) => _onFilterChanged(index, value),
+                    fieldNameVisible: true,
+                  ),
+                );
+              }
+            ),
+          SizedBox(height: 20.h),
+          SizedBox(
+            // width: PlatformUtils.isMobile ? null : width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                
+                CustomButton(
+                  text: 'CANCEL',
+                  isRed: true,
+                  dynamicWidth: true,
+                  onPressed: widget.onClose,
+                  width: 120.w, 
                 ),
-              );
-            }
+                SizedBox(width: 160.w),
+                CustomButton(
+                  text: 'CONFIRM',
+                  dynamicWidth: true,
+                  onPressed: _onConfirm,
+                  width: 120.w, 
+                ),
+              ],
+            ),
           ),
-        SizedBox(height: 20.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            
-            CustomButton(
-              text: 'CANCEL',
-              isRed: true,
-              onPressed: widget.onClose,
-              width: 120.w, 
-            ),
-            SizedBox(width: 160.w),
-            CustomButton(
-              text: 'CONFIRM',
-              onPressed: _onConfirm,
-              width: 120.w, 
-            ),
-          ],
-        ),
-        SizedBox(height: 20.h),
-        
-      ],
+          SizedBox(height: 20.h),
+          
+        ],
+      ),
     );
   }
 
@@ -524,6 +549,9 @@ class _CustomMultipleSelectorHorizontal2State
 
   @override
   Widget build(BuildContext context) {
+    final width = PlatformUtils.isMobile 
+        ? null 
+        : (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
 
     return Material(
       color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
@@ -545,7 +573,7 @@ class _CustomMultipleSelectorHorizontal2State
                 Expanded(
                   child: BreadCrumb(
                     items: _buildBreadcrumbItems(
-                        context, BlocProvider.of<DashboardBloc>(context)),
+                        context, BlocProvider.of<DashboardBloc>(context), width),
                     divider: Icon(
                       Icons.chevron_right,
                       color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
@@ -565,8 +593,11 @@ class _CustomMultipleSelectorHorizontal2State
   }
 
   List<BreadCrumbItem> _buildBreadcrumbItems(
-    BuildContext context, DashboardBloc dashboardBloc) {
+    BuildContext context, DashboardBloc dashboardBloc, double? width) {
     final selectedFilters = dashboardBloc.currentFilters;
+    final fontSize = PlatformUtils.isMobile 
+        ? ThemeNotifier.small.responsiveSp 
+        : (width ?? 400) / 30;
 
     if (selectedFilters.isEmpty) {
       return [
@@ -574,7 +605,7 @@ class _CustomMultipleSelectorHorizontal2State
           content: Text(
             "NO FILTER SELECTED",
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.small.responsiveSp,
+              fontSize: fontSize,
               color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
             ),
           ),
@@ -588,7 +619,7 @@ class _CustomMultipleSelectorHorizontal2State
               content: Text(
                 f.toUpperCase(),
                 style: GoogleFonts.robotoMono(
-                  fontSize: ThemeNotifier.small.responsiveSp,
+                  fontSize: fontSize,
                   color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                 ),
               ),
