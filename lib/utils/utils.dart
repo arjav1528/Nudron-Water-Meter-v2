@@ -16,7 +16,45 @@ class Utils {
   }
 
   static DateTime parseMMMYYToDate(String dateStr) {
-    List<String> parts = dateStr.split(' ');
+    // Clean the date string (remove asterisks and trim)
+    String cleanedDateStr = dateStr.trim().replaceAll('*', '');
+    
+    // Handle "DD-MMM-YY" format (e.g., "11-Oct-25")
+    if (cleanedDateStr.contains('-')) {
+      List<String> parts = cleanedDateStr.split('-');
+      if (parts.length == 3) {
+        int day = int.tryParse(parts[0]) ?? 1;
+        String monthStr = parts[1];
+        String yearStr = parts[2];
+        
+        // Convert 2-digit year to 4-digit year
+        int year = int.tryParse(yearStr) ?? 0;
+        if (year < 100) {
+          year = year < 50 ? 2000 + year : 1900 + year;
+        }
+
+        Map<String, int> monthMap = {
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 3,
+          "Apr": 4,
+          "May": 5,
+          "Jun": 6,
+          "Jul": 7,
+          "Aug": 8,
+          "Sep": 9,
+          "Oct": 10,
+          "Nov": 11,
+          "Dec": 12
+        };
+
+        int month = monthMap[monthStr] ?? 1;
+        return DateTime(year, month, day);
+      }
+    }
+    
+    // Handle "MMM YY" format (e.g., "Oct 2025")
+    List<String> parts = cleanedDateStr.split(' ');
     if (parts.length != 2) return DateTime(1900); 
 
     String monthStr = parts[0];
