@@ -28,8 +28,11 @@ class UIConfig {
   static double get accentLineHeightResponsive => 3.responsiveSp;
   static double get backButtonHeight => 35.h;
   static double get backButtonWidth => 45.w;
+  static double get backButtonIconSize => 30.responsiveSp;
   static double get iconContainerHeight => 30.h;
   static double get iconContainerWidth => 30.w;
+  static double get projectIconHeight => 30.h;
+  static double get projectIconWidth => 30.w;
   static double get loaderSize => 75.responsiveSp;
   static double get profileImageSize => 75.responsiveSp;
   static double get noEntriesIconSize => 114.responsiveSp;

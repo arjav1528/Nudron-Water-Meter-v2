@@ -77,18 +77,18 @@ class _DevicesPageState extends State<DevicesPage> {
                           Navigator.of(context).pushReplacementNamed('/projectSelection');
                         },
                         child: Container(
-                          height: 35.h,
-                          width: 45.w,
+                          height: UIConfig.backButtonHeight,
+                          width: UIConfig.backButtonWidth,
                           decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: UIConfig.borderRadiusCircularMedium,
-                              color: Colors.transparent,
+                              color: UIConfig.colorTransparent,
                               border: GradientBoxBorder(
                                 width: UIConfig.chartBorderWidth,
                                 gradient: LinearGradient(
                                   colors: [
-                                    CommonColors.red,
-                                    CommonColors.red.withOpacity(0.6),
+                                    UIConfig.accentColorRed,
+                                    UIConfig.accentColorRed.withOpacity(UIConfig.opacityVeryHigh),
                                     Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
                                   ],
                                   begin: Alignment.centerLeft,
@@ -102,7 +102,7 @@ class _DevicesPageState extends State<DevicesPage> {
                               child: Icon(
                                 Icons.arrow_right_alt,
                                 color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                size: 30.responsiveSp,
+                                size: UIConfig.backButtonIconSize,
                               ),
                             ),
                           ),
@@ -111,7 +111,8 @@ class _DevicesPageState extends State<DevicesPage> {
                       UIConfig.spacingSizedBoxMedium,
                       SvgPicture.asset('assets/icons/project.svg',
                         color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                        height: 30.h,
+                        height: UIConfig.projectIconHeight,
+                        width: UIConfig.projectIconWidth,
                       ),
                       UIConfig.spacingSizedBoxSmall,
                       Text(

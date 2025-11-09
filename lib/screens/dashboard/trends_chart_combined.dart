@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
@@ -65,24 +64,22 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                       Navigator.of(context).pushReplacementNamed('/projectSelection');
                     },
                     child: Container(
-                      height: 35.h,
-                      width: 45.w,
+                      height: UIConfig.backButtonHeight,
+                      width: UIConfig.backButtonWidth,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: UIConfig.borderRadiusCircularMedium,
-                        color: Colors.transparent,
+                        color: UIConfig.colorTransparent,
                         border: GradientBoxBorder(
                           width: UIConfig.chartBorderWidth,
                           gradient: LinearGradient(
                             colors: [
-                              CommonColors.yellow,
-                              CommonColors.yellow.withOpacity(0.6),
-                              // CommonColors.yellow.withOpacity(0.6),
+                              UIConfig.accentColorYellow,
+                              UIConfig.accentColorYellow.withOpacity(UIConfig.opacityVeryHigh),
                               Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
                             ],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
-                            
                           ),
                         )
                       ),
@@ -92,7 +89,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                           child: Icon(
                             Icons.arrow_right_alt,
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                            size: UIConfig.iconSizeMedium,
+                            size: UIConfig.backButtonIconSize,
                           ),
                         ),
                       ),
@@ -101,7 +98,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                   UIConfig.spacingSizedBoxMedium,
                   SvgPicture.asset('assets/icons/project.svg',
                     color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                    height: 30.h,
+                    height: UIConfig.projectIconHeight,
+                    width: UIConfig.projectIconWidth,
                   ),
                   UIConfig.spacingSizedBoxSmall,
                   Text(
