@@ -16,6 +16,7 @@ import 'package:watermeter2/utils/pok.dart';
 import 'package:watermeter2/services/app_state_service.dart';
 import 'package:watermeter2/constants/app_config.dart';
 import 'package:watermeter2/constants/theme2.dart';
+import 'package:watermeter2/constants/ui_config.dart';
 import 'package:watermeter2/utils/alert_message.dart';
 import 'package:watermeter2/utils/biometric_helper.dart';
 import 'package:watermeter2/utils/misc_functions.dart';
@@ -70,8 +71,8 @@ class _LoginPageState extends State<LoginPage> {
         body: Column(
           children: [
             Container(
-              height: 3.h,
-              color: CommonColors.blue,
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorBlue,
             ),
             Expanded(
               child: Stack(
@@ -85,8 +86,8 @@ class _LoginPageState extends State<LoginPage> {
                         'assets/icons/nfcicon.svg',
                         fit: BoxFit.cover,
                         clipBehavior: Clip.hardEdge,
-                        color: CommonColors.blue.withOpacity(0.25),
-                        width: PlatformUtils.isMobile ? 450.responsiveSp : 450.0,
+                        color: UIConfig.accentColorBlue.withOpacity(UIConfig.opacityMedium),
+                        width: UIConfig.getResponsiveIconSize(450.responsiveSp, desktopSize: 450.0),
                       ),
                     ),
                   ),
@@ -99,33 +100,33 @@ class _LoginPageState extends State<LoginPage> {
                             width: PlatformUtils.isMobile ? 1.sw : 600,
                             child: Column(
                               children: [
-                                SizedBox(height: 20.h),
+                                SizedBox(height: UIConfig.spacingExtraLarge),
                                 Center(
                                   child: Text(
                                     'Nudron IoT Solutions',
                                     style: GoogleFonts.roboto(
-                                        fontSize: PlatformUtils.isMobile ? 37.responsiveSp : 37.0,
+                                        fontSize: UIConfig.getResponsiveIconSize(37.responsiveSp, desktopSize: 37.0),
                                         fontWeight: FontWeight.bold,
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .loginTitleColor),
                                   ),
                                 ),
-                                SizedBox(height: 10.h),
+                                SizedBox(height: UIConfig.spacingMedium),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                  padding: UIConfig.paddingTextFieldHorizontal,
                                   child: Center(
                                     child: Text(
                                         "Welcome to Nudron's Water Metering Dashboard",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.roboto(
-                                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : 16.0,
+                                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: 16.0),
                                             color: Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
                                                 .basicAdvanceTextColor)),
                                   ),
                                 ),
-                                SizedBox(height: 20.h),
+                                SizedBox(height: UIConfig.spacingExtraLarge),
                                 Center(
                                   child: ToggleButtonCustom(
                                     key: UniqueKey(),
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                                     },
                                   ),
                                 ),
-                                SizedBox(height: 40.h),
+                                SizedBox(height: UIConfig.spacingXXXLarge),
                                 IndexedStack(
                                   index: NudronRandomStuff.isSignIn.value ? 0 : 1,
                                   children: pages,
@@ -160,8 +161,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Container(
-              height: 3.h,
-              color: CommonColors.blue,
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorBlue,
             ),
           ],
         ),
@@ -255,7 +256,7 @@ class _SigninPageState extends State<SigninPage> {
       child: Column(
         children: [
         Padding(
-            padding: EdgeInsets.only(left: 35.w, right: 35.w),
+            padding: UIConfig.paddingDialogTop,
             child: CustomTextField(
               key: UniqueKey(),
               controller: emailController,
@@ -263,20 +264,18 @@ class _SigninPageState extends State<SigninPage> {
               prefixIcon: PlatformUtils.isMobile
                   ? null
                   : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: UIConfig.paddingTextFieldHorizontal,
                       child: SvgPicture.asset(
                         'assets/icons/mail.svg',
-                        height: 20.0,
-                        width: 24.0,
+                        height: UIConfig.iconSizeSmall,
+                        width: UIConfig.iconSizePrefixWidth,
                         fit: BoxFit.scaleDown,
                       ),
                     ),
               hintText: 'Enter Email',
               keyboardType: TextInputType.emailAddress,
               style: GoogleFonts.roboto(
-                  fontSize: PlatformUtils.isMobile
-                      ? ThemeNotifier.medium.responsiveSp
-                      : 18.0,
+                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: 18.0),
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .textfieldTextColor),
@@ -292,30 +291,30 @@ class _SigninPageState extends State<SigninPage> {
         Visibility(
           visible: openForgotPasswordButtons,
           child: Padding(
-            padding: EdgeInsets.only(left: 35.w, right: 35.w),
+            padding: UIConfig.paddingDialogTop,
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.h),
+                  padding: EdgeInsets.symmetric(vertical: UIConfig.spacingXSmall * 1.25),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         "Forgot Password?",
                         style: GoogleFonts.roboto(
-                            fontSize: ThemeNotifier.medium.responsiveSp,
+                            fontSize: UIConfig.fontSizeMediumResponsive,
                             fontWeight: FontWeight.w500,
                             color: CommonColors.red),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 5.h),
+                SizedBox(height: UIConfig.spacingXSmall * 1.25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomButton(
-                      width: 130.w,
+                      width: UIConfig.buttonDefaultWidth + 18.w,
                       text: "CANCEL",
                       isRed: true,
                       onPressed: () {
@@ -325,7 +324,7 @@ class _SigninPageState extends State<SigninPage> {
                       },
                     ),
                     CustomButton(
-                      width: 130.w,
+                      width: UIConfig.buttonDefaultWidth + 18.w,
                       text: "SEND EMAIL",
                       onPressed: () async {
                         
@@ -349,7 +348,7 @@ class _SigninPageState extends State<SigninPage> {
                   children: [
                     Padding(
                         padding: EdgeInsets.only(
-                            left: 35.w, right: 35.w, top: 22.h),
+                            left: UIConfig.paddingHorizontalExtraLarge, right: UIConfig.paddingHorizontalExtraLarge, top: UIConfig.paddingVerticalExtraLarge),
                         child: PasswordTextField(
                           controller: passwordControllerObscure,
                           style: GoogleFonts.roboto(
@@ -367,14 +366,14 @@ class _SigninPageState extends State<SigninPage> {
                                 .currentTheme
                                 .textfieldHintColor,
                           ),
-                          desktopPrefixIconHeight: 20.0,
-                          desktopPrefixIconWidth: 24.0,
-                          desktopSuffixIconSize: 18.0,
+                          desktopPrefixIconHeight: UIConfig.iconSizeSmall,
+                          desktopPrefixIconWidth: UIConfig.iconSizePrefixWidth,
+                          desktopSuffixIconSize: UIConfig.fontSizeSmall,
                         )),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
-                        padding: EdgeInsets.only(right: 35.w, top: 25.h),
+                        padding: EdgeInsets.only(right: UIConfig.paddingHorizontalExtraLarge, top: UIConfig.spacingXXLarge + 1.h),
                         child: GestureDetector(
                           onTap: () async {
                             if (emailController.text.isNotEmpty) {
@@ -402,7 +401,7 @@ class _SigninPageState extends State<SigninPage> {
                           child: Text(
                             "Forgot Password?",
                             style: GoogleFonts.roboto(
-                                fontSize: ThemeNotifier.medium.responsiveSp,
+                                fontSize: UIConfig.fontSizeMediumResponsive,
                                 decoration: TextDecoration.underline,
                                 decorationColor: CommonColors.red,
                                 fontWeight: FontWeight.w500,
@@ -411,7 +410,7 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                       ),
                     ),
-                    Container(height: 40.h),
+                    Container(height: UIConfig.spacingXXXLarge),
                     Center(
                       child: CustomButton(
                         text: "SIGN IN",
@@ -446,7 +445,7 @@ class _SigninPageState extends State<SigninPage> {
                         },
                       ),
                     ),
-                    Container(height: 40.h),
+                    Container(height: UIConfig.spacingXXXLarge),
                   ],
                 ),
                 
@@ -467,7 +466,7 @@ class _SigninPageState extends State<SigninPage> {
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed)) {
                                 return CommonColors.blue
-                                    .withOpacity(0.25); 
+                                    .withOpacity(UIConfig.opacityMedium); 
                               }
                               return null; 
                             },
@@ -488,7 +487,7 @@ class _SigninPageState extends State<SigninPage> {
                           children: [
                             Icon(
                               Icons.fingerprint,
-                              size: PlatformUtils.isMobile ? 70.responsiveSp : 70.0,
+                              size: UIConfig.getResponsiveIconSize(70.responsiveSp, desktopSize: 70.0),
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .basicAdvanceTextColor,
@@ -501,7 +500,7 @@ class _SigninPageState extends State<SigninPage> {
                                     Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
-                                fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 12.0,
+                                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: 12.0),
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
@@ -511,7 +510,7 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: UIConfig.spacingExtraLarge),
                   ],
                 )
               ],
@@ -586,10 +585,10 @@ class _AutoLoginState extends State<AutoLogin> {
           border: Border.all(
             color:
                 Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: 3.responsiveSp,
+            width: UIConfig.dialogBorderWidth,
           ),
         ),
-        width: 350.w,
+        width: UIConfig.desktopDrawerWidthMin - 50.w,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -618,7 +617,7 @@ class _AutoLoginState extends State<AutoLogin> {
                 ),
               ],
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: UIConfig.spacingExtraLarge),
             Center(
               child: Text(
                 "WELCOME BACK! \nLOGIN AS ${widget.email}?",
@@ -627,11 +626,11 @@ class _AutoLoginState extends State<AutoLogin> {
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
-                  fontSize: ThemeNotifier.small.responsiveSp,
+                  fontSize: UIConfig.fontSizeSmallResponsive,
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: UIConfig.spacingExtraLarge),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -654,7 +653,7 @@ class _AutoLoginState extends State<AutoLogin> {
                 ),
               ],
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: UIConfig.spacingExtraLarge),
           ],
         ),
       ),

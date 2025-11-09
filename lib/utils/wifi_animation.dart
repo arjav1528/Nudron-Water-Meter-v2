@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:watermeter2/utils/pok.dart';
+import '../constants/ui_config.dart';
 
 class WifiAnimation extends StatelessWidget {
   const WifiAnimation({super.key});
@@ -8,6 +8,6 @@ class WifiAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Image.asset('assets/images/1fqC.gif',
-            color: Colors.blue, width: 200.responsiveSp, height: 200.responsiveSp));
+            color: UIConfig.accentColorBlue, width: UIConfig.wifiAnimationSize, height: UIConfig.wifiAnimationSize));
   }
 }

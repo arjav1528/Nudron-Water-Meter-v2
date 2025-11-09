@@ -5,12 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/utils/pok.dart';
-
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../models/userInfo.dart';
-import '../../services/platform_utils.dart';
 
 class ActiveDevices extends StatelessWidget {
   const ActiveDevices({super.key});
@@ -32,13 +30,13 @@ class ActiveDevices extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      top: index == 0 ? 0 : 8.h,
-                      bottom: (index == sessions.length - 1) ? 8.h : 8.h),
+                      top: index == 0 ? 0 : UIConfig.spacingSmall.h,
+                      bottom: (index == sessions.length - 1) ? UIConfig.spacingSmall.h : UIConfig.spacingSmall.h),
                   child: SessionWidget(session: sessions[index]),
                 ),
                 
                 Container(
-                  height: 1,
+                  height: UIConfig.borderWidthThin,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -59,14 +57,14 @@ class SessionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Client: ${session.clientID}',
           style: GoogleFonts.roboto(
-            fontSize: PlatformUtils.isMobile ? ThemeNotifier.large.responsiveSp : width / 25,
+            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeLarge, desktopWidth: width),
             color: CommonColors.blue2,
             fontWeight: FontWeight.bold,
           ),
@@ -78,7 +76,7 @@ class SessionWidget extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.roboto(
-              fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -88,7 +86,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Location: ${session.location}',
           style: GoogleFonts.roboto(
-            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,
@@ -97,7 +95,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Last Active: ${timeago.format(session.lastRefresh)}',
           style: GoogleFonts.roboto(
-            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,

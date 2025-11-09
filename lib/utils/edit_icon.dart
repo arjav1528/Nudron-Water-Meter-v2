@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/utils/pok.dart';
 import 'package:watermeter2/constants/theme2.dart';
+import 'package:watermeter2/constants/ui_config.dart';
 
 class EditIcon extends StatelessWidget {
   EditIcon({
@@ -20,24 +20,24 @@ class EditIcon extends StatelessWidget {
         onPressed: onTap,
         fillColor:
             Provider.of<ThemeNotifier>(context).currentTheme.editIconBG,
-        splashColor: CommonColors.blue.withOpacity(0.25),
+        splashColor: UIConfig.accentColorBlue.withOpacity(UIConfig.opacityMedium),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        elevation: 0,
+        elevation: UIConfig.dialogElevation,
         padding: EdgeInsets.zero,
-        constraints: BoxConstraints.tightFor(width: 30.responsiveSp),
+        constraints: BoxConstraints.tightFor(width: UIConfig.iconSizeLarge),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(2.responsiveSp),
+          borderRadius: BorderRadius.circular(UIConfig.spacingXSmall * 0.5),
           side: BorderSide(
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .gridLineColor, 
-            width: 1.responsiveSp, 
+            width: UIConfig.borderWidthThin, 
           ),
         ),
         child: Center(
           child: Icon(
             icon,
-            size: 20.responsiveSp,
+            size: UIConfig.fontSizeSmallResponsive + UIConfig.spacingXSmall,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .editIconColor, 

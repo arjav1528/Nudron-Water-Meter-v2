@@ -12,6 +12,7 @@ import 'package:watermeter2/utils/pok.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../widgets/data_grid_widget.dart';
 class DevicesPage extends StatefulWidget {
   const DevicesPage({super.key});
@@ -64,11 +65,11 @@ class _DevicesPageState extends State<DevicesPage> {
             body: Column(
               children: [
                 Container(
-                  height: 3.responsiveSp,
-                  color: CommonColors.red,
+                  height: UIConfig.accentLineHeightResponsive,
+                  color: UIConfig.accentColorRed,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 8.h),
+                  padding: UIConfig.paddingChartHorizontal,
                   child: Row(
                     children: [
                       GestureDetector(
@@ -80,10 +81,10 @@ class _DevicesPageState extends State<DevicesPage> {
                           width: 45.w,
                           decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(8.r),
+                              borderRadius: UIConfig.borderRadiusCircularMedium,
                               color: Colors.transparent,
                               border: GradientBoxBorder(
-                                width: 2.responsiveSp,
+                                width: UIConfig.chartBorderWidth,
                                 gradient: LinearGradient(
                                   colors: [
                                     CommonColors.red,
@@ -107,20 +108,20 @@ class _DevicesPageState extends State<DevicesPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 12.w),
+                      UIConfig.spacingSizedBoxMedium,
                       SvgPicture.asset('assets/icons/project.svg',
                         color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                         height: 30.h,
                       ),
-                      SizedBox(width: 8.w),
+                      UIConfig.spacingSizedBoxSmall,
                       Text(
                         currentProject.toUpperCase(),
                         style: TextStyle(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16.responsiveSp,
-                            letterSpacing: 0.5.sp
+                            fontSize: UIConfig.fontSizeSmallResponsive,
+                            letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),
                     ],
@@ -128,8 +129,8 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
             
                 Container(
-                  height: 3.responsiveSp,
-                  color: CommonColors.red,
+                  height: UIConfig.accentLineHeightResponsive,
+                  color: UIConfig.accentColorRed,
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -149,18 +150,18 @@ class _DevicesPageState extends State<DevicesPage> {
                                 .currentTheme
                                 .splashColor,
                             child: Container(
-                              height: 46.h,
+                              height: UIConfig.buttonHeight + 2.h,
                               decoration: BoxDecoration(
                                 border: Border(
                                   left: BorderSide(
                                     color: CommonColors.red,
-                                    width: 12.responsiveSp,
+                                    width: UIConfig.spacingMedium.responsiveSp,
                                   ),
                                 ),
                               ),
                               child: Padding(
                                   padding:
-                                  EdgeInsets.fromLTRB(12.w, 0.h, 0.w, 0.h),
+                                  EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
                                   child: TextField(
                                     
                                     controller: _searchController,
@@ -169,7 +170,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                       UpperCaseTextFormatter(),
                                     ],
                                     style: GoogleFonts.robotoMono(
-                                      fontSize: ThemeNotifier.small.responsiveSp,
+                                      fontSize: UIConfig.fontSizeSmallResponsive,
                                       color: Provider.of<ThemeNotifier>(context)
                                           .currentTheme
                                           .basicAdvanceTextColor,
@@ -180,7 +181,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                       hintText:
                                       'SEARCH DEVICE LABEL OR SERIAL NO.',
                                       hintStyle: GoogleFonts.robotoMono(
-                                        fontSize: ThemeNotifier.small.responsiveSp,
+                                        fontSize: UIConfig.fontSizeSmallResponsive,
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .noEntriesColor,
@@ -188,14 +189,14 @@ class _DevicesPageState extends State<DevicesPage> {
                                       suffixIcon: Padding(
                                         padding: EdgeInsets.only(
                                             right:
-                                            8.w), 
+                                            UIConfig.spacingSmall.w), 
                                         child: Icon(
                                           Icons.search,
                                           color:
                                           Provider.of<ThemeNotifier>(context)
                                               .currentTheme
                                               .basicAdvanceTextColor,
-                                          size: 30.responsiveSp,
+                                          size: UIConfig.iconSizeLarge,
                                         ),
                                       ),
                                       border: InputBorder
@@ -224,8 +225,8 @@ class _DevicesPageState extends State<DevicesPage> {
                   ],
                 ),
                 Container(
-                  height: 3.responsiveSp,
-                  color: CommonColors.red,
+                  height: UIConfig.accentLineHeightResponsive,
+                  color: UIConfig.accentColorRed,
                 ),
                 
                 Expanded(
@@ -239,11 +240,11 @@ class _DevicesPageState extends State<DevicesPage> {
                     },
                     builder: (context, state) {
                       final Map<int, int> mobileJson = {
-                        0: 30.responsiveSp.toInt(),
-                        3: 0.responsiveSp.toInt(),
+                        0: UIConfig.iconSizeLarge.toInt(),
+                        3: UIConfig.scrollClampMin.toInt(),
                       };
                       final Map<int, int> desktopJson = {
-                        3: 0.responsiveSp.toInt(),
+                        3: UIConfig.scrollClampMin.toInt(),
                       };
                       final Map<int, int> json = PlatformUtils.isMobile ? mobileJson : desktopJson;
                       return DataGridWidget(
@@ -257,7 +258,7 @@ class _DevicesPageState extends State<DevicesPage> {
                   ),
                 ),
                 Container(
-                  height: 3.h,
+                  height: UIConfig.accentLineHeight,
                   color: CommonColors.red,
                 ),
               ],

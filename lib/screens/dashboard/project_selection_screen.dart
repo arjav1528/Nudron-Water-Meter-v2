@@ -5,13 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/services/platform_utils.dart';
-import 'package:watermeter2/utils/pok.dart';
 
 import '../../api/auth_service.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_state.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/loader.dart';
 import '../../utils/new_loader.dart';
@@ -99,7 +99,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     showDialog(
       context: context,
       builder: (context) {
-        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+        final width = UIConfig.getDesktopProjectWidth(context);
         final currentTheme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
         final dialogWidth = PlatformUtils.isMobile ? 350.w : width;
         return Dialog(
@@ -108,18 +108,18 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           child: Container(
             width: dialogWidth,
             constraints: BoxConstraints(
-              maxHeight: 500.h,
+              maxHeight: UIConfig.dialogMaxHeight,
             ),
             decoration: BoxDecoration(
                 color: currentTheme.dialogBG, 
                 border: Border.all(
                   color: currentTheme.gridLineColor, 
-                  width: 3.responsiveSp, 
+                  width: UIConfig.dialogBorderWidth, 
                 ),
                 
               ),
             child: Padding(
-              padding: EdgeInsets.only(bottom: 24.h),
+              padding: UIConfig.paddingDialogBottom,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +133,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         borderColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .gridLineColor,
-                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                        fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                       ),
                       IconButton(
                         icon: Icon(Icons.close,
@@ -148,7 +148,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                   ),
                   SizedBox(height: 15.h),
                   Padding(
-                    padding: EdgeInsets.only(left: 24.w,right: 24.w),
+                    padding: UIConfig.paddingDialogHorizontal,
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -158,10 +158,10 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           BoxShadow(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.shadowColor,
                             blurRadius: 1.r,
-                            offset: Offset(3.w, 4.h),
+                            offset: Offset(UIConfig.spacingXSmall * 0.75, UIConfig.spacingXSmall),
                           ),
                         ],
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: UIConfig.borderRadiusCircularMedium,
                       ),
                       child: TextField(
                         controller: activationCodeController,
@@ -170,12 +170,12 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           hintStyle: TextStyle(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.textfieldHintColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                           ),
                           filled: true,
                           fillColor: Provider.of<ThemeNotifier>(context).currentTheme.textFieldFillColor,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: UIConfig.borderRadiusCircularMedium,
                             borderSide: BorderSide(
                               color: Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor,
                             ),
@@ -183,14 +183,14 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         ),
                         style: TextStyle(
                           color: Provider.of<ThemeNotifier>(context).currentTheme.textfieldTextColor,
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 24.h),
+                  UIConfig.spacingSizedBoxXXLarge,
                   Padding(
-                    padding: EdgeInsets.only(left: 24.w,right: 24.w),
+                    padding: UIConfig.paddingDialogHorizontal,
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,7 +199,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           text: "CANCEL",
                           isRed: true,
                           dynamicWidth: true,
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                           onPressed: () {
                             activationCodeController.clear();
                             Navigator.of(context).pop();
@@ -209,7 +209,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         CustomButton(
                           text: "CONFIRM",
                           dynamicWidth: true,
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
                             if (activationCodeController.text.isEmpty) {
@@ -303,8 +303,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           child: Column(
             children: [
               Container(
-                height: 3.h,
-                color: Color(0xFF14414e),
+                height: UIConfig.accentLineHeight,
+                color: UIConfig.color14414e,
               ),
               Center(
                 child: SizedBox(
@@ -325,11 +325,11 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                   color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                                   height: PlatformUtils.isMobile ? 30.h : 30.0,
                                 ),
-                                SizedBox(width: 8.w),
+                                UIConfig.spacingSizedBoxSmall,
                                 Text(
                                   "SELECT PROJECT",
                                   style: GoogleFonts.robotoMono(
-                                    fontSize: PlatformUtils.isMobile ? 18.responsiveSp : width / 30,
+                                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                                     fontWeight: FontWeight.w500,
                                     color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                                   ),
@@ -342,7 +342,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                 height: PlatformUtils.isMobile ? 30.h : 30.0,
                                 width: PlatformUtils.isMobile ? 30.w : 30.0,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.r),
+                                  borderRadius: UIConfig.borderRadiusCircularSmall,
                                   border: Border.all(
                                     color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), 
                                     width: 2, 
@@ -351,7 +351,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                 child: Icon(
                                   Icons.add,
                                   color: theme.basicAdvanceTextColor,
-                                  size: PlatformUtils.isMobile ? 24.h : 24.0,
+                                  size: UIConfig.getResponsiveIconSize(UIConfig.iconSizeSmall),
                                 ),
                               ),
                             )
@@ -372,10 +372,11 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           desktopDropdownWidth: width - 30,
                           fieldNameVisible: false,
                         ),
-                        SizedBox(height: 470.h),
+                        SizedBox(height: UIConfig.spacingHuge),
                         CustomButton(
                           text: "DASHBOARD",
                           onPressed: _navigateToDashboard,
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                           arrowWidget: true,
                           dynamicWidth: true,
                         ),
@@ -386,8 +387,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
               ),
               Spacer(),
               Container(
-                height: 3.h,
-                color: Color(0xFF14414e),
+                height: UIConfig.accentLineHeight,
+                color: UIConfig.color14414e,
               ),
             ],
           ),

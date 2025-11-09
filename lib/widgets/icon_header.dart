@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +6,7 @@ import '../../utils/pok.dart';
 import '../../api/data_service.dart';
 
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 
 class HeaderWidget extends StatelessWidget {
   final String title;
@@ -16,19 +16,19 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
       child: title[0] != '!'
           ? Text(
               title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.responsiveSp,
+                fontSize: UIConfig.fontSizeMediumResponsive,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridHeadingColor,
-                height: 1.5,
+                height: UIConfig.lineHeight * 1.25,
                 
                 letterSpacing:
                     0.5, 
@@ -81,14 +81,14 @@ class CustomIconButton extends StatelessWidget {
           
           decoration: BoxDecoration(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(2.responsiveSp),
+            borderRadius: BorderRadius.circular(UIConfig.spacingXSmall),
           ),
           
           alignment: Alignment.center,
           child: SvgPicture.asset(
             iconAsset,
-            width: 25.responsiveSp,
-            height: 25.responsiveSp,
+            width: UIConfig.iconSizeMedium,
+            height: UIConfig.iconSizeMedium,
             color: Provider.of<ThemeNotifier>(context, listen: false)
                 .currentTheme
                 .gridHeadingColor,
@@ -127,30 +127,30 @@ class CustomIconButton extends StatelessWidget {
 
     double leftOffset = position.dx - halfTooltipWidth;
     leftOffset = leftOffset < 0
-        ? 8.0
+        ? UIConfig.spacingSmall
         : leftOffset; 
 
-    if (leftOffset + fullTooltipWidth + 25.responsiveSp > screenWidth) {
-      leftOffset = screenWidth - fullTooltipWidth - 25.responsiveSp;
+    if (leftOffset + fullTooltipWidth + UIConfig.iconSizeMedium > screenWidth) {
+      leftOffset = screenWidth - fullTooltipWidth - UIConfig.iconSizeMedium;
     }
 
     final overlay = Overlay.of(context);
     _currentOverlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: position.dy + 40.h, 
+        top: position.dy + UIConfig.spacingXXXLarge, 
         left: leftOffset,
         child: Material(
           color: Colors.transparent,
           child: Container(
-            padding: EdgeInsets.all(8.w),
+            padding: UIConfig.paddingSmall,
             decoration: BoxDecoration(
               color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
-              borderRadius: BorderRadius.circular(4.0),
+              borderRadius: BorderRadius.circular(UIConfig.spacingXSmall),
             ),
             child: Text(
               tooltipMessage,
               style: GoogleFonts.robotoMono(
-                fontSize: ThemeNotifier.medium.responsiveSp,
+                fontSize: UIConfig.fontSizeMediumResponsive,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridHeadingColor,

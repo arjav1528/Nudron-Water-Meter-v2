@@ -11,6 +11,7 @@ import 'package:watermeter2/utils/pok.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../models/chartModels.dart';
 import '../../utils/no_entries.dart';
 import '../../utils/performance_monitor.dart';
@@ -96,7 +97,7 @@ TooltipBehavior createCustomTooltipBehavior({
           child: Text(
             "No data available",
             style: GoogleFonts.roboto(
-              fontSize: ThemeNotifier.small.responsiveSp,
+              fontSize: UIConfig.fontSizeSmallResponsive,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -115,7 +116,7 @@ TooltipBehavior createCustomTooltipBehavior({
               Text(
                 content,
                 style: GoogleFonts.roboto(
-                  fontSize: ThemeNotifier.small.responsiveSp,
+                  fontSize: UIConfig.fontSizeSmallResponsive,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -604,7 +605,7 @@ class _DailyChartState extends State<DailyChart> {
                       "${xLabelsMonthly[NudronChartMap.selectedMonth.value - 1]} Trend"
                           .toUpperCase(),
                       style: GoogleFonts.robotoMono(
-                        fontSize: ThemeNotifier.small.responsiveSp,
+                        fontSize: UIConfig.fontSizeSmallResponsive,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -750,7 +751,7 @@ class BasicChart extends StatelessWidget {
                           Text(
                             "USAGE(L)",
                             style: GoogleFonts.robotoMono(
-                              fontSize: ThemeNotifier.small.responsiveSp,
+                              fontSize: UIConfig.fontSizeSmallResponsive,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .basicAdvanceTextColor,
@@ -839,7 +840,7 @@ class BasicChart extends StatelessWidget {
                           Text(
                             "ALERTS",
                             style: GoogleFonts.robotoMono(
-                              fontSize: ThemeNotifier.small.responsiveSp,
+                              fontSize: UIConfig.fontSizeSmallResponsive,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .basicAdvanceTextColor,
@@ -873,7 +874,7 @@ class BasicChart extends StatelessWidget {
                                 legend: Legend(
                                   isVisible: true,
                                   textStyle: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.small.responsiveSp,
+                                    fontSize: UIConfig.fontSizeSmallResponsive,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -906,7 +907,7 @@ class BasicChart extends StatelessWidget {
                                           .currentTheme
                                           .gridLineColor),
                                   labelStyle: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.small.responsiveSp,
+                                    fontSize: UIConfig.fontSizeSmallResponsive,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -938,7 +939,7 @@ class BasicChart extends StatelessWidget {
                                           .currentTheme
                                           .gridLineColor),
                                   labelStyle: GoogleFonts.roboto(
-                                    fontSize: ThemeNotifier.small.responsiveSp,
+                                    fontSize: UIConfig.fontSizeSmallResponsive,
                                     color: Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
@@ -955,7 +956,7 @@ class BasicChart extends StatelessWidget {
                                           .currentTheme
                                           .basicAdvanceTextColor,
                                       fontFamily: 'Roboto',
-                                      fontSize: 12.responsiveSp,
+                                      fontSize: UIConfig.fontSizeExtraSmallResponsive,
                                     ),
                                   ),
                                 ),
@@ -983,7 +984,7 @@ class BasicChart extends StatelessWidget {
                                                 .currentTheme
                                                 .gridLineColor),
                                     labelStyle: GoogleFonts.roboto(
-                                      fontSize: ThemeNotifier.small.responsiveSp,
+                                      fontSize: UIConfig.fontSizeSmallResponsive,
                                       color: Provider.of<ThemeNotifier>(context)
                                           .currentTheme
                                           .basicAdvanceTextColor,
@@ -996,7 +997,7 @@ class BasicChart extends StatelessWidget {
                                                 .currentTheme
                                                 .basicAdvanceTextColor,
                                         fontFamily: 'Roboto',
-                                        fontSize: 12.responsiveSp,
+                                        fontSize: UIConfig.fontSizeExtraSmallResponsive,
                                       ),
                                     ),
                                   ),

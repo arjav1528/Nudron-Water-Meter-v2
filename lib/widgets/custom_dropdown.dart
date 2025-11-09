@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/pok.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -45,10 +46,10 @@ class _CustomDropDownState extends State<CustomDropDown> {
     // Calculate font size gradient for desktop
     final totalWidth = PlatformUtils.isMobile 
         ? null 
-        : (widget.width1 + widget.width2 + 30.0 + 20.0); // width1 + width2 + icon space + padding
+        : UIConfig.getDesktopDropdownTotalWidth(widget.width1, widget.width2);
     final fontSize = PlatformUtils.isMobile 
-        ? ThemeNotifier.small.responsiveSp 
-        : (totalWidth ?? 400) / 30;
+        ? UIConfig.fontSizeSmallResponsive 
+        : UIConfig.getDesktopFontSizeFromWidth(totalWidth ?? UIConfig.desktopDrawerWidthMin);
     
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +63,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
               ),
             ),
             SizedBox(
-              height: 50.91.h,
+              height: UIConfig.dropdownRowHeight,
               child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -89,7 +90,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   width: 10.w,
                 ),
                 Container(
-                  height: 50.91.h,
+                  height: UIConfig.dropdownRowHeight,
                   width: 1.w,
                   color: CommonColors.blue,
                 ),
@@ -100,12 +101,12 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     buttonSplashColor: Colors.transparent,
                     buttonPadding: EdgeInsets.zero,
                     dropdownPadding: EdgeInsets.symmetric(vertical: 0.h),
-                    itemHeight: 40.h,
-                    iconSize: 30.responsiveSp,
+                    itemHeight: UIConfig.dropdownItemHeight,
+                    iconSize: UIConfig.iconSizeLarge,
                     itemPadding: EdgeInsets.zero,
-                    dropdownMaxHeight: 200.h,
-                    dropdownWidth: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
-                    buttonWidth: (PlatformUtils.isMobile ? widget.width2.w : widget.width2) + (PlatformUtils.isMobile ? 30.responsiveSp : 30.0),
+                    dropdownMaxHeight: UIConfig.dropdownMaxHeight,
+                    dropdownWidth: PlatformUtils.isMobile ? widget.width2.w + UIConfig.desktopDropdownWidthOffset.responsiveSp : widget.width2 + UIConfig.desktopDropdownWidthOffset,
+                    buttonWidth: (PlatformUtils.isMobile ? widget.width2.w : widget.width2) + (PlatformUtils.isMobile ? UIConfig.desktopDropdownWidthOffset.responsiveSp : UIConfig.desktopDropdownWidthOffset),
                     dropdownDecoration: BoxDecoration(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
@@ -113,15 +114,15 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       border: Border(
                         left: BorderSide(
                           color: CommonColors.blue,
-                          width: 1.w,
+                          width: UIConfig.borderWidthThin,
                         ),
                         right: BorderSide(
                           color: CommonColors.blue,
-                          width: 1.w,
+                          width: UIConfig.borderWidthThin,
                         ),
                         bottom: BorderSide(
                           color: CommonColors.blue,
-                          width: 1.w,
+                          width: UIConfig.borderWidthThin,
                         ),
                       ),
                     ),
@@ -129,7 +130,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       width: (PlatformUtils.isMobile ? widget.width2.w : widget.width2) + (PlatformUtils.isMobile ? 30.responsiveSp : 30.0),
                       height: 40.h,
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: 12.w, right: 8.w),
+                      padding: EdgeInsets.only(left: UIConfig.dropdownPaddingLeft, right: UIConfig.dropdownPaddingRight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -157,7 +158,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                           ),
                           Icon(
                             Icons.arrow_drop_down,
-                            size: 30.responsiveSp,
+                            size: UIConfig.iconSizeLarge,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
@@ -174,12 +175,11 @@ class _CustomDropDownState extends State<CustomDropDown> {
                           children: [
                             Container(
                               width: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
-                              height: 39.5.h,
+                              height: UIConfig.dropdownItemPadding,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .primaryContainer,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8.w, vertical: 8.h),
+                              padding: UIConfig.paddingDropdownItem,
                               child: Text(
                                 widget.valueConvertor == null
                                     ? value.toString()
@@ -194,8 +194,8 @@ class _CustomDropDownState extends State<CustomDropDown> {
                               ),
                             ),
                             Container(
-                              height: 0.5.h,
-                              color: CommonColors.blue,
+                              height: UIConfig.dropdownDividerHeight,
+                              color: UIConfig.accentColorBlue,
                             )
                           ],
                         ),
@@ -321,7 +321,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
         ? null 
         : (widget.width1 + widget.width2 + 30.0 + 20.0);
     final fontSize = PlatformUtils.isMobile 
-        ? ThemeNotifier.small.responsiveSp 
+        ? UIConfig.fontSizeSmallResponsive 
         : (totalWidth ?? 400) / 30;
 
     return OverlayEntry(
@@ -395,10 +395,10 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
     // Calculate font size gradient for desktop
     final totalWidth = PlatformUtils.isMobile 
         ? null 
-        : (widget.width1 + widget.width2 + 30.0 + 20.0); // width1 + width2 + icon space + padding
+        : UIConfig.getDesktopDropdownTotalWidth(widget.width1, widget.width2);
     final fontSize = PlatformUtils.isMobile 
-        ? ThemeNotifier.small.responsiveSp 
-        : (totalWidth ?? 400) / 30;
+        ? UIConfig.fontSizeSmallResponsive 
+        : UIConfig.getDesktopFontSizeFromWidth(totalWidth ?? UIConfig.desktopDrawerWidthMin);
     
     return GestureDetector(
       onTap: _toggleDropdown,
@@ -415,7 +415,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                   ),
                 ),
                 SizedBox(
-                  height: 50.91.h,
+                  height: UIConfig.dropdownRowHeight,
                   child: Row(
                     children: [
                       widget.fieldNameVisible ? Row(
@@ -442,8 +442,8 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                           ),
                           Container(width: 10.w),
                           Container(
-                            height: 50.91.h,
-                            width: 1.w,
+                            height: UIConfig.dropdownRowHeight,
+                            width: UIConfig.borderWidthThin,
                             color: CommonColors.blue,
                           ),
                         ],

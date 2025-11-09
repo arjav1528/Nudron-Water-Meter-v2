@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../utils/pok.dart';
 import '../../screens/profile/profile_drawer.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../widgets/custom_app_bar.dart';
 
 class DrawerWithAlert extends StatefulWidget {
@@ -76,7 +77,7 @@ class _DrawerWithAlertState extends State<DrawerWithAlert> {
                               child: Text(
                                 widget.drawerName[widget.drawerIndex],
                                 style: GoogleFonts.roboto(
-                                  fontSize: 24.responsiveSp,
+                                  fontSize: UIConfig.fontSizeLargeResponsive + 4.responsiveSp,
                                   fontWeight: FontWeight.bold,
                                   color:
                                       Provider.of<ThemeNotifier>(context)

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../utils/pok.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import 'customButton.dart';
@@ -83,7 +84,7 @@ class _CustomMonthDropdownState extends State<CustomMonthDropdown>
                             .convertMonthNumberToText(selectedMonth)
                             .toUpperCase(),
                         style: GoogleFonts.robotoMono(
-                          fontSize: ThemeNotifier.small.responsiveSp,
+                          fontSize: UIConfig.fontSizeSmallResponsive,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -349,7 +350,7 @@ class StringItem extends StatelessWidget {
             value.toUpperCase(),
             style: GoogleFonts.robotoMono(
               textStyle: TextStyle(
-                  fontSize: ThemeNotifier.medium.responsiveSp,
+                  fontSize: UIConfig.fontSizeMediumResponsive,
                   color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor),
             ),
           ),

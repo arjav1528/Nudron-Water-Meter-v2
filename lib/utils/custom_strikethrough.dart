@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/utils/pok.dart';
 
 import '../constants/theme2.dart';
+import '../constants/ui_config.dart';
 
 class CustomStrikethrough extends StatelessWidget {
   const CustomStrikethrough({
@@ -25,7 +25,7 @@ class CustomStrikethrough extends StatelessWidget {
       text: TextSpan(
         text: oldValue.toString(),
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.medium.responsiveSp,
+          fontSize: UIConfig.fontSizeMediumResponsive,
           color: CommonColors.red,
         ),
       ),
@@ -41,7 +41,7 @@ class CustomStrikethrough extends StatelessWidget {
           text: TextSpan(
             text: oldValue.toString(),
             style: GoogleFonts.robotoMono(
-              fontSize: ThemeNotifier.medium.responsiveSp,
+              fontSize: UIConfig.fontSizeMediumResponsive,
               color: CommonColors.red,
             ),
             children: <TextSpan>[
@@ -49,7 +49,7 @@ class CustomStrikethrough extends StatelessWidget {
               TextSpan(
                   text: newValue.toString(),
                   style: GoogleFonts.robotoMono(
-                    fontSize: ThemeNotifier.medium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                     color:
                         (isPreviousChange != null && isPreviousChange == true)
                             ? const Color(0xff00bc8a)
@@ -59,10 +59,10 @@ class CustomStrikethrough extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 13.responsiveSp, 
-          left: 0,
+          top: UIConfig.fontSizeMediumResponsive * 0.72, 
+          left: UIConfig.scrollClampMin,
           child: Container(
-            height: 2, 
+            height: UIConfig.borderWidthMedium, 
             width: textWidth, 
             color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
           ),

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../api/auth_service.dart';
 import '../../constants/app_config.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../services/app_state_service.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
@@ -75,8 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: [
               Padding(
-                  padding:
-                      EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h),
+                  padding: UIConfig.paddingDialogTop,
                   child: CustomTextField(
                     key: UniqueKey(),
                     controller: nameController,
@@ -85,8 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.name,
                   )),
               Padding(
-                  padding:
-                      EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h),
+                  padding: UIConfig.paddingDialogTop,
                   child: CustomTextField(
                     controller: emailController,
                     key: UniqueKey(),
@@ -95,8 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                   )),
               Padding(
-                  padding:
-                      EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h),
+                  padding: UIConfig.paddingDialogTop,
                   child: CustomTextField(
                     controller: _phoneController,
                     key: UniqueKey(),
@@ -107,25 +105,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                     prefixIcon: Container(
                       
-                      padding: EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
+                      padding: UIConfig.paddingFromLTRBWithClamp,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.r),
-                            bottomLeft: Radius.circular(10.r),
-                          ),
+                          borderRadius: UIConfig.borderRadiusTopLeft,
                           color: Colors.transparent),
                       
                       child: CountryCodePicker2(
                         dropDownColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .textFieldBGProfile,
-                        height: 30.78.h,
+                        height: UIConfig.dropdownItemHeight * 0.77,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.r),
-                            bottomLeft: Radius.circular(10.r),
-                          ),
+                          borderRadius: UIConfig.borderRadiusTopLeft,
                         ),
                         onChanged: (CountryCode countryCode) {
                           selectedCountryCode = countryCode;
@@ -141,12 +133,13 @@ class _RegisterPageState extends State<RegisterPage> {
               Padding(
                   padding: EdgeInsets.only(left: 35.w, right: 35.w),
                   child: CustomTextField(
+                  
                     controller: activationCodeController,
                     key: UniqueKey(),
 
                     hintText: 'Enter Activation Code',
                     prefixIcon: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        padding: UIConfig.paddingTextFieldHorizontal,
                         child: Icon(
                           Icons.key,
                           color: Provider.of<ThemeNotifier>(context)
@@ -155,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         )),
                     
                   )),
-              SizedBox(height: 40.h),
+              SizedBox(height: UIConfig.spacingXXXLarge),
               Center(
                 child: CustomButton(
                   text: "REGISTER",
@@ -189,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               
-              SizedBox(height: 40.h),
+              SizedBox(height: UIConfig.spacingXXXLarge),
             ],
           ),
         ),

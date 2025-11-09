@@ -5,9 +5,9 @@ import 'package:watermeter2/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/services/platform_utils.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../services/app_state_service.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
@@ -15,7 +15,6 @@ import '../../widgets/customButton.dart';
 import 'authenticator.dart';
 import '../../api/auth_service.dart';
 import '../../utils/biometric_helper.dart';
-import '../../utils/pok.dart';
 
 class TwoFADisabled extends StatefulWidget {
   const TwoFADisabled({super.key, required this.closeFunction});
@@ -53,15 +52,15 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
       width: width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.r),
+        borderRadius: UIConfig.borderRadiusCircularSmall,
       ),
       child: Column(
         children: [
-          SizedBox(height: 15.h),
+          SizedBox(height: UIConfig.spacingLarge * 1.25.h),
           CustomtwofacRow(
             icon: Icons.lock_outline,
             title: "Authenticator app",
@@ -69,18 +68,18 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
               text: TextSpan(
                   style: GoogleFonts.roboto(
                     color: const Color(0xFF00BC8A),
-                    fontSize: ThemeNotifier.small.responsiveSp,
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                   ),
                   children: [
                     TextSpan(
                         text: "Recommended! ",
                         style: GoogleFonts.roboto(
                           color: const Color(0xFF00BC8A),
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                         )),
                     TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -99,11 +98,11 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             visible: showCancelConfirmQrCode,
             child: Column(
               children: [
-                SizedBox(height: 15.h),
+                SizedBox(height: UIConfig.spacingLarge * 1.25.h),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -112,10 +111,10 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                     },
                     isRed: true,
                   ),
-                  SizedBox(width: 40.w),
+                  SizedBox(width: UIConfig.spacingXXXLarge.w),
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                     text: "CONFIRM",
                     onPressed: () async {
                       if (!await checkIfAlreadyEnabled()) {
@@ -157,7 +156,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+            padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium * 0.83.w),
             child: Divider(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
@@ -178,13 +177,13 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
           Visibility(
             visible: showCancelConfirmSms,
             child: Padding(
-              padding: EdgeInsets.only(top: 15.h),
+              padding: EdgeInsets.only(top: UIConfig.spacingLarge * 1.25.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -193,10 +192,10 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                     },
                     isRed: true,
                   ),
-                  SizedBox(width: 40.w),
+                  SizedBox(width: UIConfig.spacingXXXLarge.w),
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                     text: "CONFIRM",
                     onPressed: () async {
                       if (await checkIfAlreadyEnabled()) return;
@@ -255,7 +254,7 @@ class CustomtwofacRow extends StatefulWidget {
 class _CustomtwofacRowState extends State<CustomtwofacRow> {
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return GestureDetector(
       onTap: () {
         widget.onTap();
@@ -263,7 +262,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.responsiveSp),
+            padding: UIConfig.paddingSmall,
             child: Icon(
               widget.icon,
               color: Provider.of<ThemeNotifier>(context)
@@ -271,7 +270,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                   .basicAdvanceTextColor,
             ),
           ),
-          SizedBox(width: 10.w),
+          SizedBox(width: UIConfig.spacingMedium * 0.83.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,7 +278,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                 Text(
                   widget.title,
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.medium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,
@@ -289,7 +288,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                     Text(
                       widget.subtitle,
                       style: GoogleFonts.roboto(
-                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                        fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -299,7 +298,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.responsiveSp),
+            padding: UIConfig.paddingSmall,
             child: Icon(
               Icons.chevron_right,
               color: Provider.of<ThemeNotifier>(context)
@@ -383,15 +382,15 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.r),
+        borderRadius: UIConfig.borderRadiusCircularSmall,
       ),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+            padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium * 0.83.w),
           ),
           CustomtwofacRow(
             icon: Icons.fingerprint,
@@ -408,13 +407,13 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
           Visibility(
             visible: showCancelConfirmBiometric,
             child: Padding(
-              padding: EdgeInsets.only(top: 15.h),
+              padding: EdgeInsets.only(top: UIConfig.spacingLarge * 1.25.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -423,10 +422,10 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
                     },
                     isRed: true,
                   ),
-                  SizedBox(width: 40.w),
+                  SizedBox(width: UIConfig.spacingXXXLarge.w),
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                     text: "CONFIRM",
                     onPressed: () async {
                       if (await checkIfAlreadyEnabled()) return;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../utils/pok.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 
 class PolygonContainer extends StatelessWidget {
   final String text;
@@ -18,7 +18,7 @@ class PolygonContainer extends StatelessWidget {
       text: TextSpan(
         text: text,
         style: GoogleFonts.robotoMono(
-          fontSize: ThemeNotifier.small.responsiveSp,
+          fontSize: UIConfig.fontSizeSmallResponsive,
         ),
       ),
       maxLines: 1,
@@ -47,7 +47,7 @@ class PolygonContainer extends StatelessWidget {
         child: Text(
           text,
           style: GoogleFonts.robotoMono(
-            fontSize: ThemeNotifier.small.responsiveSp,
+            fontSize: UIConfig.fontSizeSmallResponsive,
             color: theme.basicAdvanceTextColor,
           ),
           maxLines: 1,

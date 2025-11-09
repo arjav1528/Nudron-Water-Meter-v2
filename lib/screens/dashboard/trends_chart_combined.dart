@@ -7,11 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/utils/pok.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../widgets/custom_multiple_selector_horizontal.dart';
 import 'trends_chart.dart';
 import 'trends_table.dart';
@@ -53,11 +53,11 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 3.h,
-              color: CommonColors.yellow,
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorYellow,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 8.h),
+              padding: UIConfig.paddingChartHorizontal,
               child: Row(
                 children: [
                   GestureDetector(
@@ -69,10 +69,10 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                       width: 45.w,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: UIConfig.borderRadiusCircularMedium,
                         color: Colors.transparent,
                         border: GradientBoxBorder(
-                          width: 2.responsiveSp,
+                          width: UIConfig.chartBorderWidth,
                           gradient: LinearGradient(
                             colors: [
                               CommonColors.yellow,
@@ -92,36 +92,39 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                           child: Icon(
                             Icons.arrow_right_alt,
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                            size: 30.responsiveSp,
+                            size: UIConfig.iconSizeMedium,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 12.w),
+                  UIConfig.spacingSizedBoxMedium,
                   SvgPicture.asset('assets/icons/project.svg',
                     color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                     height: 30.h,
                   ),
-                  SizedBox(width: 8.w),
+                  UIConfig.spacingSizedBoxSmall,
                   Text(
                     currentProject.toUpperCase(),
                     style: TextStyle(
                       color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                       fontFamily: GoogleFonts.robotoMono().fontFamily,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16.responsiveSp,
-                      letterSpacing: 0.5.sp
+                      fontSize: UIConfig.fontSizeSmallResponsive,
+                      letterSpacing: UIConfig.letterSpacingSp
                     ),
                   ),
                 ],
               ),
             ),
-            
+            Container(
+              height: UIConfig.accentLineHeightResponsive,
+              color: UIConfig.accentColorYellow,
+            ),
             CustomMultipleSelectorHorizontal(),
             Container(
-              height: 3.responsiveSp,
-              color: CommonColors.yellow,
+              height: UIConfig.accentLineHeightResponsive,
+              color: UIConfig.accentColorYellow,
             ),
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
@@ -138,7 +141,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               }),
             ),
             Container(
-              height: 3.responsiveSp,
+              height: UIConfig.accentLineHeightResponsive,
               color: CommonColors.yellow,
             ),
             Expanded(
@@ -156,8 +159,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               }),
             ),
             Container(
-              height: 3.h,
-              color: CommonColors.yellow,
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorYellow,
             ),
           ],
         );

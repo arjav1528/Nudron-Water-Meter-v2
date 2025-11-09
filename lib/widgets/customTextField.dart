@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../utils/pok.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../constants/app_config.dart';
 import '../../services/platform_utils.dart';
 
@@ -62,28 +62,33 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
-    final fontSize = PlatformUtils.isMobile 
-        ? ThemeNotifier.medium.responsiveSp 
-        : width / 30;
+    final width = UIConfig.getDesktopDrawerWidth(context);
+    final fontSize = UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width);
+    
+    // Calculate clamped width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final calculatedWidth = PlatformUtils.isMobile 
+        ? screenWidth.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth)
+        : width.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth);
     
     return Container(
-      width: double.infinity,
+      width: calculatedWidth,
+      constraints: BoxConstraints(
+        minHeight: UIConfig.textFieldMinHeight,
+        maxHeight: UIConfig.textFieldMaxHeight,
+        minWidth: UIConfig.textFieldMinWidth,
+        maxWidth: UIConfig.textFieldMaxWidth,
+      ),
       decoration: BoxDecoration(
         color:
             Provider.of<ThemeNotifier>(context).currentTheme.textFieldFillColor,
-        borderRadius: BorderRadius.all(Radius.circular(10.r)),
+        borderRadius: UIConfig.borderRadiusAllLarge,
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            spreadRadius: 0,
-            blurRadius: 4,
-            offset: const Offset(0, 4),
-          ),
+          UIConfig.shadowSmall,
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.h),
+        padding: UIConfig.paddingTextField,
         child: TextField(
           controller: widget.controller,
           focusNode: _focusNode,
@@ -102,7 +107,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           cursorColor: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .textfieldCursorColor,
-          cursorHeight: 30.responsiveSp,
+          cursorHeight: UIConfig.textFieldCursorHeight,
           enableSuggestions: widget.enableSuggestions,
           autocorrect: widget.autocorrect,
           decoration: InputDecoration(
@@ -110,27 +115,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
             prefixIcon: widget.prefixIcon ??
                 Padding(
                   padding: widget.iconPath != null
-                      ? EdgeInsets.symmetric(horizontal: 16.w)
+                      ? UIConfig.paddingTextFieldHorizontal
                       : EdgeInsets.zero,
                   child: widget.iconPath != null
                       ? SvgPicture.asset(
                           widget.iconPath!,
-                          height: 16.69.h,
-                          width: 21.w,
+                          height: UIConfig.iconSizePrefix,
+                          width: UIConfig.iconSizePrefixWidth,
                           fit: BoxFit.scaleDown,
                         )
                       : null,
                 ),
             prefixIconConstraints: BoxConstraints(
-              minHeight: 16.69.h,
-              minWidth: 21.w,
+              minHeight: UIConfig.textFieldPrefixMinHeight,
+              minWidth: UIConfig.textFieldPrefixMinWidth,
             ),
             focusedBorder: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide(
                     color: CommonColors.blue,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  borderRadius: UIConfig.borderRadiusAllLarge,
                 ),
             filled: true,
             fillColor: widget.fillColor ??
@@ -148,12 +153,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
             border: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  borderRadius: UIConfig.borderRadiusAllLarge,
                 ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: isLargerTextField
-                    ? 22.h
-                    : 10.h), 
+                    ? UIConfig.paddingTextFieldLarger.vertical / 1.h
+                    : UIConfig.paddingTextFieldNormal.vertical / 1.h), 
           ),
         ),
       ),

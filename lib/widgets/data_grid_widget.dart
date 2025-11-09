@@ -10,6 +10,7 @@ import '../../utils/pok.dart';
 import '../../utils/utils.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/no_entries.dart';
 
 import '../../widgets/export_to_excel.dart';
@@ -50,7 +51,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   
   List<List<dynamic>>? _cachedProcessedData;
 
-  final double rowHeight = 41.h;
+  final double rowHeight = UIConfig.rowHeight;
 
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
@@ -69,33 +70,33 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         text: TextSpan(
           text: Utils.cleanFieldName(text),
           style: GoogleFonts.robotoMono(
-            fontSize: ThemeNotifier.medium.responsiveSp,
-            fontWeight: FontWeight.bold,
-            height: 1.2,
-            letterSpacing: 0.5,
+            fontSize: UIConfig.fontSizeMediumResponsive,
+            fontWeight: UIConfig.fontWeightBold,
+            height: UIConfig.lineHeight,
+            letterSpacing: UIConfig.letterSpacing,
           ),
         ),
         maxLines: 1,
         textDirection: TextDirection.ltr,
       )..layout(minWidth: 0);
       
-      width = textPainter.width + 16 + 6.responsiveSp;
+      width = textPainter.width + UIConfig.tableTextWidthPadding + UIConfig.tableTextWidthPaddingSmall;
     } else {
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
           text: Utils.cleanFieldName(text),
           style: isHeader
               ? GoogleFonts.robotoMono(
-                  fontSize: ThemeNotifier.medium.responsiveSp,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2, 
-                  letterSpacing: 0.5, 
+                  fontSize: UIConfig.fontSizeMediumResponsive,
+                  fontWeight: UIConfig.fontWeightBold,
+                  height: UIConfig.lineHeight, 
+                  letterSpacing: UIConfig.letterSpacing, 
                 )
               : GoogleFonts.robotoMono(
-                  fontSize: ThemeNotifier.medium.responsiveSp,
-                  height: 1.2,
-                  fontWeight: FontWeight.normal,
-                  letterSpacing: 0.5,
+                  fontSize: UIConfig.fontSizeMediumResponsive,
+                  height: UIConfig.lineHeight,
+                  fontWeight: UIConfig.fontWeightNormal,
+                  letterSpacing: UIConfig.letterSpacing,
                 ),
         ),
         maxLines: 1,
@@ -103,8 +104,8 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       )..layout(minWidth: 0);
 
       width = textPainter.width +
-          16 + 
-          6.responsiveSp + 
+          UIConfig.tableTextWidthPadding + 
+          UIConfig.tableTextWidthPaddingSmall + 
           (hasDownloadButton
               ? rowHeight
               : 0.0); 
@@ -244,13 +245,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: index == columnWidths.length - 1 ? 0 : 3.responsiveSp,
+              width: index == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth,
             ),
             bottom: BorderSide(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: 3.responsiveSp,
+              width: UIConfig.tableBorderWidth,
             ),
           ),
         ),
@@ -272,13 +273,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: index == columnWidths.length - 1 ? 0 : 3.responsiveSp,
+              width: index == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth,
             ),
             bottom: BorderSide(
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .gridLineColor,
-              width: 3.responsiveSp,
+              width: UIConfig.tableBorderWidth,
             ),
           ),
         ),
@@ -295,7 +296,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       width: columnWidths[index2],
       height: rowHeight,
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
       decoration: BoxDecoration(
         color: index % 2 == 1
             ? Provider.of<ThemeNotifier>(context)
@@ -306,7 +307,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           right: BorderSide(
             color:
                 Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: index2 == widget.data![1][index].length - 1 ? 0 : 3.responsiveSp,
+            width: index2 == widget.data![1][index].length - 1 ? 0 : UIConfig.tableBorderWidth,
           ),
           bottom: BorderSide(
             color: index == widget.data![1]!.length - 1
@@ -314,7 +315,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                 : Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridLineColor,
-            width: index == widget.data![1]!.length - 1 ? 0.00 : 3.responsiveSp,
+            width: index == widget.data![1]!.length - 1 ? 0.00 : UIConfig.tableBorderWidth,
           ),
         ),
       ),
@@ -332,9 +333,9 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     if (_cachedTextStyle == null) {
       _cachedTextStyle = GoogleFonts.robotoMono(
         fontSize: ThemeNotifier.medium.responsiveSp,
-        height: 1.2,
-        fontWeight: FontWeight.normal,
-        letterSpacing: 0.5,
+        height: UIConfig.lineHeight,
+        fontWeight: UIConfig.fontWeightNormal,
+        letterSpacing: UIConfig.letterSpacing,
         color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
       );
     }
@@ -398,7 +399,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               if (_verticalScrollController1.hasClients) {
                 _verticalScrollController1.jumpTo(
                   newOffsetV1.clamp(
-                    0.0,
+                    UIConfig.scrollClampMin,
                     _verticalScrollController1.position.maxScrollExtent,
                   ),
                 );
@@ -409,7 +410,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               if (_verticalScrollController2.hasClients) {
                 _verticalScrollController2.jumpTo(
                   newOffsetV2.clamp(
-                    0.0,
+                    UIConfig.scrollClampMin,
                     _verticalScrollController2.position.maxScrollExtent,
                   ),
                 );
@@ -420,7 +421,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               if (_horizontalScrollController1.hasClients) {
                 _horizontalScrollController1.jumpTo(
                   newOffsetH1.clamp(
-                    0.0,
+                    UIConfig.scrollClampMin,
                     _horizontalScrollController1.position.maxScrollExtent,
                   ),
                 );
@@ -431,7 +432,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
               if (_horizontalScrollController2.hasClients) {
                 _horizontalScrollController2.jumpTo(
                   newOffsetH2.clamp(
-                    0.0,
+                    UIConfig.scrollClampMin,
                     _horizontalScrollController2.position.maxScrollExtent,
                   ),
                 );
@@ -459,13 +460,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .gridLineColor,
-                                  width: 3.responsiveSp,
+                                  width: UIConfig.tableBorderWidth,
                                 ),
                                 bottom: BorderSide(
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .gridLineColor,
-                                  width: 3.responsiveSp,
+                                  width: UIConfig.tableBorderWidth,
                                 ),
                               ),
                             ),
@@ -479,23 +480,24 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                             .currentTheme
                                             .splashColor,
                                     splashFactory: InkRipple.splashFactory,
-                                    radius: 20.responsiveSp,
+                                    radius: UIConfig.buttonSplashRadius,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 2.h, horizontal: 7.w),
                                       
                                       child: Icon(
                                         Icons.download,
-                                        size: 30.responsiveSp,
+                                        size: UIConfig.iconSizeLarge,
                                         color:
                                             Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
                                                 .basicAdvanceTextColor
-                                                .withOpacity(0.8),
+                                                .withOpacity(UIConfig.opacityIcon),
                                       ),
                                     ),
                                     onTap: () async {
                                       bool confirm = await showDialog(
+                                        
                                         context: context,
                                         builder: (context2) {
                                           return ConfirmationDialog(
@@ -521,7 +523,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 0.h),
+                                    padding: UIConfig.paddingFromLTRBZero,
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
                                           widget.data![0][0].toString()),

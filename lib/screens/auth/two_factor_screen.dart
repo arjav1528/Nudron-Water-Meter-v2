@@ -14,6 +14,7 @@ import 'package:watermeter2/utils/pok.dart';
 
 import '../../api/auth_service.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
@@ -95,7 +96,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
-                                fontSize: ThemeNotifier.large.responsiveSp,
+                                fontSize: UIConfig.fontSizeLargeResponsive + 4.responsiveSp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -121,7 +122,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
-                                fontSize: ThemeNotifier.small.responsiveSp,
+                                fontSize: UIConfig.fontSizeSmallResponsive,
                               ),
                             ),
                             SizedBox(height: 25.h),
@@ -142,7 +143,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,
-                                fontSize: ThemeNotifier.medium.responsiveSp,
+                                fontSize: UIConfig.fontSizeMediumResponsive,
                                 fontWeight: FontWeight.w400,
                               ),
                               pinTheme: PinTheme(

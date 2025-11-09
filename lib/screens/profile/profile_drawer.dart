@@ -19,6 +19,7 @@ import '../../bloc/auth_state.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../services/app_state_service.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/biometric_helper.dart';
@@ -175,7 +176,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
@@ -188,15 +189,15 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 return PopScope(
                   canPop: false,
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                    filter: ImageFilter.blur(sigmaX: UIConfig.blurSigmaX, sigmaY: UIConfig.blurSigmaY),
                     child: Container(
                       alignment: FractionalOffset.center,
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                      decoration: BoxDecoration(color: Colors.black.withOpacity(UIConfig.opacityBackdrop)),
                       child: SizedBox(
-                        width: 75.responsiveSp,
-                        height: 75.responsiveSp,
+                        width: UIConfig.loaderSize,
+                        height: UIConfig.loaderSize,
                         child: LoadingAnimationWidget.hexagonDots(
-                          size: 75.responsiveSp,
+                          size: UIConfig.loaderSize,
                           color: CommonColors.blue,
                         ),
                       ),
@@ -272,27 +273,27 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             return Column(
               children: [
                 Container(
-                  height: 3.h,
+                  height: UIConfig.accentLineHeight,
                   color: CommonColors.blue2,
                 ),
-                SizedBox(
-                  height: constraints.maxHeight - 6.h,
-                  width: PlatformUtils.isMobile
-                      ? MediaQuery.of(context).size.width
-                      : width,
-                  child: SingleChildScrollView(
-                    physics: ClampingScrollPhysics(),
-                    child: Container(
-                      color: Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .bgColor,
-                      child: Column(
+                Expanded(
+                  child: SizedBox(
+                    width: PlatformUtils.isMobile
+                        ? MediaQuery.of(context).size.width
+                        : width,
+                    child: SingleChildScrollView(
+                      physics: ClampingScrollPhysics(),
+                      child: Container(
+                        color: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .bgColor,
+                        child: Column(
                         children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              height: 51.h,
+                              height: UIConfig.iconContainerHeight + 21.h,
                               color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
                               child: Row(
                                 children: [
@@ -309,7 +310,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   Text(
                                     "PROFILE",
                                     style: GoogleFonts.robotoMono(
-                                      fontSize: PlatformUtils.isMobile ? 18.responsiveSp : width / 30,
+                                      fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                                       fontWeight: FontWeight.w500,
                                       color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
                                     ),
@@ -318,7 +319,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                              padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                               child: ChamferedTextWidget(
                                 text: "USER",
                                 fillColor: Provider.of<ThemeNotifier>(context)
@@ -334,20 +335,19 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .profileBorderColor,
-                                fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                              padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 11.w, vertical: 13.h),
+                                padding: UIConfig.paddingProfileField,
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .profileBorderColor,
-                                  width: 3.responsiveSp,
+                                  width: UIConfig.profileFieldBorderWidth,
                                 )),
                                 child: Column(
                                   children: [
@@ -357,7 +357,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       hintText: 'Enter Full Name',
                                       keyboardType: TextInputType.name,
                                     ),
-                                    SizedBox(height: 8.h),
+                                    UIConfig.spacingSizedBoxVerticalSmall,
                                     CustomTextField(
                                       controller: _emailController,
                                       iconPath: 'assets/icons/mail.svg',
@@ -365,7 +365,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       keyboardType:
                                           TextInputType.emailAddress,
                                     ),
-                                    SizedBox(height: 8.h),
+                                    UIConfig.spacingSizedBoxVerticalSmall,
                                     CustomTextField(
                                       controller: _phoneController,
                                       hintText: 'Enter Phone number',
@@ -376,12 +376,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       ],
                                       prefixIcon: Container(
                                         padding:
-                                            EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
+                                            UIConfig.paddingFromLTRBWithClamp,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10.r),
-                                              bottomLeft: Radius.circular(10.r),
-                                            ),
+                                                  borderRadius: UIConfig.borderRadiusTopLeft,
                                             color: Colors.transparent),
                                         child: CountryCodePicker2(
                                           refreshPhoneCode: refreshPhoneCode,
@@ -390,13 +387,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                       context)
                                                   .currentTheme
                                                   .textFieldBGProfile,
-                                          height: 30.78.h,
+                                          height: UIConfig.dropdownItemHeight * 0.77,
                                           decoration: BoxDecoration(
                                             color: Colors.transparent,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10.r),
-                                              bottomLeft: Radius.circular(10.r),
-                                            ),
+                                                  borderRadius: UIConfig.borderRadiusTopLeft,
                                           ),
                                           onChanged:
                                               (CountryCode countryCode) {
@@ -415,35 +409,35 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 8.h),
+                                    UIConfig.spacingSizedBoxVerticalSmall,
                                     Container(
-                                      height: 1.h,
+                                      height: UIConfig.borderWidthThin,
                                       color:
                                           Provider.of<ThemeNotifier>(context)
                                               .currentTheme
                                               .profileBorderColor,
                                     ),
-                                    SizedBox(height: 8.h),
+                                    UIConfig.spacingSizedBoxVerticalSmall,
                                     PasswordTextField(
                                       controller: oldPasswordController,
                                       hint: "Enter current password",
                                     ),
-                                    SizedBox(height: 8.h),
+                                    UIConfig.spacingSizedBoxVerticalSmall,
                                     PasswordTextField(
                                       controller: newPasswordController,
                                       hint: "Enter new password",
                                     ),
-                                    SizedBox(height: 8.h),
+                                    UIConfig.spacingSizedBoxVerticalSmall,
                                     PasswordTextField(
                                       controller:
                                           confirmNewPasswordController,
                                       hint: "Confirm new password",
                                     ),
-                                    SizedBox(height: 16.h),
+                                    UIConfig.spacingSizedBoxVerticalLarge,
                                     CustomButton(
                                       dynamicWidth: true,
                                       text: "SUBMIT",
-                                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                      fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                                       onPressed: () async {
                                         FocusScope.of(context).unfocus();
 
@@ -497,10 +491,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                          padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                           child: Column(
                             children: [
-                              SizedBox(height: 20.h),
+                              SizedBox(height: UIConfig.spacingExtraLarge),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -519,7 +513,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   AuthenticationWidget(
                                     bottomOpen: true,
@@ -529,12 +523,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
+                              UIConfig.spacingSizedBoxVerticalLarge,
+                              UIConfig.spacingSizedBoxVerticalLarge,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -553,17 +543,17 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 11.w, vertical: 13.h),
+                                          horizontal: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, vertical: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                        width: 3.responsiveSp,
+                                        width: UIConfig.profileFieldBorderWidth,
                                       )),
                                       child: Row(
                                         mainAxisAlignment:
@@ -571,12 +561,11 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         children: [
                                           Expanded(
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                                              padding: UIConfig.paddingProfileFieldBoth,
                                               child: Text(
                                                 "Log out from this app",
                                                 style: GoogleFonts.roboto(
-                                                  fontSize:
-                                                      PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                                  fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                                                   color: Provider.of<ThemeNotifier>(
                                                           context)
                                                       .currentTheme
@@ -589,7 +578,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                           CustomButton(
                                             text: "LOGOUT",
                                             dynamicWidth: true,
-                                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                                             onPressed: () async {
                                               setState(() {
                                                 _isLoggingOut = true;
@@ -603,9 +592,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
                                 ],
                               ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
+                              UIConfig.spacingSizedBoxVerticalLarge,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -624,37 +611,37 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 11.w, vertical: 13.h),
+                                          horizontal: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, vertical: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                        width: 3.responsiveSp,
+                                        width: UIConfig.profileFieldBorderWidth,
                                       )),
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 8.w),
+                                        padding: UIConfig.paddingProfileFieldLeft,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             ActiveDevices(key: UniqueKey()),
-                                            SizedBox(height: 16.h),
+                                            UIConfig.spacingSizedBoxVerticalLarge,
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Expanded(
                                                   child: Padding(
-                                                    padding: EdgeInsets.only(right: 8.w),
+                                                    padding: UIConfig.paddingProfileFieldRight,
                                                     child: Text(
                                                       "Log out from all devices",
                                                       style: GoogleFonts.roboto(
-                                                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                                        fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                         color: Provider.of<
                                                                     ThemeNotifier>(
                                                                 context)
@@ -668,7 +655,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                 CustomButton(
                                                   text: "GLOBAL LOGOUT",
                                                   dynamicWidth: true,
-                                                  fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                                                   onPressed: () async {
                                                     setState(() {
                                                       _isGlobalLoggingOut = true;
@@ -685,9 +672,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
                                 ],
                               ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
+                              UIConfig.spacingSizedBoxVerticalLarge,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -706,17 +691,17 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                    fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 11.w, vertical: 13.h),
+                                          horizontal: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, vertical: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
                                             .profileBorderColor,
-                                        width: 3.responsiveSp,
+                                        width: UIConfig.profileFieldBorderWidth,
                                       )),
                                       child: Column(
                                         children: [
@@ -726,7 +711,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             children: [
                                               Expanded(
                                                 child: Padding(
-                                                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                                                  padding: UIConfig.paddingProfileFieldBoth,
                                                   child: Text(
                                                     "Delete your account",
                                                     style: GoogleFonts.roboto(
@@ -744,7 +729,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               CustomButton(
                                                 text: "DELETE",
                                                 dynamicWidth: true,
-                                                fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                                                 onPressed: () async {
                                                   setState(() {
                                                     deleteAccountVisible = true;
@@ -758,23 +743,22 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             visible: deleteAccountVisible,
                                             child: Column(
                                               children: [
-                                                SizedBox(height: 8.h),
+                                                UIConfig.spacingSizedBoxVerticalSmall,
                                                 Padding(
-                                                  padding: EdgeInsets.only(top: 8.h),
+                                                  padding: UIConfig.paddingProfileFieldTop,
                                                   child: Text(
                                                     "Warning: This action is irreversible. You will no longer be able to access your IoT data.",
                                                     style: GoogleFonts.roboto(
-                                                      fontSize:
-                                                          ThemeNotifier.extrasmall.responsiveSp,
+                                                      fontSize: UIConfig.fontSizeExtraSmallResponsive,
                                                       color: CommonColors.red,
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(height: 16.h),
+                                                UIConfig.spacingSizedBoxVerticalLarge,
                                                 CustomTextField(controller: deleteConfirmationFieldController, hintText: "Type 'DELETE' to confirm"),
-                                                SizedBox(height: 16.h),
+                                                UIConfig.spacingSizedBoxVerticalLarge,
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+                                                  padding: UIConfig.paddingTextFieldHorizontal,
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
@@ -782,7 +766,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                         child: CustomButton(
                                                           dynamicWidth: true,
                                                           text: "CANCEL",
-                                                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                                                           onPressed: () {
                                                             setState(() {
                                                               deleteAccountVisible = false;
@@ -791,12 +775,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                           },
                                                         ),
                                                       ),
-                                                      SizedBox(width: 8.w),
+                                                      UIConfig.spacingSizedBoxSmall,
                                                       Expanded(
                                                         child: CustomButton(
                                                           dynamicWidth: true,
                                                           text: "CONFIRM",
-                                                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                                                           onPressed: () {
                                                             if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
                                                               
@@ -819,18 +803,17 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
                                 ],
                               ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
+                              UIConfig.spacingSizedBoxVerticalLarge,
                             ],
                           ),
                         ),
                       ]),
+                        ),
+                      ),
                     ),
                   ),
-                ),
                 Container(
-                  height: 3.h,
+                  height: UIConfig.accentLineHeight,
                   color: CommonColors.blue2,
                 ),
               ],
@@ -876,9 +859,9 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-      padding: EdgeInsets.fromLTRB(11.w, 13.h, 11.w, 9.h),
+      padding: EdgeInsets.fromLTRB(UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
       decoration: BoxDecoration(
         border: widget.topOpen
             ? Border(
@@ -886,19 +869,19 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .profileBorderColor,
-                  width: 3.responsiveSp,
+                  width: UIConfig.profileFieldBorderWidth,
                 ),
                 right: BorderSide(
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .profileBorderColor,
-                  width: 3.responsiveSp,
+                  width: UIConfig.profileFieldBorderWidth,
                 ),
                 bottom: BorderSide(
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .profileBorderColor,
-                  width: 3.responsiveSp,
+                  width: UIConfig.profileFieldBorderWidth,
                 ),
               )
             : widget.bottomOpen
@@ -907,26 +890,26 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.responsiveSp,
+                      width: UIConfig.profileFieldBorderWidth,
                     ),
                     right: BorderSide(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.responsiveSp,
+                      width: UIConfig.profileFieldBorderWidth,
                     ),
                     top: BorderSide(
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.responsiveSp,
+                      width: UIConfig.profileFieldBorderWidth,
                     ),
                   )
                 : Border.all(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.responsiveSp,
+                    width: UIConfig.profileFieldBorderWidth,
                   ),
       ),
       child: Column(
@@ -936,11 +919,11 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                  padding: UIConfig.paddingProfileFieldBoth,
                   child: Text(
                     "Two Factor Authentication",
                     style: GoogleFonts.roboto(
-                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                      fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor,
@@ -977,10 +960,10 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 selectedTextColor: Colors.white,
                 unselectedTextColor:
                     Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-                width: PlatformUtils.isMobile ? 120 : (width / 3.5).clamp(110.0, 135.0),
-                height: 30.55,
-                smallerWidth: PlatformUtils.isMobile ? 57 : ((width / 3.5).clamp(110.0, 135.0) * 0.475),
-                smallerHeight: 21,
+                width: PlatformUtils.isMobile ? UIConfig.buttonDefaultWidth + 8.w : (width / 3.5).clamp(110.0, 135.0),
+                height: UIConfig.iconContainerHeight + 0.55,
+                smallerWidth: PlatformUtils.isMobile ? UIConfig.buttonDefaultWidth * 0.51 : ((width / 3.5).clamp(110.0, 135.0) * 0.475),
+                smallerHeight: 25,
                 verticalGap: 4.8,
                 leftGap: 3.6,
                 fontSize: PlatformUtils.isMobile ? 12 : 11.5,
@@ -992,14 +975,14 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
           Visibility(
               visible: showDisableConfirm,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.h),
+                padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomButton(
                       dynamicWidth: true,
                       text: "CANCEL",
-                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                      fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                       onPressed: () {
                         setState(() {
                           showDisableConfirm = false;
@@ -1007,11 +990,11 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                       },
                       isRed: true,
                     ),
-                    SizedBox(width: 40.w),
+                    SizedBox(width: UIConfig.spacingXXXLarge.w),
                     CustomButton(
                       dynamicWidth: true,
                       text: "CONFIRM",
-                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                      fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                       onPressed: () {
                         if (NudronRandomStuff.isAuthEnabled.value) {
                           LoaderUtility.showLoader(context,
@@ -1046,10 +1029,10 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 )
               : Container(),
           SizedBox(
-            height: 9.h,
+            height: UIConfig.spacingSmall * 1.125.h,
           ),
           Container(
-            height: 1,
+            height: UIConfig.borderWidthThin,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,
@@ -1121,9 +1104,9 @@ class _BiometricWidgetState extends State<BiometricWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-        padding: EdgeInsets.fromLTRB(11.w, 1.h, 11.w, 13.h),
+        padding: EdgeInsets.fromLTRB(UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.borderWidthThin.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.paddingProfileFieldVertical.vertical / 1.h),
         decoration: BoxDecoration(
           border: widget.topOpen
               ? Border(
@@ -1131,19 +1114,19 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.responsiveSp,
+                    width: UIConfig.profileFieldBorderWidth,
                   ),
                   right: BorderSide(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.responsiveSp,
+                    width: UIConfig.profileFieldBorderWidth,
                   ),
                   bottom: BorderSide(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .profileBorderColor,
-                    width: 3.responsiveSp,
+                    width: UIConfig.profileFieldBorderWidth,
                   ),
                   top: BorderSide.none,
                 )
@@ -1153,19 +1136,19 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .profileBorderColor,
-                        width: 3.responsiveSp,
+                        width: UIConfig.profileFieldBorderWidth,
                       ),
                       right: BorderSide(
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .profileBorderColor,
-                        width: 3.responsiveSp,
+                        width: UIConfig.profileFieldBorderWidth,
                       ),
                       top: BorderSide(
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .profileBorderColor,
-                        width: 3.responsiveSp,
+                        width: UIConfig.profileFieldBorderWidth,
                       ),
                       bottom: BorderSide.none,
                     )
@@ -1173,7 +1156,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .profileBorderColor,
-                      width: 3.responsiveSp,
+                      width: UIConfig.profileFieldBorderWidth,
                     ),
         ),
         child: Column(
@@ -1183,11 +1166,11 @@ class _BiometricWidgetState extends State<BiometricWidget> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                    padding: UIConfig.paddingProfileFieldBoth,
                     child: Text(
                       "Biometric Login",
                       style: GoogleFonts.roboto(
-                        fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                        fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -1240,14 +1223,14 @@ class _BiometricWidgetState extends State<BiometricWidget> {
             Visibility(
                 visible: showDisableConfirm,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15.h),
+                  padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomButton(
                           dynamicWidth: true,
                           text: "CANCEL",
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                           onPressed: () {
                             setState(() {
                               showDisableConfirm = false;
@@ -1255,11 +1238,11 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                           },
                           isRed: true,
                         ),
-                        SizedBox(width: 40.w),
+                        SizedBox(width: UIConfig.spacingXXXLarge.w),
                         CustomButton(
                           dynamicWidth: true,
                           text: "CONFIRM",
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width / 30,
+                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
                           onPressed: () {
                             if (NudronRandomStuff.isBiometricEnabled.value) {
                               disableBiometric()

@@ -5,12 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/utils/pok.dart';
 import 'package:watermeter2/utils/smallbutton.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../main.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../utils/custom_exception.dart';
@@ -91,7 +91,7 @@ class _BillingFormulaState extends State<BillingFormula> {
                 : Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
-            height: 30.responsiveSp,
+            height: UIConfig.iconSizeLarge,
           ),
         ),
       ),
@@ -211,16 +211,16 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     if (tiers.length == 2) {
       rightpaddingconstant = 0;
     } else {
-      rightpaddingconstant = 30.responsiveSp + 8.w;
+      rightpaddingconstant = UIConfig.iconSizeLarge + UIConfig.spacingSmall.w;
     }
 
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
-    final dialogWidth = PlatformUtils.isMobile ? 400.w : width;
+    final width = UIConfig.getDesktopProjectWidth(context);
+    final dialogWidth = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin.w : width;
 
     return Container(
       width: dialogWidth,
       constraints: BoxConstraints(
-        maxHeight: 600.h,
+        maxHeight: UIConfig.dialogMaxHeight + UIConfig.spacingXXXLarge * 2.5,
       ),
       color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
       child: SingleChildScrollView(
@@ -232,31 +232,31 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .gridLineColor,
-                width: 3.responsiveSp,
+                width: UIConfig.dialogBorderWidth,
               ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildDialogHeader(),
-                SizedBox(height: (20.h - 8).clamp(0.0, double.infinity)),
+                SizedBox(height: (UIConfig.spacingExtraLarge.h - UIConfig.spacingSmall).clamp(0.0, double.infinity)),
                 Container(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .gridLineColor,
-                    height: 1.responsiveSp),
+                    height: UIConfig.borderWidthThin),
                 _buildTable(context),
                 Container(
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .gridLineColor,
-                    height: 1.responsiveSp),
-                SizedBox(height: 20.h),
+                    height: UIConfig.borderWidthThin),
+                SizedBox(height: UIConfig.spacingExtraLarge),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      SizedBox(width: 20.w),
+                      SizedBox(width: UIConfig.spacingExtraLarge.w),
                       SmallButton(
                           onPressed: () {
                             if (tiers.length == 7) {
@@ -290,7 +290,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                           bgColor: CommonColors.green),
                       Text("ADD TIER",
                           style: GoogleFonts.robotoMono(
-                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
@@ -298,9 +298,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: UIConfig.spacingExtraLarge),
                 _buildDialogActions(),
-                SizedBox(height: 20.h),
+                SizedBox(height: UIConfig.spacingExtraLarge),
               ],
             ),
           ),
@@ -310,7 +310,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
   }
 
   Widget _buildDialogHeader() {
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,7 +319,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           text: "BILLING FORMULA",
           borderColor:
               Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-          fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
         ),
         IconButton(
           icon: Icon(Icons.close,
@@ -336,10 +336,10 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     );
   }
 
-  double rightpaddingconstant = 30.responsiveSp + 8.w;
+  double rightpaddingconstant = UIConfig.iconSizeLarge + UIConfig.spacingSmall.w;
 
   Widget _buildEditableTierCell(int index) {
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
     if (index == 0) {
       return Padding(
         padding: EdgeInsets.only(right: rightpaddingconstant),
@@ -374,7 +374,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         ),
         Text(" to ",
             style: GoogleFonts.robotoMono(
-              fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -394,14 +394,14 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
       {bool editable = true,
       TextAlign textAlign = TextAlign.start,
       bool addPlusSuffix = false}) {
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  right: addPlusSuffix ? ThemeNotifier.medium.responsiveSp + 2 : 0),
+                  right: addPlusSuffix ? UIConfig.fontSizeMediumResponsive + 2 : 0),
               child: TextField(
                 controller: controller,
                 enabled: editable,
@@ -411,9 +411,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                 cursorColor: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .textfieldCursorColor,
-                cursorHeight: 30.responsiveSp,
+                cursorHeight: UIConfig.textFieldCursorHeight,
                 style: GoogleFonts.robotoMono(
-                  fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width/30,
+                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -424,7 +424,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                       ? Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor
-                          .withOpacity(0.5)
+                          .withOpacity(UIConfig.opacityHigh)
                       : null,
                 ),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -454,7 +454,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                   final textSpan = TextSpan(
                     text: value.text,
                     style: GoogleFonts.robotoMono(
-                      fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width/30,
+                      fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                       color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor,
@@ -473,14 +473,14 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
 
                   if (textWidth < availableWidth) {
                     
-                    plusPosition =
-                        ((availableWidth - ThemeNotifier.medium.responsiveSp + 2) /
+                        plusPosition =
+                        ((availableWidth - UIConfig.fontSizeMediumResponsive + 2) /
                                 2) -
                             (textWidth / 2) +
                             textWidth;
                   } else {
                     
-                    plusPosition = availableWidth - ThemeNotifier.medium.responsiveSp;
+                    plusPosition = availableWidth - UIConfig.fontSizeMediumResponsive;
                   }
 
                   return Positioned(
@@ -494,7 +494,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                          fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : 18.0,
+                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: 18.0),
                         ),
                       ),
                     ),
@@ -508,7 +508,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
   }
 
   Widget _buildTableCellTextFieldAmount(TextEditingController controller) {
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
     return Center(
       child: TextField(
         controller: controller,
@@ -518,9 +518,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         cursorColor: Provider.of<ThemeNotifier>(context)
             .currentTheme
             .textfieldCursorColor,
-        cursorHeight: 30.responsiveSp,
+        cursorHeight: UIConfig.textFieldCursorHeight,
         style: GoogleFonts.robotoMono(
-          fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width/30,
+          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
           color: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor,
@@ -528,14 +528,14 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           decorationColor: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor
-              .withOpacity(0.5),
+              .withOpacity(UIConfig.opacityHigh),
         ),
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         
         decoration: InputDecoration(
           isDense: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 8.h),
+          contentPadding: UIConfig.paddingSymmetricVerticalSmall,
           border: InputBorder.none, 
           focusedBorder: InputBorder.none, 
         ),
@@ -552,7 +552,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
       border: TableBorder.symmetric(
         inside: BorderSide(
           color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-          width: 1,
+          width: UIConfig.borderWidthThin,
         ),
       ),
       children: [
@@ -591,7 +591,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
   }
 
   Widget _buildDialogActions() {
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -599,7 +599,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           text: "CANCEL",
           isRed: true,
           dynamicWidth: true,
-          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width/30,
+          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
           onPressed: () {
             if (mounted) {
               Navigator.of(context).pop();
@@ -609,7 +609,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         CustomButton(
           text: "SUBMIT",
           dynamicWidth: true,
-          fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : width/30,
+          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
           onPressed: () {
             String newFormula = _buildBillingFormula();
             
@@ -655,9 +655,9 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
   }
 
   Widget _buildTableHeaderCell(String text, double padding) {
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
     return Container(
-      height: 40.h,
+      height: UIConfig.dropdownItemHeight,
       padding: EdgeInsets.only(right: padding),
       
       alignment: Alignment.center,
@@ -667,7 +667,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           text,
           textAlign: TextAlign.center,
           style: GoogleFonts.robotoMono(
-            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width/30,
+            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
             fontWeight: FontWeight.bold,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme

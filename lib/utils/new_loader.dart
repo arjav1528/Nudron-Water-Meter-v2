@@ -2,9 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:watermeter2/utils/pok.dart';
-
 import '../constants/theme2.dart';
+import '../constants/ui_config.dart';
 class LoaderUtility {
   static Future<dynamic> showLoader(BuildContext context, Future futureFunction,
       {Color? color}) async {
@@ -17,16 +16,16 @@ class LoaderUtility {
         return PopScope(
             canPop: false, 
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+              filter: ImageFilter.blur(sigmaX: UIConfig.blurSigmaX, sigmaY: UIConfig.blurSigmaY),
               child: Container(
                 alignment: FractionalOffset.center,
-                decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                decoration: BoxDecoration(color: Colors.black.withOpacity(UIConfig.opacityBackdrop)),
                 
                 child: SizedBox(
-                  width: 75.responsiveSp,
-                  height: 75.responsiveSp,
+                  width: UIConfig.loaderSize,
+                  height: UIConfig.loaderSize,
                   child:LoadingAnimationWidget.hexagonDots(
-                    size: 75.responsiveSp,
+                    size: UIConfig.loaderSize,
                     color: CommonColors.blue,
                   ),
                   

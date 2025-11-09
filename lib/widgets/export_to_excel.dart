@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../utils/pok.dart';
 
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
 
@@ -75,7 +76,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.robotoMono(
                   textStyle: TextStyle(
-                    fontSize: ThemeNotifier.small.responsiveSp,
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,
@@ -89,12 +90,16 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
               children: [
                 CustomButton(
                   text: "CANCEL",
+                  dynamicWidth: true,
+                  width: 120.w,
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
                   isRed: true,
                 ),
                 CustomButton(
+                  dynamicWidth: true,
+                  width: 120.w,
                   text: "CONFIRM",
                   onPressed: () {
                     Navigator.of(context).pop(true);

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/utils/pok.dart';
 
 import '../constants/theme2.dart';
+import '../constants/ui_config.dart';
 import '../services/platform_utils.dart';
 class ToggleButtonCustom extends StatefulWidget {
   final List<String> tabs;
@@ -149,10 +150,10 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
                                 ? widget.selectedTextColor
                                 : widget.unselectedTextColor,
                             fontSize: PlatformUtils.isMobile
-                                ? (widget.fontSize ?? ThemeNotifier.small).responsiveSp
+                                ? (widget.fontSize ?? UIConfig.fontSizeSmall).responsiveSp
                                 : (widget.fontSize != null && widget.fontSize! > 10 
                                     ? widget.fontSize! 
-                                    : (widget.fontSize ?? ThemeNotifier.small).responsiveSp),
+                                    : (widget.fontSize ?? UIConfig.fontSizeSmall).responsiveSp),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

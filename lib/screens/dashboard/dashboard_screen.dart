@@ -13,6 +13,7 @@ import '../../bloc/auth_state.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../services/platform_utils.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/loader.dart';
@@ -76,7 +77,7 @@ class _DashboardPageState extends State<DashboardPage> {
               return Scaffold(
                 body: Center(
                   child: SizedBox(
-                    height: 600.h,
+                    height: UIConfig.dialogMaxHeight + 100.h,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,10 +85,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         Text("ERROR IN FETCHING DATA. REFRESH LATER",
                             style: GoogleFonts.roboto(
                               color: CommonColors.blue,
-                              fontSize: ThemeNotifier.medium.responsiveSp,
+                              fontSize: UIConfig.fontSizeMediumResponsive,
                               fontWeight: FontWeight.w500,
                             )),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: UIConfig.spacingExtraLarge),
                         CustomButton(
                           text: "REFRESH",
                           onPressed: () {
@@ -171,7 +172,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
 
     Navigator.of(context).push(
       PageRouteBuilder(
-        transitionDuration: Duration.zero, 
+        transitionDuration: UIConfig.transitionDurationZero, 
         pageBuilder: (context, animation, secondaryAnimation) {
           return BlocProvider.value(
             value: dashboardBloc,
@@ -205,7 +206,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            height: 3.h,
+            height: UIConfig.accentLineHeight,
             color: selectedColor[drawerIndex],
           ),
           Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.2)),
@@ -226,7 +227,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             ),
           ),
           Container(
-            height: 3.h,
+            height: UIConfig.accentLineHeight,
             color: selectedColor[drawerIndex],
           ),
         ],
@@ -249,7 +250,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           BlocProvider.of<DashboardBloc>(context).switchBottomNavPos(index);
         },
         child: Container(
-          height: 95.h,
+          height: UIConfig.buttonHeight * 2.16,
           padding: EdgeInsets.zero,
           child: isCollapsed
               ? Column(
@@ -263,10 +264,10 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .inactiveBottomNavbarIconColor,
-                      width: 50.w,
-                      height: 50.w,
+                      width: UIConfig.iconSizeLarge + 20.w,
+                      height: UIConfig.iconSizeLarge + 20.w,
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: UIConfig.spacingXSmall),
                     Text(
                       MainDashboardPage.bottomNavTabs[index].toUpperCase(),
                       style: GoogleFonts.robotoMono(
@@ -293,10 +294,10 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .inactiveBottomNavbarIconColor,
-                      width: 70.0.w,
-                      height: 70.0.w,
+                      width: UIConfig.iconSizeLarge * 2.33,
+                      height: UIConfig.iconSizeLarge * 2.33,
                     ),
-                    SizedBox(width: 16.w),
+                    UIConfig.spacingSizedBoxVerticalLarge,
                     Expanded(
                       child: Text(
                         MainDashboardPage.bottomNavTabs[index].toUpperCase(),
@@ -389,7 +390,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                           fontSize: ThemeNotifier.medium.responsiveSp,
                           fontWeight: FontWeight.w500,
                         )),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: UIConfig.spacingExtraLarge),
                     CustomButton(
                       text: "REFRESH",
                       onPressed: () {
@@ -451,7 +452,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               },
             ),
             Container(
-              width: 3.responsiveSp,
+              width: UIConfig.sidebarWidth,
               color: selectedColor[BlocProvider.of<DashboardBloc>(context).bottomNavPos % selectedColor.length],
             ),
             Expanded(
@@ -475,7 +476,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         key: UniqueKey(),
-        height: 69.h,
+        height: UIConfig.bottomNavBarHeight,
         padding: EdgeInsets.all(0.w),
         color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
         child: BlocBuilder<DashboardBloc, DashboardState>(
@@ -510,8 +511,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                                 : Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .inactiveBottomNavbarIconColor,
-                            width: 45.responsiveSp,
-                            height: 45.responsiveSp,
+                            width: UIConfig.iconSizeLarge + 15.responsiveSp,
+                            height: UIConfig.iconSizeLarge + 15.responsiveSp,
                           ),
                           Text(
                             visibleTabs[index].toUpperCase(),

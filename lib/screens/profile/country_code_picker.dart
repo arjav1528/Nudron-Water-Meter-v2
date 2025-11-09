@@ -1,11 +1,11 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:watermeter2/utils/pok.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 
 class CountryCodePicker2 extends StatefulWidget {
   final double height;
@@ -127,9 +127,9 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
           
           child: Material(
             color: widget.dropDownColor,
-            elevation: 4.0,
+            elevation: UIConfig.dialogOverlayElevation,
             child: SizedBox(
-              height: 200.h,
+              height: UIConfig.dropdownMaxHeight,
               child: ListView(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
@@ -163,11 +163,11 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
               Image.asset(
                 'flags/${country.code!.toLowerCase()}.png',
                 package: 'country_code_picker',
-                width: 20,
+                width: UIConfig.iconSizeSmall * 0.83,
               ),
               Text(country.dialCode ?? '',
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.medium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .textfieldTextColor,
@@ -186,7 +186,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
 
     dropdownItems.add(
       Container(
-        height: 1.responsiveSp,
+        height: UIConfig.borderWidthThin,
         color:
             Provider.of<ThemeNotifier>(context).currentTheme.textfieldTextColor,
       ),
@@ -208,19 +208,19 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
       child: Container(
         color: Colors.transparent,
         child: Container(
-          height: 53.h,
+          height: UIConfig.dropdownRowHeight + 2.09.h,
           decoration: widget.decoration,
           child: GestureDetector(
             onTap: () => widget.isEditable ? _toggleDropdown(context) : null,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              padding: UIConfig.paddingSmall,
               child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 Image.asset(
                   'flags/${selectedItem?.code!.toLowerCase()}.png',
                   package: 'country_code_picker',
-                  width: 20,
+                  width: UIConfig.iconSizeSmall * 0.83,
                 ),
-                const SizedBox(width: 8.0),
+                UIConfig.spacingSizedBoxSmall,
                 Icon(
                   Icons.arrow_drop_down,
                   color: Provider.of<ThemeNotifier>(context)

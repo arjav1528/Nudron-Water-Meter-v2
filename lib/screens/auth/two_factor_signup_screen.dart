@@ -14,6 +14,7 @@ import 'package:watermeter2/utils/pok.dart';
 import '../../api/auth_service.dart';
 import '../../constants/app_config.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
@@ -119,7 +120,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                       enableSuggestions: false,
                       autocorrect: false,
                       style: GoogleFonts.roboto(
-                        fontSize: ThemeNotifier.medium.responsiveSp,
+                        fontSize: UIConfig.fontSizeMediumResponsive,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .textfieldTextColor,
@@ -194,7 +195,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                           },
                         ),
                         hintStyle: GoogleFonts.roboto(
-                          fontSize: ThemeNotifier.medium.responsiveSp,
+                          fontSize: UIConfig.fontSizeMediumResponsive,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .textfieldHintColor,
@@ -239,7 +240,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                       enableSuggestions: false,
                       autocorrect: false,
                       style: GoogleFonts.roboto(
-                        fontSize: ThemeNotifier.medium.responsiveSp,
+                        fontSize: UIConfig.fontSizeMediumResponsive,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .textfieldTextColor,
@@ -316,7 +317,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                           },
                         ),
                         hintStyle: GoogleFonts.roboto(
-                          fontSize: ThemeNotifier.medium.responsiveSp,
+                          fontSize: UIConfig.fontSizeMediumResponsive,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .textfieldHintColor,
@@ -472,7 +473,7 @@ class _CustomPincodeState extends State<CustomPincode> {
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
-                fontSize: 16.responsiveSp,
+                fontSize: UIConfig.fontSizeSmallResponsive,
                 fontWeight: FontWeight.w400,
               ),
               cursorColor: Provider.of<ThemeNotifier>(context)

@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:watermeter2/utils/pok.dart';
 
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 
 class AuthenticatorPage extends StatefulWidget {
@@ -37,15 +37,15 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
       double width = constraints.maxWidth;
       return Column(
         children: [
-           SizedBox(height: 10.h),
+           SizedBox(height: UIConfig.spacingMedium * 0.83.h),
           
           Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: UIConfig.paddingSmall,
               child: Image.memory(
                 base64Decode(widget.image),
-                width: width * 0.6,
+                width: width * UIConfig.opacityVeryHigh,
                 fit: BoxFit.cover,
               ),
             ),
@@ -53,11 +53,11 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
           Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: UIConfig.paddingSmall,
               child: Text(
                 'Scan the QR code with your Authenticator app',
                 style: GoogleFonts.roboto(
-                  fontSize: ThemeNotifier.small.responsiveSp,
+                  fontSize: UIConfig.fontSizeSmallResponsive,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
@@ -77,7 +77,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
                 TextSpan(
                   text: 'Click here ',
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.small.responsiveSp,
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     color: CommonColors.blue,
                     decoration: TextDecoration.underline,
                   ),
@@ -96,7 +96,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
                 TextSpan(
                   text: 'to open the default Authenticator app',
                   style: GoogleFonts.roboto(
-                    fontSize: ThemeNotifier.medium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,

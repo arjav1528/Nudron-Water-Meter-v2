@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:watermeter2/utils/pok.dart';
-
-import '../constants/theme2.dart';
+import '../constants/ui_config.dart';
 
 class CustomTabBar extends StatefulWidget {
   final ValueNotifier<int> selectedIndex;
@@ -34,10 +32,10 @@ class _CustomTabBarState extends State<CustomTabBar> {
       valueListenable: widget.selectedIndex,
       builder: (context, selectedIndex, child) {
         return Container(
-          height: 48.h,
+          height: UIConfig.iconContainerHeight + 18.h,
           decoration: BoxDecoration(
             color: widget.bgColor,
-            borderRadius: BorderRadius.circular(10.responsiveSp),
+            borderRadius: UIConfig.borderRadiusCircularLarge,
           ),
           child: Stack(
             children: [
@@ -49,15 +47,15 @@ class _CustomTabBarState extends State<CustomTabBar> {
                   0,
                 ),
                 child: Container(
-                  margin: const EdgeInsets.all(4),
+                  margin: EdgeInsets.all(UIConfig.spacingXSmall),
                   
-                  width: (MediaQuery.of(context).size.width - 32) /
+                  width: (MediaQuery.of(context).size.width - UIConfig.spacingLarge * 2) /
                           widget.tabTitles.length -
-                      8,
-                  height: 38.h,
+                      UIConfig.spacingSmall,
+                  height: UIConfig.iconContainerHeight + 8.h,
                   decoration: BoxDecoration(
                     color: widget.tabBgColor, 
-                    borderRadius: BorderRadius.circular(6.responsiveSp),
+                    borderRadius: BorderRadius.circular(UIConfig.spacingXSmall * 1.5),
                   ),
                 ),
               ),
@@ -74,7 +72,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
                         widget.tabTitles[index],
                         style: GoogleFonts.robotoMono(
                           textStyle: TextStyle(
-                            fontSize: ThemeNotifier.small.responsiveSp,
+                            fontSize: UIConfig.fontSizeSmallResponsive,
                             color: index == selectedIndex
                                 ? widget.selectedColor
                                 : widget.unselectedColor,

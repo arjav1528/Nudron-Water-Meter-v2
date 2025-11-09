@@ -10,6 +10,7 @@ import '../../utils/pok.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
@@ -104,16 +105,17 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 .currentTheme
                 .splashColor,
             child: Container(
+              height: UIConfig.buttonHeight + 2.h,
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
                     color: CommonColors.green,
-                    width: 12.responsiveSp,
+                    width: UIConfig.spacingMedium.responsiveSp,
                   ),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -122,7 +124,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             ? "${DateFormat('MMM dd, yyyy').format(startDate!)} - ${DateFormat('MMM dd, yyyy').format(endDate!)}"
                             : "Select Month Range",
                         style: GoogleFonts.robotoMono(
-                          fontSize: ThemeNotifier.small.responsiveSp,
+                          fontSize: UIConfig.fontSizeSmallResponsive,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -136,7 +138,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                      size: 30.responsiveSp,
+                      size: UIConfig.iconSizeLarge,
                     ),
                   ],
                 ),
@@ -192,7 +194,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       final currentTheme = themeNotifier.currentTheme;
 
       DateTimeRange? currentSelectedRange = selectedRange;
-      final dialogWidth = PlatformUtils.isMobile ? 400.w : 600.0;
+      final dialogWidth = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 1.25.w : UIConfig.desktopDrawerWidthMax + UIConfig.spacingXXXLarge * 1.25;
 
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
         context: context,
@@ -205,13 +207,13 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                   child: Container(
                     width: dialogWidth,
                     constraints: BoxConstraints(
-                      maxHeight: 650.h,
+                      maxHeight: UIConfig.dialogMaxHeight + 150.h,
                     ),
                   decoration: BoxDecoration(
                     color: currentTheme.dialogBG,
                     border: Border.all(
                       color: currentTheme.gridLineColor,
-                      width: 3.responsiveSp,
+                      width: UIConfig.dialogBorderWidth,
                     ),
                   ),
                   child: SingleChildScrollView(
@@ -227,7 +229,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             borderColor: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .gridLineColor,
-                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : dialogWidth / 30,
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: dialogWidth),
                           ),
                           IconButton(
                             icon: Icon(Icons.close,
@@ -245,8 +247,8 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.topCenter,
                         child: SizedBox(
-                          width: PlatformUtils.isMobile ? 360.w : (dialogWidth - 40),
-                          height: 300.h,
+                          width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 90.w : (dialogWidth - UIConfig.spacingXXXLarge),
+                          height: UIConfig.dialogMaxHeight * 0.6,
                           child: RangeDatePicker(
                           minDate: minDate,
                           maxDate: maxDate,
@@ -258,65 +260,65 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             color: Colors.transparent,
                             border: Border.all(
                               color: CommonColors.green,
-                              width: 2,
+                              width: UIConfig.borderWidthMedium,
                             ),
-                              borderRadius: BorderRadius.circular(100.r)
+                              borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33)
                           ),
                           currentDateTextStyle: TextStyle(
                             color: CommonColors.green,
-                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
                             fontWeight: FontWeight.w600,
                       
                           ),
                       
                           enabledCellsDecoration: BoxDecoration(
                             color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(100.r),
+                            borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
                           ),
                           enabledCellsTextStyle: TextStyle(
                             color: currentTheme.basicAdvanceTextColor,
-                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
                           ),
                       
                           selectedCellsDecoration: BoxDecoration(
-                            color: CommonColors.green.withOpacity(0.15),
+                            color: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 1.5),
                           ),
                           selectedCellsTextStyle: TextStyle(
                             color: currentTheme.basicAdvanceTextColor,
-                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
                             fontWeight: FontWeight.w500,
                           ),
                       
                           singleSelectedCellDecoration: BoxDecoration(
                             color: CommonColors.green,
-                            borderRadius: BorderRadius.circular(100.r),
+                            borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
                           ),
                           singleSelectedCellTextStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
                             fontWeight: FontWeight.w600,
                           ),
                       
                           daysOfTheWeekTextStyle: TextStyle(
                             color: currentTheme.gridHeadingColor,
-                            fontSize: PlatformUtils.isMobile ? 12.responsiveSp : 14.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
                             fontWeight: FontWeight.w500,
                           ),
                       
                           disabledCellsTextStyle: TextStyle(
                             color: currentTheme.noEntriesColor,
-                            fontSize: PlatformUtils.isMobile ? 14.responsiveSp : 16.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
                           ),
                       
                           leadingDateTextStyle: GoogleFonts.robotoMono(
-                            fontSize: PlatformUtils.isMobile ? 18.responsiveSp : 20.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: 20.0),
                             fontWeight: FontWeight.w600,
                             color: currentTheme.basicAdvanceTextColor,
                           ),
                       
                           slidersColor: CommonColors.green,
-                          splashColor: CommonColors.green.withOpacity(0.1),
-                          highlightColor: CommonColors.green.withOpacity(0.2),
+                          splashColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow),
+                          highlightColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 2),
 
                           onStartDateChanged: (DateTime? date) {
                             if (date != null) {
@@ -462,15 +464,15 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       Container(
-                        width: PlatformUtils.isMobile ? 300.w : (dialogWidth - 100),
-                        padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+                        width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
+                        padding: EdgeInsets.symmetric(vertical: UIConfig.spacingXSmall * 1.5.h, horizontal: UIConfig.spacingMedium.w),
                         decoration: BoxDecoration(
                           color: currentTheme.dropDownColor,
                           border: Border.all(
                             color: currentTheme.gridLineColor,
-                            width: 1.responsiveSp,
+                            width: UIConfig.borderWidthThin,
                           ),
-                          borderRadius: BorderRadius.circular(8.r),
+                          borderRadius: UIConfig.borderRadiusCircularMedium,
                         ),
                         child: Text(
                           currentSelectedRange != null
@@ -480,7 +482,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             color: currentSelectedRange != null 
                                 ? CommonColors.green 
                                 : currentTheme.noEntriesColor,
-                            fontSize: PlatformUtils.isMobile ? 13.responsiveSp : 15.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall + 1.responsiveSp, desktopWidth: 15.0),
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
@@ -488,13 +490,13 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       Container(
-                        width: PlatformUtils.isMobile ? 300.w : (dialogWidth - 100),
-                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
+                        padding: UIConfig.paddingSymmetricVerticalSmall,
                         child: Text(
                           'Tip: Select start and end dates. Max range: 92 days.',
                           style: TextStyle(
                             color: currentTheme.gridHeadingColor,
-                            fontSize: PlatformUtils.isMobile ? 12.responsiveSp : 14.0,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
                             fontStyle: FontStyle.italic,
                           ),
                           textAlign: TextAlign.center,
@@ -502,8 +504,8 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       Container(
-                        padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
-                        width: PlatformUtils.isMobile ? 300.w : (dialogWidth - 100),
+                        padding: EdgeInsets.only(top: UIConfig.spacingMedium * 0.83.h, bottom: UIConfig.spacingLarge * 0.94.h),
+                        width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -514,7 +516,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 16.0,
+                              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: 16.0),
                               dynamicWidth: true,
                             ),
                             CustomButton(
@@ -524,7 +526,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               onPressed: () {
                                 Navigator.of(context).pop(currentSelectedRange);
                               },
-                              fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 16.0,
+                              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: 16.0),
                               dynamicWidth: true,
                             ),
                           ],

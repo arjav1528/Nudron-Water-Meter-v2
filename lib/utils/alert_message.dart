@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/main.dart';
-import 'package:watermeter2/utils/pok.dart';
+import '../constants/ui_config.dart';
 
 enum AlertType { success, error, warning, info }
 
@@ -23,13 +23,13 @@ class CustomAlert {
                 TextSpan(
                   text: '$alertName! ',
                   style: GoogleFonts.roboto(
-                      fontSize: 18.responsiveSp,
-                      fontWeight: FontWeight.bold,
+                      fontSize: UIConfig.fontSizeMediumResponsive,
+                      fontWeight: UIConfig.fontWeightBold,
                       color: color),
                 ),
                 TextSpan(
                   text: message,
-                  style: GoogleFonts.roboto(fontSize: 18.responsiveSp, color: color),
+                  style: GoogleFonts.roboto(fontSize: UIConfig.fontSizeMediumResponsive, color: color),
                 ),
               ],
             ),
@@ -37,7 +37,7 @@ class CustomAlert {
           backgroundColor: colorAccent,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: UIConfig.borderRadiusCircularLarge,
           )),
     );
   }
@@ -50,11 +50,11 @@ class CustomAlert {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.all(8.0),
-      padding: const EdgeInsets.all(16.0),
+      margin: UIConfig.paddingSmall,
+      padding: UIConfig.paddingChartHorizontal,
       decoration: BoxDecoration(
         color: colorAccent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: UIConfig.borderRadiusCircularLarge,
       ),
       child: RichText(
         text: TextSpan(
@@ -62,13 +62,13 @@ class CustomAlert {
             TextSpan(
               text: '$alertName! ',
               style: GoogleFonts.roboto(
-                  fontSize: 18.responsiveSp,
-                  fontWeight: FontWeight.bold,
+                  fontSize: UIConfig.fontSizeMediumResponsive,
+                  fontWeight: UIConfig.fontWeightBold,
                   color: color),
             ),
             TextSpan(
               text: message,
-              style: GoogleFonts.roboto(fontSize: 18.responsiveSp, color: color),
+              style: GoogleFonts.roboto(fontSize: UIConfig.fontSizeMediumResponsive, color: color),
             ),
           ],
         ),

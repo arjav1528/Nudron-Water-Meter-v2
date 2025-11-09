@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../utils/pok.dart';
 
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../services/platform_utils.dart';
 
 class CustomButton extends StatelessWidget {
@@ -34,12 +35,10 @@ class CustomButton extends StatelessWidget {
     final buttonColor = isEnabled 
         ? (isRed ? CommonColors.red : CommonColors.blue)
         : Colors.grey;
-    final chamferHeight = (44.h) / 3;
-    final drawerWidth = (MediaQuery.of(context).size.width * 2/3).clamp(400.0, 550.0);
+    final chamferHeight = UIConfig.getButtonChamferHeight();
+    final drawerWidth = UIConfig.getDesktopDrawerWidth(context);
     final calculatedFontSize = fontSize ?? ThemeNotifier.medium;
-    final finalFontSize = PlatformUtils.isMobile 
-        ? calculatedFontSize.responsiveSp 
-        : (fontSize != null ? fontSize! : drawerWidth / 30);
+    final finalFontSize = UIConfig.getResponsiveFontSize(context, calculatedFontSize, desktopWidth: drawerWidth);
 
     return ClipPath(
       clipper: ChamferClipper(chamferHeight: chamferHeight),
@@ -53,13 +52,13 @@ class CustomButton extends StatelessWidget {
             children: [
               SizedBox(
                 
-                height: 44.h,
+                height: UIConfig.buttonHeight,
 
-                width: dynamicWidth ? null : (width ?? 112.w),
+                width: dynamicWidth ? null : (width ?? UIConfig.buttonDefaultWidth),
                 child: Center(
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: dynamicWidth ? 20.w : 0),
+                        EdgeInsets.symmetric(horizontal: dynamicWidth ? UIConfig.paddingButtonHorizontal.horizontal / 1.w : 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -74,14 +73,14 @@ class CustomButton extends StatelessWidget {
                           ),
                         ),
                         if (arrowWidget) ...[
-                          SizedBox(width: 8.w),
+                          UIConfig.spacingSizedBoxSmall,
                           Icon(
                             Icons.arrow_right_alt,
 
                             color: Colors.white,
                             size: PlatformUtils.isMobile 
-                                ? (calculatedFontSize + 10).responsiveSp 
-                                : (fontSize != null ? fontSize! + 10 : drawerWidth / 30 + 10),
+                                ? (calculatedFontSize + UIConfig.buttonArrowSizeOffset).responsiveSp 
+                                : (fontSize != null ? fontSize! + UIConfig.buttonArrowSizeOffset : UIConfig.getDesktopFontSizeFromWidth(drawerWidth) + UIConfig.buttonArrowSizeOffset),
                           ),
                         ],
                       ],

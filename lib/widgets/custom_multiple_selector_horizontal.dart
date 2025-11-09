@@ -10,6 +10,7 @@ import '../../utils/pok.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../models/filterAndSummaryForProject.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/custom_dropdown.dart';
@@ -58,8 +59,7 @@ class _CustomMultipleSelectorHorizontalState
   Widget build(BuildContext context) {
     final width = PlatformUtils.isMobile 
         ? null 
-        : (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
-    final iconSize = PlatformUtils.isMobile ? 35.responsiveSp : width! / 15.7;
+        : UIConfig.getDesktopProjectWidth(context);
     
     return Material(
       color: Colors.transparent,
@@ -73,22 +73,17 @@ class _CustomMultipleSelectorHorizontalState
             child: CompositedTransformTarget(
               link: _layerLink,
               child: Container(
+                height: UIConfig.buttonHeight + 2.h,
                 decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
-                        color: CommonColors.yellow,
-                        width: 10.responsiveSp,
+                        color: UIConfig.accentColorYellow,
+                        width: UIConfig.spacingMedium.responsiveSp,
                       ),
-                      top: BorderSide(
-                        color: CommonColors.yellow,
-                        width: 3.responsiveSp,
-                      ),
-                      
                     )
                 ),
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                  padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
                   child: Container(
                     color: Colors.transparent,
                     child: Row(
@@ -114,7 +109,7 @@ class _CustomMultipleSelectorHorizontalState
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
-                          size: iconSize,
+                          size: UIConfig.iconSizeLarge,
                         )
                       ],
                     ),
@@ -189,7 +184,7 @@ class _CustomMultipleSelectorHorizontalState
             child: CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
-              offset: Offset(0, size.height + 3.responsiveSp),
+              offset: Offset(0, size.height + UIConfig.accentLineHeightResponsive),
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: Material(
@@ -197,8 +192,8 @@ class _CustomMultipleSelectorHorizontalState
                   
                   child: Container(
                     constraints: BoxConstraints(
-                      minHeight: 100.h,
-                      maxHeight: MediaQuery.of(context).size.height * 0.7,
+                      minHeight: UIConfig.spacingXXXLarge * 2.5,
+                      maxHeight: MediaQuery.of(context).size.height * UIConfig.opacityVeryHigh,
                     ),
                     decoration: BoxDecoration(
                       color: Provider.of<ThemeNotifier>(context)
@@ -207,7 +202,7 @@ class _CustomMultipleSelectorHorizontalState
                       
                       border: Border.all(
                       color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor, 
-                      width: 3.responsiveSp, 
+                      width: UIConfig.dialogBorderWidth, 
                 ),
                     ),
                     child: GestureDetector(
@@ -233,9 +228,7 @@ class _CustomMultipleSelectorHorizontalState
   List<BreadCrumbItem> _buildBreadcrumbItems(
     BuildContext context, DashboardBloc dashboardBloc, double? width) {
     final selectedFilters = dashboardBloc.currentFilters;
-    final fontSize = PlatformUtils.isMobile 
-        ? ThemeNotifier.small.responsiveSp 
-        : (width ?? 400) / 30;
+    final fontSize = UIConfig.fontSizeSmallResponsive;
 
     List<BreadCrumbItem> breadcrumbItems = [];
 
@@ -343,26 +336,26 @@ class _DropdownContentState extends State<DropdownContent> {
   @override
   Widget build(BuildContext context) {
     final projects = dashboardBloc.projects;
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = UIConfig.getDesktopProjectWidth(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: PlatformUtils.isMobile ? 12.w : 0,
+        horizontal: PlatformUtils.isMobile ? UIConfig.spacingMedium.w : 0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 12.h),
+          SizedBox(height: UIConfig.spacingMedium.h),
           for (int index = 1; index < levels.length; index++)
             Builder(
               builder: (context) {
                 var items = _getItemsForLevel(index, projects);
 
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  padding: UIConfig.paddingSymmetricVerticalSmall,
                   child: CustomDropdownButton2(
-                    width1: PlatformUtils.isMobile ? 60.w : 0.33 * width,
-                    width2: PlatformUtils.isMobile ? 273.w : 0.66 * width,
+                    width1: PlatformUtils.isMobile ? UIConfig.spacingXXXLarge * 1.5.w : width * UIConfig.desktopProjectWidthMultiplier,
+                    width2: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 87.w : width * (1 - UIConfig.desktopProjectWidthMultiplier),
                     // desktopDropdownWidth: PlatformUtils.isMobile ? null : width,
                     // desktopDropdownWidth: width - 30,
                     fieldName: levels[index],
@@ -374,7 +367,7 @@ class _DropdownContentState extends State<DropdownContent> {
                 );
               }
             ),
-          SizedBox(height: 20.h),
+          SizedBox(height: UIConfig.spacingExtraLarge),
           SizedBox(
             // width: PlatformUtils.isMobile ? null : width,
             child: Row(
@@ -386,19 +379,19 @@ class _DropdownContentState extends State<DropdownContent> {
                   isRed: true,
                   dynamicWidth: true,
                   onPressed: widget.onClose,
-                  width: 120.w, 
+                  width: UIConfig.buttonDefaultWidth + 8.w, 
                 ),
-                SizedBox(width: 160.w),
+                SizedBox(width: UIConfig.spacingXXXLarge * 4.w),
                 CustomButton(
                   text: 'CONFIRM',
                   dynamicWidth: true,
                   onPressed: _onConfirm,
-                  width: 120.w, 
+                  width: UIConfig.buttonDefaultWidth + 8.w, 
                 ),
               ],
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: UIConfig.spacingExtraLarge),
           
         ],
       ),
@@ -551,21 +544,22 @@ class _CustomMultipleSelectorHorizontal2State
   Widget build(BuildContext context) {
     final width = PlatformUtils.isMobile 
         ? null 
-        : (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+        : UIConfig.getDesktopProjectWidth(context);
 
     return Material(
       color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
       child: Container(
+        height: UIConfig.buttonHeight + 2.h,
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
-              color: CommonColors.yellow,
-              width: 12, 
+              color: UIConfig.accentColorYellow,
+              width: UIConfig.spacingMedium.responsiveSp, 
             ),
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+          padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
           child: Container(
             color: Colors.transparent,
             child: Row(
@@ -595,9 +589,7 @@ class _CustomMultipleSelectorHorizontal2State
   List<BreadCrumbItem> _buildBreadcrumbItems(
     BuildContext context, DashboardBloc dashboardBloc, double? width) {
     final selectedFilters = dashboardBloc.currentFilters;
-    final fontSize = PlatformUtils.isMobile 
-        ? ThemeNotifier.small.responsiveSp 
-        : (width ?? 400) / 30;
+    final fontSize = UIConfig.fontSizeSmallResponsive;
 
     if (selectedFilters.isEmpty) {
       return [

@@ -3,9 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/utils/pok.dart';
-
 import '../constants/theme2.dart';
+import '../constants/ui_config.dart';
 class NoEntries extends StatelessWidget {
   const NoEntries({super.key});
 
@@ -21,8 +20,8 @@ class NoEntries extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 'assets/icons/noentries.svg',
-                height: min(114,constraints.maxHeight*0.8).responsiveSp,
-                width: min(114,constraints.maxHeight*0.8).responsiveSp,
+                height: min(UIConfig.noEntriesIconSize, constraints.maxHeight * UIConfig.opacityIcon),
+                width: min(UIConfig.noEntriesIconSize, constraints.maxHeight * UIConfig.opacityIcon),
                 color:
                 Provider.of<ThemeNotifier>(context).currentTheme.noEntriesColor,
               ),

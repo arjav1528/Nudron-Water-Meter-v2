@@ -11,6 +11,7 @@ import 'package:watermeter2/utils/pok.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../widgets/billing_formula.dart';
 import '../../widgets/custom_date_range_picker.dart';
 import '../../widgets/data_grid_widget.dart';
@@ -51,11 +52,11 @@ class _SummaryTableState extends State<SummaryTable> {
         return Column(
           children: [
             Container(
-              height: 3.responsiveSp,
-              color: CommonColors.green,
+              height: UIConfig.accentLineHeightResponsive,
+              color: UIConfig.accentColorGreen,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 12.5.w, top: 8.h, bottom: 8.h),
+              padding: EdgeInsets.only(left: UIConfig.chartPaddingHorizontal, right: 12.5.w, top: UIConfig.chartPaddingVertical, bottom: UIConfig.chartPaddingVertical),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -71,10 +72,10 @@ class _SummaryTableState extends State<SummaryTable> {
                           width: 45.w,
                           decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(8.r),
+                              borderRadius: UIConfig.borderRadiusCircularMedium,
                               color: Colors.transparent,
                               border: GradientBoxBorder(
-                                width: 2.responsiveSp,
+                                width: UIConfig.chartBorderWidth,
                                 gradient: LinearGradient(
                                   colors: [
                                     CommonColors.green,
@@ -92,26 +93,26 @@ class _SummaryTableState extends State<SummaryTable> {
                               child: Icon(
                                 Icons.arrow_right_alt,
                                 color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                size: 30.responsiveSp,
+                                size: UIConfig.iconSizeLarge,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(width: 12.w),
+                      UIConfig.spacingSizedBoxMedium,
                       SvgPicture.asset('assets/icons/project.svg',
                         color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                         height: 30.h,
                       ),
-                      SizedBox(width: 8.w),
+                      UIConfig.spacingSizedBoxSmall,
                       Text(
                         currentProject.toUpperCase(),
                         style: TextStyle(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16.responsiveSp,
-                            letterSpacing: 0.5.sp
+                            fontSize: UIConfig.fontSizeSmallResponsive,
+                            letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),
                     ],
@@ -122,14 +123,14 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             ),
             Container(
-              height: 3.responsiveSp,
-              color: CommonColors.green,
+              height: UIConfig.accentLineHeightResponsive,
+              color: UIConfig.accentColorGreen,
             ),
 
             const CustomDateRangePicker(),
             Container(
-              height: 3.responsiveSp,
-              color: CommonColors.green,
+              height: UIConfig.accentLineHeightResponsive,
+              color: UIConfig.accentColorGreen,
             ),
 
             Expanded(
@@ -147,8 +148,8 @@ class _SummaryTableState extends State<SummaryTable> {
                   
                   final Map<int, int> desktopJson = {};
                       final Map<int, int> mobileJson = {
-                        0: 20.responsiveSp.toInt(),
-                        1: 20.responsiveSp.toInt(),
+                        0: UIConfig.spacingExtraLarge.responsiveSp.toInt(),
+                        1: UIConfig.spacingExtraLarge.responsiveSp.toInt(),
                       };
                       final json = PlatformUtils.isDesktop ? desktopJson : mobileJson;
 
@@ -163,7 +164,7 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             ),
             Container(
-              height: 3.h,
+              height: UIConfig.accentLineHeight,
               color: CommonColors.green,
             ),
           ],

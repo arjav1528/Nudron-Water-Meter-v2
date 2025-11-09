@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/theme2.dart';
-import '../utils/pok.dart';
+import '../constants/ui_config.dart';
 
 class SuccessAnimation extends StatefulWidget {
   final bool isFailure;
@@ -58,8 +58,8 @@ class _SuccessAnimationState extends State<SuccessAnimation>
                 child: Transform.translate(
                   offset: Offset(0, -85 - 50 * _animation.value),
                   child: Container(
-                    width: 4,
-                    height: 20,
+                    width: UIConfig.successAnimationBarWidth,
+                    height: UIConfig.successAnimationBarHeight,
                     color: widget.isFailure?Colors.redAccent.withOpacity(1 - _animation.value):
                     Colors.green.withOpacity(1 - _animation.value),
                   ),
@@ -70,7 +70,7 @@ class _SuccessAnimationState extends State<SuccessAnimation>
               child: Icon(
                 widget.isFailure?Icons.cancel:Icons.check_circle,
                 color: widget.isFailure?Colors.redAccent:CommonColors.green,
-                size: 150.responsiveSp,
+                size: UIConfig.successAnimationIconSize,
               ),
             ),
           ],

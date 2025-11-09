@@ -8,6 +8,7 @@ import 'package:watermeter2/utils/pok.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
+import '../../constants/ui_config.dart';
 import '../../utils/loader.dart';
 import 'trends_chart.dart';
 
@@ -85,7 +86,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
             ],
             title: Text('FULLSCREEN CHART',
                 style: GoogleFonts.roboto(
-                  fontSize: 24.responsiveSp,
+                  fontSize: UIConfig.fontSizeLargeResponsive + 4.responsiveSp,
                   fontWeight: FontWeight.w500,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
@@ -166,7 +167,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                   "Error loading chart data",
                   style: GoogleFonts.roboto(
                     color: CommonColors.red,
-                    fontSize: ThemeNotifier.medium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                   ),
                 ),
               );
