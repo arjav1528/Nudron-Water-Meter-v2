@@ -23,6 +23,14 @@ class UIConfig {
   static double get buttonHeight => 44.h;
   static double get bottomNavBarHeight => 69.h;
   
+  /// Header widget dimensions (for consistent alignment across dashboard tabs)
+  static double get headerWidgetHeight => 46.h; // buttonHeight + 2.h (same as buttonHeightWithOffset)
+  static EdgeInsets get headerWidgetPadding => EdgeInsets.symmetric(vertical: spacingSmall.h, horizontal: spacingMedium.w);
+  static double get headerWidgetBorderWidth => spacingMedium.responsiveSp;
+  
+  /// Header section dimensions (for back button, icon, project name row)
+  static double get headerSectionHeight => 40.h; // Fixed height for header section alignment
+  
   /// Container heights
   static double get accentLineHeight => 3.h;
   static double get accentLineHeightResponsive => 3.responsiveSp;

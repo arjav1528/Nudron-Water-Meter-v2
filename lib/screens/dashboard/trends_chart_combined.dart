@@ -55,7 +55,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                 height: UIConfig.accentLineHeight,
                 color: UIConfig.accentColorYellow,
               ),
-            Padding(
+            Container(
+              height: UIConfig.headerSectionHeight,
               padding: UIConfig.paddingChartHorizontal,
               child: Row(
                 children: [

@@ -5,7 +5,6 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../utils/pok.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../models/filterAndSummaryForProject.dart';
@@ -73,17 +72,17 @@ class _CustomMultipleSelectorHorizontalState
             child: CompositedTransformTarget(
               link: _layerLink,
               child: Container(
-                height: UIConfig.buttonHeightWithOffset,
+                height: UIConfig.headerWidgetHeight,
                 decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
                         color: UIConfig.accentColorYellow,
-                        width: UIConfig.spacingMedium.responsiveSp,
+                        width: UIConfig.headerWidgetBorderWidth,
                       ),
                     )
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
+                  padding: UIConfig.headerWidgetPadding,
                   child: Container(
                     color: Colors.transparent,
                     child: Row(
@@ -549,17 +548,17 @@ class _CustomMultipleSelectorHorizontal2State
     return Material(
       color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
       child: Container(
-        height: UIConfig.buttonHeight + 2.h,
+        height: UIConfig.headerWidgetHeight,
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
               color: UIConfig.accentColorYellow,
-              width: UIConfig.spacingMedium.responsiveSp, 
+              width: UIConfig.headerWidgetBorderWidth, 
             ),
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
+          padding: UIConfig.headerWidgetPadding,
           child: Container(
             color: Colors.transparent,
             child: Row(

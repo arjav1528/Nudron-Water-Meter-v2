@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
-import 'package:watermeter2/utils/pok.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
@@ -69,7 +67,8 @@ class _DevicesPageState extends State<DevicesPage> {
                   height: UIConfig.accentLineHeight,
                   color: UIConfig.accentColorRed,
                 ),
-                Padding(
+                Container(
+                  height: UIConfig.headerSectionHeight,
                   padding: UIConfig.paddingChartHorizontal,
                   child: Row(
                     children: [
@@ -153,18 +152,17 @@ class _DevicesPageState extends State<DevicesPage> {
                                 .currentTheme
                                 .splashColor,
                             child: Container(
-                              height: UIConfig.buttonHeightWithOffset,
+                              height: UIConfig.headerWidgetHeight,
                               decoration: BoxDecoration(
                                 border: Border(
                                   left: BorderSide(
                                     color: UIConfig.accentColorRed,
-                                    width: UIConfig.spacingMedium.responsiveSp,
+                                    width: UIConfig.headerWidgetBorderWidth,
                                   ),
                                 ),
                               ),
                               child: Padding(
-                                  padding:
-                                  EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
+                                  padding: UIConfig.headerWidgetPadding,
                                   child: Row(
                                     children: [
                                       Expanded(

@@ -55,10 +55,12 @@ class _SummaryTableState extends State<SummaryTable> {
                 height: UIConfig.accentLineHeight,
                 color: UIConfig.accentColorGreen,
               ),
-            Padding(
+            Container(
+              height: UIConfig.headerSectionHeight,
               padding: UIConfig.paddingChartHorizontal,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     children: [

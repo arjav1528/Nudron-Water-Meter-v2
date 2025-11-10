@@ -105,17 +105,17 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 .currentTheme
                 .splashColor,
             child: Container(
-              height: UIConfig.buttonHeightWithOffset,
+              height: UIConfig.headerWidgetHeight,
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
                     color: UIConfig.accentColorGreen,
-                    width: UIConfig.spacingMedium.responsiveSp,
+                    width: UIConfig.headerWidgetBorderWidth,
                   ),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
+                padding: UIConfig.headerWidgetPadding,
                 child: Row(
                   children: [
                     Expanded(
