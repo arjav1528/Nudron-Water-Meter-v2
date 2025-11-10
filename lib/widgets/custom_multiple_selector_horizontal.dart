@@ -73,7 +73,7 @@ class _CustomMultipleSelectorHorizontalState
             child: CompositedTransformTarget(
               link: _layerLink,
               child: Container(
-                height: UIConfig.buttonHeight + 2.h,
+                height: UIConfig.buttonHeightWithOffset,
                 decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(

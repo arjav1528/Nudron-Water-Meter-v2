@@ -105,11 +105,11 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 .currentTheme
                 .splashColor,
             child: Container(
-              height: UIConfig.buttonHeight + 2.h,
+              height: UIConfig.buttonHeightWithOffset,
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
-                    color: CommonColors.green,
+                    color: UIConfig.accentColorGreen,
                     width: UIConfig.spacingMedium.responsiveSp,
                   ),
                 ),
@@ -134,7 +134,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                     Icon(
                       Icons.calendar_month,
                       color: isDialogOpen
-                          ? CommonColors.green
+                          ? UIConfig.accentColorGreen
                           : Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -259,13 +259,13 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           currentDateDecoration: BoxDecoration(
                             color: Colors.transparent,
                             border: Border.all(
-                              color: CommonColors.green,
+                              color: UIConfig.accentColorGreen,
                               width: UIConfig.borderWidthMedium,
                             ),
                               borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33)
                           ),
                           currentDateTextStyle: TextStyle(
-                            color: CommonColors.green,
+                            color: UIConfig.accentColorGreen,
                             fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
                             fontWeight: FontWeight.w600,
                       
@@ -290,7 +290,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                       
                           singleSelectedCellDecoration: BoxDecoration(
-                            color: CommonColors.green,
+                            color: UIConfig.accentColorGreen,
                             borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
                           ),
                           singleSelectedCellTextStyle: TextStyle(
@@ -316,7 +316,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             color: currentTheme.basicAdvanceTextColor,
                           ),
                       
-                          slidersColor: CommonColors.green,
+                          slidersColor: UIConfig.accentColorGreen,
                           splashColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow),
                           highlightColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 2),
 
@@ -480,7 +480,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               : 'No date range selected',
                           style: TextStyle(
                             color: currentSelectedRange != null 
-                                ? CommonColors.green 
+                                ? UIConfig.accentColorGreen 
                                 : currentTheme.noEntriesColor,
                             fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall + 1.responsiveSp, desktopWidth: 15.0),
                             fontWeight: FontWeight.w600,

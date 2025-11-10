@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../models/chartModels.dart';
-import '../../utils/pok.dart';
 import '../../utils/utils.dart';
 import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
@@ -70,7 +69,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         text: TextSpan(
           text: Utils.cleanFieldName(text),
           style: GoogleFonts.robotoMono(
-            fontSize: UIConfig.fontSizeMediumResponsive,
+            fontSize: UIConfig.fontSizeTableHeaderMobile,
             fontWeight: UIConfig.fontWeightBold,
             height: UIConfig.lineHeight,
             letterSpacing: UIConfig.letterSpacing,
@@ -87,13 +86,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           text: Utils.cleanFieldName(text),
           style: isHeader
               ? GoogleFonts.robotoMono(
-                  fontSize: UIConfig.fontSizeMediumResponsive,
+                  fontSize: UIConfig.fontSizeTableHeaderMobile,
                   fontWeight: UIConfig.fontWeightBold,
                   height: UIConfig.lineHeight, 
                   letterSpacing: UIConfig.letterSpacing, 
                 )
               : GoogleFonts.robotoMono(
-                  fontSize: UIConfig.fontSizeMediumResponsive,
+                  fontSize: UIConfig.fontSizeTableMobile,
                   height: UIConfig.lineHeight,
                   fontWeight: UIConfig.fontWeightNormal,
                   letterSpacing: UIConfig.letterSpacing,
@@ -332,7 +331,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   TextStyle _getTextStyle(BuildContext context) {
     if (_cachedTextStyle == null) {
       _cachedTextStyle = GoogleFonts.robotoMono(
-        fontSize: ThemeNotifier.medium.responsiveSp,
+        fontSize: UIConfig.fontSizeTableMobile,
         height: UIConfig.lineHeight,
         fontWeight: UIConfig.fontWeightNormal,
         letterSpacing: UIConfig.letterSpacing,

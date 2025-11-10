@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/gradient_borders.dart';
@@ -52,11 +51,11 @@ class _SummaryTableState extends State<SummaryTable> {
         return Column(
           children: [
             Container(
-              height: UIConfig.accentLineHeightResponsive,
+              height: UIConfig.accentLineHeight,
               color: UIConfig.accentColorGreen,
             ),
             Padding(
-              padding: EdgeInsets.only(left: UIConfig.chartPaddingHorizontal, right: 12.5.w, top: UIConfig.chartPaddingVertical, bottom: UIConfig.chartPaddingVertical),
+              padding: UIConfig.paddingChartHorizontal,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -88,12 +87,13 @@ class _SummaryTableState extends State<SummaryTable> {
                               )
                           ),
                           child: Center(
-                            child: Transform.scale(
-                              scaleX: -1,
-                              child: Icon(
-                                Icons.arrow_right_alt,
-                                color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                size: UIConfig.backButtonIconSize,
+                            child: SvgPicture.asset(
+                              'assets/icons/back_arrow.svg',
+                              height: UIConfig.backButtonIconSize,
+                              width: UIConfig.backButtonIconSize,
+                              colorFilter: ColorFilter.mode(
+                                Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                BlendMode.srcIn,
                               ),
                             ),
                           ),
@@ -124,13 +124,13 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             ),
             Container(
-              height: UIConfig.accentLineHeightResponsive,
+              height: UIConfig.accentLineHeight,
               color: UIConfig.accentColorGreen,
             ),
 
             const CustomDateRangePicker(),
             Container(
-              height: UIConfig.accentLineHeightResponsive,
+              height: UIConfig.accentLineHeight,
               color: UIConfig.accentColorGreen,
             ),
 
@@ -166,7 +166,7 @@ class _SummaryTableState extends State<SummaryTable> {
             ),
             Container(
               height: UIConfig.accentLineHeight,
-              color: CommonColors.green,
+              color: UIConfig.accentColorGreen,
             ),
           ],
         );

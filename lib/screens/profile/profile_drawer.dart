@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
-import 'package:watermeter2/utils/pok.dart';
 import 'package:watermeter2/widgets/custom_app_bar.dart';
 import '../../api/auth_service.dart';
 import '../../bloc/auth_bloc.dart';
@@ -716,7 +715,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                     "Delete your account",
                                                     style: GoogleFonts.roboto(
                                                       fontSize:
-                                                          PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : width / 30,
+                                                          UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeProfileMobile, desktopWidth: width),
                                                       color: Provider.of<ThemeNotifier>(
                                                               context)
                                                           .currentTheme
@@ -966,7 +965,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 smallerHeight: 25,
                 verticalGap: 4.8,
                 leftGap: 3.6,
-                fontSize: PlatformUtils.isMobile ? 12 : 11.5,
+                fontSize: UIConfig.fontSizeProfileToggleMobile,
                 tabColor: CommonColors.red,
                 tabColor2: const Color(0xFF00BC8A),
               ),
@@ -1214,7 +1213,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   smallerHeight: 21,
                   verticalGap: 4.8,
                   leftGap: 3.6,
-                  fontSize: PlatformUtils.isMobile ? 12 : 11.5,
+                  fontSize: UIConfig.fontSizeProfileToggleMobile,
                   tabColor: CommonColors.red,
                   tabColor2: const Color(0xFF00BC8A),
                 ),

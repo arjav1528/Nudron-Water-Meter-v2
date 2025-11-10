@@ -65,7 +65,7 @@ class _DevicesPageState extends State<DevicesPage> {
             body: Column(
               children: [
                 Container(
-                  height: UIConfig.accentLineHeightResponsive,
+                  height: UIConfig.accentLineHeight,
                   color: UIConfig.accentColorRed,
                 ),
                 Padding(
@@ -97,12 +97,13 @@ class _DevicesPageState extends State<DevicesPage> {
                               )
                           ),
                           child: Center(
-                            child: Transform.scale(
-                              scaleX: -1,
-                              child: Icon(
-                                Icons.arrow_right_alt,
-                                color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                size: UIConfig.backButtonIconSize,
+                            child: SvgPicture.asset(
+                              'assets/icons/back_arrow.svg',
+                              height: UIConfig.backButtonIconSize,
+                              width: UIConfig.backButtonIconSize,
+                              colorFilter: ColorFilter.mode(
+                                Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                BlendMode.srcIn,
                               ),
                             ),
                           ),
@@ -130,7 +131,7 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
             
                 Container(
-                  height: UIConfig.accentLineHeightResponsive,
+                  height: UIConfig.accentLineHeight,
                   color: UIConfig.accentColorRed,
                 ),
                 Row(
@@ -139,7 +140,7 @@ class _DevicesPageState extends State<DevicesPage> {
                     
                     Expanded(
                       child: Material(
-                        color: Colors.transparent,
+                        color: UIConfig.colorTransparent,
                         child: Ink(
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
@@ -151,11 +152,11 @@ class _DevicesPageState extends State<DevicesPage> {
                                 .currentTheme
                                 .splashColor,
                             child: Container(
-                              height: UIConfig.buttonHeight + 2.h,
+                              height: UIConfig.buttonHeightWithOffset,
                               decoration: BoxDecoration(
                                 border: Border(
                                   left: BorderSide(
-                                    color: CommonColors.red,
+                                    color: UIConfig.accentColorRed,
                                     width: UIConfig.spacingMedium.responsiveSp,
                                   ),
                                 ),
@@ -163,59 +164,52 @@ class _DevicesPageState extends State<DevicesPage> {
                               child: Padding(
                                   padding:
                                   EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
-                                  child: TextField(
-                                    
-                                    controller: _searchController,
-                                    keyboardType: TextInputType.text,
-                                    inputFormatters: [
-                                      UpperCaseTextFormatter(),
-                                    ],
-                                    style: GoogleFonts.robotoMono(
-                                      fontSize: UIConfig.fontSizeSmallResponsive,
-                                      color: Provider.of<ThemeNotifier>(context)
-                                          .currentTheme
-                                          .basicAdvanceTextColor,
-                                    ),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.transparent,
-                                      hintText:
-                                      'SEARCH DEVICE LABEL OR SERIAL NO.',
-                                      hintStyle: GoogleFonts.robotoMono(
-                                        fontSize: UIConfig.fontSizeSmallResponsive,
-                                        color: Provider.of<ThemeNotifier>(context)
-                                            .currentTheme
-                                            .noEntriesColor,
-                                      ),
-                                      suffixIcon: Padding(
-                                        padding: EdgeInsets.only(
-                                            right:
-                                            UIConfig.spacingSmall.w), 
-                                        child: Icon(
-                                          Icons.search,
-                                          color:
-                                          Provider.of<ThemeNotifier>(context)
-                                              .currentTheme
-                                              .basicAdvanceTextColor,
-                                          size: UIConfig.iconSizeLarge,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          controller: _searchController,
+                                          keyboardType: TextInputType.text,
+                                          inputFormatters: [
+                                            UpperCaseTextFormatter(),
+                                          ],
+                                          style: GoogleFonts.robotoMono(
+                                            fontSize: UIConfig.fontSizeSmallResponsive,
+                                            color: Provider.of<ThemeNotifier>(context)
+                                                .currentTheme
+                                                .basicAdvanceTextColor,
+                                          ),
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: UIConfig.colorTransparent,
+                                            hintText:
+                                            'SEARCH DEVICE LABEL OR SERIAL NO.',
+                                            hintStyle: GoogleFonts.robotoMono(
+                                              fontSize: UIConfig.fontSizeSmallResponsive,
+                                              color: Provider.of<ThemeNotifier>(context)
+                                                  .currentTheme
+                                                  .noEntriesColor,
+                                            ),
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.zero,
+                                            isCollapsed: true,
+                                          ),
+                                          textAlignVertical: TextAlignVertical.center,
+                                          onChanged: (query) {
+                                            dashboardBloc
+                                                .filterDevices(_searchController.text);
+                                          },
                                         ),
                                       ),
-                                      border: InputBorder
-                                          .none, 
-            
-                                      contentPadding: EdgeInsets.symmetric(
-                                        vertical: 0,
-                                        
+                                      Icon(
+                                        Icons.search,
+                                        color:
+                                        Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .basicAdvanceTextColor,
+                                        size: UIConfig.iconSizeLarge,
                                       ),
-                                      isCollapsed:
-                                      true, 
-                                    ),
-                                    textAlignVertical: TextAlignVertical
-                                        .center, 
-                                    onChanged: (query) {
-                                      dashboardBloc
-                                          .filterDevices(_searchController.text);
-                                    },
+                                    ],
                                   )),
                             ),
                           ),
@@ -226,7 +220,7 @@ class _DevicesPageState extends State<DevicesPage> {
                   ],
                 ),
                 Container(
-                  height: UIConfig.accentLineHeightResponsive,
+                  height: UIConfig.accentLineHeight,
                   color: UIConfig.accentColorRed,
                 ),
                 
@@ -260,7 +254,7 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
                 Container(
                   height: UIConfig.accentLineHeight,
-                  color: CommonColors.red,
+                  color: UIConfig.accentColorRed,
                 ),
               ],
             ),

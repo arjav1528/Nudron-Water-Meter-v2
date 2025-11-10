@@ -170,6 +170,14 @@ class UIConfig {
   static double get fontSizeMediumResponsive => 18.responsiveSp;
   static double get fontSizeLargeResponsive => 20.responsiveSp;
   
+  /// Mobile-specific table font sizes (larger for better readability)
+  static double get fontSizeTableMobile => PlatformUtils.isMobile ? 20.responsiveSp : 18.responsiveSp;
+  static double get fontSizeTableHeaderMobile => PlatformUtils.isMobile ? 20.responsiveSp : 18.responsiveSp;
+  
+  /// Profile-specific font sizes (larger for better readability on mobile)
+  static double get fontSizeProfileMobile => PlatformUtils.isMobile ? 20.responsiveSp : 18.responsiveSp;
+  static double get fontSizeProfileToggleMobile => PlatformUtils.isMobile ? 12.responsiveSp : 11.5.responsiveSp;
+  
   /// Desktop font size calculation
   static double getDesktopFontSize(double width) => width / desktopFontSizeDivisor;
   
@@ -256,6 +264,7 @@ class UIConfig {
   static double get buttonDefaultWidth => 112.w;
   static double get buttonSplashRadius => 20.responsiveSp;
   static double get buttonArrowSizeOffset => 10;
+  static double get buttonHeightWithOffset => buttonHeight + 2.h;
   
   // ==================== DROPDOWN VALUES ====================
   

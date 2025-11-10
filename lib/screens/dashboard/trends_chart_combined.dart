@@ -49,7 +49,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
           : "NO PROJECT SELECTED";
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               height: UIConfig.accentLineHeight,
@@ -84,12 +83,13 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                         )
                       ),
                       child: Center(
-                        child: Transform.scale(
-                          scaleX: -1,
-                          child: Icon(
-                            Icons.arrow_right_alt,
-                            color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                            size: UIConfig.backButtonIconSize,
+                        child: SvgPicture.asset(
+                          'assets/icons/back_arrow.svg',
+                          height: UIConfig.backButtonIconSize,
+                          width: UIConfig.backButtonIconSize,
+                          colorFilter: ColorFilter.mode(
+                            Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                            BlendMode.srcIn,
                           ),
                         ),
                       ),
@@ -116,12 +116,12 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               ),
             ),
             Container(
-              height: UIConfig.accentLineHeightResponsive,
+              height: UIConfig.accentLineHeight,
               color: UIConfig.accentColorYellow,
             ),
             CustomMultipleSelectorHorizontal(),
             Container(
-              height: UIConfig.accentLineHeightResponsive,
+              height: UIConfig.accentLineHeight,
               color: UIConfig.accentColorYellow,
             ),
             Expanded(
@@ -139,8 +139,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               }),
             ),
             Container(
-              height: UIConfig.accentLineHeightResponsive,
-              color: CommonColors.yellow,
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorYellow,
             ),
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
