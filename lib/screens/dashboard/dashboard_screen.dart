@@ -477,128 +477,116 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   }
 
   Widget _buildMobileLayout(BuildContext context, List<Widget> contentPages) {
-    final mediaQuery = MediaQuery.of(context);
-    final bottomPadding = mediaQuery.padding.bottom;
-    
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SafeArea(
-              top: false,
-              child: BottomAppBar(
-                key: UniqueKey(),
-                height: UIConfig.bottomNavBarHeight,
-                padding: EdgeInsets.all(0.w),
-                color: Colors.black,
-                child: BlocBuilder<DashboardBloc, DashboardState>(
-            buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
-            builder: (context, state) {
-              final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-              int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
-      
-              List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
-      
-              return Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  visibleTabs.length,
-                  (index) {
-                    
-                    final safeIndex = index.clamp(0, bottomNavTabIcons.length - 1);
-                    return GestureDetector(
-                      child: Container(
-                        color: Colors.black,
-                        width: MediaQuery.of(context).size.width / visibleTabs.length,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/${bottomNavTabIcons[safeIndex]}.svg",
+    return Scaffold(
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: BottomAppBar(
+          key: UniqueKey(),
+          height: UIConfig.bottomNavBarHeight,
+          padding: EdgeInsets.all(0.w),
+          color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
+          child: BlocBuilder<DashboardBloc, DashboardState>(
+          buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
+          builder: (context, state) {
+            final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+            int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
+
+            List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
+
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                visibleTabs.length,
+                (index) {
+                  
+                  final safeIndex = index.clamp(0, bottomNavTabIcons.length - 1);
+                  return GestureDetector(
+                    child: Container(
+                      color: Provider.of<ThemeNotifier>(context)
+                          .currentTheme
+                          .bottomNavColor,
+                      width: MediaQuery.of(context).size.width / visibleTabs.length,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/${bottomNavTabIcons[safeIndex]}.svg",
+                            color: currentPositionOfBottomNav == index
+                                ? selectedColor[safeIndex % selectedColor.length]
+                                : Provider.of<ThemeNotifier>(context)
+                                    .currentTheme
+                                    .inactiveBottomNavbarIconColor,
+                            width: UIConfig.iconSizeLarge + 15.responsiveSp,
+                            height: UIConfig.iconSizeLarge + 15.responsiveSp,
+                          ),
+                          Text(
+                            visibleTabs[index].toUpperCase(),
+                            style: GoogleFonts.robotoMono(
                               color: currentPositionOfBottomNav == index
                                   ? selectedColor[safeIndex % selectedColor.length]
                                   : Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .inactiveBottomNavbarIconColor,
-                              width: UIConfig.iconSizeLarge + 15.responsiveSp,
-                              height: UIConfig.iconSizeLarge + 15.responsiveSp,
+                              fontSize: 16.responsiveSp,
+                              fontWeight: FontWeight.w500,
                             ),
-                            Text(
-                              visibleTabs[index].toUpperCase(),
-                              style: GoogleFonts.robotoMono(
-                                color: currentPositionOfBottomNav == index
-                                    ? selectedColor[safeIndex % selectedColor.length]
-                                    : Provider.of<ThemeNotifier>(context)
-                                        .currentTheme
-                                        .inactiveBottomNavbarIconColor,
-                                fontSize: 16.responsiveSp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      onTap: () {
-                        dashboardBloc.switchBottomNavPos(index);
-                      },
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+                    ),
+                    onTap: () {
+                      dashboardBloc.switchBottomNavPos(index);
+                    },
+                  );
+                },
               ),
-            ),
-            Container(
-              height: bottomPadding,
-              color: Colors.black,
-            ),
-          ],
-        ),
-        drawerEnableOpenDragGesture: false,
-        key: _scaffoldKey,
-        backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-        drawerEdgeDragWidth: 0.0,
-        resizeToAvoidBottomInset: true,
-        appBar: CustomAppBar(
-          choiceAction: (value) {
-            showProfileDrawer(context);
+            );
           },
         ),
-        body: SafeArea(
-          child: Row(
-          children: [
-            LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return SizedBox(
-                height: constraints.maxHeight,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                      height: constraints.maxHeight,
-                      child: BlocBuilder<DashboardBloc, DashboardState>(
-                          buildWhen: (previous, current) =>
-                              current is ChangeDashBoardNav,
-                          builder: (context, state) {
-                            int bottomNavPos =
-                                BlocProvider.of<DashboardBloc>(context)
-                                    .bottomNavPos;
-                            return IndexedStack(
-                              index: bottomNavPos,
-                              children: contentPages,
-                            );
-                          }),
-                    ),
-                  ],
-                ),
-              );
-            })
-          ],
-          ),
+        ),
+      ),
+      drawerEnableOpenDragGesture: false,
+      key: _scaffoldKey,
+      backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+      drawerEdgeDragWidth: 0.0,
+      resizeToAvoidBottomInset: true,
+      appBar: CustomAppBar(
+        choiceAction: (value) {
+          showProfileDrawer(context);
+        },
+      ),
+      body: SafeArea(
+        child: Row(
+        children: [
+          LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            return SizedBox(
+              height: constraints.maxHeight,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                    height: constraints.maxHeight,
+                    child: BlocBuilder<DashboardBloc, DashboardState>(
+                        buildWhen: (previous, current) =>
+                            current is ChangeDashBoardNav,
+                        builder: (context, state) {
+                          int bottomNavPos =
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .bottomNavPos;
+                          return IndexedStack(
+                            index: bottomNavPos,
+                            children: contentPages,
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            );
+          })
+        ],
         ),
       ),
     );
