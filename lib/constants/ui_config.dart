@@ -33,6 +33,7 @@ class UIConfig {
   static double get iconContainerWidth => 30.w;
   static double get projectIconHeight => 30.h;
   static double get projectIconWidth => 30.w;
+  static double get appBarHeight => 50.h;
   static double get loaderSize => 75.responsiveSp;
   static double get profileImageSize => 75.responsiveSp;
   static double get noEntriesIconSize => 114.responsiveSp;
@@ -126,6 +127,10 @@ class UIConfig {
   static double get spacingXXLarge => 24.h;
   static double get spacingXXXLarge => 40.h;
   static double get spacingHuge => 470.h;
+  static double get spacingAppBarLogo => 10.w;
+  static double get spacingLoginTitle => 10.h;
+  static double get spacingForgotPasswordTop => 25.h;
+  static double get spacingForgotPasswordVertical => 5.h;
   
   /// SizedBox spacing
   static SizedBox get spacingSizedBoxXSmall => SizedBox(width: 4.w);
@@ -155,6 +160,7 @@ class UIConfig {
     topLeft: Radius.circular(10.r),
     bottomLeft: Radius.circular(10.r),
   );
+  static BorderRadius get borderRadiusAppBarIcon => BorderRadius.circular(50.r);
   
   // ==================== FONT SIZES ====================
   
@@ -163,13 +169,13 @@ class UIConfig {
   static double get fontSizeSmall => 16;
   static double get fontSizeMedium => 18;
   static double get fontSizeLarge => 20;
-  
+  static double get fontSizeExtraLarge => 24;
   /// Responsive font sizes
   static double get fontSizeExtraSmallResponsive => 14.responsiveSp;
   static double get fontSizeSmallResponsive => 16.responsiveSp;
   static double get fontSizeMediumResponsive => 18.responsiveSp;
   static double get fontSizeLargeResponsive => 20.responsiveSp;
-  
+  static double get fontSizeExtraLargeResponsive => 24.responsiveSp;
   /// Mobile-specific table font sizes (larger for better readability)
   static double get fontSizeTableMobile => PlatformUtils.isMobile ? 20.responsiveSp : 18.responsiveSp;
   static double get fontSizeTableHeaderMobile => PlatformUtils.isMobile ? 20.responsiveSp : 18.responsiveSp;
@@ -196,6 +202,8 @@ class UIConfig {
   static double get iconSizePrefix => 16.69.h;
   static double get iconSizePrefixWidth => 21.w;
   static double get iconSizeButtonArrow => 10; // Additional size for button arrow
+  static double get iconSizeAppBarLogo => 34.responsiveSp;
+  static double get iconSizeAppBarIcon => 28.responsiveSp;
   
   // ==================== TEXT STYLING ====================
   
@@ -265,6 +273,7 @@ class UIConfig {
   static double get buttonSplashRadius => 20.responsiveSp;
   static double get buttonArrowSizeOffset => 10;
   static double get buttonHeightWithOffset => buttonHeight + 2.h;
+  static double get buttonWidthForgotPassword => 130.w;
   
   // ==================== DROPDOWN VALUES ====================
   
@@ -277,6 +286,7 @@ class UIConfig {
   static double get dropdownPaddingRight => 8.w;
   static double get dropdownPaddingLeftSmall => 8.w;
   static double get dropdownPaddingLeftMedium => 15.w;
+  static double get dropdownCountryPickerHeight => 30.78.h;
   
   // ==================== TABLE/GRID VALUES ====================
   
@@ -302,6 +312,7 @@ class UIConfig {
   static double get dialogBorderWidth => 3.responsiveSp;
   static double get dialogElevation => 0;
   static double get dialogOverlayElevation => 4;
+  static double get dialogWidthAutoLogin => 350.w;
   
   // ==================== BLUR VALUES ====================
   

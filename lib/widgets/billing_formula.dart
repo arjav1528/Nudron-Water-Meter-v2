@@ -91,7 +91,7 @@ class _BillingFormulaState extends State<BillingFormula> {
                 : Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .basicAdvanceTextColor,
-            height: UIConfig.iconSizeLarge,
+            height: UIConfig.iconSizeExtraLarge,
           ),
         ),
       ),

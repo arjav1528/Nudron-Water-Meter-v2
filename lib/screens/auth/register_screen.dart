@@ -76,7 +76,8 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: [
               Padding(
-                  padding: UIConfig.paddingDialogTop,
+                  padding:
+                      EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h),
                   child: CustomTextField(
                     key: UniqueKey(),
                     controller: nameController,
@@ -85,7 +86,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.name,
                   )),
               Padding(
-                  padding: UIConfig.paddingDialogTop,
+                  padding:
+                      EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h),
                   child: CustomTextField(
                     controller: emailController,
                     key: UniqueKey(),
@@ -94,7 +96,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                   )),
               Padding(
-                  padding: UIConfig.paddingDialogTop,
+                  padding:
+                      EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h),
                   child: CustomTextField(
                     controller: _phoneController,
                     key: UniqueKey(),
@@ -105,19 +108,25 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                     prefixIcon: Container(
                       
-                      padding: UIConfig.paddingFromLTRBWithClamp,
+                      padding: EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
                       decoration: BoxDecoration(
-                          borderRadius: UIConfig.borderRadiusTopLeft,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.r),
+                            bottomLeft: Radius.circular(10.r),
+                          ),
                           color: Colors.transparent),
                       
                       child: CountryCodePicker2(
                         dropDownColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .textFieldBGProfile,
-                        height: UIConfig.dropdownItemHeight * 0.77,
+                        height: UIConfig.dropdownCountryPickerHeight,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
-                          borderRadius: UIConfig.borderRadiusTopLeft,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.r),
+                            bottomLeft: Radius.circular(10.r),
+                          ),
                         ),
                         onChanged: (CountryCode countryCode) {
                           selectedCountryCode = countryCode;
@@ -133,13 +142,12 @@ class _RegisterPageState extends State<RegisterPage> {
               Padding(
                   padding: EdgeInsets.only(left: 35.w, right: 35.w),
                   child: CustomTextField(
-                  
                     controller: activationCodeController,
                     key: UniqueKey(),
 
                     hintText: 'Enter Activation Code',
                     prefixIcon: Padding(
-                        padding: UIConfig.paddingTextFieldHorizontal,
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Icon(
                           Icons.key,
                           color: Provider.of<ThemeNotifier>(context)
