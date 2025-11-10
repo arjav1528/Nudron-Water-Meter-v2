@@ -48,12 +48,13 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
           ? dashboardBloc.currentFilters.first.toUpperCase()
           : "NO PROJECT SELECTED";
 
-        return Column(
-          children: [
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorYellow,
-            ),
+        return SafeArea(
+          child: Column(
+            children: [
+              Container(
+                height: UIConfig.accentLineHeight,
+                color: UIConfig.accentColorYellow,
+              ),
             Padding(
               padding: UIConfig.paddingChartHorizontal,
               child: Row(
@@ -161,6 +162,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               color: UIConfig.accentColorYellow,
             ),
           ],
+          ),
         );
       },
     );

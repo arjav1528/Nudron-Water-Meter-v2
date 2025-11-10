@@ -298,7 +298,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           showProfileDrawer(context);
         },
       ),
-      body: GestureDetector(
+      body: SafeArea(
+        child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
@@ -393,6 +394,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
             ],
           ),
         ),
+      ),
     );
   }
 }

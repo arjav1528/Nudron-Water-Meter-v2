@@ -55,7 +55,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: BlocBuilder<DashboardBloc, DashboardState>(
+      body: SafeArea(
+        child: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           
           if ((current is DashboardPageInitial) ||
@@ -112,6 +113,7 @@ class _DashboardPageState extends State<DashboardPage> {
           
           return const CustomLoader();
         }),
+      ),
     );
   }
 }
@@ -428,7 +430,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             showProfileDrawer(context);
           },
         ),
-        body: Row(
+        body: SafeArea(
+          child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BlocBuilder<DashboardBloc, DashboardState>(
@@ -468,18 +471,21 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             ),
           ],
         ),
+          ),
       ),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context, List<Widget> contentPages) {
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        key: UniqueKey(),
-        height: UIConfig.bottomNavBarHeight,
-        padding: EdgeInsets.all(0.w),
-        color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
-        child: BlocBuilder<DashboardBloc, DashboardState>(
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: BottomAppBar(
+          key: UniqueKey(),
+          height: UIConfig.bottomNavBarHeight,
+          padding: EdgeInsets.all(0.w),
+          color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
+          child: BlocBuilder<DashboardBloc, DashboardState>(
           buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
           builder: (context, state) {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
@@ -538,6 +544,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             );
           },
         ),
+        ),
       ),
       drawerEnableOpenDragGesture: false,
       key: _scaffoldKey,
@@ -549,7 +556,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           showProfileDrawer(context);
         },
       ),
-      body: Row(
+      body: SafeArea(
+        child: Row(
         children: [
           LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -579,6 +587,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             );
           })
         ],
+        ),
       ),
     );
   }

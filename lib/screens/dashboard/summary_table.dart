@@ -48,12 +48,13 @@ class _SummaryTableState extends State<SummaryTable> {
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
 
-        return Column(
-          children: [
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorGreen,
-            ),
+        return SafeArea(
+          child: Column(
+            children: [
+              Container(
+                height: UIConfig.accentLineHeight,
+                color: UIConfig.accentColorGreen,
+              ),
             Padding(
               padding: UIConfig.paddingChartHorizontal,
               child: Row(
@@ -169,6 +170,7 @@ class _SummaryTableState extends State<SummaryTable> {
               color: UIConfig.accentColorGreen,
             ),
           ],
+          ),
         );
 
       },

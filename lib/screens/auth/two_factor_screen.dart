@@ -60,14 +60,15 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
         backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         appBar: CustomAppBar(choiceAction: null),
-        body: Column(
-          children: [
-            Container(
-              height: 3.h,
-              color: CommonColors.blue,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                height: 3.h,
+                color: CommonColors.blue,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
                 child: Center(
                   child: Column(
                     children: [
@@ -225,11 +226,12 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                 ),
               ),
             ),
-            Container(
-              height: 3.h,
-              color: CommonColors.blue,
-            ),
-          ],
+              Container(
+                height: 3.h,
+                color: CommonColors.blue,
+              ),
+            ],
+          ),
         ),
       ),
     );

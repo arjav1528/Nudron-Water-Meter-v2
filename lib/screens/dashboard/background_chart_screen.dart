@@ -102,7 +102,8 @@ class _BackgroundChartState extends State<BackgroundChart> {
             ),
           ),
         ),
-        body: BlocBuilder<DashboardBloc, DashboardState>(
+        body: SafeArea(
+          child: BlocBuilder<DashboardBloc, DashboardState>(
           buildWhen: (previous, current) {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
             final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
@@ -176,6 +177,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
             return CustomLoader();
           },
         ),
+          ),
       ),
     );
   }

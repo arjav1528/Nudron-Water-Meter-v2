@@ -258,7 +258,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 ),
           backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
           resizeToAvoidBottomInset: false,
-          body: BlocBuilder<DashboardBloc, DashboardState>(
+          body: SafeArea(
+            child: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           if (current is UserInfoUpdate || current is UserInfoUpdate2) {
             initControllers();
@@ -819,6 +820,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             );
           });
         }),
+            ),
         ),
       ),
     );

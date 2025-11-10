@@ -164,7 +164,7 @@ class _MyAppState extends State<MyApp> {
                                         
                                         if (dashboardState is DashboardPageInitial) {
                                           return const Scaffold(
-                                            body: Center(child: CustomLoader()),
+                                            body: SafeArea(child: Center(child: CustomLoader())),
                                           );
                                         }
                                         
@@ -173,7 +173,7 @@ class _MyAppState extends State<MyApp> {
                                             return const ProjectSelectionPage();
                                           }
                                           return const Scaffold(
-                                            body: Center(child: CustomLoader()),
+                                            body: SafeArea(child: Center(child: CustomLoader())),
                                           );
                                         }
                                         
@@ -183,14 +183,14 @@ class _MyAppState extends State<MyApp> {
                                           return const ProjectSelectionPage();
                                         } else {
                                           return const Scaffold(
-                                            body: Center(child: CustomLoader()),
+                                            body: SafeArea(child: Center(child: CustomLoader())),
                                           );
                                         }
                                       },
                                     );
                                   } else if (authState is AuthInitial || authState is AuthLoading) {
                                     return const Scaffold(
-                                      body: Center(child: CustomLoader()),
+                                      body: SafeArea(child: Center(child: CustomLoader())),
                                     );
                                   } else {
                                     return const LoginPage();
@@ -256,8 +256,10 @@ class _MyAppState extends State<MyApp> {
                           
                           if (dashboardState is DashboardPageInitial) {
                             return const Scaffold(
-                              body: Center(
-                                child: CustomLoader(),
+                              body: SafeArea(
+                                child: Center(
+                                  child: CustomLoader(),
+                                ),
                               ),
                             );
                           }
@@ -269,8 +271,10 @@ class _MyAppState extends State<MyApp> {
                             }
                             
                             return const Scaffold(
-                              body: Center(
-                                child: CustomLoader(),
+                              body: SafeArea(
+                                child: Center(
+                                  child: CustomLoader(),
+                                ),
                               ),
                             );
                           }
@@ -284,8 +288,10 @@ class _MyAppState extends State<MyApp> {
                           } else {
                             
                             return const Scaffold(
-                              body: Center(
-                                child: CustomLoader(),
+                              body: SafeArea(
+                                child: Center(
+                                  child: CustomLoader(),
+                                ),
                               ),
                             );
                           }
@@ -294,15 +300,19 @@ class _MyAppState extends State<MyApp> {
                     } else if (authState is AuthInitial) {
                       
                       return const Scaffold(
-                        body: Center(
-                          child: CustomLoader(),
+                        body: SafeArea(
+                          child: Center(
+                            child: CustomLoader(),
+                          ),
                         ),
                       );
                     } else if (authState is AuthLoading) {
                       
                       return const Scaffold(
-                        body: Center(
-                          child: CustomLoader(),
+                        body: SafeArea(
+                          child: Center(
+                            child: CustomLoader(),
+                          ),
                         ),
                       );
                     } else {

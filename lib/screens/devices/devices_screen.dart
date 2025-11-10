@@ -62,7 +62,8 @@ class _DevicesPageState extends State<DevicesPage> {
             backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
             
-            body: Column(
+            body: SafeArea(
+              child: Column(
               children: [
                 Container(
                   height: UIConfig.accentLineHeight,
@@ -258,6 +259,7 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
               ],
             ),
+              ),
           ),
         );
       },
