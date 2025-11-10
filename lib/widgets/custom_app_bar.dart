@@ -39,7 +39,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               
               Container(
                 height: topPadding,
-                color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                color: Colors.black,
               ),
               Container(
                 height: UIConfig.appBarHeight,
