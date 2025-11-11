@@ -8,4 +8,5 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.10+1
   # If there are any other dependencies the package uses, include them here.

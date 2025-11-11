@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/utils/pok.dart';
@@ -38,15 +39,15 @@ class _BackgroundChartState extends State<BackgroundChart> {
             backgroundColor:
                 Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
             leading: IconButton(
-              icon: Transform.scale(
-                scaleX: -1,
-                child: Icon(
-                  Icons.arrow_right_alt,
-                  color: Provider.of<ThemeNotifier>(context)
-                    .currentTheme
-                    .basicAdvanceTextColor,
-                )
-              ),
+              icon: SvgPicture.asset(
+                              'assets/icons/back_arrow.svg',
+                              height: UIConfig.backButtonIconSize,
+                              width: UIConfig.backButtonIconSize,
+                              colorFilter: ColorFilter.mode(
+                                Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
               onPressed: () {
                 BlocProvider.of<DashboardBloc>(context).changeScreen();
               },

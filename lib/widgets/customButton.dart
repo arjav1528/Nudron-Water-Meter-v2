@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../utils/pok.dart';
 
@@ -74,14 +75,19 @@ class CustomButton extends StatelessWidget {
                         ),
                         if (arrowWidget) ...[
                           UIConfig.spacingSizedBoxSmall,
-                          Icon(
-                            Icons.arrow_right_alt,
-
-                            color: Colors.white,
-                            size: PlatformUtils.isMobile 
-                                ? (calculatedFontSize + UIConfig.buttonArrowSizeOffset).responsiveSp 
-                                : (fontSize != null ? fontSize! + UIConfig.buttonArrowSizeOffset : UIConfig.getDesktopFontSizeFromWidth(drawerWidth) + UIConfig.buttonArrowSizeOffset),
+                          Transform.scale(
+                            scaleX: -1,
+                            child: SvgPicture.asset(
+                              'assets/icons/back_arrow.svg',
+                              height: UIConfig.backButtonIconSize,
+                              width: UIConfig.backButtonIconSize,
+                              colorFilter: ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ),
+
                         ],
                       ],
                     ),

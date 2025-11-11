@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomDropdownButton2 extends StatelessWidget {
   final String hint;
@@ -96,7 +97,15 @@ class CustomDropdownButton2 extends StatelessWidget {
             .toList(),
         onChanged: onChanged,
         selectedItemBuilder: selectedItemBuilder,
-        icon: icon ?? const Icon(Icons.arrow_right_alt),
+        icon: icon ?? SvgPicture.asset(
+          'assets/icons/back_arrow.svg',
+          height: 25,
+          width: 25,
+          colorFilter: ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
+        ),
         iconSize: iconSize ?? 12,
         iconEnabledColor: iconEnabledColor,
         iconDisabledColor: iconDisabledColor,

@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
@@ -303,16 +305,45 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: Transform.scale(
-                                      scaleX: -1,
-                                      child: Icon(
-                                        Icons.arrow_right_alt,
-                                        color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                      height: UIConfig.backButtonHeight,
+                                      width: UIConfig.backButtonWidth,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius: UIConfig.borderRadiusCircularMedium,
+                                          color: UIConfig.colorTransparent,
+                                          border: GradientBoxBorder(
+                                            width: UIConfig.chartBorderWidth,
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                CommonColors.blue,
+                                                CommonColors.blue.withOpacity(UIConfig.opacityVeryHigh),
+                                                CommonColors.blue2,
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                          )
+                                      ),
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          'assets/icons/back_arrow.svg',
+                                          height: UIConfig.backButtonIconSize,
+                                          width: UIConfig.backButtonIconSize,
+                                          colorFilter: ColorFilter.mode(
+                                            Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    onPressed: () => Navigator.of(context).pop(),
                                   ),
+                                  SizedBox(width: UIConfig.spacingSizedBoxLarge.width),
+                                  
                                   Text(
                                     "PROFILE",
                                     style: GoogleFonts.robotoMono(

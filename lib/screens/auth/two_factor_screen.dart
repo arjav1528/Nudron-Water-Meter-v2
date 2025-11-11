@@ -80,14 +80,15 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: Transform.scale(
-                                scaleX: -1,
-                                child: Icon(
-                                  Icons.arrow_right_alt,
-                                  color: Provider.of<ThemeNotifier>(context)
-                                      .currentTheme
-                                      .basicAdvanceTextColor),
-                                ),
+                              icon: SvgPicture.asset(
+                              'assets/icons/back_arrow.svg',
+                              height: UIConfig.backButtonIconSize,
+                              width: UIConfig.backButtonIconSize,
+                              colorFilter: ColorFilter.mode(
+                                Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                               
                               onPressed: () => Navigator.of(context).pop(),
                             ),

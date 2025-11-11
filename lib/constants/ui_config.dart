@@ -144,7 +144,7 @@ class UIConfig {
   static SizedBox get spacingSizedBoxXSmall => SizedBox(width: 4.w);
   static SizedBox get spacingSizedBoxSmall => SizedBox(width: 8.w);
   static SizedBox get spacingSizedBoxMedium => SizedBox(width: 12.w);
-  static SizedBox get spacingSizedBoxLarge => SizedBox(height: 15.h);
+  static SizedBox get spacingSizedBoxLarge => SizedBox(width: 15.w);
   static SizedBox get spacingSizedBoxExtraLarge => SizedBox(height: 20.h);
   static SizedBox get spacingSizedBoxXXLarge => SizedBox(height: 24.h);
   static SizedBox get spacingSizedBoxXXXLarge => SizedBox(height: 40.h);
