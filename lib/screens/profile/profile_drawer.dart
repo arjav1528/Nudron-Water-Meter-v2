@@ -28,7 +28,6 @@ import '../../utils/new_loader.dart';
 import '../../utils/toggle_button.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
-import '../../widgets/custom_safe_area.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/password_controller.dart';
 import 'active_devices.dart';
@@ -949,6 +948,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 ),
               ),
               ToggleButtonCustom(
+                fillBackground: false,
                 key: UniqueKey(),
                 index: is2FAEnabled ? 1 : 0,
                 dontChangeImmediately: true,
@@ -974,15 +974,14 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                     .currentTheme
                     .toggleColor,
                 selectedTextColor: Colors.white,
-                unselectedTextColor:
-                    Provider.of<ThemeNotifier>(context).currentTheme.tableText,
-                width: PlatformUtils.isMobile ? UIConfig.buttonDefaultWidth + 8.w : (width / 3.5).clamp(110.0, 135.0),
-                height: UIConfig.iconContainerHeight + 0.55,
-                smallerWidth: PlatformUtils.isMobile ? UIConfig.buttonDefaultWidth * 0.51 : ((width / 3.5).clamp(110.0, 135.0) * 0.475),
-                smallerHeight: 25,
-                verticalGap: 4.8,
-                leftGap: 3.6,
-                fontSize: UIConfig.fontSizeProfileToggleMobile,
+                unselectedTextColor: Colors.white,
+                width: PlatformUtils.isMobile ? 110.w : 110,
+                height: PlatformUtils.isMobile ? 28.h : 28,
+                smallerWidth: PlatformUtils.isMobile ? 52.w : 52,
+                smallerHeight: PlatformUtils.isMobile ? 20.h : 20,
+                verticalGap: 4,
+                leftGap: 4,
+                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                 tabColor: CommonColors.red,
                 tabColor2: const Color(0xFF00BC8A),
               ),
@@ -1196,6 +1195,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   ),
                 ),
                 ToggleButtonCustom(
+                  fillBackground: false,
                   key: UniqueKey(),
                   index: isBiometricEnabled ? 1 : 0,
                   dontChangeImmediately: true,
@@ -1221,16 +1221,14 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                       .currentTheme
                       .toggleColor,
                   selectedTextColor: Colors.white,
-                  unselectedTextColor: Provider.of<ThemeNotifier>(context)
-                      .currentTheme
-                      .tableText,
-                  width: PlatformUtils.isMobile ? 120 : (width / 3.5).clamp(110.0, 135.0),
-                  height: 30.55,
-                  smallerWidth: PlatformUtils.isMobile ? 57 : ((width / 3.5).clamp(110.0, 135.0) * 0.475),
-                  smallerHeight: 21,
-                  verticalGap: 4.8,
-                  leftGap: 3.6,
-                  fontSize: UIConfig.fontSizeProfileToggleMobile,
+                  unselectedTextColor: Colors.white,
+                  width: PlatformUtils.isMobile ? 110.w : 110,
+                  height: PlatformUtils.isMobile ? 28.h : 28,
+                  smallerWidth: PlatformUtils.isMobile ? 52.w : 52,
+                  smallerHeight: PlatformUtils.isMobile ? 20.h : 20,
+                  verticalGap: 4,
+                  leftGap: 4,
+                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                   tabColor: CommonColors.red,
                   tabColor2: const Color(0xFF00BC8A),
                 ),

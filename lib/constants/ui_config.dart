@@ -20,7 +20,7 @@ class UIConfig {
   static double get sectionBarHeight => 41.h;
   static double get dropdownRowHeight => 50.91.h;
   static double get dropdownItemHeight => 40.h;
-  static double get buttonHeight => 44.h;
+  static double get buttonHeight => 48.h;
   static double get bottomNavBarHeight => 69.h;
   
   /// Header widget dimensions (for consistent alignment across dashboard tabs)

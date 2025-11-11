@@ -268,37 +268,41 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             ),
           ),
           child: isCollapsed
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/icons/${bottomNavTabIcons[index]}.svg",
-                      color: isSelected
-                          ? selectedColor[index]
-                          : Provider.of<ThemeNotifier>(context)
-                              .currentTheme
-                              .inactiveBottomNavbarIconColor,
-                      width: UIConfig.iconSizeLarge + 20.w,
-                      height: UIConfig.iconSizeLarge + 20.w,
-                    ),
-                    SizedBox(height: UIConfig.spacingXSmall),
-                    Text(
-                      MainDashboardPage.bottomNavTabs[index].toUpperCase(),
-                      style: GoogleFonts.robotoMono(
+              ? FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/${bottomNavTabIcons[index]}.svg",
                         color: isSelected
-                            ? selectedColor[index % selectedColor.length]
+                            ? selectedColor[index]
                             : Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .inactiveBottomNavbarIconColor,
-                        fontSize: 20.minSp,
-                        fontWeight: FontWeight.w500,
+                        width: UIConfig.iconSizeLarge + 20.w,
+                        height: UIConfig.iconSizeLarge + 20.w,
                       ),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                  ],
+                      SizedBox(height: UIConfig.spacingXSmall),
+                      Text(
+                        MainDashboardPage.bottomNavTabs[index].toUpperCase(),
+                        style: GoogleFonts.robotoMono(
+                          color: isSelected
+                              ? selectedColor[index % selectedColor.length]
+                              : Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .inactiveBottomNavbarIconColor,
+                          fontSize: 20.minSp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ],
+                  ),
                 )
               : Row(
                   children: [
