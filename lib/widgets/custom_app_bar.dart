@@ -64,7 +64,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         Text("WATER METERING",
                             
                             style: GoogleFonts.robotoMono(
-                              fontSize: UIConfig.fontSizeExtraLargeResponsive,
+                              fontSize: UIConfig.fontSizeLargeResponsive,
                               fontWeight: FontWeight.w500,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme

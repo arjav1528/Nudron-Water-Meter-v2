@@ -47,6 +47,7 @@ class _DevicesPageState extends State<DevicesPage> {
         }
       },
       builder: (context, state){
+        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
@@ -123,7 +124,7 @@ class _DevicesPageState extends State<DevicesPage> {
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: UIConfig.fontSizeSmallResponsive,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                             letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),

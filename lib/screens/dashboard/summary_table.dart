@@ -44,7 +44,7 @@ class _SummaryTableState extends State<SummaryTable> {
       },
       builder: (context, state){
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-
+        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
@@ -116,7 +116,7 @@ class _SummaryTableState extends State<SummaryTable> {
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: UIConfig.fontSizeSmallResponsive,
+                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                             letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),

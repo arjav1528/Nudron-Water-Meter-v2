@@ -29,14 +29,14 @@ class UIConfig {
   static double get headerWidgetBorderWidth => spacingMedium.responsiveSp;
   
   /// Header section dimensions (for back button, icon, project name row)
-  static double get headerSectionHeight => 40.h; // Fixed height for header section alignment
+  static double get headerSectionHeight => PlatformUtils.isMobile ? 40.h : 46.h; // Fixed height for header section alignment
   
   /// Container heights
   static double get accentLineHeight => 3.h;
   static double get accentLineHeightResponsive => 3.responsiveSp;
-  static double get backButtonHeight => 35.h;
-  static double get backButtonWidth => 45.w;
-  static double get backButtonIconSize => 30.responsiveSp;
+  static double get backButtonHeight => 30.h;
+  static double get backButtonWidth => 35.w;
+  static double get backButtonIconSize => 25.responsiveSp;
   static double get iconContainerHeight => 30.h;
   static double get iconContainerWidth => 30.w;
   static double get projectIconHeight => 30.h;
@@ -119,7 +119,7 @@ class UIConfig {
   static EdgeInsets get paddingProfileFieldRight => EdgeInsets.only(right: 8.w);
   static EdgeInsets get paddingProfileFieldBoth => EdgeInsets.only(left: 8.w, right: 8.w);
   static EdgeInsets get paddingProfileFieldTop => EdgeInsets.only(top: 8.h);
-  static EdgeInsets get paddingChartHorizontal => EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 8.h);
+  static EdgeInsets get paddingChartHorizontal => EdgeInsets.only(left: 16.w, right: 16.w);
   static EdgeInsets get paddingFromLTRBZero => EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 0.h);
   static EdgeInsets get paddingFromLTRBSmall => EdgeInsets.fromLTRB(16.w, 0.h, 0.w, 0.h);
   static EdgeInsets get paddingFromLTRBMedium => EdgeInsets.fromLTRB(24.w, 0.h, 0.w, 0.h);
@@ -210,7 +210,7 @@ class UIConfig {
   static double get iconSizePrefix => 16.69.h;
   static double get iconSizePrefixWidth => 21.w;
   static double get iconSizeButtonArrow => 10; // Additional size for button arrow
-  static double get iconSizeAppBarLogo => 34.responsiveSp;
+  static double get iconSizeAppBarLogo => 30.responsiveSp;
   static double get iconSizeAppBarIcon => 28.responsiveSp;
   
   // ==================== TEXT STYLING ====================
