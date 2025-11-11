@@ -383,7 +383,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         CustomButton(
                           text: "DASHBOARD",
                           onPressed: _navigateToDashboard,
-                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                           arrowWidget: true,
                           dynamicWidth: true,
                         ),

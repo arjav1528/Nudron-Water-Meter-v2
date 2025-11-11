@@ -337,6 +337,10 @@ class _DropdownContentState extends State<DropdownContent> {
     final projects = dashboardBloc.projects;
     final width = UIConfig.getDesktopProjectWidth(context);
 
+    // Calculate the actual width1 and width2 used in dropdowns
+    final dropdownWidth1 = PlatformUtils.isMobile ? UIConfig.spacingExtraLarge * 5.w : width * UIConfig.desktopProjectWidthMultiplier;
+    final dropdownWidth2 = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 187.w : width * (1 - UIConfig.desktopProjectWidthMultiplier);
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: PlatformUtils.isMobile ? UIConfig.spacingMedium.w : 0,
@@ -350,11 +354,14 @@ class _DropdownContentState extends State<DropdownContent> {
               builder: (context) {
                 var items = _getItemsForLevel(index, projects);
 
+                final width1 = PlatformUtils.isMobile ? UIConfig.spacingExtraLarge * 5.w : width * UIConfig.desktopProjectWidthMultiplier;
+                final width2 = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 187.w : width * (1 - UIConfig.desktopProjectWidthMultiplier);
+
                 return Padding(
-                  padding: UIConfig.paddingSymmetricVerticalSmall,
+                  padding: EdgeInsets.symmetric(vertical: UIConfig.paddingSymmetricVerticalSmall.vertical),
                   child: CustomDropdownButton2(
-                    width1: PlatformUtils.isMobile ? UIConfig.spacingXXXLarge * 1.5.w : width * UIConfig.desktopProjectWidthMultiplier,
-                    width2: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 87.w : width * (1 - UIConfig.desktopProjectWidthMultiplier),
+                    width1: width1,
+                    width2: width2,
                     // desktopDropdownWidth: PlatformUtils.isMobile ? null : width,
                     // desktopDropdownWidth: width - 30,
                     fieldName: levels[index],
@@ -368,9 +375,12 @@ class _DropdownContentState extends State<DropdownContent> {
             ),
           SizedBox(height: UIConfig.spacingExtraLarge),
           SizedBox(
-            // width: PlatformUtils.isMobile ? null : width,
+            width: PlatformUtils.isMobile 
+                ? dropdownWidth1 + dropdownWidth2 + UIConfig.spacingXXXLarge * 0.4.w
+                : dropdownWidth1 + dropdownWidth2 - UIConfig.spacingXXXLarge * 0.5,
+           
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 
                 CustomButton(
@@ -380,7 +390,7 @@ class _DropdownContentState extends State<DropdownContent> {
                   onPressed: widget.onClose,
                   width: UIConfig.buttonDefaultWidth + 8.w, 
                 ),
-                SizedBox(width: UIConfig.spacingXXXLarge * 4.w),
+                // SizedBox(width: UIConfig.spacingXXXLarge * 4.w),
                 CustomButton(
                   text: 'CONFIRM',
                   dynamicWidth: true,

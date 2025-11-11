@@ -193,7 +193,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                                   .noEntriesColor,
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(bottom: 5.0.h),
+                                            contentPadding: EdgeInsets.only(bottom: PlatformUtils.isMobile ? 0.0.h : 5.0.h),
                                             isDense: true,
                                           ),
                                           textAlignVertical: TextAlignVertical.center,

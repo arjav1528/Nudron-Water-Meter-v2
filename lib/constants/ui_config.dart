@@ -103,7 +103,7 @@ class UIConfig {
   static EdgeInsets get paddingTextFieldLarger => EdgeInsets.symmetric(vertical: 22.h);
   static EdgeInsets get paddingTextFieldNormal => EdgeInsets.symmetric(vertical: 10.h);
   static EdgeInsets get paddingTextFieldHorizontal => EdgeInsets.symmetric(horizontal: 16.w);
-  static EdgeInsets get paddingButtonHorizontal => EdgeInsets.symmetric(horizontal: 20.w);
+  static EdgeInsets get paddingButtonHorizontal => EdgeInsets.symmetric(horizontal: 10.w);
   static EdgeInsets get paddingButtonVertical => EdgeInsets.symmetric(vertical: 2.h);
   static EdgeInsets get paddingButtonHorizontalSmall => EdgeInsets.symmetric(horizontal: 7.w);
   static EdgeInsets get paddingDropdownHorizontal => EdgeInsets.symmetric(horizontal: 8.w);

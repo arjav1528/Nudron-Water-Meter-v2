@@ -372,14 +372,16 @@ class ToggleIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Extend bottom edge more (about 5% of height)
+    final bottomExtension = size.height * 0.1;
     final indicatorPath = Path()
-      ..moveTo(size.width * 0.9754789, size.height)
+      ..moveTo(size.width * 0.9754789, size.height + bottomExtension)
       ..lineTo(size.width, size.height * 0.5000000)
       ..lineTo(size.width * 0.9754789, 0)
       ..lineTo(size.width * 0.02452317, 0)
       ..lineTo(0, size.height * 0.5000000)
-      ..lineTo(size.width * 0.02452317, size.height)
-      ..lineTo(size.width * 0.9754789, size.height)
+      ..lineTo(size.width * 0.02452317, size.height + bottomExtension)
+      ..lineTo(size.width * 0.9754789, size.height + bottomExtension)
       ..close();
 
     final paint = Paint()

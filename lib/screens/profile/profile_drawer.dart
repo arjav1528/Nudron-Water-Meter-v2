@@ -443,7 +443,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     CustomButton(
                                       dynamicWidth: true,
                                       text: "SUBMIT",
-                                      fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                                      fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                       onPressed: () async {
                                         FocusScope.of(context).unfocus();
 
@@ -584,7 +584,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                           CustomButton(
                                             text: "LOGOUT",
                                             dynamicWidth: true,
-                                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                             onPressed: () async {
                                               setState(() {
                                                 _isLoggingOut = true;
@@ -661,7 +661,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                 CustomButton(
                                                   text: "GLOBAL LOGOUT",
                                                   dynamicWidth: true,
-                                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                   onPressed: () async {
                                                     setState(() {
                                                       _isGlobalLoggingOut = true;
@@ -735,7 +735,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               CustomButton(
                                                 text: "DELETE",
                                                 dynamicWidth: true,
-                                                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                                                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                 onPressed: () async {
                                                   setState(() {
                                                     deleteAccountVisible = true;
@@ -772,7 +772,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                         child: CustomButton(
                                                           dynamicWidth: true,
                                                           text: "CANCEL",
-                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                           onPressed: () {
                                                             setState(() {
                                                               deleteAccountVisible = false;
@@ -786,7 +786,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                         child: CustomButton(
                                                           dynamicWidth: true,
                                                           text: "CONFIRM",
-                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                           onPressed: () {
                                                             if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
                                                               
@@ -1256,7 +1256,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                         CustomButton(
                           dynamicWidth: true,
                           text: "CONFIRM",
-                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                           onPressed: () {
                             if (NudronRandomStuff.isBiometricEnabled.value) {
                               disableBiometric()
