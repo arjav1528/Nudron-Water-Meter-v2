@@ -95,7 +95,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         hintStyle: widget.hintStyle,
         suffixIcon: IconButton(
           icon: Icon(
-            widget.controller.isObscuring ? Icons.visibility : Icons.visibility_off,
+            widget.controller.isObscuring ? Icons.visibility_off : Icons.visibility,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .textfieldHintColor,

@@ -256,6 +256,17 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         child: Container(
           height: UIConfig.buttonHeight * 2.16,
           padding: EdgeInsets.zero,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? selectedColor[index % selectedColor.length].withOpacity(0.1)
+                : Colors.transparent,
+            border: Border(
+              left: BorderSide(
+                color: isSelected ? selectedColor[index % selectedColor.length] : Colors.transparent,
+                width: 4.0,
+              ),
+            ),
+          ),
           child: isCollapsed
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -17,7 +17,7 @@ extension CustomScreenUtil on num {
         defaultTargetPlatform == TargetPlatform.macOS || 
         defaultTargetPlatform == TargetPlatform.linux) {
       
-      return (baseSize * 1.2).toDouble();
+      return (baseSize * 1.3).toDouble();
     }
     
     return baseSize;

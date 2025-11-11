@@ -723,7 +723,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                     "Delete your account",
                                                     style: GoogleFonts.roboto(
                                                       fontSize:
-                                                          UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeProfileMobile, desktopWidth: width),
+                                                          UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                       color: Provider.of<ThemeNotifier>(
                                                               context)
                                                           .currentTheme
