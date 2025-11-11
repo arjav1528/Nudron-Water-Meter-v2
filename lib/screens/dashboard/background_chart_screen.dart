@@ -11,6 +11,7 @@ import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../utils/loader.dart';
 import '../../widgets/custom_safe_area.dart';
+import '../../services/platform_utils.dart';
 import 'trends_chart.dart';
 
 class BackgroundChart extends StatefulWidget {
@@ -131,37 +132,41 @@ class _BackgroundChartState extends State<BackgroundChart> {
                 state is ChangeDashBoardNav ||
                 state is DashboardPageInitial ||
                 hasDataLoaded) {
-              return Center(
-                child: RotatedBox(
-                  quarterTurns: 1,
-                  child: BlocBuilder<DashboardBloc, DashboardState>(
-                      buildWhen: (previous, current) {
-                    if (current is RefreshDashboard2 ||
-                        current is RefreshDashboard ||
-                        current is ChangeScreen ||
-                        current is ChangeDashBoardNav) {
-                      return true;
-                    }
-                    return false;
-                  }, builder: (context, state) {
-                    GlobalKey key = GlobalKey();
-                    dashboardBloc.changeKey(key);
-                    return RepaintBoundary(
-                      key: key,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 3.responsiveSp, 
-                            color: CommonColors.yellow,
-                          ),
-                          Expanded(
-                            child: TrendsChart(isFullScreen: true, key: UniqueKey()),
-                          ),
-                        ],
+              final chartWidget = BlocBuilder<DashboardBloc, DashboardState>(
+                  buildWhen: (previous, current) {
+                if (current is RefreshDashboard2 ||
+                    current is RefreshDashboard ||
+                    current is ChangeScreen ||
+                    current is ChangeDashBoardNav) {
+                  return true;
+                }
+                return false;
+              }, builder: (context, state) {
+                GlobalKey key = GlobalKey();
+                dashboardBloc.changeKey(key);
+                return RepaintBoundary(
+                  key: key,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 3.responsiveSp, 
+                        color: CommonColors.yellow,
                       ),
-                    );
-                  }),
-                ),
+                      Expanded(
+                        child: TrendsChart(isFullScreen: true, key: UniqueKey()),
+                      ),
+                    ],
+                  ),
+                );
+              });
+              
+              return Center(
+                child: PlatformUtils.isMobile
+                    ? RotatedBox(
+                        quarterTurns: 1,
+                        child: chartWidget,
+                      )
+                    : chartWidget,
               );
             } else if (state is DashboardPageError) {
               return Center(

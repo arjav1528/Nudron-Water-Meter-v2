@@ -332,7 +332,8 @@ class _SigninPageState extends State<SigninPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomButton(
-                      width: UIConfig.buttonWidthForgotPassword,
+                      // width: UIConfig.buttonWidthForgotPassword,
+                      dynamicWidth: true,
                       text: "CANCEL",
                       isRed: true,
                       onPressed: () {
@@ -342,7 +343,8 @@ class _SigninPageState extends State<SigninPage> {
                       },
                     ),
                     CustomButton(
-                      width: UIConfig.buttonWidthForgotPassword,
+                      // width: UIConfig.buttonWidthForgotPassword,
+                      dynamicWidth: true,
                       text: "SEND EMAIL",
                       onPressed: () async {
                         
@@ -431,9 +433,10 @@ class _SigninPageState extends State<SigninPage> {
                     Container(height: UIConfig.spacingXXXLarge),
                     Center(
                       child: CustomButton(
+                        dynamicWidth: true,
                         text: "SIGN IN",
                         
-                        dynamicWidth: true,
+                        
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
                           
@@ -606,7 +609,7 @@ class _AutoLoginState extends State<AutoLogin> {
             width: UIConfig.dialogBorderWidth,
           ),
         ),
-        width: UIConfig.dialogWidthAutoLogin,
+        width: UIConfig.getDesktopDialogWidth(context),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -654,6 +657,7 @@ class _AutoLoginState extends State<AutoLogin> {
               children: [
                 CustomButton(
                   text: "NO",
+                  dynamicWidth: true,
                   isRed: true,
                   onPressed: () {
                     if (mounted) {
@@ -663,6 +667,7 @@ class _AutoLoginState extends State<AutoLogin> {
                 ),
                 CustomButton(
                   text: "YES",
+                  dynamicWidth: true,
                   onPressed: () async {
                     
                     final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);

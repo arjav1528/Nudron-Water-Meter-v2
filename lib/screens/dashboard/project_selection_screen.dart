@@ -99,9 +99,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     showDialog(
       context: context,
       builder: (context) {
-        final width = UIConfig.getDesktopProjectWidth(context);
         final currentTheme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
-        final dialogWidth = PlatformUtils.isMobile ? 350.w : width;
+        final dialogWidth = UIConfig.getDesktopDialogWidth(context);
+        final width = dialogWidth;
         return Dialog(
           backgroundColor: currentTheme.dialogBG,
             elevation: 0,

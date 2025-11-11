@@ -341,6 +341,18 @@ class UIConfig {
         .clamp(desktopDrawerWidthMin, desktopDrawerWidthMax);
   }
   
+  /// Calculate desktop dialog width with clamp
+  /// For desktop: min = 400, max = 550, between 1/3rd of screen width
+  /// For mobile: returns mobile-specific width (kept as is)
+  static double getDesktopDialogWidth(BuildContext context) {
+    if (PlatformUtils.isMobile) {
+      return 350.w;
+    } else {
+      return (MediaQuery.of(context).size.width * (1/3))
+          .clamp(400.0, 550.0);
+    }
+  }
+  
   /// Calculate desktop font size based on width
   static double getDesktopFontSizeFromWidth(double width) {
     return width / desktopFontSizeDivisor;

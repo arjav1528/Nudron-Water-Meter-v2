@@ -194,7 +194,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       final currentTheme = themeNotifier.currentTheme;
 
       DateTimeRange? currentSelectedRange = selectedRange;
-      final dialogWidth = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 1.25.w : UIConfig.desktopDrawerWidthMax + UIConfig.spacingXXXLarge * 1.25;
+      final dialogWidth = UIConfig.getDesktopDialogWidth(context);
 
       final DateTimeRange? pickedRange = await showDialog<DateTimeRange>(
         context: context,
@@ -510,6 +510,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomButton(
+                              
                               text: 'CANCEL',
                               isEnabled: true,
                               isRed: true,

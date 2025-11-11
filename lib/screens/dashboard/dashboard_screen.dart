@@ -92,6 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             )),
                         SizedBox(height: UIConfig.spacingExtraLarge),
                         CustomButton(
+                          dynamicWidth: true,
                           text: "REFRESH",
                           onPressed: () {
                             LoaderUtility.showLoader(
@@ -396,6 +397,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                     SizedBox(height: UIConfig.spacingExtraLarge),
                     CustomButton(
                       text: "REFRESH",
+                      dynamicWidth: true,
                       onPressed: () {
                         LoaderUtility.showLoader(
                                 context,

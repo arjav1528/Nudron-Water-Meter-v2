@@ -26,6 +26,7 @@ class ConfirmationDialog extends StatefulWidget {
 class _ConfirmationDialogState extends State<ConfirmationDialog> {
   @override
   Widget build(BuildContext context) {
+    final dialogWidth = UIConfig.getDesktopDialogWidth(context);
 
     return Dialog(
       insetPadding: EdgeInsets.all(0.w),
@@ -41,7 +42,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
             width: 3.responsiveSp,
           ),
         ),
-        width: 350.w,
+        width: dialogWidth,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -91,7 +92,6 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 CustomButton(
                   text: "CANCEL",
                   dynamicWidth: true,
-                  width: 120.w,
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
@@ -99,7 +99,6 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 ),
                 CustomButton(
                   dynamicWidth: true,
-                  width: 120.w,
                   text: "CONFIRM",
                   onPressed: () {
                     Navigator.of(context).pop(true);

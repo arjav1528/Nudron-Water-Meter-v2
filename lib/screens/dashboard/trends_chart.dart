@@ -15,6 +15,7 @@ import '../../constants/ui_config.dart';
 import '../../models/chartModels.dart';
 import '../../utils/no_entries.dart';
 import '../../utils/performance_monitor.dart';
+import '../../services/platform_utils.dart';
 import '../../widgets/export_to_excel.dart';
 
 List<Color> listOfBarColor = [
@@ -788,7 +789,7 @@ class BasicChart extends StatelessWidget {
                                       context: context,
                                       builder: (context2) {
                                         return RotatedBox(
-                                          quarterTurns: isFullScreen ? 1 : 0,
+                                          quarterTurns: (isFullScreen && PlatformUtils.isMobile) ? 1 : 0,
                                           child: ConfirmationDialog(
                                             heading: "Export image",
                                             message:

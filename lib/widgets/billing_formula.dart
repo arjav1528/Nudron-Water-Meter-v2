@@ -16,7 +16,6 @@ import '../../utils/new_loader.dart';
 import '../../utils/custom_exception.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
-import '../../services/platform_utils.dart';
 
 class BillingFormula extends StatefulWidget {
   const BillingFormula({super.key});
@@ -214,8 +213,8 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
       rightpaddingconstant = UIConfig.iconSizeLarge + UIConfig.spacingSmall.w;
     }
 
-    final width = UIConfig.getDesktopProjectWidth(context);
-    final dialogWidth = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin.w : width;
+    final dialogWidth = UIConfig.getDesktopDialogWidth(context);
+    final width = dialogWidth;
 
     return Container(
       width: dialogWidth,

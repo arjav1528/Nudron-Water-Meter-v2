@@ -189,6 +189,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             SizedBox(
                               
                               child: CustomButton(
+                                dynamicWidth: true,
                                 text: "VERIFY",
                                 onPressed: () async {
                                   if (otpFieldController.text.length == 6) {

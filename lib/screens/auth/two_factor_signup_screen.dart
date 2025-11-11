@@ -348,6 +348,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CustomButton(
+                dynamicWidth: true,
                 text: "CANCEL",
                 isRed: true,
                 onPressed: () {
@@ -359,6 +360,7 @@ class _EnterTwoFacCodeSignUpState extends State<EnterTwoFacCodeSignUp>
                 },
               ),
               CustomButton(
+                dynamicWidth: true,
                 text: "VERIFY",
                 onPressed: () async {
                   if (checkAllTextFields()) {

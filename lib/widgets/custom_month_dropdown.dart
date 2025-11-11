@@ -306,11 +306,13 @@ class _StringSelectorOverlayState extends State<StringSelectorOverlay> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             CustomButton(
+              dynamicWidth: true,
               text: "CANCEL",
               onPressed: widget.onClose,
               isRed: true,
             ),
             CustomButton(
+              dynamicWidth: true,
               text: "CONFIRM",
               onPressed: () {
                 widget.onValueSelected(_currentValue);
