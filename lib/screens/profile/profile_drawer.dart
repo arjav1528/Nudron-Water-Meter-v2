@@ -948,7 +948,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 ),
               ),
               ToggleButtonCustom(
-                fillBackground: false,
+                fillBackground: true,
                 key: UniqueKey(),
                 index: is2FAEnabled ? 1 : 0,
                 dontChangeImmediately: true,
@@ -1195,7 +1195,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   ),
                 ),
                 ToggleButtonCustom(
-                  fillBackground: false,
+                  fillBackground: true,
                   key: UniqueKey(),
                   index: isBiometricEnabled ? 1 : 0,
                   dontChangeImmediately: true,

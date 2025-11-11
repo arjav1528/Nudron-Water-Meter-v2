@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
@@ -192,8 +193,8 @@ class _DevicesPageState extends State<DevicesPage> {
                                                   .noEntriesColor,
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding: EdgeInsets.zero,
-                                            isCollapsed: true,
+                                            contentPadding: EdgeInsets.only(bottom: 5.0.h),
+                                            isDense: true,
                                           ),
                                           textAlignVertical: TextAlignVertical.center,
                                           onChanged: (query) {
