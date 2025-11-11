@@ -298,15 +298,21 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           showProfileDrawer(context);
         },
       ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            children: [
-              Container(
-                height: UIConfig.accentLineHeight,
-                color: UIConfig.color14414e,
-              ),
+      body: Builder(
+        builder: (context) {
+          final mediaQuery = MediaQuery.of(context);
+          final bottomPadding = mediaQuery.padding.bottom;
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: UIConfig.accentLineHeight,
+                        color: UIConfig.color14414e,
+                      ),
               Center(
                 child: SizedBox(
                   width: PlatformUtils.isMobile
@@ -386,14 +392,22 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                   ),
                 ),
               ),
-              Spacer(),
-              Container(
-                height: UIConfig.accentLineHeight,
-                color: UIConfig.color14414e,
-              ),
-            ],
-          ),
-        ),
+                      Spacer(),
+                      Container(
+                        height: UIConfig.accentLineHeight,
+                        color: UIConfig.color14414e,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: bottomPadding,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

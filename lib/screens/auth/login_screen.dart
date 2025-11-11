@@ -68,14 +68,20 @@ class _LoginPageState extends State<LoginPage> {
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         resizeToAvoidBottomInset: false,
         
-        body: SafeArea(
-          child: Column(
-            children: [
-              Container(
-                height: UIConfig.accentLineHeight,
-                color: UIConfig.accentColorBlue,
-              ),
-              Expanded(
+        body: Builder(
+          builder: (context) {
+            final mediaQuery = MediaQuery.of(context);
+            final bottomPadding = mediaQuery.padding.bottom;
+            return Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: UIConfig.accentLineHeight,
+                        color: UIConfig.accentColorBlue,
+                      ),
+                      Expanded(
                 child: Stack(
                 children: [
                   Align(
@@ -161,12 +167,20 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-              Container(
-                height: UIConfig.accentLineHeight,
-                color: UIConfig.accentColorBlue,
-              ),
-            ],
-          ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: UIConfig.accentLineHeight,
+                  color: UIConfig.accentColorBlue,
+                ),
+                Container(
+                  height: bottomPadding,
+                  color: Colors.black,
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

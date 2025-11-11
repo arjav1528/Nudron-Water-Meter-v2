@@ -11,6 +11,7 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
+import '../../widgets/custom_safe_area.dart';
 import '../../widgets/data_grid_widget.dart';
 class DevicesPage extends StatefulWidget {
   const DevicesPage({super.key});
@@ -60,7 +61,7 @@ class _DevicesPageState extends State<DevicesPage> {
             backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
             
-            body: SafeArea(
+            body: CustomSafeArea(
               child: Column(
               children: [
                 Container(

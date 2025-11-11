@@ -28,6 +28,7 @@ import '../../utils/new_loader.dart';
 import '../../utils/toggle_button.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
+import '../../widgets/custom_safe_area.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/password_controller.dart';
 import 'active_devices.dart';
@@ -258,8 +259,14 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 ),
           backgroundColor: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
           resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: BlocBuilder<DashboardBloc, DashboardState>(
+          body: Builder(
+            builder: (context) {
+              final mediaQuery = MediaQuery.of(context);
+              final bottomPadding = mediaQuery.padding.bottom;
+              return Column(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           if (current is UserInfoUpdate || current is UserInfoUpdate2) {
             initControllers();
@@ -819,11 +826,19 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ],
             );
           });
-        }),
-            ),
+        },
+                    ),
+                  ),
+                Container(
+                  height: bottomPadding,
+                  color: Colors.black,
+                ),
+              ],
+            );
+          },
         ),
       ),
-    );
+    ));
   }
 }
 

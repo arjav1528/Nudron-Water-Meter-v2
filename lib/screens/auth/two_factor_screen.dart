@@ -19,6 +19,7 @@ import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/custom_safe_area.dart';
 
 class EnterTwoFacCode extends StatefulWidget {
   EnterTwoFacCode({super.key, required this.referenceCode});
@@ -60,7 +61,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
         backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         appBar: CustomAppBar(choiceAction: null),
-        body: SafeArea(
+        body: CustomSafeArea(
           child: Column(
             children: [
               Container(

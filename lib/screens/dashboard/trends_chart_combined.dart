@@ -12,6 +12,7 @@ import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../widgets/custom_multiple_selector_horizontal.dart';
+import '../../widgets/custom_safe_area.dart';
 import 'trends_chart.dart';
 import 'trends_table.dart';
 
@@ -48,7 +49,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
           ? dashboardBloc.currentFilters.first.toUpperCase()
           : "NO PROJECT SELECTED";
 
-        return SafeArea(
+        return CustomSafeArea(
           child: Column(
             children: [
               Container(

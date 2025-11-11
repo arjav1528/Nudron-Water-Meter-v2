@@ -10,6 +10,7 @@ import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../utils/loader.dart';
+import '../../widgets/custom_safe_area.dart';
 import 'trends_chart.dart';
 
 class BackgroundChart extends StatefulWidget {
@@ -102,7 +103,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
             ),
           ),
         ),
-        body: SafeArea(
+        body: CustomSafeArea(
           child: BlocBuilder<DashboardBloc, DashboardState>(
           buildWhen: (previous, current) {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context);

@@ -20,6 +20,7 @@ import '../../utils/loader.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/custom_safe_area.dart';
 import '../devices/devices_screen.dart';
 import '../profile/profile_drawer.dart';
 import 'background_chart_screen.dart';
@@ -55,7 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
+      body: CustomSafeArea(
         child: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           
@@ -430,7 +431,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             showProfileDrawer(context);
           },
         ),
-        body: SafeArea(
+        body: CustomSafeArea(
           child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -477,73 +478,83 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
   }
 
   Widget _buildMobileLayout(BuildContext context, List<Widget> contentPages) {
+    final mediaQuery = MediaQuery.of(context);
+    final bottomPadding = mediaQuery.padding.bottom;
+    
     return Scaffold(
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: BottomAppBar(
-          key: UniqueKey(),
-          height: UIConfig.bottomNavBarHeight,
-          padding: EdgeInsets.all(0.w),
-          color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
-          child: BlocBuilder<DashboardBloc, DashboardState>(
-          buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
-          builder: (context, state) {
-            final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-            int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: UIConfig.bottomNavBarHeight,
+              color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
+              child: BlocBuilder<DashboardBloc, DashboardState>(
+                buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
+                builder: (context, state) {
+                  final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+                  int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
 
-            List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
+                  List<String> visibleTabs = MainDashboardPage.bottomNavTabs;
 
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                visibleTabs.length,
-                (index) {
-                  
-                  final safeIndex = index.clamp(0, bottomNavTabIcons.length - 1);
-                  return GestureDetector(
-                    child: Container(
-                      color: Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .bottomNavColor,
-                      width: MediaQuery.of(context).size.width / visibleTabs.length,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/${bottomNavTabIcons[safeIndex]}.svg",
-                            color: currentPositionOfBottomNav == index
-                                ? selectedColor[safeIndex % selectedColor.length]
-                                : Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .inactiveBottomNavbarIconColor,
-                            width: UIConfig.iconSizeLarge + 15.responsiveSp,
-                            height: UIConfig.iconSizeLarge + 15.responsiveSp,
-                          ),
-                          Text(
-                            visibleTabs[index].toUpperCase(),
-                            style: GoogleFonts.robotoMono(
-                              color: currentPositionOfBottomNav == index
-                                  ? selectedColor[safeIndex % selectedColor.length]
-                                  : Provider.of<ThemeNotifier>(context)
-                                      .currentTheme
-                                      .inactiveBottomNavbarIconColor,
-                              fontSize: 16.responsiveSp,
-                              fontWeight: FontWeight.w500,
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      visibleTabs.length,
+                      (index) {
+                        
+                        final safeIndex = index.clamp(0, bottomNavTabIcons.length - 1);
+                        return GestureDetector(
+                          child: Container(
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .bottomNavColor,
+                            width: MediaQuery.of(context).size.width / visibleTabs.length,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/${bottomNavTabIcons[safeIndex]}.svg",
+                                  color: currentPositionOfBottomNav == index
+                                      ? selectedColor[safeIndex % selectedColor.length]
+                                      : Provider.of<ThemeNotifier>(context)
+                                          .currentTheme
+                                          .inactiveBottomNavbarIconColor,
+                                  width: UIConfig.iconSizeLarge + 15.responsiveSp,
+                                  height: UIConfig.iconSizeLarge + 15.responsiveSp,
+                                ),
+                                Text(
+                                  visibleTabs[index].toUpperCase(),
+                                  style: GoogleFonts.robotoMono(
+                                    color: currentPositionOfBottomNav == index
+                                        ? selectedColor[safeIndex % selectedColor.length]
+                                        : Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .inactiveBottomNavbarIconColor,
+                                    fontSize: 16.responsiveSp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                          onTap: () {
+                            dashboardBloc.switchBottomNavPos(index);
+                          },
+                        );
+                      },
                     ),
-                    onTap: () {
-                      dashboardBloc.switchBottomNavPos(index);
-                    },
                   );
                 },
               ),
-            );
-          },
-        ),
+            ),
+            Container(
+              height: bottomPadding,
+              color: Colors.black,
+            ),
+          ],
         ),
       ),
       drawerEnableOpenDragGesture: false,
@@ -556,7 +567,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           showProfileDrawer(context);
         },
       ),
-      body: SafeArea(
+      body: CustomSafeArea(
         child: Row(
         children: [
           LayoutBuilder(
