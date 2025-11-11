@@ -116,7 +116,7 @@ class _SummaryTableState extends State<SummaryTable> {
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+                            fontSize: UIConfig.fontSizeLargeResponsive,
                             letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),
