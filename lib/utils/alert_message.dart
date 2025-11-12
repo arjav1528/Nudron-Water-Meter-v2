@@ -14,8 +14,16 @@ class CustomAlert {
     String alertName = _capitalize(alertType.toString().split('.').last);
     final messenger = scaffoldMessengerKey.currentState;
     if(messenger == null) return;
+    
+    // Hide any existing SnackBar to prevent Hero tag conflicts
+    messenger.hideCurrentSnackBar();
+    
+    // Generate a unique key based on timestamp and message to ensure unique Hero tags
+    final uniqueKey = ValueKey('${DateTime.now().millisecondsSinceEpoch}_$message');
+    
     messenger.showSnackBar(
       SnackBar(
+          key: uniqueKey,
           duration: duration,
           content: RichText(
             text: TextSpan(

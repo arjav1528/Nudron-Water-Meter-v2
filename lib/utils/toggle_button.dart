@@ -70,6 +70,12 @@ class ToggleButtonCustom extends StatefulWidget {
   /// If false, only draws a border outline (transparent background).
   final bool fillBackground;
 
+  /// If true, applies platform-aware position adjustments for profile drawer.
+  /// When NO (index 0): extends indicator downward slightly.
+  /// When YES (index 1): moves indicator upward slightly.
+  /// Adjustments are applied on both mobile and desktop platforms.
+  final bool adjustDesktopPosition;
+
   const ToggleButtonCustom({
     super.key,
     required this.tabs,
@@ -89,6 +95,7 @@ class ToggleButtonCustom extends StatefulWidget {
     this.index = 0,
     this.dontChangeImmediately = false,
     this.fillBackground = false,
+    this.adjustDesktopPosition = false,
   });
 
   @override
@@ -102,6 +109,14 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
   void initState() {
     super.initState();
     selectedIndex = widget.index;
+  }
+
+  @override
+  void didUpdateWidget(ToggleButtonCustom oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.index != oldWidget.index) {
+      selectedIndex = widget.index;
+    }
   }
 
   /// Returns the appropriate color for the selection indicator based on tab index
@@ -192,14 +207,48 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     _ResponsiveDimensions dimensions,
     Color indicatorColor,
   ) {
-    final indicatorLeft = selectedIndex * dimensions.tabWidth + dimensions.leftGap;
+    double indicatorLeft = selectedIndex * dimensions.tabWidth + dimensions.leftGap;
+    
+    // Platform-aware adjustments for profile drawer
+    double adjustedTop = dimensions.verticalGap;
+    double adjustedHeight = dimensions.tabHeight;
+    
+    if (widget.adjustDesktopPosition) {
+      final isMobile = PlatformUtils.isMobile;
+      
+      if (isMobile) {
+        // Mobile-specific adjustments
+        adjustedHeight = dimensions.tabHeight + 1;
+        
+        if (selectedIndex == 0) {
+          // NO: move up by 1.h pixels to center it better, and move left to extreme
+          adjustedTop = dimensions.verticalGap - 0.75 - 1.h;
+          indicatorLeft = indicatorLeft - 1.h;
+        } else if (selectedIndex == 1) {
+          // YES: move upward slightly, and move right to extreme
+          adjustedTop = dimensions.verticalGap - 1.5;
+          indicatorLeft = indicatorLeft + 1.h;
+        }
+      } else {
+        // Desktop-specific adjustments
+        adjustedHeight = dimensions.tabHeight + 1;
+        
+        if (selectedIndex == 0) {
+          // NO: extend downward slightly
+          adjustedTop = dimensions.verticalGap - 0.75;
+        } else if (selectedIndex == 1) {
+          // YES: move upward slightly
+          adjustedTop = dimensions.verticalGap - 1.5;
+        }
+      }
+    }
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       left: indicatorLeft,
-      top: dimensions.verticalGap,
-      child: _buildIndicatorContent(dimensions, indicatorColor),
+      top: adjustedTop,
+      child: _buildIndicatorContent(dimensions, indicatorColor, adjustedHeight),
     );
   }
 
@@ -207,22 +256,11 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
   Widget _buildIndicatorContent(
     _ResponsiveDimensions dimensions,
     Color indicatorColor,
+    double height,
   ) {
-    // Special case: use image asset for red color
-    if (indicatorColor == CommonColors.red) {
-      return SizedBox(
-        width: dimensions.tabWidth,
-        height: dimensions.tabHeight,
-        child: Image.asset(
-          "assets/images/red_calibrate.png",
-          fit: BoxFit.fill,
-        ),
-      );
-    }
-
-    // Default: use CustomPaint for dynamic colors
+    // Use CustomPaint for all colors to ensure consistent appearance
     return CustomPaint(
-      size: Size(dimensions.tabWidth, dimensions.tabHeight),
+      size: Size(dimensions.tabWidth, height),
       painter: ToggleIndicatorPainter(color: indicatorColor),
     );
   }

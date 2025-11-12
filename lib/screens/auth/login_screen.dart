@@ -136,9 +136,11 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(height: UIConfig.spacingExtraLarge),
                                 Center(
                                   child: ToggleButtonCustom(
+                                    
                                     key: UniqueKey(),
                                     tabs: const ["SIGN IN", "REGISTER"],
-                                    backgroundColor: null,
+                                    backgroundColor: CommonColors.blue,
+                                    fontSize: ThemeNotifier.medium.responsiveSp,
                                     selectedTextColor: Colors.white,
                                     unselectedTextColor:
                                         Provider.of<ThemeNotifier>(context)
