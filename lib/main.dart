@@ -214,6 +214,19 @@ class _MyAppState extends State<MyApp> {
               } else if (state is AuthAuthenticated) {
                 
                 dashboardBloc.loadInitialData();
+                
+                // Show success message after navigation completes
+                // Using postFrameCallback ensures the message displays after route changes
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final context = mainNavigatorKey.currentContext;
+                  if (context != null && scaffoldMessengerKey.currentState != null) {
+                    CustomAlert.showCustomScaffoldMessenger(
+                      context,
+                      "Successfully logged in!",
+                      AlertType.success,
+                    );
+                  }
+                });
               }
             },
             child: MaterialApp(

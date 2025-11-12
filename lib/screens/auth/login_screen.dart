@@ -236,8 +236,8 @@ class _SigninPageState extends State<SigninPage> {
           
         } else if (state is AuthAuthenticated) {
           
-          CustomAlert.showCustomScaffoldMessenger(
-              context, "Successfully logged in!", AlertType.success);
+          // Success message is shown in main.dart after navigation completes
+          // to ensure it displays properly after route changes
           
           try {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
