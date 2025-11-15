@@ -143,8 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLoginWithBiometric(AuthLoginWithBiometric event, Emitter<AuthState> emit) async {
     try {
-      emit(AuthLoading());
-      
+      // Don't emit loading yet - let the biometric dialog show first
       final biometricHelper = BiometricHelper();
       final isBiometricSetup = await biometricHelper.isBiometricSetup().timeout(
         const Duration(seconds: 3),
@@ -165,6 +164,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError('Biometric authentication failed'));
         return;
       }
+
+      // Biometric scan successful - now emit loading state and close the dialog
+      emit(AuthLoading());
 
       final email = await AuthService.getStoredEmail();
       final password = await AuthService.getStoredPassword();

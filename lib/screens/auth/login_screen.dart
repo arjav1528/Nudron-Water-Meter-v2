@@ -566,7 +566,12 @@ class _AutoLoginState extends State<AutoLogin> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthAuthenticated) {
+        if (state is AuthLoading) {
+          // Close the dialog immediately when loading starts (after successful biometric scan)
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        } else if (state is AuthAuthenticated) {
           
           CustomAlert.showCustomScaffoldMessenger(
               context, "Successfully logged in!", AlertType.success);
