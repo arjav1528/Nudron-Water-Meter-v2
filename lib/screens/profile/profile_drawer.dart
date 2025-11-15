@@ -62,6 +62,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   bool _isLoggingOut = false;
   bool _isGlobalLoggingOut = false;
   bool _isLoaderShowing = false;
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _deleteAccountKey = GlobalKey();
 
   @override
   void initState() {
@@ -75,6 +77,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   void dispose() {
     
     refreshPhoneCode.dispose();
+    _scrollController.dispose();
     
     _nameController.dispose();
     _emailController.dispose();
@@ -290,6 +293,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                         ? MediaQuery.of(context).size.width
                         : width,
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       physics: ClampingScrollPhysics(),
                       child: Container(
                         color: Provider.of<ThemeNotifier>(context)
@@ -734,6 +738,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
+                                    key: _deleteAccountKey,
                                       padding: EdgeInsets.only(
                                           left: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), right: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, top: UIConfig.paddingProfileFieldVertical.vertical / 1.h, bottom: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
                                       decoration: BoxDecoration(
@@ -774,6 +779,16 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   setState(() {
                                                     deleteAccountVisible = true;
                                                   });
+                                                  // Auto-scroll to the delete account section after the widget is built
+                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                    if (_deleteAccountKey.currentContext != null) {
+                                                      Scrollable.ensureVisible(
+                                                        _deleteAccountKey.currentContext!,
+                                                        duration: const Duration(milliseconds: 300),
+                                                        curve: Curves.easeInOut,
+                                                      );
+                                                    }
+                                                  });
                                                 },
                                                 isRed: true,
                                               ),
@@ -782,10 +797,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                           Visibility(
                                             visible: deleteAccountVisible,
                                             child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              
                                               children: [
                                                 UIConfig.spacingSizedBoxVerticalSmall,
                                                 Padding(
-                                                  padding: UIConfig.paddingProfileFieldTop,
+                                                  padding: EdgeInsets.only(left: UIConfig.getResponsiveFontSize(context, 8.5, desktopWidth: width), right: UIConfig.paddingProfileFieldHorizontal.horizontal),
                                                   child: Text(
                                                     "Warning: This action is irreversible. You will no longer be able to access your IoT data.",
                                                     style: GoogleFonts.roboto(

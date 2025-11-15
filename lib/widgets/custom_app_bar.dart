@@ -33,7 +33,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
     final responsiveFontSize = UIConfig.getResponsiveFontSize(
       context, 
-      UIConfig.fontSizeLarge, 
+      UIConfig.fontSizeExtraLarge, 
       desktopWidth: width
     );
     

@@ -137,7 +137,7 @@ class _DevicesPageState extends State<DevicesPage> {
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
                             fontWeight: FontWeight.w500,
-                            fontSize: UIConfig.fontSizeMediumResponsive,
+                            fontSize: UIConfig.fontSizeSmallResponsive,
                             letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),
@@ -155,11 +155,11 @@ class _DevicesPageState extends State<DevicesPage> {
                     
                     Expanded(
                       child: Material(
-                        color: UIConfig.colorTransparent,
-                        child: Ink(
-                          color: Provider.of<ThemeNotifier>(context)
+                        color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .dropDownColor,
+                        child: Ink(
+                          
                           child: InkWell(
                             splashFactory: InkRipple.splashFactory,
                             splashColor:
@@ -195,7 +195,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                           ),
                                           decoration: InputDecoration(
                                           
-                                            filled: true,
+                                            // filled: true,
                                             fillColor: UIConfig.colorTransparent,
                                             hintText:
                                             'SEARCH DEVICE LABEL OR SERIAL NO.',
@@ -206,7 +206,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                                   .noEntriesColor,
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(bottom: PlatformUtils.isMobile ? 0.0.h : 5.0.h, left: UIConfig.spacingSmall),
+                                            contentPadding:UIConfig.headerWidgetPadding,
                                             isDense: true,
                                           ),
                                           textAlignVertical: TextAlignVertical.center,
