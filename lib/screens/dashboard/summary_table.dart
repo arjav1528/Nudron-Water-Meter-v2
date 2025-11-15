@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/gradient_borders.dart';
@@ -44,10 +45,17 @@ class _SummaryTableState extends State<SummaryTable> {
       },
       builder: (context, state){
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+        
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
+
+        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+        final responsiveFontSize = UIConfig.getResponsiveFontSize(
+          context, 
+          UIConfig.fontSizeLarge, 
+          desktopWidth: width
+        );
 
         return CustomSafeArea(
           child: Column(
@@ -58,7 +66,7 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             Container(
               height: UIConfig.headerSectionHeight,
-              padding: UIConfig.paddingChartHorizontal,
+              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingExtraLarge - 1).w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,7 +82,7 @@ class _SummaryTableState extends State<SummaryTable> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            width: UIConfig.backButtonWidth,
+                            width: UIConfig.backButtonHeight,
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -118,8 +126,8 @@ class _SummaryTableState extends State<SummaryTable> {
                         style: TextStyle(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            fontWeight: FontWeight.bold,
-                            fontSize: UIConfig.fontSizeLargeResponsive,
+                            fontWeight: FontWeight.w500,
+                            fontSize: UIConfig.fontSizeMediumResponsive,
                             letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),

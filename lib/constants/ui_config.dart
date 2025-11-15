@@ -29,7 +29,7 @@ class UIConfig {
   static double get headerWidgetBorderWidth => spacingMedium.responsiveSp;
   
   /// Header section dimensions (for back button, icon, project name row)
-  static double get headerSectionHeight => PlatformUtils.isMobile ? 40.h : 46.h; // Fixed height for header section alignment
+  static double get headerSectionHeight => 46.h; // Fixed height for header section alignment
   
   /// Container heights
   static double get accentLineHeight => 3.h;
@@ -131,7 +131,7 @@ class UIConfig {
   static double get spacingSmall => 8.w;
   static double get spacingMedium => 12.w;
   static double get spacingLarge => 15.h;
-  static double get spacingExtraLarge => 20.h;
+  static double get spacingExtraLarge => 20.w;
   static double get spacingXXLarge => 24.h;
   static double get spacingXXXLarge => 40.h;
   static double get spacingHuge => 470.h;

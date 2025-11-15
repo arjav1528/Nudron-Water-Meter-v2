@@ -56,6 +56,13 @@ class _DevicesPageState extends State<DevicesPage> {
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
 
+        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+        final responsiveFontSize = UIConfig.getResponsiveFontSize(
+          context, 
+          UIConfig.fontSizeLarge, 
+          desktopWidth: width
+        );
+
         return GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -74,7 +81,7 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
                 Container(
                   height: UIConfig.headerSectionHeight,
-                  padding: UIConfig.paddingChartHorizontal,
+                  padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: UIConfig.spacingExtraLarge.w),
                   child: Row(
                     children: [
                       MouseRegion(
@@ -129,8 +136,8 @@ class _DevicesPageState extends State<DevicesPage> {
                         style: TextStyle(
                             color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            fontWeight: FontWeight.bold,
-                            fontSize: UIConfig.fontSizeLargeResponsive,
+                            fontWeight: FontWeight.w500,
+                            fontSize: UIConfig.fontSizeMediumResponsive,
                             letterSpacing: UIConfig.letterSpacingSp
                         ),
                       ),
@@ -170,7 +177,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                 ),
                               ),
                               child: Padding(
-                                  padding: UIConfig.headerWidgetPadding,
+                                  padding: EdgeInsets.only(right: UIConfig.spacingExtraLarge.w),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -181,7 +188,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                             UpperCaseTextFormatter(),
                                           ],
                                           style: GoogleFonts.robotoMono(
-                                            fontSize: UIConfig.fontSizeSmallResponsive,
+                                            fontSize: UIConfig.fontSizeMediumResponsive,
                                             color: Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
                                                 .basicAdvanceTextColor,
@@ -192,7 +199,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                             hintText:
                                             'SEARCH DEVICE LABEL OR SERIAL NO.',
                                             hintStyle: GoogleFonts.robotoMono(
-                                              fontSize: UIConfig.fontSizeSmallResponsive,
+                                              fontSize: UIConfig.fontSizeMediumResponsive,
                                               color: Provider.of<ThemeNotifier>(context)
                                                   .currentTheme
                                                   .noEntriesColor,

@@ -89,7 +89,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
             ],
             title: Text('FULLSCREEN CHART',
                 style: GoogleFonts.roboto(
-                  fontSize: UIConfig.fontSizeLargeResponsive + 4.responsiveSp,
+                  fontSize: UIConfig.fontSizeLargeResponsive,
                   fontWeight: FontWeight.w500,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme

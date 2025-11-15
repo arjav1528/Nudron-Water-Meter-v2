@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
@@ -49,6 +50,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
           ? dashboardBloc.currentFilters.first.toUpperCase()
           : "NO PROJECT SELECTED";
 
+        
+
         return CustomSafeArea(
           child: Column(
             children: [
@@ -58,7 +61,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               ),
             Container(
               height: UIConfig.headerSectionHeight,
-              padding: UIConfig.paddingChartHorizontal,
+              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingExtraLarge - 1).w),
               child: Row(
                 children: [
                   MouseRegion(
@@ -113,8 +116,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                     style: TextStyle(
                       color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                       fontFamily: GoogleFonts.robotoMono().fontFamily,
-                      fontWeight: FontWeight.bold,
-                      fontSize: UIConfig.fontSizeLargeResponsive,
+                      fontWeight: FontWeight.w500,
+                      fontSize: UIConfig.fontSizeMediumResponsive,
                       letterSpacing: UIConfig.letterSpacingSp
                     ),
                   ),

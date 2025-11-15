@@ -603,7 +603,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             child: Padding(
                                               padding: UIConfig.paddingProfileFieldBoth,
                                               child: Text(
-                                                "Log out from this app",
+                                                "Logout from this app",
                                                 style: GoogleFonts.roboto(
                                                   fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
                                                   color: Provider.of<ThemeNotifier>(
@@ -679,7 +679,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   child: Padding(
                                                     padding: UIConfig.paddingProfileFieldRight,
                                                     child: Text(
-                                                      "Log out from all devices",
+                                                      "Logout from all devices",
                                                       style: GoogleFonts.roboto(
                                                         fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                                         color: Provider.of<
@@ -802,35 +802,31 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      Expanded(
-                                                        child: CustomButton(
-                                                          dynamicWidth: true,
-                                                          text: "CANCEL",
-                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              deleteAccountVisible = false;
-                                                            });
-                                                            
-                                                          },
-                                                        ),
+                                                      CustomButton(
+                                                        dynamicWidth: true,
+                                                        text: "CANCEL",
+                                                        fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            deleteAccountVisible = false;
+                                                          });
+                                                          
+                                                        },
                                                       ),
                                                       UIConfig.spacingSizedBoxSmall,
-                                                      Expanded(
-                                                        child: CustomButton(
-                                                          dynamicWidth: true,
-                                                          text: "CONFIRM",
-                                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                          onPressed: () {
-                                                            if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
-                                                              
-                                                              BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
-                                                            } else {
-                                                              CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
-                                                            }
-                                                          },
-                                                          isRed: true,
-                                                        ),
+                                                      CustomButton(
+                                                        dynamicWidth: true,
+                                                        text: "CONFIRM",
+                                                        fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                                        onPressed: () {
+                                                          if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
+                                                            
+                                                            BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
+                                                          } else {
+                                                            CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
+                                                          }
+                                                        },
+                                                        isRed: true,
                                                       ),
                                                     ],
                                                   ),

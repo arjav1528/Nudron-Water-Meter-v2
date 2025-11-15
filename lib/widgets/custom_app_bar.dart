@@ -102,7 +102,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             
                             child: Padding(
                               padding: EdgeInsets.only(
-                                right: UIConfig.paddingHorizontalSmall,
+                                right: UIConfig.spacingExtraLarge.w,
                                 top: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
                                 bottom: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
                                 left: UIConfig.paddingHorizontalSmall,
@@ -143,7 +143,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                       .splashColor,
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                      right: UIConfig.paddingHorizontalSmall,
+                                      right: (UIConfig.spacingExtraLarge+3).w,
                                       top: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
                                       bottom: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
                                       left: UIConfig.paddingHorizontalSmall,

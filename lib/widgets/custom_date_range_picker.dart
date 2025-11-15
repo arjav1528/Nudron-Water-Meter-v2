@@ -127,7 +127,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingExtraLarge.w),
+                padding: UIConfig.headerWidgetPadding,
                 child: Row(
                   children: [
                     Expanded(
@@ -136,7 +136,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             ? "${DateFormat('MMM dd, yyyy').format(startDate!)} - ${DateFormat('MMM dd, yyyy').format(endDate!)}"
                             : "Select Month Range",
                         style: GoogleFonts.robotoMono(
-                          fontSize: UIConfig.fontSizeSmallResponsive,
+                          fontSize: UIConfig.fontSizeMediumResponsive,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,

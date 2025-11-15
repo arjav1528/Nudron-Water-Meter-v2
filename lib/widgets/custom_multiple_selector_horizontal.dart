@@ -227,7 +227,7 @@ class _CustomMultipleSelectorHorizontalState
   List<BreadCrumbItem> _buildBreadcrumbItems(
     BuildContext context, DashboardBloc dashboardBloc, double? width) {
     final selectedFilters = dashboardBloc.currentFilters;
-    final fontSize = UIConfig.fontSizeSmallResponsive;
+    final fontSize = UIConfig.fontSizeMediumResponsive;
 
     List<BreadCrumbItem> breadcrumbItems = [];
 
@@ -598,7 +598,7 @@ class _CustomMultipleSelectorHorizontal2State
   List<BreadCrumbItem> _buildBreadcrumbItems(
     BuildContext context, DashboardBloc dashboardBloc, double? width) {
     final selectedFilters = dashboardBloc.currentFilters;
-    final fontSize = UIConfig.fontSizeSmallResponsive;
+    final fontSize = UIConfig.fontSizeMediumResponsive;
 
     if (selectedFilters.isEmpty) {
       return [
