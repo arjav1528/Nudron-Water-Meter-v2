@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ class DevicesPage extends StatefulWidget {
 class _DevicesPageState extends State<DevicesPage> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  Timer? _searchDebounceTimer;
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _DevicesPageState extends State<DevicesPage> {
 
   @override
   void dispose() {
+    _searchDebounceTimer?.cancel();
     _searchController.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -48,7 +51,6 @@ class _DevicesPageState extends State<DevicesPage> {
         }
       },
       builder: (context, state){
-        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
@@ -198,8 +200,15 @@ class _DevicesPageState extends State<DevicesPage> {
                                           ),
                                           textAlignVertical: TextAlignVertical.center,
                                           onChanged: (query) {
-                                            dashboardBloc
-                                                .filterDevices(_searchController.text);
+                                            // Cancel previous timer if it exists
+                                            _searchDebounceTimer?.cancel();
+                                            
+                                            // Start a new timer that will trigger search after 0.5 seconds
+                                            _searchDebounceTimer = Timer(const Duration(milliseconds: 500), () {
+                                              if (mounted) {
+                                                dashboardBloc.filterDevices(_searchController.text);
+                                              }
+                                            });
                                           },
                                         ),
                                       ),

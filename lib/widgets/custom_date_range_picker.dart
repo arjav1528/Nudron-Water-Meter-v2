@@ -64,6 +64,10 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         startDate = defaultStart;
         endDate = defaultEnd;
       });
+      
+      // Sync default dates to bloc so Excel export uses correct dates
+      dashboardBloc.selectedStartDate = defaultStart;
+      dashboardBloc.selectedEndDate = defaultEnd;
     }
   }
 
@@ -83,6 +87,14 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
               }
             });
           }
+        } else if (startDate != null && endDate != null) {
+          // If widget has dates but bloc doesn't (e.g., after hot reload), sync to bloc
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && (dashboardBloc.selectedStartDate == null || dashboardBloc.selectedEndDate == null)) {
+              dashboardBloc.selectedStartDate = startDate;
+              dashboardBloc.selectedEndDate = endDate;
+            }
+          });
         }
         return Material(
           color: Colors.transparent,

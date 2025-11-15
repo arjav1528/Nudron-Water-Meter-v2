@@ -246,8 +246,21 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   filterDevices(String query) {
     debugPrint("Query is : $query");
 
-    List header = allDevices[0]; 
-    List dataToFilter = allDevices[1]; 
+    if (allDevices == null || allDevices is! List || allDevices.length < 2) {
+      debugPrint("Error: allDevices is not properly initialized");
+      return;
+    }
+
+    var headerValue = allDevices[0];
+    var dataToFilterValue = allDevices[1];
+
+    if (headerValue is! List || dataToFilterValue is! List) {
+      debugPrint("Error: allDevices structure is invalid. Header: ${headerValue.runtimeType}, Data: ${dataToFilterValue.runtimeType}");
+      return;
+    }
+
+    List header = headerValue; 
+    List dataToFilter = dataToFilterValue; 
 
     List filteredData = dataToFilter.where((device) {
       if (device is! List || device.length < 2) {
@@ -263,7 +276,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     devicesData = [header, filteredData];
 
-    debugPrint(devicesData);
+    debugPrint("Filtered devices count: ${filteredData.length}");
     refreshDevicesPage();
   }
 

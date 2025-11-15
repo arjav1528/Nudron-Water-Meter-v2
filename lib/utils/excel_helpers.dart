@@ -34,7 +34,6 @@ class ExcelHelper {
       var excel = Excel.createExcel();
 
       String todayDDMMYYYY = DateFormat('ddMMyyyy').format(DateTime.now());
-      String todayMMM = DateFormat('MMM').format(DateTime.now());
       List<String> identifier =
           BlocProvider.of<DashboardBloc>(context).currentFilters;
 
@@ -46,15 +45,23 @@ class ExcelHelper {
         case 'billing':
           final bloc = BlocProvider.of<DashboardBloc>(context);
           String rangePart;
+          DateTime startDate;
+          DateTime endDate;
+          
           if (bloc.selectedStartDate != null && bloc.selectedEndDate != null) {
-            final startStr = DateFormat('ddMMyyyy').format(bloc.selectedStartDate!);
-            final endStr = DateFormat('ddMMyyyy').format(bloc.selectedEndDate!);
-            rangePart = "${startStr}_$endStr";
-            
-            rangePart = "${startStr.replaceAll('/', '-')}_${endStr.replaceAll('/', '-')}";
+            startDate = bloc.selectedStartDate!;
+            endDate = bloc.selectedEndDate!;
           } else {
-            rangePart = todayMMM;
+            // Fallback to current month if dates are not set
+            final now = DateTime.now();
+            startDate = DateTime(now.year, now.month, 1);
+            endDate = DateTime(now.year, now.month + 1, 0);
           }
+          
+          final startStr = DateFormat('ddMMyyyy').format(startDate);
+          final endStr = DateFormat('ddMMyyyy').format(endDate);
+          rangePart = "${startStr}_$endStr";
+          
           fileName = "Water_Summary_${identifier[0]}_$rangePart.xlsx";
           break;
         case 'activity':
@@ -73,11 +80,19 @@ class ExcelHelper {
 
         List<dynamic> columnNames = data[0];
         
-        // Process headers: use cleanFieldName for devices table, getActualTitle for others
+        // Process headers: use getActualTitle for ! columns, cleanFieldName for others in devices table
         List<TextCellValue> textColumnNames;
         if (isDevicesTable) {
           textColumnNames = columnNames
-              .map((e) => TextCellValue(Utils.cleanFieldName(e.toString())))
+              .map((e) {
+                String columnName = e.toString();
+                // Use getActualTitle for columns starting with ! (like !AI0, !St1)
+                if (columnName.isNotEmpty && columnName[0] == '!') {
+                  return TextCellValue(getActualTitle(columnName));
+                } else {
+                  return TextCellValue(Utils.cleanFieldName(columnName));
+                }
+              })
               .toList();
         } else {
           textColumnNames = columnNames
