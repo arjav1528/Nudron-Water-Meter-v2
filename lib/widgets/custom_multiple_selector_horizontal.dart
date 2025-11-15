@@ -409,6 +409,8 @@ class _DropdownContentState extends State<DropdownContent> {
 
   void _onFilterChanged(int index, String? value) async {
   if (index == 0) {
+    // Only fetch filterData for UI purposes, don't update bloc state yet
+    // This is needed to populate nested dropdowns
     try {
       filterData = await LoaderUtility.showLoader(
         context,
@@ -457,17 +459,34 @@ class _DropdownContentState extends State<DropdownContent> {
   }
 }
 
-  void _onConfirm() {
-    
+  void _onConfirm() async {
     final parentContext = widget.context;
     
-    widget.onClose();
+    // Check if project changed and needs to be selected first
+    final currentProject = dashboardBloc.currentFilters.firstOrNull;
+    final selectedProject = selectedFilters.first;
     
-    widget.onProjectSelected(selectedFilters.first, selectedFilters);
-    LoaderUtility.showLoader(
-      parentContext,
-      dashboardBloc.updateSelectedFilters(selectedFilters, filterData),
-    ).catchError((e) {
+    try {
+      // If project changed, select it first (this fetches filterData if needed)
+      if (selectedProject != null && selectedProject != currentProject) {
+        final projectIndex = dashboardBloc.projects.indexOf(selectedProject);
+        if (projectIndex >= 0) {
+          filterData = await LoaderUtility.showLoader(
+            parentContext,
+            dashboardBloc.selectProject(projectIndex),
+          );
+        }
+      }
+      
+      // Now update the selected filters - this will trigger all API calls
+      widget.onClose();
+      widget.onProjectSelected(selectedFilters.first, selectedFilters);
+      
+      await LoaderUtility.showLoader(
+        parentContext,
+        dashboardBloc.updateSelectedFilters(selectedFilters, filterData),
+      );
+    } catch (e) {
       if (mounted) {
         CustomAlert.showCustomScaffoldMessenger(
           parentContext,
@@ -476,7 +495,7 @@ class _DropdownContentState extends State<DropdownContent> {
         );
       }
       throw e;
-    });
+    }
   }
 
   List<String> _getItemsForLevel(int level, List<String> projects) {
@@ -488,14 +507,16 @@ class _DropdownContentState extends State<DropdownContent> {
       if (items.isNotEmpty) {
         items = ["-", ...items];
 
+        // Only update local state, don't trigger API calls
+        // API calls will only happen when confirm button is clicked
         if (items.length == 2 && selectedFilters[level] == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               setState(() {
                 selectedFilters[level] = items[1]; 
               });
-
-              dashboardBloc.updateSelectedFilters(selectedFilters, filterData);
+              // Removed: dashboardBloc.updateSelectedFilters(selectedFilters, filterData);
+              // This was causing premature API calls
             }
           });
         }
