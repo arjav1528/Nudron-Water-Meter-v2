@@ -298,7 +298,7 @@ class UIConfig {
   
   // ==================== TABLE/GRID VALUES ====================
   
-  static double get tableCellPaddingHorizontal => 4.w;
+  static double get tableCellPaddingHorizontal => 6.w;
   static double get tableTextWidthPadding => 16;
   static double get tableTextWidthPaddingSmall => 6.responsiveSp;
   static double get tableBorderWidth => 3.responsiveSp;

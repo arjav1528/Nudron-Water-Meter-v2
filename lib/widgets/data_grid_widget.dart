@@ -482,7 +482,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     radius: UIConfig.buttonSplashRadius,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
-                                          vertical: 2.h, horizontal: 7.w),
+                                          vertical: 4.h, horizontal: 10.w),
                                       
                                       child: Icon(
                                         Icons.download,
