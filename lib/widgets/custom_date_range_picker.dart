@@ -143,15 +143,18 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.calendar_month,
-                      color: isDialogOpen
-                          ? UIConfig.accentColorGreen
-                          : Provider.of<ThemeNotifier>(context)
-                              .currentTheme
-                              .basicAdvanceTextColor,
-                      size: UIConfig.iconSizeLarge,
+                    Center(
+                      child: Icon(
+                        Icons.calendar_month,
+                        color: isDialogOpen
+                            ? UIConfig.accentColorGreen
+                            : Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .basicAdvanceTextColor,
+                        size: UIConfig.iconSizeLarge,
+                      ),
                     ),
+                    SizedBox(width: UIConfig.spacingSmall),
                   ],
                 ),
               ),
