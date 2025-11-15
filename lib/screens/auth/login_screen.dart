@@ -590,11 +590,10 @@ class _AutoLoginState extends State<AutoLogin> {
             Navigator.of(context).pop();
           }
         } else if (state is AuthTwoFactorRequired) {
-          
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => EnterTwoFacCode(
-                    referenceCode: state.refCode,
-                  )));
+          // Close the dialog - navigation to 2FA screen is handled in main.dart
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
         } else if (state is AuthError) {
           
           CustomAlert.showCustomScaffoldMessenger(

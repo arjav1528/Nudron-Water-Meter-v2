@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +14,9 @@ import 'package:provider/provider.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:watermeter2/utils/pok.dart';
 
-import '../../api/auth_service.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_event.dart';
+import '../../bloc/auth_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
@@ -20,6 +24,7 @@ import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_safe_area.dart';
+import '../../main.dart';
 
 class EnterTwoFacCode extends StatefulWidget {
   EnterTwoFacCode({super.key, required this.referenceCode});
@@ -52,16 +57,33 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          // Navigate to home route so the route builder can show the dashboard/project selection
+          // Success message is shown in main.dart after navigation completes
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final navigator = mainNavigatorKey.currentState;
+            if (navigator != null) {
+              // Navigate to home route - this will trigger the route builder to show dashboard/project selection
+              navigator.pushNamedAndRemoveUntil('/', (route) => false);
+            }
+          });
+        } else if (state is AuthError) {
+          CustomAlert.showCustomScaffoldMessenger(
+              context, state.message, AlertType.error);
+        }
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor:
-            Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-        appBar: CustomAppBar(choiceAction: null),
-        body: CustomSafeArea(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor:
+              Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+          appBar: CustomAppBar(choiceAction: null),
+          body: CustomSafeArea(
           child: Column(
             children: [
               Container(
@@ -194,23 +216,53 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 text: "VERIFY",
                                 onPressed: () async {
                                   if (otpFieldController.text.length == 6) {
-                                    LoaderUtility.showLoader(
-                                            context,
-                                            LoginPostRequests.sendTwoFactorCode(
-                                                widget.referenceCode,
-                                                otpFieldController.text))
-                                        .then((a) {
-                                      CustomAlert.showCustomScaffoldMessenger(
-                                          context,
-                                          "Successfully logged in! Redirecting to home page...",
-                                          AlertType.success);
-                                      LoginPostRequests.isLoggedIn = true;
-                                      Navigator.of(context).pushNamedAndRemoveUntil(
-                                          "/", (route) => false);
-                                    }).catchError((e) {
-                                      CustomAlert.showCustomScaffoldMessenger(
-                                          context, e.toString(), AlertType.error);
+                                    final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+                                    
+                                    // Create a completer to wait for the auth result
+                                    final completer = Completer<void>();
+                                    StreamSubscription? subscription;
+                                    
+                                    // Listen to auth state changes
+                                    subscription = authBloc.stream.listen((state) {
+                                      if (state is AuthAuthenticated || state is AuthError) {
+                                        subscription?.cancel();
+                                        if (!completer.isCompleted) {
+                                          if (state is AuthError) {
+                                            completer.completeError(state.message);
+                                          } else {
+                                            completer.complete();
+                                          }
+                                        }
+                                      }
                                     });
+                                    
+                                    try {
+                                      // Show loader and wait for verification
+                                      await LoaderUtility.showLoader(
+                                        context,
+                                        Future(() async {
+                                          // Trigger the verification
+                                          authBloc.add(AuthVerifyTwoFactor(
+                                            refCode: widget.referenceCode,
+                                            code: otpFieldController.text,
+                                          ));
+                                          // Wait for the result
+                                          await completer.future;
+                                        }),
+                                      );
+                                      
+                                      // If we get here, authentication was successful
+                                      // Navigation is handled by the BlocListener
+                                    } catch (e) {
+                                      // Error is already handled by the BlocListener
+                                      // But we can show an error message if needed
+                                      if (mounted && e.toString().isNotEmpty) {
+                                        CustomAlert.showCustomScaffoldMessenger(
+                                            context, e.toString(), AlertType.error);
+                                      }
+                                    } finally {
+                                      subscription.cancel();
+                                    }
                                   } else {
                                     CustomAlert.showCustomScaffoldMessenger(
                                         context,
@@ -237,6 +289,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
           ),
         ),
       ),
+    ),
     );
   }
 

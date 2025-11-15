@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/constants/app_config.dart';
 import 'package:watermeter2/screens/auth/login_screen.dart';
+import 'package:watermeter2/screens/auth/two_factor_screen.dart';
 import 'package:watermeter2/utils/loader.dart';
 import 'package:watermeter2/widgets/custom_safe_area.dart';
 
@@ -227,6 +228,22 @@ class _MyAppState extends State<MyApp> {
                     );
                   }
                 });
+              } else if (state is AuthTwoFactorRequired) {
+                // Handle 2FA navigation at app level to ensure it works properly
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final navigator = mainNavigatorKey.currentState;
+                  if (navigator != null) {
+                    final navigatorContext = navigator.context;
+                    CustomAlert.showCustomScaffoldMessenger(
+                        navigatorContext,
+                        "Please enter the code sent to your authenticator app/sms",
+                        AlertType.info);
+                    navigator.push(MaterialPageRoute(
+                        builder: (context) => EnterTwoFacCode(
+                              referenceCode: state.refCode,
+                            )));
+                  }
+                });
               }
             },
             child: MaterialApp(
@@ -329,6 +346,9 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                       );
+                    } else if (authState is AuthTwoFactorRequired) {
+                      // Show LoginPage - the 2FA screen will be pushed on top via navigation
+                      return const LoginPage();
                     } else {
                       
                       return const LoginPage();
