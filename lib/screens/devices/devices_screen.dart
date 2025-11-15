@@ -77,38 +77,41 @@ class _DevicesPageState extends State<DevicesPage> {
                   padding: UIConfig.paddingChartHorizontal,
                   child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushReplacementNamed('/projectSelection');
-                        },
-                        child: Container(
-                          height: UIConfig.backButtonHeight,
-                          width: UIConfig.backButtonHeight,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: UIConfig.borderRadiusCircularMedium,
-                              color: UIConfig.colorTransparent,
-                              border: GradientBoxBorder(
-                                width: UIConfig.chartBorderWidth,
-                                gradient: LinearGradient(
-                                  colors: [
-                                    UIConfig.accentColorRed,
-                                    UIConfig.accentColorRed.withOpacity(UIConfig.opacityVeryHigh),
-                                    Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushReplacementNamed('/projectSelection');
+                          },
+                          child: Container(
+                            height: UIConfig.backButtonHeight,
+                            width: UIConfig.backButtonHeight,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: UIConfig.borderRadiusCircularMedium,
+                                color: UIConfig.colorTransparent,
+                                border: GradientBoxBorder(
+                                  width: UIConfig.chartBorderWidth,
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      UIConfig.accentColorRed,
+                                      UIConfig.accentColorRed.withOpacity(UIConfig.opacityVeryHigh),
+                                      Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                )
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/icons/back_arrow.svg',
+                                height: UIConfig.backButtonIconSize,
+                                width: UIConfig.backButtonIconSize,
+                                colorFilter: ColorFilter.mode(
+                                  Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                  BlendMode.srcIn,
                                 ),
-                              )
-                          ),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              'assets/icons/back_arrow.svg',
-                              height: UIConfig.backButtonIconSize,
-                              width: UIConfig.backButtonIconSize,
-                              colorFilter: ColorFilter.mode(
-                                Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                BlendMode.srcIn,
                               ),
                             ),
                           ),

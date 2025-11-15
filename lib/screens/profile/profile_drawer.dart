@@ -305,38 +305,41 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
                               child: Row(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Container(
-                                      height: UIConfig.backButtonHeight,
-                                      width: UIConfig.backButtonWidth,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          borderRadius: UIConfig.borderRadiusCircularMedium,
-                                          color: UIConfig.colorTransparent,
-                                          border: GradientBoxBorder(
-                                            width: UIConfig.chartBorderWidth,
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                CommonColors.blue,
-                                                CommonColors.blue.withOpacity(UIConfig.opacityVeryHigh),
-                                                CommonColors.blue2,
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
+                                  MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Container(
+                                        height: UIConfig.backButtonHeight,
+                                        width: UIConfig.backButtonWidth,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            borderRadius: UIConfig.borderRadiusCircularMedium,
+                                            color: UIConfig.colorTransparent,
+                                            border: GradientBoxBorder(
+                                              width: UIConfig.chartBorderWidth,
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  CommonColors.blue,
+                                                  CommonColors.blue.withOpacity(UIConfig.opacityVeryHigh),
+                                                  CommonColors.blue2,
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                              ),
+                                            )
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            'assets/icons/back_arrow.svg',
+                                            height: UIConfig.backButtonIconSize,
+                                            width: UIConfig.backButtonIconSize,
+                                            colorFilter: ColorFilter.mode(
+                                              Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                              BlendMode.srcIn,
                                             ),
-                                          )
-                                      ),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          'assets/icons/back_arrow.svg',
-                                          height: UIConfig.backButtonIconSize,
-                                          width: UIConfig.backButtonIconSize,
-                                          colorFilter: ColorFilter.mode(
-                                            Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                            BlendMode.srcIn,
                                           ),
                                         ),
                                       ),
