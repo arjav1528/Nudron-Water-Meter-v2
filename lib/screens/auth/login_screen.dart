@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                     key: UniqueKey(),
                                     tabs: const ["SIGN IN", "REGISTER"],
                                     backgroundColor: CommonColors.blue,
-                                    fontSize: ThemeNotifier.medium.responsiveSp,
+                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.large, desktopWidth:  UIConfig.getDesktopDrawerWidth(context)),
                                     selectedTextColor: Colors.white,
                                     unselectedTextColor:
                                         Provider.of<ThemeNotifier>(context)
