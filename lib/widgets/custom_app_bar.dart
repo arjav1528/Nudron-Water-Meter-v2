@@ -82,6 +82,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     Row(
                       children: [
                         
+                        
                         Material(
                           color: Colors.transparent,
                           
@@ -102,10 +103,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             
                             child: Padding(
                               padding: EdgeInsets.only(
-                                right: UIConfig.spacingExtraLarge.w,
-                                top: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
-                                bottom: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
-                                left: UIConfig.paddingHorizontalSmall,
+                                right: 11.w,
+                                top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                                bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                                left: 11.w,
                               ),
                               child: Icon(
                                 Icons.contrast,
@@ -117,7 +118,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             ),
                           ),
                         ),
-                        
+                        SizedBox(width: UIConfig.spacingSmall),
                         BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                             bool isUserLoggedIn = state is AuthAuthenticated;
@@ -143,10 +144,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                       .splashColor,
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                      right: (UIConfig.spacingExtraLarge+3).w,
-                                      top: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
-                                      bottom: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
-                                      left: UIConfig.paddingHorizontalSmall,
+                                      right: 11.w,
+                                      top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                                      bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
+                                      left: 11.w,
                                     ),
                                     child: SizedBox(
                                       width: UIConfig.iconSizeAppBarIcon,
@@ -173,7 +174,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             return SizedBox.shrink();
                           },
                         ),
-                                    
+                        SizedBox(width: UIConfig.spacingMedium),
                       ],
                     )
                   ],
