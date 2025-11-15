@@ -67,7 +67,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                     },
                     child: Container(
                       height: UIConfig.backButtonHeight,
-                      width: UIConfig.backButtonWidth,
+                      width: UIConfig.backButtonHeight,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: UIConfig.borderRadiusCircularMedium,
