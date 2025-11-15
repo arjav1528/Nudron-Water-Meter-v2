@@ -82,7 +82,7 @@ class _CustomMultipleSelectorHorizontalState
                     )
                 ),
                 child: Padding(
-                  padding: UIConfig.headerWidgetPadding,
+                  padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
                   child: Container(
                     color: Colors.transparent,
                     child: Row(
@@ -589,7 +589,7 @@ class _CustomMultipleSelectorHorizontal2State
           ),
         ),
         child: Padding(
-          padding: UIConfig.headerWidgetPadding,
+          padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
           child: Container(
             color: Colors.transparent,
             child: Row(
@@ -598,9 +598,11 @@ class _CustomMultipleSelectorHorizontal2State
                   child: BreadCrumb(
                     items: _buildBreadcrumbItems(
                         context, BlocProvider.of<DashboardBloc>(context), width),
-                    divider: Icon(
-                      Icons.chevron_right,
-                      color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
+                    divider: Center(
+                      child: Icon(
+                        Icons.chevron_right,
+                        color: Provider.of<ThemeNotifier>(context).currentTheme.dialogBG,
+                      ),
                     ),
                     overflow: const WrapOverflow(
                       keepLastDivider: false,

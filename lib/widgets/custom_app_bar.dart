@@ -103,10 +103,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             
                             child: Padding(
                               padding: EdgeInsets.only(
-                                right: 11.w,
+                                right: 0.w,
                                 top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
                                 bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
-                                left: 11.w,
+                                left: 0.w,
                               ),
                               child: Icon(
                                 Icons.contrast,
@@ -144,10 +144,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                       .splashColor,
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                      right: 11.w,
+                                      right: 0.w,
                                       top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
                                       bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
-                                      left: 11.w,
+                                      left: 0.w,
                                     ),
                                     child: SizedBox(
                                       width: UIConfig.iconSizeAppBarIcon,

@@ -117,7 +117,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                       color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                       fontFamily: GoogleFonts.robotoMono().fontFamily,
                       fontWeight: FontWeight.w500,
-                      fontSize: UIConfig.fontSizeSmallResponsive,
+                      fontSize: UIConfig.fontSizeMediumResponsive,
                       letterSpacing: UIConfig.letterSpacingSp
                     ),
                   ),

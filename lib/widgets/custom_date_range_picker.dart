@@ -127,7 +127,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 ),
               ),
               child: Padding(
-                padding: UIConfig.headerWidgetPadding,
+                padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w),
                 child: Row(
                   children: [
                     Expanded(
