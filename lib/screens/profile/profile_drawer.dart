@@ -301,8 +301,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              height: UIConfig.iconContainerHeight + 21.h,
-                              color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                              height: UIConfig.headerSectionHeight,
+                              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingExtraLarge - 1).w),
                               child: Row(
                                 children: [
                                   MouseRegion(
@@ -586,8 +586,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, vertical: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+                                      padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
@@ -654,8 +653,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, vertical: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+                                      padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
@@ -734,8 +732,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                   ),
                                   Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, vertical: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+                                      padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
@@ -906,7 +903,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-      padding: EdgeInsets.fromLTRB(UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
+      padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 5, desktopWidth: width), UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
       decoration: BoxDecoration(
         border: widget.topOpen
             ? Border(
@@ -1152,7 +1149,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-        padding: EdgeInsets.fromLTRB(UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.borderWidthThin.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+        padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width),UIConfig.borderWidthThin.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
         decoration: BoxDecoration(
           border: widget.topOpen
               ? Border(

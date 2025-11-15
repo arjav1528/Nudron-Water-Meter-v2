@@ -92,7 +92,7 @@ class _DevicesPageState extends State<DevicesPage> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            width: UIConfig.backButtonHeight,
+                            width: UIConfig.backButtonWidth,
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -181,7 +181,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        child: TextField(
+                                        child: TextField(                         
                                           controller: _searchController,
                                           keyboardType: TextInputType.text,
                                           inputFormatters: [
@@ -194,6 +194,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                                 .basicAdvanceTextColor,
                                           ),
                                           decoration: InputDecoration(
+                                          
                                             filled: true,
                                             fillColor: UIConfig.colorTransparent,
                                             hintText:
@@ -205,7 +206,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                                   .noEntriesColor,
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(bottom: PlatformUtils.isMobile ? 0.0.h : 5.0.h),
+                                            contentPadding: EdgeInsets.only(bottom: PlatformUtils.isMobile ? 0.0.h : 5.0.h, left: UIConfig.spacingSmall),
                                             isDense: true,
                                           ),
                                           textAlignVertical: TextAlignVertical.center,

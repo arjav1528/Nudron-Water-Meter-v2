@@ -82,7 +82,7 @@ class _SummaryTableState extends State<SummaryTable> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            width: UIConfig.backButtonHeight,
+                            width: UIConfig.backButtonWidth,
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,
