@@ -29,6 +29,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final topPadding = mediaQuery.padding.top;
+    // Calculate 1/3rd width for responsive font sizing (same as dashboard tabs)
+    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final responsiveFontSize = UIConfig.getResponsiveFontSize(
+      context, 
+      UIConfig.fontSizeLarge, 
+      desktopWidth: width
+    );
     
     return PreferredSize(
         preferredSize: Size.fromHeight(UIConfig.appBarHeight + topPadding),
@@ -62,10 +69,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                         SizedBox(width: UIConfig.spacingAppBarLogo),
                         Text("WATER METERING",
-                            
                             style: GoogleFonts.robotoMono(
-                              fontSize: UIConfig.fontSizeLargeResponsive,
+                              fontSize: responsiveFontSize,
                               fontWeight: FontWeight.w500,
+                              letterSpacing: UIConfig.letterSpacingSp,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .loginTitleColor,
@@ -95,10 +102,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             
                             child: Padding(
                               padding: EdgeInsets.only(
-                                right: 11.w,
-                                top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
-                                bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
-                                left: 11.w,
+                                right: UIConfig.paddingHorizontalSmall,
+                                top: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
+                                bottom: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
+                                left: UIConfig.paddingHorizontalSmall,
                               ),
                               child: Icon(
                                 Icons.contrast,
@@ -136,20 +143,27 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                       .splashColor,
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                      right: 11.w,
-                                      top: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
-                                      bottom: ((51.h - 28.responsiveSp) / 2).clamp(0.0, double.infinity),
-                                      left: 11.w,
+                                      right: UIConfig.paddingHorizontalSmall,
+                                      top: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
+                                      bottom: ((UIConfig.appBarHeight - UIConfig.iconSizeAppBarIcon) / 2).clamp(0.0, double.infinity),
+                                      left: UIConfig.paddingHorizontalSmall,
                                     ),
-                                    child: SvgPicture.asset(
-                                      "assets/icons/profile2.svg",
+                                    child: SizedBox(
                                       width: UIConfig.iconSizeAppBarIcon,
                                       height: UIConfig.iconSizeAppBarIcon,
-                                      color: widget.isProfile
-                                          ? CommonColors.blue2
-                                          : Provider.of<ThemeNotifier>(context)
-                                              .currentTheme
-                                              .loginTitleColor,
+                                      child: SvgPicture.asset(
+                                        "assets/icons/profile2.svg",
+                                        width: UIConfig.iconSizeAppBarIcon,
+                                        height: UIConfig.iconSizeAppBarIcon,
+                                        colorFilter: ColorFilter.mode(
+                                          widget.isProfile
+                                              ? CommonColors.blue2
+                                              : Provider.of<ThemeNotifier>(context)
+                                                  .currentTheme
+                                                  .loginTitleColor,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
                                     ),  
                                     
                                   ),
