@@ -514,6 +514,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                           widget.exportToIncludeWholeData,
                                           widget.location,
                                           context,
+                                          isDevicesTable: widget.devicesTable ?? false,
                                         );
                                       }
                                     },

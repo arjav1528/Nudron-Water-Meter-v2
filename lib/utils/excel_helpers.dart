@@ -10,6 +10,8 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../main.dart';
 
 import '../../utils/alert_message.dart';
+import '../../utils/utils.dart';
+import '../../models/chartModels.dart';
 import '../api/data_service.dart';
 
 class ExcelHelper {
@@ -24,8 +26,9 @@ class ExcelHelper {
   static Future<String?> exportToExcel(
     List<List<dynamic>> sheetsData,
     String exportType,
-    BuildContext context,
-  ) async {
+    BuildContext context, {
+    bool isDevicesTable = false,
+  }) async {
     try {
       
       var excel = Excel.createExcel();
@@ -55,6 +58,7 @@ class ExcelHelper {
           fileName = "Water_Summary_${identifier[0]}_$rangePart.xlsx";
           break;
         case 'activity':
+        case 'devices':
           fileName = "Water_Meters_${identifier[0]}_$todayDDMMYYYY.xlsx";
           break;
         default:
@@ -68,9 +72,18 @@ class ExcelHelper {
         Sheet sheetObject = excel[sheetName];
 
         List<dynamic> columnNames = data[0];
-        List<TextCellValue> textColumnNames = columnNames
-            .map((e) => TextCellValue(getActualTitle(e.toString())))
-            .toList();
+        
+        // Process headers: use cleanFieldName for devices table, getActualTitle for others
+        List<TextCellValue> textColumnNames;
+        if (isDevicesTable) {
+          textColumnNames = columnNames
+              .map((e) => TextCellValue(Utils.cleanFieldName(e.toString())))
+              .toList();
+        } else {
+          textColumnNames = columnNames
+              .map((e) => TextCellValue(getActualTitle(e.toString())))
+              .toList();
+        }
         sheetObject.insertRowIterables(textColumnNames, 0);
 
         List<dynamic> rows = data[1];
@@ -78,9 +91,36 @@ class ExcelHelper {
           List<CellValue> row = [];
           for (int j = 0; j < rows[i].length; j++) {
             var cellValue = rows[i][j];
-            row.add((cellValue is num
-                ? DoubleCellValue(cellValue.toDouble())
-                : TextCellValue(cellValue.toString())));
+            
+            // Process cell value for devices table
+            if (isDevicesTable && columnNames.length > j) {
+              String fieldName = columnNames[j].toString();
+              
+              // Process fields starting with '%' (Last Seen)
+              if (fieldName.isNotEmpty && fieldName[0] == '%') {
+                String processedValue = Utils.lastSeenFromMilliseconds(cellValue).toString();
+                row.add(TextCellValue(processedValue));
+              }
+              // Process fields starting with '@' (Last Record)
+              else if (fieldName.isNotEmpty && fieldName[0] == '@') {
+                String lastSeenDate = NudronChartMap.convertDaysToDate(cellValue.toString());
+                if (lastSeenDate == '01-Jan-20') {
+                  lastSeenDate = 'NA';
+                }
+                row.add(TextCellValue(lastSeenDate));
+              }
+              // Regular cell value
+              else {
+                row.add((cellValue is num
+                    ? DoubleCellValue(cellValue.toDouble())
+                    : TextCellValue(cellValue.toString())));
+              }
+            } else {
+              // Regular processing for non-devices table
+              row.add((cellValue is num
+                  ? DoubleCellValue(cellValue.toDouble())
+                  : TextCellValue(cellValue.toString())));
+            }
           }
           sheetObject.insertRowIterables(row, i + 1);
         }

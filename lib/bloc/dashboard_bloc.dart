@@ -349,8 +349,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     var data,
     bool exportToIncludeWholeData,
     String exportType,
-    BuildContext context,
-  ) async {
+    BuildContext context, {
+    bool isDevicesTable = false,
+  }) async {
     CustomAlert.showCustomScaffoldMessenger(
       mainNavigatorKey.currentContext!,
       "Preparing data for export...",
@@ -382,6 +383,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         ],
         exportType,
         context,
+        isDevicesTable: isDevicesTable,
       );
     } else {
       if (!isValidSheetData(data)) {
@@ -398,6 +400,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         ],
         exportType,
         context,
+        isDevicesTable: isDevicesTable,
       );
     }
 
