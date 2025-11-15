@@ -59,7 +59,7 @@ class CustomButton extends StatelessWidget {
                 child: Center(
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: dynamicWidth ? UIConfig.paddingButtonHorizontal.horizontal : 0),
+                        EdgeInsets.symmetric(horizontal: dynamicWidth ? 15.0 : 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
