@@ -177,7 +177,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                 ),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.only(right: UIConfig.spacingExtraLarge.w),
+                                  padding: EdgeInsets.only(right: UIConfig.spacingSmall.w),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -206,7 +206,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                                   .noEntriesColor,
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding:UIConfig.headerWidgetPadding,
+                                            contentPadding:EdgeInsets.only(left: UIConfig.spacingMedium.w, right: 1.w),
                                             isDense: true,
                                           ),
                                           textAlignVertical: TextAlignVertical.center,

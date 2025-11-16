@@ -66,7 +66,7 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             Container(
               height: UIConfig.headerSectionHeight,
-              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingExtraLarge - 1).w),
+              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingSmall - 1).w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
