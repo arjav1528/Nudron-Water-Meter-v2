@@ -31,7 +31,25 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
   @override
   void initState() {
     super.initState();
-    super.initState();
+    // Initialize with default dates immediately to prevent "Select Month Range" flash
+    final now = DateTime.now();
+    final minDate = DateTime(2020, 1, 1);
+    final maxDate = DateTime(now.year, now.month, now.day);
+
+    DateTime defaultStart = DateTime(now.year, now.month, 1);
+    DateTime defaultEnd = DateTime(now.year, now.month + 1, 0);
+
+    if (defaultStart.isBefore(minDate)) {
+      defaultStart = minDate;
+    }
+    if (defaultEnd.isAfter(maxDate)) {
+      defaultEnd = maxDate;
+    }
+
+    startDate = defaultStart;
+    endDate = defaultEnd;
+    
+    // Sync with bloc after first frame to get any existing dates from bloc
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _syncWithBlocDates();
     });
@@ -41,33 +59,17 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
     
     if (dashboardBloc.selectedStartDate != null && dashboardBloc.selectedEndDate != null) {
-      setState(() {
-        startDate = dashboardBloc.selectedStartDate;
-        endDate = dashboardBloc.selectedEndDate;
-      });
+      // Only update if bloc has different dates
+      if (startDate != dashboardBloc.selectedStartDate || endDate != dashboardBloc.selectedEndDate) {
+        setState(() {
+          startDate = dashboardBloc.selectedStartDate;
+          endDate = dashboardBloc.selectedEndDate;
+        });
+      }
     } else {
-      final now = DateTime.now();
-      final minDate = DateTime(2020, 1, 1);
-      final maxDate = DateTime(now.year, now.month, now.day);
-
-      DateTime defaultStart = DateTime(now.year, now.month, 1);
-      DateTime defaultEnd = DateTime(now.year, now.month + 1, 0);
-
-      if (defaultStart.isBefore(minDate)) {
-        defaultStart = minDate;
-      }
-      if (defaultEnd.isAfter(maxDate)) {
-        defaultEnd = maxDate;
-      }
-
-      setState(() {
-        startDate = defaultStart;
-        endDate = defaultEnd;
-      });
-      
       // Sync default dates to bloc so Excel export uses correct dates
-      dashboardBloc.selectedStartDate = defaultStart;
-      dashboardBloc.selectedEndDate = defaultEnd;
+      dashboardBloc.selectedStartDate = startDate;
+      dashboardBloc.selectedEndDate = endDate;
     }
   }
 
