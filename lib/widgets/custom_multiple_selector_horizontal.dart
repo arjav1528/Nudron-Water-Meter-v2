@@ -12,6 +12,7 @@ import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';
+import '../../utils/pok.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/customButton.dart';
 import '../../services/platform_utils.dart';
@@ -82,10 +83,12 @@ class _CustomMultipleSelectorHorizontalState
                     )
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: UIConfig.spacingSmall.h, horizontal: UIConfig.spacingMedium.w),
+                  padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w),
                   child: Container(
                     color: Colors.transparent,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: BreadCrumb(
@@ -103,12 +106,14 @@ class _CustomMultipleSelectorHorizontalState
                             ),
                           ),
                         ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Provider.of<ThemeNotifier>(context)
-                              .currentTheme
-                              .basicAdvanceTextColor,
-                          size: UIConfig.iconSizeLarge,
+                        Center(
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .basicAdvanceTextColor,
+                            size: UIConfig.iconSizeLarge,
+                          ),
                         )
                       ],
                     ),
@@ -337,9 +342,87 @@ class _DropdownContentState extends State<DropdownContent> {
     final projects = dashboardBloc.projects;
     final width = UIConfig.getDesktopProjectWidth(context);
 
-    // Calculate the actual width1 and width2 used in dropdowns
-    final dropdownWidth1 = PlatformUtils.isMobile ? UIConfig.spacingExtraLarge * 5.w : width * UIConfig.desktopProjectWidthMultiplier;
-    final dropdownWidth2 = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 187.w : width * (1 - UIConfig.desktopProjectWidthMultiplier);
+    // Calculate the maximum width needed for all field names (labels)
+    double maxLabelWidth = 0;
+    
+    // For desktop: make font size responsive to actual available width to prevent overflow
+    // This is specific to these dropdowns only, not affecting other dropdowns
+    final double fontSize;
+    if (PlatformUtils.isMobile) {
+      fontSize = UIConfig.fontSizeSmallResponsive;
+    } else {
+      // Get the actual available width for the dropdown
+      final screenWidth = MediaQuery.of(context).size.width;
+      final availableWidth = screenWidth - (UIConfig.spacingMedium.w * 2); // Account for padding
+      // Calculate responsive font size based on available width, with min/max bounds
+      fontSize = (availableWidth / UIConfig.desktopFontSizeDivisor).clamp(12.0, 18.0);
+    }
+    
+    final textStyle = GoogleFonts.robotoMono(fontSize: fontSize);
+    
+    // Measure all labels to find the maximum width
+    for (int index = 1; index < levels.length; index++) {
+      final textPainter = TextPainter(
+        text: TextSpan(text: levels[index], style: textStyle),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+      );
+      // Layout with no width constraint to get the full text width
+      textPainter.layout(maxWidth: double.infinity);
+      final labelWidth = textPainter.width;
+      if (labelWidth > maxLabelWidth) {
+        maxLabelWidth = labelWidth;
+      }
+      textPainter.dispose();
+    }
+    
+    // Add padding for the label area using UIConfig constants
+    final labelPadding = UIConfig.dropdownLabelTotalPadding;
+    final dividerWidth = UIConfig.borderWidthThin;
+    
+    // CustomDropdownButton2 applies .w to width1 (line 425: widget.width1.w)
+    // .w converts from design units to screen units based on design size
+    // Mobile design size: 430, Desktop design size: 1920
+    // So we need to pass width1 in design units
+    
+    // For mobile: convert logical pixels to design units (divide by scaleWidth)
+    // For desktop: convert logical pixels to design units (divide by scaleWidth, which scales to 1920)
+    final maxLabelWidthInDesignUnits = maxLabelWidth / ScreenUtil().scaleWidth;
+    
+    final calculatedWidth1 = maxLabelWidthInDesignUnits + labelPadding;
+    
+    // Calculate width2 as remaining width after width1, divider, and icon space
+    // CustomDropdownButton2 uses width2 differently:
+    // - Mobile: applies .w (line 454: widget.width2.w), so needs design units
+    // - Desktop: uses directly (line 454: widget.width2), so needs logical pixels
+    
+    // For mobile: get actual available screen width and constrain to it
+    // Account for horizontal padding that will be applied to the dropdown container
+    final totalAvailableWidth = PlatformUtils.isMobile 
+        ? MediaQuery.of(context).size.width - (UIConfig.spacingMedium.w * 2) // Subtract left and right padding
+        : width;
+    
+    // Convert everything to the appropriate units for width2
+    final double calculatedWidth2;
+    if (PlatformUtils.isMobile) {
+      // For mobile: convert to design units since CustomDropdownButton2 will apply .w
+      // Account for all spacing: left padding (10.w), width1, right padding (3.w), divider (1.w), icon space (30.responsiveSp)
+      // Add a small buffer (8 design units) to prevent overflow from rounding errors
+      final totalInDesignUnits = totalAvailableWidth / ScreenUtil().scaleWidth;
+      final width1InDesignUnits = calculatedWidth1; // already in design units
+      final leftPaddingInDesignUnits = 10.0 / ScreenUtil().scaleWidth;
+      final rightPaddingInDesignUnits = UIConfig.dropdownLabelPaddingRight / ScreenUtil().scaleWidth;
+      final dividerInDesignUnits = dividerWidth / ScreenUtil().scaleWidth;
+      final iconSpaceInDesignUnits = UIConfig.desktopDropdownIconSpace / ScreenUtil().scaleWidth;
+      final safetyBuffer = 8.0 / ScreenUtil().scaleWidth; // Buffer to prevent overflow
+      // Subtract all spacing elements and buffer from total width
+      calculatedWidth2 = totalInDesignUnits - width1InDesignUnits - leftPaddingInDesignUnits - rightPaddingInDesignUnits - dividerInDesignUnits - iconSpaceInDesignUnits - safetyBuffer;
+    } else {
+      // For desktop: use logical pixels directly (CustomDropdownButton2 doesn't apply .w)
+      // But width1 was converted to design units, so we need to convert it back to logical pixels
+      final width1InLogicalPixels = calculatedWidth1 * ScreenUtil().scaleWidth;
+      calculatedWidth2 = totalAvailableWidth - width1InLogicalPixels - dividerWidth - UIConfig.desktopDropdownIconSpace;
+    }
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -354,14 +437,11 @@ class _DropdownContentState extends State<DropdownContent> {
               builder: (context) {
                 var items = _getItemsForLevel(index, projects);
 
-                final width1 = PlatformUtils.isMobile ? UIConfig.spacingExtraLarge * 5.w : width * UIConfig.desktopProjectWidthMultiplier;
-                final width2 = PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 187.w : width * (1 - UIConfig.desktopProjectWidthMultiplier);
-
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: UIConfig.paddingSymmetricVerticalSmall.vertical),
                   child: CustomDropdownButton2(
-                    width1: width1,
-                    width2: width2,
+                    width1: calculatedWidth1,
+                    width2: calculatedWidth2,
                     // desktopDropdownWidth: PlatformUtils.isMobile ? null : width,
                     // desktopDropdownWidth: width - 30,
                     fieldName: levels[index],
@@ -369,36 +449,42 @@ class _DropdownContentState extends State<DropdownContent> {
                     items: items,
                     onChanged: (value) => _onFilterChanged(index, value),
                     fieldNameVisible: true,
+                    customFontSize: fontSize, // Pass responsive font size for desktop
                   ),
                 );
               }
             ),
           SizedBox(height: UIConfig.spacingExtraLarge),
-          SizedBox(
-            width: PlatformUtils.isMobile 
-                ? dropdownWidth1 + dropdownWidth2 + UIConfig.spacingXXXLarge * 0.4.w
-                : dropdownWidth1 + dropdownWidth2 - UIConfig.spacingXXXLarge * 0.5,
-           
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                
-                CustomButton(
-                  text: 'CANCEL',
-                  isRed: true,
-                  dynamicWidth: true,
-                  onPressed: widget.onClose,
-                  width: UIConfig.buttonDefaultWidth + 8.w, 
+          // Calculate the exact dropdown width to align buttons
+          Builder(
+            builder: (context) {
+              // Calculate the total dropdown width (same as the dropdown itself)
+              final dropdownTotalWidth = PlatformUtils.isMobile
+                  ? (calculatedWidth1.w + calculatedWidth2.w + dividerWidth + UIConfig.desktopDropdownIconSpace.responsiveSp)
+                  : (calculatedWidth1 * ScreenUtil().scaleWidth + calculatedWidth2 + dividerWidth + UIConfig.desktopDropdownIconSpace);
+              
+              return SizedBox(
+                width: dropdownTotalWidth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      text: 'CANCEL',
+                      isRed: true,
+                      dynamicWidth: true,
+                      onPressed: widget.onClose,
+                      width: UIConfig.buttonDefaultWidth + UIConfig.buttonWidthExtraPadding, 
+                    ),
+                    CustomButton(
+                      text: 'CONFIRM',
+                      dynamicWidth: true,
+                      onPressed: _onConfirm,
+                      width: UIConfig.buttonDefaultWidth + UIConfig.buttonWidthExtraPadding, 
+                    ),
+                  ],
                 ),
-                // SizedBox(width: UIConfig.spacingXXXLarge * 4.w),
-                CustomButton(
-                  text: 'CONFIRM',
-                  dynamicWidth: true,
-                  onPressed: _onConfirm,
-                  width: UIConfig.buttonDefaultWidth + 8.w, 
-                ),
-              ],
-            ),
+              );
+            }
           ),
           SizedBox(height: UIConfig.spacingExtraLarge),
           

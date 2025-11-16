@@ -296,6 +296,21 @@ class UIConfig {
   static double get dropdownPaddingLeftMedium => 15.w;
   static double get dropdownCountryPickerHeight => 30.78.h;
   
+  // Dropdown label padding (for width calculation in design units)
+  static double get dropdownLabelPaddingLeft => 10.0;
+  static double get dropdownLabelPaddingRight => 0.0; // Reduced spacing between label and divider
+  static double get dropdownLabelTextPaddingLeft => 8.0;
+  static double get dropdownLabelBuffer => 5.0;
+  static double get dropdownLabelTotalPadding => dropdownLabelPaddingLeft + dropdownLabelPaddingRight + dropdownLabelTextPaddingLeft + dropdownLabelBuffer;
+  
+  // Dropdown mobile width calculation
+  static double get dropdownMobileWidthOffset => 187.0;
+  static double get dropdownMobileWidthMultiplier => 5.0;
+  static double get dropdownMobileWidthMultiplierIncreased => 15.5; // Increased for wider mobile dropdowns
+  
+  // Button width adjustments
+  static double get buttonWidthExtraPadding => 8.w;
+  
   // ==================== TABLE/GRID VALUES ====================
   
   static double get tableCellPaddingHorizontal => 6.w;

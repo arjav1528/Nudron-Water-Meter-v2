@@ -230,6 +230,7 @@ class CustomDropdownButton2 extends StatefulWidget {
   final double width2;
   final bool fieldNameVisible;
   final double? desktopDropdownWidth;
+  final double? customFontSize; // Optional custom font size for responsive behavior
 
   const CustomDropdownButton2({
     super.key,
@@ -241,6 +242,7 @@ class CustomDropdownButton2 extends StatefulWidget {
     this.width2 = 273,
     this.fieldNameVisible = true,
     this.desktopDropdownWidth,
+    this.customFontSize,
   });
 
   @override
@@ -316,13 +318,19 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
     }
     final size = renderBox.size;
 
-    // Calculate font size gradient for desktop
-    final totalWidth = PlatformUtils.isMobile 
-        ? null 
-        : (widget.width1 + widget.width2 + 30.0 + 20.0);
-    final fontSize = PlatformUtils.isMobile 
-        ? UIConfig.fontSizeSmallResponsive 
-        : (totalWidth ?? 400) / 30;
+    // Use custom font size if provided, otherwise calculate normally
+    final double fontSize;
+    if (widget.customFontSize != null) {
+      fontSize = widget.customFontSize!;
+    } else {
+      // Calculate font size gradient for desktop (default behavior)
+      final totalWidth = PlatformUtils.isMobile 
+          ? null 
+          : (widget.width1 + widget.width2 + 30.0 + 20.0);
+      fontSize = PlatformUtils.isMobile 
+          ? UIConfig.fontSizeSmallResponsive 
+          : (totalWidth ?? 400) / 30;
+    }
 
     return OverlayEntry(
       builder: (context) => Positioned(
@@ -392,21 +400,34 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate font size gradient for desktop
-    final totalWidth = PlatformUtils.isMobile 
-        ? null 
-        : UIConfig.getDesktopDropdownTotalWidth(widget.width1, widget.width2);
-    final fontSize = PlatformUtils.isMobile 
-        ? UIConfig.fontSizeSmallResponsive 
-        : UIConfig.getDesktopFontSizeFromWidth(totalWidth ?? UIConfig.desktopDrawerWidthMin);
+    // Use custom font size if provided, otherwise calculate normally
+    // This allows specific dropdowns to have responsive font sizes
+    final double fontSize;
+    if (widget.customFontSize != null) {
+      fontSize = widget.customFontSize!;
+    } else {
+      // Calculate font size gradient for desktop (default behavior)
+      final totalWidth = PlatformUtils.isMobile 
+          ? null 
+          : UIConfig.getDesktopDropdownTotalWidth(widget.width1, widget.width2);
+      fontSize = PlatformUtils.isMobile 
+          ? UIConfig.fontSizeSmallResponsive 
+          : UIConfig.getDesktopFontSizeFromWidth(totalWidth ?? UIConfig.desktopDrawerWidthMin);
+    }
     
     return GestureDetector(
       onTap: _toggleDropdown,
       child: CompositedTransformTarget(
         link: _layerLink,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: PlatformUtils.isMobile 
+                ? MediaQuery.of(context).size.width - (UIConfig.spacingMedium.w * 2) - 0.w // Extra 8.w buffer to prevent overflow
+                : double.infinity,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
             Stack(
               children: [
                 Positioned.fill(
@@ -417,30 +438,34 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                 SizedBox(
                   height: UIConfig.dropdownRowHeight,
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       widget.fieldNameVisible ? Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(width: 10.w),
-                          SizedBox(
-                            width: widget.width1.w,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 8.w),
-                                child: Text(
-                                  widget.fieldName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.robotoMono(
-                                    fontSize: fontSize,
-                                    color: Provider.of<ThemeNotifier>(context)
-                                        .currentTheme
-                                        .basicAdvanceTextColor,
+                          Flexible(
+                            child: SizedBox(
+                              width: widget.width1.w,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8.w),
+                                  child: Text(
+                                    widget.fieldName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.robotoMono(
+                                      fontSize: fontSize,
+                                      color: Provider.of<ThemeNotifier>(context)
+                                          .currentTheme
+                                          .basicAdvanceTextColor,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          Container(width: 10.w),
+                          Container(width: UIConfig.dropdownLabelPaddingRight.w),
                           Container(
                             height: UIConfig.dropdownRowHeight,
                             width: UIConfig.borderWidthThin,
@@ -448,10 +473,13 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                           ),
                         ],
                       ) : Container(),
-                      GestureDetector(
-                        onTap: _toggleDropdown,
-                        child: Container(
-                          width: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
+                      Flexible(
+                        child: GestureDetector(
+                          onTap: _toggleDropdown,
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: PlatformUtils.isMobile ? widget.width2.w + 30.responsiveSp : widget.width2 + 30.0,
+                            ),
                           height: 40.h,
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -462,7 +490,9 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 15.w),
+                                    padding: widget.fieldNameVisible 
+                                        ? EdgeInsets.zero 
+                                        : EdgeInsets.only(left: 8.w),
                                     child: Text(
                                       selectedValue ?? '-',
                                       overflow: TextOverflow.ellipsis,
@@ -488,6 +518,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
                             ],
                           ),
                         ),
+                        ),
                       ),
                     ],
                   ),
@@ -495,6 +526,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
               ],
             ),
           ],
+          ),
         ),
       ),
     );
