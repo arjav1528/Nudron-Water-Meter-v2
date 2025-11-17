@@ -225,9 +225,8 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
           adjustedTop = dimensions.verticalGap - 0.75 - 1.h;
           indicatorLeft = indicatorLeft - 1.h;
         } else if (selectedIndex == 1) {
-          // YES: move upward slightly, and move right to extreme
-          adjustedTop = dimensions.verticalGap - 1.5;
-          indicatorLeft = indicatorLeft + 1.h;
+          // YES: move upward slightly (reduced offset for mobile)
+          adjustedTop = dimensions.verticalGap - 1.0;
         }
       } else {
         // Desktop-specific adjustments
