@@ -34,6 +34,7 @@ class ExcelHelper {
       var excel = Excel.createExcel();
 
       String todayDDMMYYYY = DateFormat('ddMMyyyy').format(DateTime.now());
+      String timeHHmm = DateFormat('HHmm').format(DateTime.now());
       List<String> identifier =
           BlocProvider.of<DashboardBloc>(context).currentFilters;
 
@@ -66,7 +67,7 @@ class ExcelHelper {
           break;
         case 'activity':
         case 'devices':
-          fileName = "Water_Meters_${identifier[0]}_$todayDDMMYYYY.xlsx";
+          fileName = "Water_Meters_${identifier[0]}_${todayDDMMYYYY}_$timeHHmm.xlsx";
           break;
         default:
           fileName = "Water_Export_$todayDDMMYYYY.xlsx";

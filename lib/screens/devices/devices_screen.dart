@@ -206,7 +206,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                                   .noEntriesColor,
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding:EdgeInsets.only(left: UIConfig.spacingMedium.w, right: 1.w),
+                                            contentPadding:EdgeInsets.only(left: UIConfig.spacingMedium.w, right: 1.w, bottom: PlatformUtils.isMobile ? 0.h : 5.h),
                                             isDense: true,
                                           ),
                                           textAlignVertical: TextAlignVertical.center,
