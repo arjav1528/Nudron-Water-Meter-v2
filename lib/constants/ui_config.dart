@@ -442,5 +442,18 @@ class UIConfig {
       return desktopSize ?? mobileSize;
     }
   }
+
+  /// Get responsive width based on platform
+  static double getResponsiveWidth(BuildContext context,
+      {required double scaleFactor, double? desktopWidth}) {
+    if (PlatformUtils.isMobile) {
+      return MediaQuery.of(context).size.width * scaleFactor;
+    } else {
+      final baseWidth = desktopWidth ??
+          (MediaQuery.of(context).size.width * desktopProjectWidthMultiplier)
+              .clamp(desktopDrawerWidthMin, desktopDrawerWidthMax);
+      return baseWidth * scaleFactor;
+    }
+  }
 }
 

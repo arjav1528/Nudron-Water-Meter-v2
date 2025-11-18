@@ -97,8 +97,29 @@ class ChamferedTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double height = UIConfig.iconSizeLarge + 15.responsiveSp;
+        final double height =
+            UIConfig.getResponsiveWidth(context, scaleFactor: 0.075);
         final double triangleSize = height;
+        final double leftPadding = UIConfig.tableTextWidthPaddingSmall + 8.responsiveSp;
+        
+        final textStyle = GoogleFonts.roboto(
+          textStyle: TextStyle(
+            fontSize: fontSize ?? UIConfig.fontSizeMediumResponsive,
+            fontWeight: FontWeight.bold,
+            color: textColor ?? borderColor,
+          ),
+        );
+        
+        final textPainter = TextPainter(
+          text: TextSpan(text: text, style: textStyle),
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
+        );
+        textPainter.layout(maxWidth: double.infinity);
+        final textWidth = textPainter.size.width;
+        
+        final double buffer = 8.0;
+        final double totalWidth = textWidth + leftPadding + triangleSize + buffer;
 
         return Transform(
           alignment: Alignment.center,
@@ -106,33 +127,30 @@ class ChamferedTextWidget extends StatelessWidget {
           child: RotatedBox(
             quarterTurns: isInverted ? 2 : 0,
             child: SizedBox(
+              width: totalWidth,
               height: height,
               child: CustomPaint(
-                size: Size(triangleSize, height),
+                size: Size(totalWidth, height),
                 painter: ChamferedLinePainter(
                   isInverted: isInverted,
                     borderColor: borderColor, fillColor: bgColor),
                 child: Container(
+                  width: double.infinity,
                   height: height,
                   padding: EdgeInsets.only(
-                      right: triangleSize, top: isInverted?0:UIConfig.spacingXSmall * 1.25.responsiveSp,bottom: isInverted?UIConfig.spacingXSmall * 1.5.responsiveSp:0, left: UIConfig.tableTextWidthPaddingSmall + 8.responsiveSp),
+                      right: triangleSize),
                   child: Transform(
                     alignment: Alignment.center,
                     transform:isInverted? (Matrix4.identity()..scale(-1.0, 1.0, 1.0)):Matrix4.identity(),
                     child: RotatedBox(
                       quarterTurns: isInverted ? 2 : 0,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: UIConfig.spacingXSmall),
+                      child: Center(
                         child: Text(
                           text,
-                          
-                          style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                              fontSize: fontSize ?? UIConfig.fontSizeMediumResponsive,
-                              fontWeight: FontWeight.bold,
-                              color: textColor ?? borderColor,
-                            ),
-                          ),
+                          style: textStyle,
+                          overflow: TextOverflow.visible,
+                          softWrap: false,
+                          maxLines: 1,
                         ),
                       ),
                     ),
