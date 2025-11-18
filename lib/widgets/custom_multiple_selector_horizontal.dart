@@ -112,7 +112,7 @@ class _CustomMultipleSelectorHorizontalState
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .basicAdvanceTextColor,
-                            size: UIConfig.iconSizeLarge,
+                            size: 35.responsiveSp,
                           ),
                         )
                       ],
