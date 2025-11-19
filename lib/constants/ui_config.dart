@@ -267,12 +267,38 @@ class UIConfig {
   static double get textFieldPrefixMinHeight => 16.69.h;
   static double get textFieldPrefixMinWidth => 21.w;
   static double get textFieldBorderRadius => 10.r;
+  static double get textFieldHeightScale => 0.1;
+  static final double _textFieldMinHeightMobile = 30.0;
+  static final double _textFieldMaxHeightMobile = 60.0;
+  static final double _textFieldMinHeightDesktop = 50.0;
+  static final double _textFieldMaxHeightDesktop = 72.0;
   
   // Text field constraints
-  static double get textFieldMinHeight => 40.h;
-  static double get textFieldMaxHeight => 100.h;
+  static double get textFieldMinHeight => PlatformUtils.isMobile
+      ? _textFieldMinHeightMobile
+      : _textFieldMinHeightDesktop;
+  static double get textFieldMaxHeight => PlatformUtils.isMobile
+      ? _textFieldMaxHeightMobile
+      : _textFieldMaxHeightDesktop;
   static double get textFieldMinWidth => 200.w;
   static double get textFieldMaxWidth => double.infinity;
+  static double get desktopDrawerHeightMin => 60.h;
+  static double get desktopDrawerHeightMax => 150.h;
+  static double get desktopDrawerHeightScale => 1;
+  static double getDesktopDrawerHeight(BuildContext context) {
+    return (MediaQuery.of(context).size.height * desktopDrawerHeightScale)
+        .clamp(desktopDrawerHeightMin, desktopDrawerHeightMax);
+  }
+
+  /// Responsive height calculation for text fields controlled via [textFieldHeightScale]
+  static double getResponsiveTextFieldHeight(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final baseDimension = PlatformUtils.isMobile
+        ? size.height
+        : getDesktopDrawerHeight(context);
+    final scaledHeight = baseDimension * textFieldHeightScale;
+    return scaledHeight.clamp(textFieldMinHeight, textFieldMaxHeight);
+  }
   
   // ==================== BUTTON VALUES ====================
   

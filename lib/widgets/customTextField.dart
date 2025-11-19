@@ -64,6 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     final fontSize = UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width);
+    final textFieldHeight = UIConfig.getResponsiveTextFieldHeight(context);
     
     // Calculate clamped width
     final screenWidth = MediaQuery.of(context).size.width;
@@ -73,6 +74,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     
     return Container(
       width: calculatedWidth,
+      height: textFieldHeight,
       constraints: BoxConstraints(
         minHeight: UIConfig.textFieldMinHeight,
         maxHeight: UIConfig.textFieldMaxHeight,
@@ -110,6 +112,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           cursorHeight: UIConfig.textFieldCursorHeight,
           enableSuggestions: widget.enableSuggestions,
           autocorrect: widget.autocorrect,
+          // textAlign: TextAlign.center,
+          textAlignVertical: TextAlignVertical.center,
+          textDirection: TextDirection.ltr,
           decoration: InputDecoration(
             suffixIcon: widget.suffixIcon,
             prefixIcon: widget.prefixIcon ??
