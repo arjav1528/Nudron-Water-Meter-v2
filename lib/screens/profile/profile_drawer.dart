@@ -317,7 +317,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       },
                                       child: Container(
                                         height: UIConfig.backButtonHeight,
-                                        width: UIConfig.backButtonWidth,
+                                        // width: UIConfig.backButtonWidth,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
                                             borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -326,9 +326,11 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               width: UIConfig.chartBorderWidth,
                                               gradient: LinearGradient(
                                                 colors: [
-                                                  CommonColors.blue,
-                                                  CommonColors.blue.withOpacity(UIConfig.opacityVeryHigh),
+                                                  
                                                   CommonColors.blue2,
+                                                  CommonColors.blue.withOpacity(UIConfig.opacityVeryHigh),
+                                                  CommonColors.blue,
+                                                  
                                                 ],
                                                 begin: Alignment.centerLeft,
                                                 end: Alignment.centerRight,
@@ -338,8 +340,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         child: Center(
                                           child: SvgPicture.asset(
                                             'assets/icons/back_arrow.svg',
-                                            height: UIConfig.backButtonIconSize,
-                                            width: UIConfig.backButtonIconSize,
+                                            height: UIConfig.projectIconHeight,
+                                            width: UIConfig.projectIconWidth,
                                             colorFilter: ColorFilter.mode(
                                               Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                                               BlendMode.srcIn,
@@ -538,7 +540,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                           child: Column(
                             children: [
-                              SizedBox(height: UIConfig.spacingExtraLarge),
+                              UIConfig.spacingSizedBoxVerticalLarge,
+                              UIConfig.spacingSizedBoxVerticalLarge,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -637,6 +640,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                 ],
                               ),
                               UIConfig.spacingSizedBoxVerticalLarge,
+                              UIConfig.spacingSizedBoxVerticalLarge,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -716,6 +720,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
                                 ],
                               ),
+                              UIConfig.spacingSizedBoxVerticalLarge,
                               UIConfig.spacingSizedBoxVerticalLarge,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

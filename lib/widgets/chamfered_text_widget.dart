@@ -98,7 +98,7 @@ class ChamferedTextWidget extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double height =
-            UIConfig.getResponsiveWidth(context, scaleFactor: 0.075);
+            UIConfig.getResponsiveWidth(context, scaleFactor: 0.095);
         final double triangleSize = height;
         final double leftPadding = UIConfig.tableTextWidthPaddingSmall + 8.responsiveSp;
         

@@ -48,7 +48,7 @@ class _BillingFormulaState extends State<BillingFormula> {
           onTap: () async {
             String? billingFormula =
                 dashboardBloc.filterData?.summaryFormattedtext;
-
+    
             if (billingFormula == null) {
               CustomAlert.showCustomScaffoldMessenger(
                 context,
@@ -57,11 +57,11 @@ class _BillingFormulaState extends State<BillingFormula> {
               );
               return;
             }
-
+    
             setState(() {
               isDialogOpen = true;
             });
-
+    
             await showDialog(
               barrierDismissible: false,
               context: context,
@@ -76,7 +76,7 @@ class _BillingFormulaState extends State<BillingFormula> {
                 );
               },
             );
-
+    
             if (mounted) {
               setState(() {
                 isDialogOpen = false;

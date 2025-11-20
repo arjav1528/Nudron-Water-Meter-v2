@@ -32,7 +32,7 @@ class UIConfig {
   static double get headerSectionHeight => 46.h; // Fixed height for header section alignment
   
   /// Container heights
-  static double get accentLineHeight => 3.h;
+  static double get accentLineHeight => 3.responsiveSp;
   static double get accentLineHeightResponsive => 3.responsiveSp;
   static double get backButtonHeight => 30.h;
   static double get backButtonWidth => 35.w;
@@ -267,11 +267,11 @@ class UIConfig {
   static double get textFieldPrefixMinHeight => 16.69.h;
   static double get textFieldPrefixMinWidth => 21.w;
   static double get textFieldBorderRadius => 10.r;
-  static double get textFieldHeightScale => 0.1;
+  static double get textFieldHeightScale => 0.25;
   static final double _textFieldMinHeightMobile = 30.0;
   static final double _textFieldMaxHeightMobile = 60.0;
   static final double _textFieldMinHeightDesktop = 50.0;
-  static final double _textFieldMaxHeightDesktop = 72.0;
+  static final double _textFieldMaxHeightDesktop = 90.0;
   
   // Text field constraints
   static double get textFieldMinHeight => PlatformUtils.isMobile
@@ -342,7 +342,7 @@ class UIConfig {
   static double get tableCellPaddingHorizontal => 6.w;
   static double get tableTextWidthPadding => 16;
   static double get tableTextWidthPaddingSmall => 6.responsiveSp;
-  static double get tableBorderWidth => 3.responsiveSp;
+  static double get tableBorderWidth => 2.responsiveSp;
   static double get tableHeaderPadding => 16;
   
   // ==================== CHART VALUES ====================

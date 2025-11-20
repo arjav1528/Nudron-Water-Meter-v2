@@ -92,7 +92,7 @@ class _DevicesPageState extends State<DevicesPage> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            width: UIConfig.backButtonWidth,
+                            // width: UIConfig.backButtonWidth,
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -113,8 +113,8 @@ class _DevicesPageState extends State<DevicesPage> {
                             child: Center(
                               child: SvgPicture.asset(
                                 'assets/icons/back_arrow.svg',
-                                height: UIConfig.backButtonIconSize,
-                                width: UIConfig.backButtonIconSize,
+                                height: UIConfig.projectIconHeight,
+                                width: UIConfig.projectIconWidth,
                                 colorFilter: ColorFilter.mode(
                                   Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                                   BlendMode.srcIn,

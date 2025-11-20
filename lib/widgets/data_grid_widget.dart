@@ -51,6 +51,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   List<List<dynamic>>? _cachedProcessedData;
 
   final double rowHeight = UIConfig.rowHeight;
+  final double headerRowHeight = UIConfig.headerWidgetHeight; // Add this line
 
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
@@ -233,7 +234,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   _getHeaderWidget(int index, BuildContext context) {
     if (widget.devicesTable == true) {
       return Container(
-        height: rowHeight,
+        height: headerRowHeight, // Change from rowHeight to headerRowHeight
         width: columnWidths[index],
         decoration: BoxDecoration(
           color: Provider.of<ThemeNotifier>(context)
@@ -261,7 +262,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       );
     } else {
       return Container(
-        height: rowHeight,
+        height: headerRowHeight, // Change from rowHeight to headerRowHeight
         width: columnWidths[index],
         decoration: BoxDecoration(
           color: Provider.of<ThemeNotifier>(context)
@@ -449,7 +450,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                         if (widget.frozenColumns > 0)
                           Container(
                             width: columnWidths[0],
-                            height: rowHeight,
+                            height: headerRowHeight, // Change from rowHeight to headerRowHeight
                             decoration: BoxDecoration(
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme

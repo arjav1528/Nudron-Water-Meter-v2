@@ -174,7 +174,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             return SizedBox.shrink();
                           },
                         ),
-                        // SizedBox(width: UIConfig.spacingMedium),
+                        SizedBox(width: UIConfig.spacingXSmall - 2.5.w),
                       ],
                     )
                   ],

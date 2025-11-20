@@ -129,7 +129,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(left: UIConfig.spacingMedium.w, right: 1.w),
+                padding: EdgeInsets.only(left: UIConfig.spacingMedium.w, right: PlatformUtils.isMobile ? 3.w : 0.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -147,6 +147,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                     ),
                     Center(
                       child: Icon(
+                        // weight: 1,
                         Icons.calendar_month,
                         color: isDialogOpen
                             ? UIConfig.accentColorGreen

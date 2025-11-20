@@ -66,7 +66,7 @@ class _SummaryTableState extends State<SummaryTable> {
               ),
             Container(
               height: UIConfig.headerSectionHeight,
-              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingSmall - 1).w),
+              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingSmall+1).w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,7 +82,7 @@ class _SummaryTableState extends State<SummaryTable> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            width: UIConfig.backButtonWidth,
+                            // width: UIConfig.backButtonWidth,
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -103,8 +103,8 @@ class _SummaryTableState extends State<SummaryTable> {
                             child: Center(
                               child: SvgPicture.asset(
                                 'assets/icons/back_arrow.svg',
-                                height: UIConfig.backButtonIconSize,
-                                width: UIConfig.backButtonIconSize,
+                                height: UIConfig.projectIconHeight,
+                                width: UIConfig.projectIconWidth,
                                 colorFilter: ColorFilter.mode(
                                   Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
                                   BlendMode.srcIn,
