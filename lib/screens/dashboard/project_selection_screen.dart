@@ -63,7 +63,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           
           dashboardBloc.currentFilters.clear();
           dashboardBloc.filterData = null;
-          dashboardBloc.summaryData = null;
+          dashboardBloc.clearBillingData();
           dashboardBloc.devicesData = null;
 
           var filterData = await dashboardBloc.selectProject(dashboardBloc.projects.indexOf(selectedProject ?? ""));

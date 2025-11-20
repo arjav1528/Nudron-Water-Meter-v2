@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
+import 'package:watermeter2/utils/upper_case_text_formatter.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
@@ -55,13 +56,6 @@ class _DevicesPageState extends State<DevicesPage> {
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
-
-        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
-        final responsiveFontSize = UIConfig.getResponsiveFontSize(
-          context, 
-          UIConfig.fontSizeLarge, 
-          desktopWidth: width
-        );
 
         return GestureDetector(
           onTap: () {
@@ -285,17 +279,6 @@ class _DevicesPageState extends State<DevicesPage> {
         );
       },
 
-    );
-  }
-}
-
-class UpperCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    return TextEditingValue(
-      text: newValue.text.toUpperCase(),
-      selection: newValue.selection,
     );
   }
 }

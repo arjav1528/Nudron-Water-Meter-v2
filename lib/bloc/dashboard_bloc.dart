@@ -43,6 +43,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   FilterAndSummaryForProject? filterData;
   var summaryData;
+  var allSummaryData;
   var devicesData;
   var allDevices;
   NudronChartMap? nudronChartData;
@@ -53,6 +54,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
+  String _billingSearchQuery = '';
+  String get billingSearchQuery => _billingSearchQuery;
 
   Future<void> captureSS() async {
     if (Platform.isAndroid) {
@@ -175,6 +178,20 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       selectedEndDate = now;
     }
   }
+  
+  void clearBillingData() {
+    summaryData = null;
+    allSummaryData = null;
+    _billingSearchQuery = '';
+  }
+  
+  void _setSummaryData(dynamic data) {
+    summaryData = data;
+    allSummaryData = data;
+    if (_billingSearchQuery.trim().isNotEmpty) {
+      filterBillingData(_billingSearchQuery, shouldRefresh: false);
+    }
+  }
 
   refreshSummaryPage() {
     debugPrint("OOPS I WAS HIT 1");
@@ -230,13 +247,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     final cacheKey = 'summary_${project}_${startDayNum}_$endDayNum';
     
     if (_isCacheValid(cacheKey)) {
-      summaryData = _apiCache[cacheKey];
+      _setSummaryData(_apiCache[cacheKey]);
     } else {
-      summaryData = await DataPostRequests.getBillingDataByDateRange(
+      final data = await DataPostRequests.getBillingDataByDateRange(
           project: project, startDayNum: startDayNum, endDayNum: endDayNum);
       
-      _apiCache[cacheKey] = summaryData;
+      _apiCache[cacheKey] = data;
       _cacheTimestamps[cacheKey] = DateTime.now();
+      _setSummaryData(data);
     }
     
     refreshSummaryPage();
@@ -251,6 +269,40 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     await _loadDevicesDataWithCache();
     refreshDevicesPage();
+  }
+
+  List<List<String>> _parseSearchQuery(String query) {
+    String trimmedQuery = query.trim();
+    if (trimmedQuery.isEmpty) {
+      return [];
+    }
+
+    return trimmedQuery
+        .split(RegExp(r'\s*\|\|\s*'))
+        .map((group) => group
+            .split(RegExp(r'\s*&&\s*'))
+            .map((term) => term.trim().toLowerCase())
+            .where((term) => term.isNotEmpty)
+            .toList())
+        .where((group) => group.isNotEmpty)
+        .toList();
+  }
+
+  bool _matchesSearchGroups(
+      List<List<String>> searchGroups, bool Function(String term) matcher) {
+    for (final group in searchGroups) {
+      bool allTermsMatch = true;
+      for (final term in group) {
+        if (!matcher(term)) {
+          allTermsMatch = false;
+          break;
+        }
+      }
+      if (allTermsMatch) {
+        return true;
+      }
+    }
+    return false;
   }
 
   filterDevices(String query) {
@@ -273,39 +325,23 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     List header = headerValue;
     List dataToFilter = dataToFilterValue;
 
-    String trimmedQuery = query.trim();
-    if (trimmedQuery.isEmpty) {
-      devicesData = [header, List.from(dataToFilter)];
-      refreshDevicesPage();
-      return;
-    }
-
-    List<List<String>> searchGroups = trimmedQuery
-        .split(RegExp(r'\s*\|\|\s*'))
-        .map((group) => group
-            .split(RegExp(r'\s*&&\s*'))
-            .map((term) => term.trim().toLowerCase())
-            .where((term) => term.isNotEmpty)
-            .toList())
-        .where((group) => group.isNotEmpty)
-        .toList();
-
+    final searchGroups = _parseSearchQuery(query);
     if (searchGroups.isEmpty) {
       devicesData = [header, List.from(dataToFilter)];
       refreshDevicesPage();
       return;
     }
 
-    bool deviceContainsTerm(List device, String term) {
-      if (device.length < 2) return false;
+    bool matchesQuery(List device) {
+      if (device.length < 2) {
+        return false;
+      }
+
       String id = device[0].toString().toLowerCase();
       String label = device[1].toString().toLowerCase();
-      return id.contains(term) || label.contains(term);
-    }
-
-    bool matchesQuery(List device) {
-      return searchGroups.any(
-        (group) => group.every((term) => deviceContainsTerm(device, term)),
+      return _matchesSearchGroups(
+        searchGroups,
+        (term) => id.contains(term) || label.contains(term),
       );
     }
 
@@ -321,6 +357,59 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     debugPrint("Filtered devices count: ${filteredData.length}");
     refreshDevicesPage();
+  }
+  
+  void filterBillingData(String query, {bool shouldRefresh = true}) {
+    _billingSearchQuery = query;
+
+    if (allSummaryData == null ||
+        allSummaryData is! List ||
+        allSummaryData.length < 2) {
+      return;
+    }
+
+    var headerValue = allSummaryData[0];
+    var dataToFilterValue = allSummaryData[1];
+
+    if (headerValue is! List || dataToFilterValue is! List) {
+      debugPrint(
+          "Error: summary data structure is invalid. Header: ${headerValue.runtimeType}, Data: ${dataToFilterValue.runtimeType}");
+      return;
+    }
+
+    List header = headerValue;
+    List dataToFilter = dataToFilterValue;
+
+    final searchGroups = _parseSearchQuery(query);
+    if (searchGroups.isEmpty) {
+      summaryData = [header, List.from(dataToFilter)];
+      if (shouldRefresh) {
+        refreshSummaryPage();
+      }
+      return;
+    }
+
+    List filteredData = dataToFilter.where((row) {
+      if (row is! List || row.length < 2) {
+        debugPrint("Invalid billing record encountered");
+        return false;
+      }
+
+      return _matchesSearchGroups(
+        searchGroups,
+        (term) {
+          String building = row[0].toString().toLowerCase();
+          String floor = row[1].toString().toLowerCase();
+          return building.contains(term) || floor.contains(term);
+        },
+      );
+    }).toList();
+
+    summaryData = [header, filteredData];
+
+    if (shouldRefresh) {
+      refreshSummaryPage();
+    }
   }
 
   setBillingFormula(String formula) async {
@@ -587,16 +676,17 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     final cacheKey = 'summary_${currentFilters.first}_${startDayNum}_$endDayNum';
     
     if (_isCacheValid(cacheKey)) {
-      summaryData = _apiCache[cacheKey];
+      _setSummaryData(_apiCache[cacheKey]);
       return;
     }
 
     try {
-      summaryData = await DataPostRequests.getBillingDataByDateRange(
+      final data = await DataPostRequests.getBillingDataByDateRange(
           project: currentFilters.first, startDayNum: startDayNum, endDayNum: endDayNum);
       
-      _apiCache[cacheKey] = summaryData;
+      _apiCache[cacheKey] = data;
       _cacheTimestamps[cacheKey] = DateTime.now();
+      _setSummaryData(data);
     } catch (e) {
       throw Exception("Error loading summary data: ${e.toString()}");
     }

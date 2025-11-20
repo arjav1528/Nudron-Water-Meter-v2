@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +9,7 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/pok.dart';
+import 'package:watermeter2/utils/upper_case_text_formatter.dart';
 
 import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
@@ -26,6 +29,29 @@ class SummaryTable extends StatefulWidget {
 
 class _SummaryTableState extends State<SummaryTable> {
   String? _lastProject;
+  final TextEditingController _billingSearchController =
+      TextEditingController();
+  Timer? _billingSearchDebounceTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+      final existingQuery = dashboardBloc.billingSearchQuery;
+      if (existingQuery.isNotEmpty) {
+        _billingSearchController.text = existingQuery;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _billingSearchDebounceTimer?.cancel();
+    _billingSearchController.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -40,6 +66,8 @@ class _SummaryTableState extends State<SummaryTable> {
         
         if (mounted && _lastProject != currentProject) {
           _lastProject = currentProject;
+          _billingSearchController.clear();
+          dashboardBloc.filterBillingData('');
           setState(() {});
         }
       },
@@ -49,13 +77,6 @@ class _SummaryTableState extends State<SummaryTable> {
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
-
-        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
-        final responsiveFontSize = UIConfig.getResponsiveFontSize(
-          context, 
-          UIConfig.fontSizeLarge, 
-          desktopWidth: width
-        );
 
         return CustomSafeArea(
           child: Column(
@@ -148,6 +169,11 @@ class _SummaryTableState extends State<SummaryTable> {
               height: UIConfig.accentLineHeight,
               color: UIConfig.accentColorGreen,
             ),
+            _buildBillingSearchBar(context),
+            Container(
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorGreen,
+            ),
 
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
@@ -190,5 +216,86 @@ class _SummaryTableState extends State<SummaryTable> {
       },
     );
 
+  }
+
+  Widget _buildBillingSearchBar(BuildContext context) {
+    final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+    final theme = Provider.of<ThemeNotifier>(context);
+
+    return Row(
+      children: [
+        Expanded(
+          child: Material(
+            color: theme.currentTheme.dropDownColor,
+            child: Ink(
+              child: InkWell(
+                splashFactory: InkRipple.splashFactory,
+                splashColor:
+                    theme.currentTheme.splashColor,
+                child: Container(
+                  height: UIConfig.headerWidgetHeight,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: UIConfig.accentColorGreen,
+                        width: UIConfig.headerWidgetBorderWidth,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(right: UIConfig.spacingSmall + (PlatformUtils.isMobile ? 2.w : -1.w)),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _billingSearchController,
+                            keyboardType: TextInputType.text,
+                            inputFormatters: [
+                              UpperCaseTextFormatter(),
+                            ],
+                            style: GoogleFonts.robotoMono(
+                              fontSize: UIConfig.fontSizeMediumResponsive,
+                              color: theme.currentTheme.basicAdvanceTextColor,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'SEARCH BUILDING OR FLOOR',
+                              hintStyle: GoogleFonts.robotoMono(
+                                fontSize: UIConfig.fontSizeMediumResponsive,
+                                color: theme.currentTheme.noEntriesColor,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(
+                                  left: UIConfig.spacingMedium.w,
+                                  right: 1.w,
+                                  bottom: PlatformUtils.isMobile ? 0.h : 5.h),
+                              isDense: true,
+                            ),
+                            textAlignVertical: TextAlignVertical.center,
+                            onChanged: (query) {
+                              _billingSearchDebounceTimer?.cancel();
+                              _billingSearchDebounceTimer =
+                                  Timer(const Duration(milliseconds: 500), () {
+                                if (!mounted) return;
+                                dashboardBloc.filterBillingData(
+                                    _billingSearchController.text);
+                              });
+                            },
+                          ),
+                        ),
+                        Icon(
+                          Icons.search,
+                          color: theme.currentTheme.basicAdvanceTextColor,
+                          size: UIConfig.iconSizeLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

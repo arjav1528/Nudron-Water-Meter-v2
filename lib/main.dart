@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
                 dashboardBloc.currentFilters.clear();
                 dashboardBloc.projects.clear();
                 dashboardBloc.filterData = null;
-                dashboardBloc.summaryData = null;
+                dashboardBloc.clearBillingData();
                 dashboardBloc.devicesData = null;
                 dashboardBloc.nudronChartData = null;
                 

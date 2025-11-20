@@ -129,7 +129,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(left: UIConfig.spacingMedium.w, right: PlatformUtils.isMobile ? 3.w : 0.w),
+                padding: EdgeInsets.only(left: UIConfig.spacingMedium.w, right: PlatformUtils.isMobile ? 4.w : 2.w),
                 child: Row(
                   children: [
                     Expanded(
