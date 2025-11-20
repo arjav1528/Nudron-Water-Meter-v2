@@ -165,6 +165,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   int selectedMonth = getCurrentMonth() - 1;
 
   List<String> currentFilters = [];
+  
+  // Initialize selectedStartDate and selectedEndDate to current month's first day to today
+  void _initializeSelectedDates() {
+    if (selectedStartDate == null || selectedEndDate == null) {
+      final now = DateTime.now();
+      final firstDayOfCurrentMonth = DateTime(now.year, now.month, 1);
+      selectedStartDate = firstDayOfCurrentMonth;
+      selectedEndDate = now;
+    }
+  }
 
   refreshSummaryPage() {
     debugPrint("OOPS I WAS HIT 1");
@@ -531,7 +541,17 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Future<void> _loadSummaryDataWithCache() async {
     if (currentFilters.isEmpty) return;
     
-    final cacheKey = 'summary_${currentFilters.first}_$selectedMonth';
+    // Ensure dates are initialized
+    _initializeSelectedDates();
+    
+    if (selectedStartDate == null || selectedEndDate == null) {
+      throw Exception("Selected dates are not initialized");
+    }
+    
+    int startDayNum = DataPostRequests.getDayNumberFromDate(selectedStartDate!);
+    int endDayNum = DataPostRequests.getDayNumberFromDate(selectedEndDate!);
+    
+    final cacheKey = 'summary_${currentFilters.first}_${startDayNum}_$endDayNum';
     
     if (_isCacheValid(cacheKey)) {
       summaryData = _apiCache[cacheKey];
@@ -539,8 +559,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     try {
-      summaryData = await DataPostRequests.getBillingData(
-          project: currentFilters.first, monthNumber: selectedMonth);
+      summaryData = await DataPostRequests.getBillingDataByDateRange(
+          project: currentFilters.first, startDayNum: startDayNum, endDayNum: endDayNum);
       
       _apiCache[cacheKey] = summaryData;
       _cacheTimestamps[cacheKey] = DateTime.now();

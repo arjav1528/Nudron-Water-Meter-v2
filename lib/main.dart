@@ -8,7 +8,6 @@ import 'package:watermeter2/bloc/dashboard_state.dart';
 import 'package:watermeter2/bloc/auth_bloc.dart';
 import 'package:watermeter2/bloc/auth_state.dart';
 import 'package:watermeter2/bloc/auth_event.dart';
-import 'package:watermeter2/utils/excel_helpers.dart';
 import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/services/mobile/mobile_init.dart';
 import 'package:watermeter2/services/desktop/desktop_init.dart';
@@ -56,16 +55,6 @@ void main() async {
     await MobileInit.initialize();
   }
   debugPrint('here');
-  try {
-    await ExcelHelper.deleteOldExportFiles();
-  } catch (e) {
-    debugPrint('Error deleting old export files: $e');
-    CustomAlert.showCustomScaffoldMessenger(
-      mainNavigatorKey.currentContext!,
-      "Error deleting old export files: $e",
-      AlertType.error,
-    );
-  }
   final themeProvider = ThemeNotifier();
   await themeProvider.readThemeMode();
   

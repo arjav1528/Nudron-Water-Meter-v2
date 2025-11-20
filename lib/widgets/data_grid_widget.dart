@@ -15,6 +15,7 @@ import '../../utils/no_entries.dart';
 import '../../widgets/export_to_excel.dart';
 import '../../widgets/icon_header.dart';
 import '../utils/scrollConfig.dart';
+import '../utils/excel_helpers.dart';
 
 class DataGridWidget extends StatefulWidget {
   final List<dynamic>? data;
@@ -509,6 +510,11 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                       );
 
                                       if (confirm == true) {
+                                        try {
+                                          await ExcelHelper.deleteOldExportFiles();
+                                        } catch (e) {
+                                          debugPrint('Error deleting old export files: $e');
+                                        }
                                         BlocProvider.of<DashboardBloc>(context)
                                             .exportDataToExcel(
                                           widget.data!,
