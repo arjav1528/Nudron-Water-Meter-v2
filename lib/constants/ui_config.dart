@@ -212,6 +212,14 @@ class UIConfig {
   static double get iconSizeButtonArrow => 10; // Additional size for button arrow
   static double get iconSizeAppBarLogo => 30.responsiveSp;
   static double get iconSizeAppBarIcon => 28.responsiveSp;
+  static double get appBarLogoDesktopMinSize => 25.responsiveSp;
+  static double get appBarLogoDesktopMaxSize => 26.responsiveSp;
+  static double get appBarIconDesktopMinSize => 24.responsiveSp ;
+  static double get appBarIconDesktopMaxSize => 28.responsiveSp;
+  static double get appBarTitleDesktopMinSize => 18.0;
+  static double get appBarTitleDesktopMaxSize => 30.0;
+  static double get appBarDesktopWidthMin => 400.0;
+  static double get appBarDesktopWidthMax => 550.0;
   
   // ==================== TEXT STYLING ====================
   
@@ -381,6 +389,58 @@ class UIConfig {
     return (MediaQuery.of(context).size.width * desktopProjectWidthMultiplier)
         .clamp(desktopDrawerWidthMin, desktopDrawerWidthMax);
   }
+
+  /// Calculate clamped 1/3rd width for responsive widgets
+  static double getResponsiveOneThirdWidth(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    if (PlatformUtils.isMobile) {
+      return width;
+    }
+    return (width * desktopProjectWidthMultiplier)
+        .clamp(appBarDesktopWidthMin, appBarDesktopWidthMax);
+  }
+
+  static double _scaleValueForAppBar(double baseWidth, double minValue, double maxValue) {
+    final normalized = ((baseWidth - desktopDrawerWidthMin) /
+            (desktopDrawerWidthMax - desktopDrawerWidthMin))
+        .clamp(0.0, 1.0);
+    return minValue + (maxValue - minValue) * normalized;
+  }
+
+  static double getResponsiveAppBarLogoSize(BuildContext context) {
+    if (PlatformUtils.isMobile) {
+      return iconSizeAppBarLogo;
+    }
+    final baseWidth = getResponsiveOneThirdWidth(context);
+    final scaled = _scaleValueForAppBar(
+      baseWidth,
+      appBarLogoDesktopMinSize,
+      appBarLogoDesktopMaxSize,
+    );
+    return scaled.clamp(appBarLogoDesktopMinSize, appBarLogoDesktopMaxSize);
+  }
+
+  static double getResponsiveAppBarIconSize(BuildContext context) {
+    if (PlatformUtils.isMobile) {
+      return iconSizeAppBarIcon;
+    }
+    final baseWidth = getResponsiveOneThirdWidth(context);
+    final scaled = _scaleValueForAppBar(
+      baseWidth,
+      appBarIconDesktopMinSize,
+      appBarIconDesktopMaxSize,
+    );
+    return scaled.clamp(appBarIconDesktopMinSize, appBarIconDesktopMaxSize);
+  }
+
+  static double getResponsiveAppBarTitleSize(BuildContext context, double baseFontSize) {
+    if (PlatformUtils.isMobile) {
+      return baseFontSize.responsiveSp;
+    }
+    final width = getResponsiveOneThirdWidth(context);
+    final scaledFont = getDesktopFontSizeFromWidth(width, divider : 20);
+    return scaledFont;
+  }
   
   /// Calculate desktop dialog width with clamp
   /// For desktop: min = 400, max = 550, between 1/3rd of screen width
@@ -395,8 +455,8 @@ class UIConfig {
   }
   
   /// Calculate desktop font size based on width
-  static double getDesktopFontSizeFromWidth(double width) {
-    return width / desktopFontSizeDivisor;
+  static double getDesktopFontSizeFromWidth(double width, {double divider = 30.0}) {
+    return width / divider;
   }
   
   /// Calculate desktop dropdown total width

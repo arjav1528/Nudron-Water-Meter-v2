@@ -26,15 +26,8 @@ class CustomSafeArea extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final padding = mediaQuery.padding;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        top: top ? padding.top : minimum.top,
-        bottom: bottom ? padding.bottom : minimum.bottom,
-        left: left ? padding.left : minimum.left,
-        right: right ? padding.right : minimum.right,
-      ),
-      child: child,
-    );
+    return child;
+
   }
 }
 

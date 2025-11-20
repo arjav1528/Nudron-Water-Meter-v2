@@ -243,7 +243,7 @@ class _SummaryTableState extends State<SummaryTable> {
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.only(right: UIConfig.spacingSmall + (PlatformUtils.isMobile ? 2.w : -1.w)),
+                    padding: EdgeInsets.only(right: UIConfig.spacingSmall + (PlatformUtils.isMobile ? 1.w : -1.w)),
                     child: Row(
                       children: [
                         Expanded(
@@ -258,7 +258,7 @@ class _SummaryTableState extends State<SummaryTable> {
                               color: theme.currentTheme.basicAdvanceTextColor,
                             ),
                             decoration: InputDecoration(
-                              hintText: 'SEARCH BUILDING OR FLOOR',
+                              hintText: 'SEARCH FILTER',
                               hintStyle: GoogleFonts.robotoMono(
                                 fontSize: UIConfig.fontSizeMediumResponsive,
                                 color: theme.currentTheme.noEntriesColor,
