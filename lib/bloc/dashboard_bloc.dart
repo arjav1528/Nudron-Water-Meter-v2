@@ -265,23 +265,56 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     var dataToFilterValue = allDevices[1];
 
     if (headerValue is! List || dataToFilterValue is! List) {
-      debugPrint("Error: allDevices structure is invalid. Header: ${headerValue.runtimeType}, Data: ${dataToFilterValue.runtimeType}");
+      debugPrint(
+          "Error: allDevices structure is invalid. Header: ${headerValue.runtimeType}, Data: ${dataToFilterValue.runtimeType}");
       return;
     }
 
-    List header = headerValue; 
-    List dataToFilter = dataToFilterValue; 
+    List header = headerValue;
+    List dataToFilter = dataToFilterValue;
+
+    String trimmedQuery = query.trim();
+    if (trimmedQuery.isEmpty) {
+      devicesData = [header, List.from(dataToFilter)];
+      refreshDevicesPage();
+      return;
+    }
+
+    List<List<String>> searchGroups = trimmedQuery
+        .split(RegExp(r'\s*\|\|\s*'))
+        .map((group) => group
+            .split(RegExp(r'\s*&&\s*'))
+            .map((term) => term.trim().toLowerCase())
+            .where((term) => term.isNotEmpty)
+            .toList())
+        .where((group) => group.isNotEmpty)
+        .toList();
+
+    if (searchGroups.isEmpty) {
+      devicesData = [header, List.from(dataToFilter)];
+      refreshDevicesPage();
+      return;
+    }
+
+    bool deviceContainsTerm(List device, String term) {
+      if (device.length < 2) return false;
+      String id = device[0].toString().toLowerCase();
+      String label = device[1].toString().toLowerCase();
+      return id.contains(term) || label.contains(term);
+    }
+
+    bool matchesQuery(List device) {
+      return searchGroups.any(
+        (group) => group.every((term) => deviceContainsTerm(device, term)),
+      );
+    }
 
     List filteredData = dataToFilter.where((device) {
-      if (device is! List || device.length < 2) {
-        debugPrint("Invalid");
+      if (device is! List) {
+        debugPrint("Invalid device record encountered");
         return false;
       }
-
-      String id = device[0].toString().toLowerCase(); 
-      String label = device[1].toString().toLowerCase(); 
-      return id.contains(query.toLowerCase()) ||
-          label.contains(query.toLowerCase());
+      return matchesQuery(device);
     }).toList();
 
     devicesData = [header, filteredData];
