@@ -112,7 +112,7 @@ class UIConfig {
   static EdgeInsets get paddingDialogBottom => EdgeInsets.only(bottom: 24.h);
   static EdgeInsets get paddingDialogHorizontal => EdgeInsets.only(left: 24.w, right: 24.w);
   static EdgeInsets get paddingDialogTop => EdgeInsets.only(left: 35.w, right: 35.w, bottom: 22.h);
-  static EdgeInsets get paddingProfileField => EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h);
+  static EdgeInsets get paddingProfileField => EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h);
   static EdgeInsets get paddingProfileFieldHorizontal => EdgeInsets.symmetric(horizontal: 8.w);
   static EdgeInsets get paddingProfileFieldVertical => EdgeInsets.symmetric(vertical: 8.h);
   static EdgeInsets get paddingProfileFieldLeft => EdgeInsets.only(left: 8.w);
