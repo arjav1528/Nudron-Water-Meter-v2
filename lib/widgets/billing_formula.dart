@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/smallbutton.dart';
 
 import '../../bloc/dashboard_bloc.dart';
@@ -239,23 +240,26 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
               children: [
                 _buildDialogHeader(),
                 SizedBox(height: (UIConfig.spacingExtraLarge.h - UIConfig.spacingSmall).clamp(0.0, double.infinity)),
-                Container(
-                    color: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .gridLineColor,
-                    height: UIConfig.borderWidthThin),
-                _buildTable(context),
-                Container(
-                    color: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .gridLineColor,
-                    height: UIConfig.borderWidthThin),
+                // Container(
+                //     color: Provider.of<ThemeNotifier>(context)
+                //         .currentTheme
+                //         .gridLineColor,
+                //     height: UIConfig.borderWidthThin),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: PlatformUtils.isDesktop ? 100.w : 0),
+                  child: _buildTable(context),
+                ),
+                // Container(
+                //     color: Provider.of<ThemeNotifier>(context)
+                //         .currentTheme
+                //         .gridLineColor,
+                //     height: UIConfig.borderWidthThin),
                 SizedBox(height: UIConfig.spacingExtraLarge),
-                Align(
-                  alignment: Alignment.centerLeft,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: PlatformUtils.isDesktop ? 100.w : 0),
                   child: Row(
                     children: [
-                      SizedBox(width: UIConfig.spacingExtraLarge.w),
+                      // SizedBox(width: UIConfig.spacingExtraLarge.w),
                       SmallButton(
                           onPressed: () {
                             if (tiers.length == 7) {
@@ -269,7 +273,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
 
                             setState(() {
                               String lastAmount = amountControllers[
-                                      amountControllers.length - 2]
+                              amountControllers.length - 2]
                                   .text;
                               String lastTier =
                                   tierControllers[tierControllers.length - 2]
