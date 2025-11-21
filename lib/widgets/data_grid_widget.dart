@@ -11,6 +11,7 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../utils/no_entries.dart';
+import '../../services/platform_utils.dart';
 
 import '../../widgets/export_to_excel.dart';
 import '../../widgets/icon_header.dart';
@@ -154,6 +155,16 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       for (int index = 0; index < headers.length; index++) {
         double headerWidth = calculateTextWidth(headers[index].toString(),
             isHeader: true, hasDownloadButton: index == 0);
+        
+        // For frozen columns on mobile in billing/devices pages, use only header width
+        bool isFrozenColumn = index < widget.frozenColumns;
+        bool isMobile = PlatformUtils.isMobile;
+        bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
+        
+        if (isFrozenColumn && isMobile && isBillingOrDevices) {
+          columnWidths[index] = headerWidth - 5.w;
+          continue;
+        }
         
         if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
           columnWidths[index] = headerWidth +
