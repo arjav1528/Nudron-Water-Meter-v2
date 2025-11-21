@@ -73,8 +73,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
         : width.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth);
     
     return Container(
-      width: calculatedWidth,
-      height: textFieldHeight,
       constraints: BoxConstraints(
         minHeight: UIConfig.textFieldMinHeight,
         maxHeight: UIConfig.textFieldMaxHeight,
@@ -117,12 +115,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           textDirection: TextDirection.ltr,
           decoration: InputDecoration(
             suffixIcon: widget.suffixIcon,
-            prefixIcon: widget.prefixIcon ??
-                Padding(
-                  padding: widget.iconPath != null
-                      ? UIConfig.paddingTextFieldHorizontal
-                      : EdgeInsets.zero,
-                  child: widget.iconPath != null
+            prefixIcon: widget.iconPath != null
                       ? SvgPicture.asset(
                           widget.iconPath!,
                           height: UIConfig.iconSizePrefix,
@@ -130,11 +123,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                           fit: BoxFit.scaleDown,
                         )
                       : null,
-                ),
-            prefixIconConstraints: BoxConstraints(
-              minHeight: UIConfig.textFieldPrefixMinHeight,
-              minWidth: UIConfig.textFieldPrefixMinWidth,
-            ),
+            
             focusedBorder: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide(
@@ -160,10 +149,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   borderSide: BorderSide.none,
                   borderRadius: UIConfig.borderRadiusAllLarge,
                 ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: isLargerTextField
-                    ? UIConfig.paddingTextFieldLarger.vertical / 1.h
-                    : UIConfig.paddingTextFieldNormal.vertical / 1.h), 
+            
           ),
         ),
       ),

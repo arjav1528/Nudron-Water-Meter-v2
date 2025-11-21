@@ -284,8 +284,8 @@ class _SigninPageState extends State<SigninPage> {
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: SvgPicture.asset(
                         'assets/icons/mail.svg',
-                        height: 20.0,
-                        width: 24.0,
+                        height: 20.0.h,
+                        width: 24.0.w,
                         fit: BoxFit.scaleDown,
                       ),
                     ),

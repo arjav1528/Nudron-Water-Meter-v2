@@ -66,8 +66,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         : width.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth);
     
     return Container(
-      width: calculatedWidth,
-      height: textFieldHeight,
+      
       constraints: BoxConstraints(
         minHeight: UIConfig.textFieldMinHeight,
         maxHeight: UIConfig.textFieldMaxHeight,
