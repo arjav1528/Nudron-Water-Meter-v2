@@ -237,7 +237,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                   child: Container(
                     width: dialogWidth,
                     constraints: BoxConstraints(
-                      maxHeight: UIConfig.dialogMaxHeight + 150.h,
+                      // maxHeight: UIConfig.dialogMaxHeight + 150.h,
                     ),
                   decoration: BoxDecoration(
                     color: currentTheme.dialogBG,
@@ -272,226 +272,226 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                         ],
                       ),
+                      Container(
+                          // color: Colors.red,
 
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 90.w : (dialogWidth - UIConfig.spacingXXXLarge),
-                          height: UIConfig.dialogMaxHeight * 0.6,
+                          // width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 90.w : dialogWidth - UIConfig.spacingXXXLarge,
+                          width: UIConfig.desktopDrawerWidthMin - 90.w,
+                          height: PlatformUtils.isMobile ? UIConfig.dialogMaxHeight * 0.6 : null,
                           child: RangeDatePicker(
-                          minDate: minDate,
-                          maxDate: maxDate,
-                          initialDate: validStartDate ?? maxDate,
-                          selectedRange: currentSelectedRange,
-                          centerLeadingDate: true,
-                      
-                          currentDateDecoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                              color: UIConfig.accentColorGreen,
-                              width: UIConfig.borderWidthMedium,
-                            ),
-                              borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33)
-                          ),
-                          currentDateTextStyle: TextStyle(
-                            color: UIConfig.accentColorGreen,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
-                            fontWeight: FontWeight.w600,
-                      
-                          ),
-                      
-                          enabledCellsDecoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
-                          ),
-                          enabledCellsTextStyle: TextStyle(
-                            color: currentTheme.basicAdvanceTextColor,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
-                          ),
-                      
-                          selectedCellsDecoration: BoxDecoration(
-                            color: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 1.5),
-                          ),
-                          selectedCellsTextStyle: TextStyle(
-                            color: currentTheme.basicAdvanceTextColor,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
-                            fontWeight: FontWeight.w500,
-                          ),
-                      
-                          singleSelectedCellDecoration: BoxDecoration(
-                            color: UIConfig.accentColorGreen,
-                            borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
-                          ),
-                          singleSelectedCellTextStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
-                            fontWeight: FontWeight.w600,
-                          ),
-                      
-                          daysOfTheWeekTextStyle: TextStyle(
-                            color: currentTheme.gridHeadingColor,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
-                            fontWeight: FontWeight.w500,
-                          ),
-                      
-                          disabledCellsTextStyle: TextStyle(
-                            color: currentTheme.noEntriesColor,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
-                          ),
-                      
-                          leadingDateTextStyle: GoogleFonts.robotoMono(
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: 20.0),
-                            fontWeight: FontWeight.w600,
-                            color: currentTheme.basicAdvanceTextColor,
-                          ),
-                      
-                          slidersColor: UIConfig.accentColorGreen,
-                          splashColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow),
-                          highlightColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 2),
+                            minDate: minDate,
+                            maxDate: maxDate,
+                            initialDate: validStartDate ?? maxDate,
+                            selectedRange: currentSelectedRange,
+                            centerLeadingDate: true,
 
-                          onStartDateChanged: (DateTime? date) {
-                            if (date != null) {
-                              final currentStart = currentSelectedRange?.start;
-                              final currentEnd = currentSelectedRange?.end;
-                              
-                              DateTimeRange? newRange;
-                              
-                              if (currentStart != null && currentEnd != null && 
-                                  !_areDatesEqual(currentStart, currentEnd)) {
-                                newRange = DateTimeRange(start: date, end: date);
-                              }
-                              else if (currentStart != null && currentEnd != null && 
-                                       _areDatesEqual(currentStart, currentEnd)) {
-                                if (date.isBefore(currentStart)) {
-                                  newRange = DateTimeRange(start: date, end: currentEnd);
-                                }
-                                else if (date.isAfter(currentStart)) {
-                                  newRange = DateTimeRange(start: currentStart, end: date);
-                                }
-                                else {
-                                  newRange = DateTimeRange(start: date, end: date);
-                                }
-                              }
-                              else {
-                                newRange = DateTimeRange(start: date, end: currentEnd ?? date);
-                              }
-                              
-                              final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
-                              if (daysDifference > 92) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                  context,
-                                  "Maximum date range is 92 days. Selected range is $daysDifference days.",
-                                  AlertType.error,
-                                );
-                                return;
-                              }
-                              
-                              currentSelectedRange = newRange;
-                              setDialogState(() {
-                              });
-                            }
-                          },
-                          onEndDateChanged: (DateTime? date) {
-                            if (date != null) {
-                              final currentStart = currentSelectedRange?.start;
-                              final currentEnd = currentSelectedRange?.end;
-                              
-                              DateTimeRange? newRange;
-                              
-                              if (currentStart != null && currentEnd != null && 
-                                  !_areDatesEqual(currentStart, currentEnd)) {
-                                newRange = DateTimeRange(start: date, end: date);
-                              }
-                              else if (currentStart != null && currentEnd != null && 
-                                       _areDatesEqual(currentStart, currentEnd)) {
-                                if (date.isBefore(currentStart)) {
-                                  newRange = DateTimeRange(start: date, end: currentEnd);
-                                }
-                                else if (date.isAfter(currentStart)) {
-                                  newRange = DateTimeRange(start: currentStart, end: date);
-                                }
-                                else {
-                                  newRange = DateTimeRange(start: date, end: date);
-                                }
-                              }
-                              else {
-                                newRange = DateTimeRange(start: currentStart ?? date, end: date);
-                              }
-                              
-                              final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
-                              if (daysDifference > 92) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                  context,
-                                  "Maximum date range is 92 days. Selected range is $daysDifference days.",
-                                  AlertType.error,
-                                );
-                                return;
-                              }
-                              
-                              currentSelectedRange = newRange;
-                              setDialogState(() {
-                              });
-                            }
-                          },
-                      
-                          onRangeSelected: (DateTimeRange? range) {
-                            if (range != null) {
-                              final currentStart = currentSelectedRange?.start;
-                              final currentEnd = currentSelectedRange?.end;
-                              final clickedStart = range.start;
-                              final clickedEnd = range.end;
-                              
-                              DateTimeRange? newRange;
-                              
-                              final isSingleDateClick = _areDatesEqual(clickedStart, clickedEnd);
-                              
-                              if (isSingleDateClick) {
-                                if (currentStart != null && currentEnd != null && 
+                            currentDateDecoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(
+                                  color: UIConfig.accentColorGreen,
+                                  width: UIConfig.borderWidthMedium,
+                                ),
+                                borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33)
+                            ),
+                            currentDateTextStyle: TextStyle(
+                              color: UIConfig.accentColorGreen,
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                              fontWeight: FontWeight.w600,
+
+                            ),
+
+                            enabledCellsDecoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
+                            ),
+                            enabledCellsTextStyle: TextStyle(
+                              color: currentTheme.basicAdvanceTextColor,
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                            ),
+
+                            selectedCellsDecoration: BoxDecoration(
+                              color: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 1.5),
+                            ),
+                            selectedCellsTextStyle: TextStyle(
+                              color: currentTheme.basicAdvanceTextColor,
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            singleSelectedCellDecoration: BoxDecoration(
+                              color: UIConfig.accentColorGreen,
+                              borderRadius: BorderRadius.circular(UIConfig.iconSizeLarge * 3.33),
+                            ),
+                            singleSelectedCellTextStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                              fontWeight: FontWeight.w600,
+                            ),
+
+                            daysOfTheWeekTextStyle: TextStyle(
+                              color: currentTheme.gridHeadingColor,
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
+                              fontWeight: FontWeight.w500,
+                            ),
+
+                            disabledCellsTextStyle: TextStyle(
+                              color: currentTheme.noEntriesColor,
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                            ),
+
+                            leadingDateTextStyle: GoogleFonts.robotoMono(
+                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: 20.0),
+                              fontWeight: FontWeight.w600,
+                              color: currentTheme.basicAdvanceTextColor,
+                            ),
+
+                            slidersColor: UIConfig.accentColorGreen,
+                            splashColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow),
+                            highlightColor: UIConfig.accentColorGreen.withOpacity(UIConfig.opacityLow * 2),
+
+                            onStartDateChanged: (DateTime? date) {
+                              if (date != null) {
+                                final currentStart = currentSelectedRange?.start;
+                                final currentEnd = currentSelectedRange?.end;
+
+                                DateTimeRange? newRange;
+
+                                if (currentStart != null && currentEnd != null &&
                                     !_areDatesEqual(currentStart, currentEnd)) {
-                                  newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+                                  newRange = DateTimeRange(start: date, end: date);
                                 }
-                                else if (currentStart != null && currentEnd != null && 
-                                         _areDatesEqual(currentStart, currentEnd)) {
-                                  if (clickedStart.isBefore(currentStart)) {
-                                    newRange = DateTimeRange(start: clickedStart, end: currentEnd);
+                                else if (currentStart != null && currentEnd != null &&
+                                    _areDatesEqual(currentStart, currentEnd)) {
+                                  if (date.isBefore(currentStart)) {
+                                    newRange = DateTimeRange(start: date, end: currentEnd);
                                   }
-                                  else if (clickedStart.isAfter(currentStart)) {
-                                    newRange = DateTimeRange(start: currentStart, end: clickedStart);
+                                  else if (date.isAfter(currentStart)) {
+                                    newRange = DateTimeRange(start: currentStart, end: date);
+                                  }
+                                  else {
+                                    newRange = DateTimeRange(start: date, end: date);
+                                  }
+                                }
+                                else {
+                                  newRange = DateTimeRange(start: date, end: currentEnd ?? date);
+                                }
+
+                                final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
+                                if (daysDifference > 92) {
+                                  CustomAlert.showCustomScaffoldMessenger(
+                                    context,
+                                    "Maximum date range is 92 days. Selected range is $daysDifference days.",
+                                    AlertType.error,
+                                  );
+                                  return;
+                                }
+
+                                currentSelectedRange = newRange;
+                                setDialogState(() {
+                                });
+                              }
+                            },
+                            onEndDateChanged: (DateTime? date) {
+                              if (date != null) {
+                                final currentStart = currentSelectedRange?.start;
+                                final currentEnd = currentSelectedRange?.end;
+
+                                DateTimeRange? newRange;
+
+                                if (currentStart != null && currentEnd != null &&
+                                    !_areDatesEqual(currentStart, currentEnd)) {
+                                  newRange = DateTimeRange(start: date, end: date);
+                                }
+                                else if (currentStart != null && currentEnd != null &&
+                                    _areDatesEqual(currentStart, currentEnd)) {
+                                  if (date.isBefore(currentStart)) {
+                                    newRange = DateTimeRange(start: date, end: currentEnd);
+                                  }
+                                  else if (date.isAfter(currentStart)) {
+                                    newRange = DateTimeRange(start: currentStart, end: date);
+                                  }
+                                  else {
+                                    newRange = DateTimeRange(start: date, end: date);
+                                  }
+                                }
+                                else {
+                                  newRange = DateTimeRange(start: currentStart ?? date, end: date);
+                                }
+
+                                final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
+                                if (daysDifference > 92) {
+                                  CustomAlert.showCustomScaffoldMessenger(
+                                    context,
+                                    "Maximum date range is 92 days. Selected range is $daysDifference days.",
+                                    AlertType.error,
+                                  );
+                                  return;
+                                }
+
+                                currentSelectedRange = newRange;
+                                setDialogState(() {
+                                });
+                              }
+                            },
+
+                            onRangeSelected: (DateTimeRange? range) {
+                              if (range != null) {
+                                final currentStart = currentSelectedRange?.start;
+                                final currentEnd = currentSelectedRange?.end;
+                                final clickedStart = range.start;
+                                final clickedEnd = range.end;
+
+                                DateTimeRange? newRange;
+
+                                final isSingleDateClick = _areDatesEqual(clickedStart, clickedEnd);
+
+                                if (isSingleDateClick) {
+                                  if (currentStart != null && currentEnd != null &&
+                                      !_areDatesEqual(currentStart, currentEnd)) {
+                                    newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+                                  }
+                                  else if (currentStart != null && currentEnd != null &&
+                                      _areDatesEqual(currentStart, currentEnd)) {
+                                    if (clickedStart.isBefore(currentStart)) {
+                                      newRange = DateTimeRange(start: clickedStart, end: currentEnd);
+                                    }
+                                    else if (clickedStart.isAfter(currentStart)) {
+                                      newRange = DateTimeRange(start: currentStart, end: clickedStart);
+                                    }
+                                    else {
+                                      newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+                                    }
                                   }
                                   else {
                                     newRange = DateTimeRange(start: clickedStart, end: clickedStart);
                                   }
+                                } else {
+                                  newRange = range;
                                 }
-                                else {
-                                  newRange = DateTimeRange(start: clickedStart, end: clickedStart);
+
+                                final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
+                                if (daysDifference > 92) {
+                                  CustomAlert.showCustomScaffoldMessenger(
+                                    context,
+                                    "Maximum date range is 92 days. Selected range is $daysDifference days.",
+                                    AlertType.error,
+                                  );
+                                  return;
                                 }
+
+                                currentSelectedRange = newRange;
+                                setDialogState(() {
+                                });
                               } else {
-                                newRange = range;
+                                currentSelectedRange = null;
+                                setDialogState(() {
+                                });
                               }
-                              
-                              final daysDifference = newRange.end.difference(newRange.start).inDays + 1;
-                              if (daysDifference > 92) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                  context,
-                                  "Maximum date range is 92 days. Selected range is $daysDifference days.",
-                                  AlertType.error,
-                                );
-                                return;
-                              }
-                              
-                              currentSelectedRange = newRange;
-                              setDialogState(() {
-                              });
-                            } else {
-                              currentSelectedRange = null;
-                              setDialogState(() {
-                              });
-                            }
-                          },
+                            },
+                          ),
                         ),
-                        ),
-                      ),
+
+
 
                       Container(
                         width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
@@ -519,6 +519,8 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                       ),
 
+                      SizedBox(height: 30.h,),
+
                       Container(
                         width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
                         padding: UIConfig.paddingSymmetricVerticalSmall,
@@ -532,9 +534,10 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           textAlign: TextAlign.center,
                         ),
                       ),
+                        SizedBox(height: 30.h,),
 
                       Container(
-                        padding: EdgeInsets.only(top: UIConfig.spacingMedium * 0.83.h, bottom: UIConfig.spacingLarge * 0.94.h),
+
                         width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -563,6 +566,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ],
                         ),
                       ),
+                        SizedBox(height: 30.h,),
                       ],
                     ),
                   ),
