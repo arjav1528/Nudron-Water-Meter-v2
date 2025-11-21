@@ -255,7 +255,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ChamferedTextWidgetInverted(
-                            text: "SELECT MONTH RANGE",
+                            text: "SELECT DATE RANGE",
                             borderColor: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .gridLineColor,
@@ -494,7 +494,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
 
                       Container(
-                        width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
+                        width: UIConfig.desktopDrawerWidthMin - 120.w,
                         padding: EdgeInsets.symmetric(vertical: UIConfig.spacingXSmall * 1.5.h, horizontal: UIConfig.spacingMedium.w),
                         decoration: BoxDecoration(
                           color: currentTheme.dropDownColor,
@@ -522,7 +522,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       SizedBox(height: 30.h,),
 
                       Container(
-                        width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
+                        width: UIConfig.desktopDrawerWidthMin - 120.w,
                         padding: UIConfig.paddingSymmetricVerticalSmall,
                         child: Text(
                           'Tip: Select start and end dates. Max range: 92 days.',
@@ -538,7 +538,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
                       Container(
 
-                        width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - UIConfig.spacingXXXLarge * 2.5.w : (dialogWidth - UIConfig.spacingXXXLarge * 2.5),
+                        width: UIConfig.desktopDrawerWidthMin - 120.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

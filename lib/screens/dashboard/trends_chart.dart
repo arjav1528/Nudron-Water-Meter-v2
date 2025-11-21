@@ -805,7 +805,7 @@ class BasicChart extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              if (!isFullScreen)
+                              if (!isFullScreen && PlatformUtils.isMobile)
                                 Material(
                                   color: Colors.transparent,
                                   child: InkWell(

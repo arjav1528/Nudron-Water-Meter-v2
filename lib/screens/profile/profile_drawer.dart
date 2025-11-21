@@ -389,7 +389,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                 ),
 
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+                                  padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 12, desktopWidth: width)),
 
                                   decoration: BoxDecoration(
                                       border: Border.all(
@@ -610,7 +610,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                 ),
                                 Container(
-                                    padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+                                    padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 12, desktopWidth: width)),
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                           color: Provider.of<ThemeNotifier>(context)
@@ -687,7 +687,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                 ),
                                 Container(
-                                    padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+                                    padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 12, desktopWidth: width)),
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                           color: Provider.of<ThemeNotifier>(context)
@@ -776,7 +776,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               ),
                               Container(
                                 key: _deleteAccountKey,
-                                  padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+                                  padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 12, desktopWidth: width)),
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                     color: Provider.of<ThemeNotifier>(context)
@@ -954,7 +954,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+      padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 12, desktopWidth: width)),
       decoration: BoxDecoration(
         border: widget.topOpen
             ? Border(
@@ -1057,7 +1057,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 height: PlatformUtils.isMobile ? 28.h : 27,
                 smallerWidth: PlatformUtils.isMobile ? 52.w : 62,
                 smallerHeight: PlatformUtils.isMobile ? 20.h : 19,
-                verticalGap: PlatformUtils.isMobile ? 4 : 4.5,
+                verticalGap: PlatformUtils.isMobile ? 4 : 12,
                 leftGap: PlatformUtils.isMobile ? 4 : 3.5,
                 fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                 tabColor: CommonColors.red,
@@ -1198,7 +1198,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+        padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 12, desktopWidth: width)),
         decoration: BoxDecoration(
           border: widget.topOpen
               ? Border(
@@ -1303,7 +1303,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   height: PlatformUtils.isMobile ? 28.h : 27,
                   smallerWidth: PlatformUtils.isMobile ? 52.w : 62,
                   smallerHeight: PlatformUtils.isMobile ? 20.h : 19,
-                  verticalGap: PlatformUtils.isMobile ? 4 : 4.5,
+                  verticalGap: PlatformUtils.isMobile ? 4 : 12,
                   leftGap: PlatformUtils.isMobile ? 4 : 3.5,
                   fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
                   tabColor: CommonColors.red,

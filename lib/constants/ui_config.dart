@@ -150,7 +150,7 @@ class UIConfig {
   static SizedBox get spacingSizedBoxXXXLarge => SizedBox(height: 40.h);
   static SizedBox get spacingSizedBoxVerticalSmall => SizedBox(height: 8.h);
   static SizedBox get spacingSizedBoxVerticalMedium => SizedBox(height: 12.h);
-  static SizedBox get spacingSizedBoxVerticalLarge => SizedBox(height: 16.h);
+  static SizedBox get spacingSizedBoxVerticalLarge => SizedBox(height: 8.h);
   static SizedBox get spacingSizedBoxVerticalExtraLarge => SizedBox(height: 20.h);
   
   // ==================== BORDER RADIUS ====================
@@ -290,9 +290,9 @@ class UIConfig {
       : _textFieldMaxHeightDesktop;
   static double get textFieldMinWidth => 200.w;
   static double get textFieldMaxWidth => double.infinity;
-  static double get desktopDrawerHeightMin => 60.h;
-  static double get desktopDrawerHeightMax => 150.h;
-  static double get desktopDrawerHeightScale => 1;
+  static double get desktopDrawerHeightMin => 40.h;
+  static double get desktopDrawerHeightMax => 100.h;
+  static double get desktopDrawerHeightScale => 0.5;
   static double getDesktopDrawerHeight(BuildContext context) {
     return (MediaQuery.of(context).size.height * desktopDrawerHeightScale)
         .clamp(desktopDrawerHeightMin, desktopDrawerHeightMax);
@@ -304,8 +304,8 @@ class UIConfig {
     final baseDimension = PlatformUtils.isMobile
         ? size.height
         : getDesktopDrawerHeight(context);
-    final scaledHeight = baseDimension * textFieldHeightScale;
-    return scaledHeight.clamp(textFieldMinHeight, textFieldMaxHeight);
+    final scaledHeight = baseDimension * textFieldHeightScale ;
+    return scaledHeight.clamp(textFieldMinHeight, textFieldMaxHeight)  * 0.85;
   }
   
   // ==================== BUTTON VALUES ====================

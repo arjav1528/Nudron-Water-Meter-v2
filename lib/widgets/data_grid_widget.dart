@@ -200,7 +200,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         if (count > 0) {
           double avg = sum / count;
           //TODO : Change the decimaal places
-          String avgStr = avg.toStringAsFixed(2);
+          String avgStr = avg.toStringAsFixed(0);
           if (avgStr.contains('.')) {
             avgStr = avgStr.replaceAll(RegExp(r'0*$'), '').replaceAll(RegExp(r'\.$'), '');
           }
@@ -492,7 +492,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       alignment: alignment,
       padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
       decoration: BoxDecoration(
-        color: theme.onSecondaryContainer.withOpacity(1.0),
+        color: theme.dialogBG,
         border: Border(
           right: BorderSide(
             color: theme.gridLineColor,
