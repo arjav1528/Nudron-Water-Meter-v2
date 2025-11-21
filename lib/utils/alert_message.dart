@@ -26,6 +26,7 @@ class CustomAlert {
           key: uniqueKey,
           duration: duration,
           content: RichText(
+            key: uniqueKey,
             text: TextSpan(
               children: [
                 TextSpan(
