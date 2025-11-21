@@ -346,17 +346,7 @@ class _DropdownContentState extends State<DropdownContent> {
     double maxLabelWidth = 0;
     
     // For desktop: make font size responsive to actual available width to prevent overflow
-    // This is specific to these dropdowns only, not affecting other dropdowns
-    final double fontSize;
-    if (PlatformUtils.isMobile) {
-      fontSize = UIConfig.fontSizeSmallResponsive;
-    } else {
-      // Get the actual available width for the dropdown
-      final screenWidth = MediaQuery.of(context).size.width;
-      final availableWidth = screenWidth - (UIConfig.spacingMedium.w * 2); // Account for padding
-      // Calculate responsive font size based on available width, with min/max bounds
-      fontSize = (availableWidth / UIConfig.desktopFontSizeDivisor).clamp(12.0, 18.0);
-    }
+    final double fontSize = UIConfig.fontSizeSmallResponsive;
     
     final textStyle = GoogleFonts.robotoMono(fontSize: fontSize);
     
@@ -444,6 +434,8 @@ class _DropdownContentState extends State<DropdownContent> {
                     width2: calculatedWidth2,
                     // desktopDropdownWidth: PlatformUtils.isMobile ? null : width,
                     // desktopDropdownWidth: width - 30,
+                    
+                    
                     fieldName: levels[index],
                     value: selectedFilters[index],
                     items: items,

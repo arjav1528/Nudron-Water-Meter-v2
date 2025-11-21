@@ -244,6 +244,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   }
 
   _getHeaderWidget(int index, BuildContext context) {
+    bool isFrozenColumn = index < widget.frozenColumns;
+    bool isDesktop = PlatformUtils.isDesktop;
+    bool isDevicesPage = widget.location == 'devices' || widget.devicesTable == true;
+    Alignment alignment = (isFrozenColumn && isDesktop && isDevicesPage) 
+        ? Alignment.centerLeft 
+        : Alignment.center;
+    
     if (widget.devicesTable == true) {
       return Container(
         height: headerRowHeight, // Change from rowHeight to headerRowHeight
@@ -267,7 +274,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
             ),
           ),
         ),
-        alignment: Alignment.center,
+        alignment: alignment,
         child: HeaderWidget(
           title: Utils.cleanFieldName(widget.data![0][index].toString()),
         ),
@@ -295,7 +302,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
             ),
           ),
         ),
-        alignment: Alignment.center,
+        alignment: alignment,
         child: HeaderWidget(
           title: Utils.cleanFieldName(widget.data![0][index].toString()),
         ),
@@ -304,10 +311,17 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   }
 
   _getNormalWidget(int index, int index2, BuildContext context) {
+    bool isFrozenColumn = index2 < widget.frozenColumns;
+    bool isDesktop = PlatformUtils.isDesktop;
+    bool isDevicesPage = widget.location == 'devices' || widget.devicesTable == true;
+    Alignment alignment = (isFrozenColumn && isDesktop && isDevicesPage) 
+        ? Alignment.centerLeft 
+        : Alignment.center;
+    
     return Container(
       width: columnWidths[index2],
       height: rowHeight,
-      alignment: Alignment.center,
+      alignment: alignment,
       padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
       decoration: BoxDecoration(
         color: index % 2 == 1
