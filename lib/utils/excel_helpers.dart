@@ -152,11 +152,21 @@ class ExcelHelper {
         }
 
         for (var i = 1; i <= rows.length; i++) {
+          // Check if this is the average row (last row with "Average" in first cell for billing)
+          bool isAverageRow = (exportType == 'billing' && 
+                               i == rows.length && 
+                               rows.length > 0 &&
+                               rows[i - 1].isNotEmpty &&
+                               rows[i - 1][0].toString().trim() == "Average");
+          
           for (var j = 0; j < rows[0].length; j++) {
             var cell = sheetObject
                 .cell(CellIndex.indexByColumnRow(columnIndex: j, rowIndex: i));
             cell.cellStyle = CellStyle(
               horizontalAlign: HorizontalAlign.Center,
+              //TODO : Change the bold for the average row
+              // bold: isAverageRow,
+              
             );
           }
         }

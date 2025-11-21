@@ -45,12 +45,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   final ScrollController _verticalScrollController2 = ScrollController();
   final ScrollController _horizontalScrollController1 = ScrollController();
   final ScrollController _horizontalScrollController2 = ScrollController();
+  final ScrollController _horizontalScrollControllerAverage = ScrollController();
 
   List<double> columnWidths = [];
   
   final Map<String, double> _textWidthCache = {};
   
   List<List<dynamic>>? _cachedProcessedData;
+  List<dynamic>? _averageRow;
 
   final double rowHeight = UIConfig.rowHeight;
   final double headerRowHeight = UIConfig.headerWidgetHeight; // Add this line
@@ -124,6 +126,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     if (_cachedProcessedData == null || 
         _cachedProcessedData!.length != widget.data![1].length) {
       calculateColumnWidths();
+      calculateAverages();
       _cachedProcessedData = List.from(widget.data![1]);
     }
     
@@ -143,6 +146,72 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         }
       }
     }
+  }
+
+  void calculateAverages() {
+    if (widget.data == null || 
+        widget.data!.isEmpty || 
+        widget.data![1].isEmpty ||
+        widget.location != 'billing') {
+      _averageRow = null;
+      return;
+    }
+
+    var headers = widget.data![0];
+    var rows = widget.data![1];
+    
+    if (rows.isEmpty) {
+      _averageRow = null;
+      return;
+    }
+
+    List<dynamic> averages = [];
+
+    averages.add("Average");
+    averages.add(" ");
+
+    // For each column
+    for (int colIndex = 2; colIndex < headers.length; colIndex++) {
+      if (colIndex < widget.frozenColumns) {
+        
+      } else {
+        // Numeric columns: calculate average
+        double sum = 0.0;
+        int count = 0;
+        
+        for (var row in rows) {
+          if (row is List && colIndex < row.length && row[colIndex] != null) {
+            try {
+              // Try to parse as number
+              String valueStr = row[colIndex].toString().trim();
+              if (valueStr.isNotEmpty) {
+                double? value = double.tryParse(valueStr);
+                if (value != null) {
+                  sum += value;
+                  count++;
+                }
+              }
+            } catch (e) {
+              // Skip non-numeric values
+            }
+          }
+        }
+        
+        if (count > 0) {
+          double avg = sum / count;
+          //TODO : Change the decimaal places
+          String avgStr = avg.toStringAsFixed(2);
+          if (avgStr.contains('.')) {
+            avgStr = avgStr.replaceAll(RegExp(r'0*$'), '').replaceAll(RegExp(r'\.$'), '');
+          }
+          averages.add(avgStr);
+        } else {
+          averages.add("0");
+        }
+      }
+    }
+    
+    _averageRow = averages;
   }
 
   void calculateColumnWidths() {
@@ -217,6 +286,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     _verticalScrollController2.dispose();
     _horizontalScrollController1.dispose();
     _horizontalScrollController2.dispose();
+    _horizontalScrollControllerAverage.dispose();
     
     _textWidthCache.clear();
     _cachedProcessedData = null;
@@ -401,20 +471,73 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     }
   }
 
+  Widget _getAverageRowCell(int colIndex, BuildContext context) {
+    if (_averageRow == null || colIndex >= _averageRow!.length) {
+      return Container();
+    }
+    
+    final cellValue = _averageRow![colIndex].toString();
+    final textStyle = _getTextStyle(context);
+    bool isFrozenColumn = colIndex < widget.frozenColumns;
+    bool isDesktop = PlatformUtils.isDesktop;
+    bool isDevicesPage = widget.location == 'devices' || widget.devicesTable == true;
+    Alignment alignment = (isFrozenColumn && isDesktop && isDevicesPage) 
+        ? Alignment.centerLeft 
+        : Alignment.center;
+    
+    final theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    return Container(
+      width: columnWidths[colIndex],
+      height: rowHeight,
+      alignment: alignment,
+      padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
+      decoration: BoxDecoration(
+        color: theme.onSecondaryContainer.withOpacity(1.0),
+        border: Border(
+          right: BorderSide(
+            color: theme.gridLineColor,
+            width: colIndex == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth,
+          ),
+          top: BorderSide(
+            color: theme.gridLineColor,
+            width: UIConfig.tableBorderWidth,
+          ),
+        ),
+      ),
+      child: Text(
+        cellValue,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: textStyle.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     syncScrollControllers(
         _verticalScrollController1, _verticalScrollController2);
     syncScrollControllers(
         _horizontalScrollController1, _horizontalScrollController2);
+    // Sync average row horizontal scroll with main horizontal scroll
+    syncScrollControllers(
+        _horizontalScrollController2, _horizontalScrollControllerAverage);
 
     if (widget.data == null || widget.data!.isEmpty || widget.data![1].isEmpty) {
+      _averageRow = null;
       return Center(
         child: const NoEntries(),
       );
     } else {
       return LayoutBuilder(builder: (context, contraints) {
         init(contraints.maxHeight);
+        // Recalculate averages if data changed
+        if (_cachedProcessedData == null || 
+            _cachedProcessedData!.length != widget.data![1].length) {
+          calculateAverages();
+        }
         return ScrollConfiguration(
           behavior: NoBounceScrollBehavior(),
           child: GestureDetector(
@@ -540,9 +663,31 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                         } catch (e) {
                                           debugPrint('Error deleting old export files: $e');
                                         }
+                                        
+                                        // Prepare data for export - include average row for billing
+                                        var dataToExport = widget.data!;
+                                        if (widget.location == 'billing' && _averageRow != null) {
+                                          // Create a copy of the data with average row appended
+                                          List<dynamic> headers = List.from(dataToExport[0]);
+                                          List<List<dynamic>> allRows = List.from(dataToExport[1]);
+                                          
+                                          // Filter out empty/dummy rows (rows where all cells are empty or null)
+                                          List<List<dynamic>> rows = allRows.where((row) {
+                                            // Check if row has any non-empty values
+                                            return row.any((cell) => 
+                                              cell != null && 
+                                              cell.toString().trim().isNotEmpty
+                                            );
+                                          }).toList();
+                                          
+                                          // Add average row as the last row
+                                          rows.add(List.from(_averageRow!));
+                                          dataToExport = [headers, rows];
+                                        }
+                                        
                                         BlocProvider.of<DashboardBloc>(context)
                                             .exportDataToExcel(
-                                          widget.data!,
+                                          dataToExport,
                                           widget.exportToIncludeWholeData,
                                           widget.location,
                                           context,
@@ -639,6 +784,39 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                   ],
                 ),
               ),
+              // Fixed average row at the bottom
+              if (_averageRow != null && widget.location == 'billing')
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Frozen columns for average row
+                      Row(
+                        children: List.generate(
+                          widget.frozenColumns,
+                          (index) => _getAverageRowCell(index, context),
+                        ),
+                      ),
+                      // Scrollable columns for average row
+                      Expanded(
+                        child: SingleChildScrollView(
+                          controller: _horizontalScrollControllerAverage,
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(
+                              widget.data![0].length - widget.frozenColumns,
+                              (index) => _getAverageRowCell(
+                                  index + widget.frozenColumns, context),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
