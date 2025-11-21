@@ -108,7 +108,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           AlertType.error,
         );
       }
-    } else if (Platform.isIOS) {
+    } else if (Platform.isIOS ||
+        Platform.isMacOS ||
+        Platform.isWindows ||
+        Platform.isLinux) {
       try {
         if (screenIndex == 0) {
           screenIndex = 1;
@@ -140,7 +143,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             }
           }
 
-          Directory directory = await getApplicationDocumentsDirectory();
+          Directory? directory;
+          if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+            directory = await getDownloadsDirectory();
+          }
+          
+          directory ??= await getApplicationDocumentsDirectory();
 
           String filePath = "${directory.path}/chart.png";
           File file = File(filePath);

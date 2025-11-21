@@ -145,10 +145,8 @@ class _BackgroundChartState extends State<BackgroundChart> {
                 }
                 return false;
               }, builder: (context, state) {
-                GlobalKey key = GlobalKey();
-                dashboardBloc.changeKey(key);
                 return RepaintBoundary(
-                  key: key,
+                  key: dashboardBloc.repaintBoundaryKey,
                   child: Column(
                     children: [
                       Container(
@@ -156,7 +154,9 @@ class _BackgroundChartState extends State<BackgroundChart> {
                         color: CommonColors.yellow,
                       ),
                       Expanded(
-                        child: TrendsChart(isFullScreen: true, key: UniqueKey()),
+                        child: TrendsChart(
+                            isFullScreen: true,
+                            chartData: dashboardBloc.nudronChartData),
                       ),
                     ],
                   ),

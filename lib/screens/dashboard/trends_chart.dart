@@ -151,12 +151,14 @@ class MonthlyChart extends StatefulWidget {
   final Function(int month) onMonthSelected;
   final Function onSaveChart;
   final bool isFullScreen;
+  final NudronChartMap? chartData;
 
   const MonthlyChart(
       {super.key,
       required this.onMonthSelected,
       required this.onSaveChart,
-      required this.isFullScreen});
+      required this.isFullScreen,
+      this.chartData});
 
   @override
   _MonthlyChartState createState() => _MonthlyChartState();
@@ -170,14 +172,23 @@ class _MonthlyChartState extends State<MonthlyChart> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        final dataMap = BlocProvider.of<DashboardBloc>(context).nudronChartData;
-        if (dataMap != null) {
-          _getSeriesMonthly(dataMap);
-        }
+    if (widget.chartData != null) {
+      _getSeriesMonthly(widget.chartData!);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant MonthlyChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.chartData != oldWidget.chartData) {
+      if (widget.chartData != null) {
+        _getSeriesMonthly(widget.chartData!);
+      } else {
+        setState(() {
+          monthlySeries = [];
+        });
       }
-    });
+    }
   }
 
   void _getSeriesMonthly(NudronChartMap dataMap) {
@@ -370,9 +381,14 @@ double customRound(double value) {
 }
 
 class DailyChart extends StatefulWidget {
-  DailyChart({super.key, required this.onSaveChart, required this.isFullScreen});
+  DailyChart(
+      {super.key,
+      required this.onSaveChart,
+      required this.isFullScreen,
+      this.chartData});
   Function onSaveChart;
   bool isFullScreen;
+  final NudronChartMap? chartData;
 
   @override
   _DailyChartState createState() => _DailyChartState();
@@ -387,17 +403,28 @@ class _DailyChartState extends State<DailyChart> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _getSeriesDaily(NudronChartMap.selectedMonth.value);
-      }
-    });
+    if (widget.chartData != null) {
+      _getSeriesDaily(NudronChartMap.selectedMonth.value);
+    }
 
     NudronChartMap.selectedMonth.addListener(() {
       if (mounted) {
         _getSeriesDaily(NudronChartMap.selectedMonth.value);
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant DailyChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.chartData != oldWidget.chartData) {
+      if (widget.chartData != null) {
+        _getSeriesDaily(NudronChartMap.selectedMonth.value);
+      } else {
+        clearData();
+        setState(() {});
+      }
+    }
   }
 
   @override
@@ -426,7 +453,7 @@ class _DailyChartState extends State<DailyChart> {
       return;
     }
 
-    final dataMap = BlocProvider.of<DashboardBloc>(context).nudronChartData;
+    final dataMap = widget.chartData;
     if (dataMap == null) return;
 
     List<CartesianSeries<Entries, String>> series = [];
@@ -631,8 +658,9 @@ class _DailyChartState extends State<DailyChart> {
 
 class TrendsChart extends StatefulWidget {
   final bool isFullScreen;
+  final NudronChartMap? chartData;
 
-  const TrendsChart({super.key, this.isFullScreen = false});
+  const TrendsChart({super.key, this.isFullScreen = false, this.chartData});
 
   @override
   _TrendsChartState createState() => _TrendsChartState();
@@ -661,10 +689,12 @@ class _TrendsChartState extends State<TrendsChart> {
                 MonthlyChart(
                     onMonthSelected: switchToDaily,
                     isFullScreen: widget.isFullScreen,
-                    onSaveChart: _saveChartAsImage),
+                    onSaveChart: _saveChartAsImage,
+                    chartData: widget.chartData),
                 DailyChart(
                     onSaveChart: _saveChartAsImage,
-                    isFullScreen: widget.isFullScreen),
+                    isFullScreen: widget.isFullScreen,
+                    chartData: widget.chartData),
               ],
             );
           },

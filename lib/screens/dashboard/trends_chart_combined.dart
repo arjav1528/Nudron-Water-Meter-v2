@@ -140,7 +140,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                 return false;
               }, builder: (context, state) {
                 return TrendsChart(
-                  key: UniqueKey(),
+                  chartData: dashboardBloc.nudronChartData,
                 );
 
               }),
