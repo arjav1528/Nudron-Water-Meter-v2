@@ -387,8 +387,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       .profileBorderColor,
                                   fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                 ),
+
                                 Container(
-                                  padding: UIConfig.paddingProfileField,
+                                  padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
+
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Provider.of<ThemeNotifier>(context)
@@ -398,6 +400,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       )),
                                   child: Column(
                                     children: [
+                                      UIConfig.spacingSizedBoxVerticalLarge,
+                                      UIConfig.spacingSizedBoxVerticalLarge,
                                       CustomTextField(
                                         controller: _nameController,
                                         iconPath: 'assets/icons/profile2.svg',
@@ -481,6 +485,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         hint: "Confirm new password",
                                       ),
                                       UIConfig.spacingSizedBoxVerticalLarge,
+                                      UIConfig.spacingSizedBoxVerticalLarge,
                                       CustomButton(
                                         dynamicWidth: true,
                                         text: "SUBMIT",
@@ -532,7 +537,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         },
                                       ),
 
-                                      UIConfig.spacingSizedBoxVerticalSmall,
+                                      UIConfig.spacingSizedBoxVerticalLarge,
+                                      UIConfig.spacingSizedBoxVerticalLarge,
+
+
                                     ],
                                   ),
                                 ),
@@ -540,7 +548,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                             ),
                           ),
                           UIConfig.spacingSizedBoxVerticalLarge,
-                          UIConfig.spacingSizedBoxVerticalSmall,
+                          UIConfig.spacingSizedBoxVerticalLarge,
 
                           // Authentication Section
                           Padding(
@@ -602,8 +610,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                 ),
                                 Container(
-                                    padding: EdgeInsets.only(
-                                        left: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), right: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, top: UIConfig.paddingProfileFieldVertical.vertical / 1.h, bottom: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+                                    padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                           color: Provider.of<ThemeNotifier>(context)
@@ -611,38 +618,42 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               .profileBorderColor,
                                           width: UIConfig.profileFieldBorderWidth,
                                         )),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                    child: Column(
                                       children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: UIConfig.paddingProfileFieldBoth,
-                                            child: Text(
-                                              "Logout from this app",
-                                              style: GoogleFonts.roboto(
-                                                fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
-                                                color: Provider.of<ThemeNotifier>(
-                                                    context)
-                                                    .currentTheme
-                                                    .basicAdvanceTextColor,
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "Logout from this app",
+                                                style: GoogleFonts.roboto(
+                                                  fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+                                                  color: Provider.of<ThemeNotifier>(
+                                                      context)
+                                                      .currentTheme
+                                                      .basicAdvanceTextColor,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                          ),
+                                            CustomButton(
+                                              text: "LOGOUT",
+                                              dynamicWidth: true,
+                                              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  _isLoggingOut = true;
+                                                });
+                                                BlocProvider.of<AuthBloc>(context).add(AuthLogout());
+                                              },
+                                              isRed: true,
+                                            ),
+                                          ],
                                         ),
-                                        CustomButton(
-                                          text: "LOGOUT",
-                                          dynamicWidth: true,
-                                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                          onPressed: () async {
-                                            setState(() {
-                                              _isLoggingOut = true;
-                                            });
-                                            BlocProvider.of<AuthBloc>(context).add(AuthLogout());
-                                          },
-                                          isRed: true,
-                                        ),
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        UIConfig.spacingSizedBoxVerticalLarge,
                                       ],
                                     )),
                               ],
@@ -676,8 +687,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
                                 ),
                                 Container(
-                                    padding: EdgeInsets.only(
-                                        left: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), right: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, top: UIConfig.paddingProfileFieldVertical.vertical / 1.h, bottom: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+                                    padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                           color: Provider.of<ThemeNotifier>(context)
@@ -685,51 +695,53 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               .profileBorderColor,
                                           width: UIConfig.profileFieldBorderWidth,
                                         )),
-                                    child: Padding(
-                                      padding: UIConfig.paddingProfileFieldLeft,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          ActiveDevices(key: UniqueKey()),
-                                          UIConfig.spacingSizedBoxVerticalLarge,
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: UIConfig.paddingProfileFieldRight,
-                                                  child: Text(
-                                                    "Logout from all devices",
-                                                    style: GoogleFonts.roboto(
-                                                      fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                      color: Provider.of<
-                                                          ThemeNotifier>(
-                                                          context)
-                                                          .currentTheme
-                                                          .basicAdvanceTextColor,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        ActiveDevices(key: UniqueKey()),
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: UIConfig.paddingProfileFieldRight,
+                                                child: Text(
+                                                  "Logout from all devices",
+                                                  style: GoogleFonts.roboto(
+                                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                                    color: Provider.of<
+                                                        ThemeNotifier>(
+                                                        context)
+                                                        .currentTheme
+                                                        .basicAdvanceTextColor,
                                                   ),
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                              CustomButton(
-                                                text: "GLOBAL LOGOUT",
-                                                dynamicWidth: true,
-                                                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    _isGlobalLoggingOut = true;
-                                                  });
-                                                  BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
-                                                },
-                                                isRed: true,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                            CustomButton(
+                                              text: "GLOBAL LOGOUT",
+                                              dynamicWidth: true,
+                                              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  _isGlobalLoggingOut = true;
+                                                });
+                                                BlocProvider.of<AuthBloc>(context).add(AuthGlobalLogout());
+                                              },
+                                              isRed: true,
+                                            ),
+                                          ],
+                                        ),
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                        UIConfig.spacingSizedBoxVerticalLarge,
+                                      ],
                                     )),
 
                               ],
@@ -764,8 +776,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               ),
                               Container(
                                 key: _deleteAccountKey,
-                                  padding: EdgeInsets.only(
-                                      left: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), right: UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, top: UIConfig.paddingProfileFieldVertical.vertical / 1.h, bottom: UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+                                  padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                     color: Provider.of<ThemeNotifier>(context)
@@ -775,25 +786,24 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   )),
                                   child: Column(
                                     children: [
+                                      UIConfig.spacingSizedBoxVerticalLarge,
+                                      UIConfig.spacingSizedBoxVerticalLarge,
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(
-                                            child: Padding(
-                                              padding: UIConfig.paddingProfileFieldBoth,
-                                              child: Text(
-                                                "Delete your account",
-                                                style: GoogleFonts.roboto(
-                                                  fontSize:
-                                                      UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                  color: Provider.of<ThemeNotifier>(
-                                                          context)
-                                                      .currentTheme
-                                                      .basicAdvanceTextColor,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
+                                            child: Text(
+                                              "Delete your account",
+                                              style: GoogleFonts.roboto(
+                                                fontSize:
+                                                    UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                                color: Provider.of<ThemeNotifier>(
+                                                        context)
+                                                    .currentTheme
+                                                    .basicAdvanceTextColor,
                                               ),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                           CustomButton(
@@ -826,56 +836,52 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
                                           children: [
                                             UIConfig.spacingSizedBoxVerticalSmall,
-                                            Padding(
-                                              padding: EdgeInsets.only(left: UIConfig.getResponsiveFontSize(context, 8.5, desktopWidth: width), right: UIConfig.paddingProfileFieldHorizontal.horizontal),
-                                              child: Text(
-                                                "Warning: This action is irreversible. You will no longer be able to access your IoT data.",
-                                                style: GoogleFonts.roboto(
-                                                  fontSize: UIConfig.fontSizeExtraSmallResponsive,
-                                                  color: CommonColors.red,
-                                                ),
+                                            Text(
+                                              "Warning: This action is irreversible. You will no longer be able to access your IoT data.",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: UIConfig.fontSizeExtraSmallResponsive,
+                                                color: CommonColors.red,
                                               ),
                                             ),
                                             UIConfig.spacingSizedBoxVerticalLarge,
                                             CustomTextField(controller: deleteConfirmationFieldController, hintText: "Type 'DELETE' to confirm"),
                                             UIConfig.spacingSizedBoxVerticalLarge,
-                                            Padding(
-                                              padding: UIConfig.paddingTextFieldHorizontal,
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  CustomButton(
-                                                    dynamicWidth: true,
-                                                    text: "CANCEL",
-                                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        deleteAccountVisible = false;
-                                                      });
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                CustomButton(
+                                                  dynamicWidth: true,
+                                                  text: "CANCEL",
+                                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteAccountVisible = false;
+                                                    });
 
-                                                    },
-                                                  ),
-                                                  UIConfig.spacingSizedBoxSmall,
-                                                  CustomButton(
-                                                    dynamicWidth: true,
-                                                    text: "CONFIRM",
-                                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                                                    onPressed: () {
-                                                      if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
+                                                  },
+                                                ),
+                                                UIConfig.spacingSizedBoxSmall,
+                                                CustomButton(
+                                                  dynamicWidth: true,
+                                                  text: "CONFIRM",
+                                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                                  onPressed: () {
+                                                    if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
 
-                                                        BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
-                                                      } else {
-                                                        CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
-                                                      }
-                                                    },
-                                                    isRed: true,
-                                                  ),
-                                                ],
-                                              ),
+                                                      BlocProvider.of<AuthBloc>(context).add(AuthDeleteAccount());
+                                                    } else {
+                                                      CustomAlert.showCustomScaffoldMessenger(context, "Please type 'DELETE' to confirm.", AlertType.error);
+                                                    }
+                                                  },
+                                                  isRed: true,
+                                                ),
+                                              ],
                                             )
                                           ],
                                         ),
                                       ),
+                                      UIConfig.spacingSizedBoxVerticalLarge,
+                                      UIConfig.spacingSizedBoxVerticalLarge,
                                     ],
                                   )),
 
@@ -948,7 +954,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-      padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), UIConfig.paddingProfileFieldVertical.vertical / 1.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.spacingSmall * 1.125.h),
+      padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
       decoration: BoxDecoration(
         border: widget.topOpen
             ? Border(
@@ -1001,22 +1007,21 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
       ),
       child: Column(
         children: [
+          UIConfig.spacingSizedBoxVerticalLarge,
+          UIConfig.spacingSizedBoxVerticalLarge,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Padding(
-                  padding: UIConfig.paddingProfileFieldBoth,
-                  child: Text(
-                    "Two Factor Authentication",
-                    style: GoogleFonts.roboto(
-                      fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
-                      color: Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .basicAdvanceTextColor,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                child: Text(
+                  "Two Factor Authentication",
+                  style: GoogleFonts.roboto(
+                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+                    color: Provider.of<ThemeNotifier>(context)
+                        .currentTheme
+                        .basicAdvanceTextColor,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               ToggleButtonCustom(
@@ -1116,9 +1121,8 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                   },
                 )
               : Container(),
-          SizedBox(
-            height: UIConfig.spacingSmall * 1.125.h,
-          ),
+          UIConfig.spacingSizedBoxVerticalLarge,
+          UIConfig.spacingSizedBoxVerticalLarge,
           Container(
             height: UIConfig.borderWidthThin,
             color: Provider.of<ThemeNotifier>(context)
@@ -1194,7 +1198,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-        padding: EdgeInsets.fromLTRB(UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width), UIConfig.borderWidthThin.h, UIConfig.paddingProfileFieldHorizontal.horizontal / 1.w, UIConfig.paddingProfileFieldVertical.vertical / 1.h),
+        padding: EdgeInsets.symmetric(horizontal: UIConfig.getResponsiveFontSize(context, 4.5, desktopWidth: width)),
         decoration: BoxDecoration(
           border: widget.topOpen
               ? Border(
@@ -1249,22 +1253,21 @@ class _BiometricWidgetState extends State<BiometricWidget> {
         ),
         child: Column(
           children: [
+            UIConfig.spacingSizedBoxVerticalLarge,
+            UIConfig.spacingSizedBoxVerticalLarge,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: UIConfig.paddingProfileFieldBoth,
-                    child: Text(
-                      "Biometric Login",
-                      style: GoogleFonts.roboto(
-                        fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
-                        color: Provider.of<ThemeNotifier>(context)
-                            .currentTheme
-                            .basicAdvanceTextColor,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                  child: Text(
+                    "Biometric Login",
+                    style: GoogleFonts.roboto(
+                      fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+                      color: Provider.of<ThemeNotifier>(context)
+                          .currentTheme
+                          .basicAdvanceTextColor,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 ToggleButtonCustom(
@@ -1356,6 +1359,8 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                     },
                   )
                 : Container(),
+            UIConfig.spacingSizedBoxVerticalLarge,
+            UIConfig.spacingSizedBoxVerticalLarge,
           ],
         ));
   }
