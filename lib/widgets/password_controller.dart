@@ -96,12 +96,19 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         style: widget.style,
         hintStyle: widget.hintStyle,
         suffixIcon: IconButton(
-          icon: Icon(
-            widget.controller.isObscuring ? Icons.visibility_off : Icons.visibility,
-            color: Provider.of<ThemeNotifier>(context)
-                .currentTheme
-                .textfieldHintColor,
-            size: isMobile ? UIConfig.fontSizeSmallResponsive : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+          icon: SvgPicture.asset(
+            widget.controller.isObscuring 
+                ? 'assets/icons/visibility_off.svg' 
+                : 'assets/icons/visibility.svg',
+            height: isMobile ? UIConfig.iconSizePrefix : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+            width: isMobile ? UIConfig.iconSizePrefixWidth : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+            fit: BoxFit.scaleDown,
+            colorFilter: ColorFilter.mode(
+              Provider.of<ThemeNotifier>(context)
+                  .currentTheme
+                  .textfieldHintColor,
+              BlendMode.srcIn,
+            ),
           ),
           onPressed: _toggleObscureText,
         ),
