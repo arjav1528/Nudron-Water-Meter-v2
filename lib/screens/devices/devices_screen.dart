@@ -14,7 +14,6 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
-import '../../widgets/custom_safe_area.dart';
 import '../../widgets/data_grid_widget.dart';
 class DevicesPage extends StatefulWidget {
   const DevicesPage({super.key});
@@ -66,9 +65,12 @@ class _DevicesPageState extends State<DevicesPage> {
             backgroundColor:
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
             
-            body: CustomSafeArea(
+            body: MediaQuery.removePadding(
+              removeTop: true,
+              removeBottom: true,
+              context: context,
               child: Column(
-              children: [
+                children: [
                 Container(
                   height: UIConfig.accentLineHeight,
                   color: UIConfig.accentColorRed,
@@ -192,7 +194,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                             // filled: true,
                                             fillColor: UIConfig.colorTransparent,
                                             hintText:
-                                            'SEARCH DEVICE LABEL OR SERIAL NO.',
+                                            'SEARCH LABEL OR SERIAL NO.',
                                             hintStyle: GoogleFonts.robotoMono(
                                               fontSize: UIConfig.fontSizeMediumResponsive,
                                               color: Provider.of<ThemeNotifier>(context)
@@ -274,7 +276,7 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
               ],
             ),
-              ),
+            ),
           ),
         );
       },

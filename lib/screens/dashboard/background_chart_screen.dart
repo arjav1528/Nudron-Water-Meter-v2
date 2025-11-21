@@ -11,7 +11,6 @@ import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../utils/loader.dart';
-import '../../widgets/custom_safe_area.dart';
 import '../../services/platform_utils.dart';
 import 'trends_chart.dart';
 
@@ -105,9 +104,12 @@ class _BackgroundChartState extends State<BackgroundChart> {
             ),
           ),
         ),
-        body: CustomSafeArea(
+        body: MediaQuery.removePadding(
+          removeTop: true,
+          removeBottom: true,
+          context: context,
           child: BlocBuilder<DashboardBloc, DashboardState>(
-          buildWhen: (previous, current) {
+            buildWhen: (previous, current) {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
             final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
                                   dashboardBloc.filterData != null;
@@ -183,8 +185,8 @@ class _BackgroundChartState extends State<BackgroundChart> {
             
             return CustomLoader();
           },
-        ),
           ),
+        ),
       ),
     );
   }

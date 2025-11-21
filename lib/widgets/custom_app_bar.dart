@@ -45,10 +45,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
           color: Colors.transparent,
           child: Column(
             children: [
-              
+              // Extend app bar background above the notch
               Container(
                 height: topPadding,
-                color: Colors.black,
+                color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
               ),
               Container(
                 height: UIConfig.appBarHeight,

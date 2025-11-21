@@ -68,11 +68,13 @@ class _LoginPageState extends State<LoginPage> {
             Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
         resizeToAvoidBottomInset: false,
         
-        body: Builder(
-          builder: (context) {
-            final mediaQuery = MediaQuery.of(context);
-            final bottomPadding = mediaQuery.padding.bottom;
-            return Column(
+        body: MediaQuery.removePadding(
+          removeTop: true,
+          removeBottom: true,
+          context: context,
+          child: Builder(
+            builder: (context) {
+              return Column(
               children: [
                 Expanded(
                   child: Column(
@@ -176,13 +178,10 @@ class _LoginPageState extends State<LoginPage> {
                   height: UIConfig.accentLineHeight,
                   color: UIConfig.accentColorBlue,
                 ),
-                Container(
-                  height: bottomPadding,
-                  color: Colors.black,
-                ),
               ],
             );
           },
+        ),
         ),
       ),
     );

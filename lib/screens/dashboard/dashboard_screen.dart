@@ -20,7 +20,6 @@ import '../../utils/loader.dart';
 import '../../utils/new_loader.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_app_bar.dart';
-import '../../widgets/custom_safe_area.dart';
 import '../devices/devices_screen.dart';
 import '../profile/profile_drawer.dart';
 import 'background_chart_screen.dart';
@@ -56,7 +55,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: CustomSafeArea(
+      body: MediaQuery.removePadding(
+        removeTop: true,
+        removeBottom: true,
+        context: context,
         child: BlocBuilder<DashboardBloc, DashboardState>(
             buildWhen: (previous, current) {
           
@@ -448,10 +450,13 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             showProfileDrawer(context);
           },
         ),
-        body: CustomSafeArea(
+        body: MediaQuery.removePadding(
+          removeTop: true,
+          removeBottom: true,
+          context: context,
           child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             BlocBuilder<DashboardBloc, DashboardState>(
               buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
               builder: (context, state) {
@@ -488,16 +493,13 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                   }),
             ),
           ],
-        ),
           ),
+        ),
       ),
     );
   }
 
   Widget _buildMobileLayout(BuildContext context, List<Widget> contentPages) {
-    final mediaQuery = MediaQuery.of(context);
-    final bottomPadding = mediaQuery.padding.bottom;
-    
     return Scaffold(
       bottomNavigationBar: Container(
         color: Colors.black,
@@ -567,10 +569,6 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                 },
               ),
             ),
-            Container(
-              height: bottomPadding,
-              color: Colors.black,
-            ),
           ],
         ),
       ),
@@ -584,9 +582,12 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           showProfileDrawer(context);
         },
       ),
-      body: CustomSafeArea(
+      body: MediaQuery.removePadding(
+        removeTop: true,
+        removeBottom: true,
+        context: context,
         child: Row(
-        children: [
+          children: [
           LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
             return SizedBox(

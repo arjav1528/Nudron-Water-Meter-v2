@@ -17,7 +17,6 @@ import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../widgets/billing_formula.dart';
 import '../../widgets/custom_date_range_picker.dart';
-import '../../widgets/custom_safe_area.dart';
 import '../../widgets/data_grid_widget.dart';
 
 class SummaryTable extends StatefulWidget {
@@ -78,9 +77,8 @@ class _SummaryTableState extends State<SummaryTable> {
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
 
-        return CustomSafeArea(
-          child: Column(
-            children: [
+        return Column(
+          children: [
               Container(
                 height: UIConfig.accentLineHeight,
                 color: UIConfig.accentColorGreen,
@@ -210,7 +208,6 @@ class _SummaryTableState extends State<SummaryTable> {
               color: UIConfig.accentColorGreen,
             ),
           ],
-          ),
         );
 
       },

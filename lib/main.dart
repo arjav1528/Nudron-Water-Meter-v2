@@ -20,7 +20,6 @@ import 'package:watermeter2/constants/app_config.dart';
 import 'package:watermeter2/screens/auth/login_screen.dart';
 import 'package:watermeter2/screens/auth/two_factor_screen.dart';
 import 'package:watermeter2/utils/loader.dart';
-import 'package:watermeter2/widgets/custom_safe_area.dart';
 
 import 'utils/alert_message.dart';
 
@@ -155,7 +154,7 @@ class _MyAppState extends State<MyApp> {
                                         
                                         if (dashboardState is DashboardPageInitial) {
                                           return const Scaffold(
-                                            body: CustomSafeArea(child: Center(child: CustomLoader())),
+                                            body: Center(child: CustomLoader()),
                                           );
                                         }
                                         
@@ -164,7 +163,7 @@ class _MyAppState extends State<MyApp> {
                                             return const ProjectSelectionPage();
                                           }
                                           return const Scaffold(
-                                            body: CustomSafeArea(child: Center(child: CustomLoader())),
+                                            body: Center(child: CustomLoader()),
                                           );
                                         }
                                         
@@ -174,14 +173,14 @@ class _MyAppState extends State<MyApp> {
                                           return const ProjectSelectionPage();
                                         } else {
                                           return const Scaffold(
-                                            body: CustomSafeArea(child: Center(child: CustomLoader())),
+                                            body: Center(child: CustomLoader()),
                                           );
                                         }
                                       },
                                     );
                                   } else if (authState is AuthInitial || authState is AuthLoading) {
                                     return const Scaffold(
-                                      body: CustomSafeArea(child: Center(child: CustomLoader())),
+                                      body: Center(child: CustomLoader()),
                                     );
                                   } else {
                                     return const LoginPage();
@@ -276,10 +275,8 @@ class _MyAppState extends State<MyApp> {
                           
                           if (dashboardState is DashboardPageInitial) {
                             return const Scaffold(
-                              body: CustomSafeArea(
-                                child: Center(
-                                  child: CustomLoader(),
-                                ),
+                              body: Center(
+                                child: CustomLoader(),
                               ),
                             );
                           }
@@ -291,10 +288,8 @@ class _MyAppState extends State<MyApp> {
                             }
                             
                             return const Scaffold(
-                              body: CustomSafeArea(
-                                child: Center(
-                                  child: CustomLoader(),
-                                ),
+                              body: Center(
+                                child: CustomLoader(),
                               ),
                             );
                           }
@@ -308,10 +303,8 @@ class _MyAppState extends State<MyApp> {
                           } else {
                             
                             return const Scaffold(
-                              body: CustomSafeArea(
-                                child: Center(
-                                  child: CustomLoader(),
-                                ),
+                              body: Center(
+                                child: CustomLoader(),
                               ),
                             );
                           }
@@ -320,19 +313,15 @@ class _MyAppState extends State<MyApp> {
                     } else if (authState is AuthInitial) {
                       
                       return const Scaffold(
-                        body: CustomSafeArea(
-                          child: Center(
-                            child: CustomLoader(),
-                          ),
+                        body: Center(
+                          child: CustomLoader(),
                         ),
                       );
                     } else if (authState is AuthLoading) {
                       
                       return const Scaffold(
-                        body: CustomSafeArea(
-                          child: Center(
-                            child: CustomLoader(),
-                          ),
+                        body: Center(
+                          child: CustomLoader(),
                         ),
                       );
                     } else if (authState is AuthTwoFactorRequired) {

@@ -13,7 +13,6 @@ import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../widgets/custom_multiple_selector_horizontal.dart';
-import '../../widgets/custom_safe_area.dart';
 import 'trends_chart.dart';
 import 'trends_table.dart';
 
@@ -52,9 +51,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
 
         
 
-        return CustomSafeArea(
-          child: Column(
-            children: [
+        return Column(
+          children: [
               Container(
                 height: UIConfig.accentLineHeight,
                 color: UIConfig.accentColorYellow,
@@ -170,7 +168,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
               color: UIConfig.accentColorYellow,
             ),
           ],
-          ),
         );
       },
     );

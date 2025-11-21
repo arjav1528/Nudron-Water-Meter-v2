@@ -286,7 +286,12 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       
       return Scaffold(
         backgroundColor: theme.bgColor,
-        body: const CustomLoader(),
+        body: MediaQuery.removePadding(
+        removeTop: true,
+        removeBottom: true,
+        context: context,
+        child: const CustomLoader(),
+      ),
       );
     }
 
@@ -298,11 +303,13 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           showProfileDrawer(context);
         },
       ),
-      body: Builder(
-        builder: (context) {
-          final mediaQuery = MediaQuery.of(context);
-          final bottomPadding = mediaQuery.padding.bottom;
-          return GestureDetector(
+      body: MediaQuery.removePadding(
+        removeTop: true,
+        removeBottom: true,
+        context: context,
+        child: Builder(
+          builder: (context) {
+            return GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Column(
               children: [
@@ -400,14 +407,11 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                     ],
                   ),
                 ),
-                Container(
-                  height: bottomPadding,
-                  color: Colors.black,
-                ),
               ],
             ),
           );
         },
+        ),
       ),
     );
   }
