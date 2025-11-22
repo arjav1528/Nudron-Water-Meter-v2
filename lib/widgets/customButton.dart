@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:watermeter2/constants/ui_config.dart';
 import '../../utils/pok.dart';
 
 import '../../constants/theme2.dart';
-import '../../constants/ui_config.dart';
-import '../../services/platform_utils.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -18,11 +17,13 @@ class CustomButton extends StatelessWidget {
   final bool isEnabled;
   bool arrowWidget = false;
 
+  // final double horizontalPadding;
+
   CustomButton({
     super.key,
     required this.text,
     this.width,
-    
+    // this.horizontalPadding=35,
     this.fontSize,
     this.dynamicWidth = false,
     required this.onPressed,
@@ -36,10 +37,7 @@ class CustomButton extends StatelessWidget {
     final buttonColor = isEnabled 
         ? (isRed ? CommonColors.red : CommonColors.blue)
         : Colors.grey;
-    final chamferHeight = UIConfig.getButtonChamferHeight();
-    final drawerWidth = UIConfig.getDesktopDrawerWidth(context);
-    final calculatedFontSize = fontSize ?? ThemeNotifier.medium;
-    final finalFontSize = UIConfig.getResponsiveFontSize(context, calculatedFontSize, desktopWidth: drawerWidth);
+    final chamferHeight = (44.h) / 3;
 
     return ClipPath(
       clipper: ChamferClipper(chamferHeight: chamferHeight),
@@ -52,10 +50,10 @@ class CustomButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                
-                height: UIConfig.buttonHeight,
+                // color: Colors.green,
+                height: 44.h,
 
-                // width: dynamicWidth ? null : (width ?? UIConfig.buttonDefaultWidth),
+                width: dynamicWidth ? null : (width ?? 112.w),
                 child: Center(
                   child: Padding(
                     padding:
@@ -68,7 +66,7 @@ class CustomButton extends StatelessWidget {
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(
-                            fontSize: finalFontSize,
+                            fontSize: (fontSize ?? ThemeNotifier.medium).responsiveSp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
