@@ -123,8 +123,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
 
   void init(double height) {
     
-    if (_cachedProcessedData == null || 
-        _cachedProcessedData!.length != widget.data![1].length) {
+    // Check if we need to recalculate column widths
+    bool needsRecalculation = _cachedProcessedData == null || 
+        _cachedProcessedData!.length != widget.data![1].length ||
+        columnWidths.isEmpty ||
+        (widget.data != null && widget.data!.isNotEmpty && 
+         columnWidths.length != widget.data![0].length);
+    
+    if (needsRecalculation) {
       calculateColumnWidths();
       calculateAverages();
       _cachedProcessedData = List.from(widget.data![1]);
@@ -231,19 +237,26 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
         
         if (isFrozenColumn && isMobile && isBillingOrDevices) {
-          columnWidths[index] = headerWidth - 5.w;
+          // Add extra padding if this column is in the map
+          if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
+            columnWidths[index] = headerWidth +
+                widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
+          } else {
+            columnWidths[index] = headerWidth;
+          }
           continue;
         }
         
-        if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
-          columnWidths[index] = headerWidth +
-              widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
-          continue;
-        }
-
         double maxDataWidth = 0.0;
         
         bool shouldCheckAllRows = (widget.devicesTable == true && index == 0);
+        
+        // Check if this column needs special formatting (for devices table)
+        String? fieldName = headers[index].toString();
+        bool isLastSeenColumn = widget.devicesTable == true && 
+            fieldName.isNotEmpty && fieldName[0] == '%';
+        bool isLastRecordColumn = widget.devicesTable == true && 
+            fieldName.isNotEmpty && fieldName[0] == '@';
         
         if (rows.length > 1000 && !shouldCheckAllRows) {
           
@@ -252,7 +265,19 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           
           for (int i = 0; i < rows.length; i += step) {
             if (rows[i][index] != null) {
-              double cellWidth = calculateTextWidth(rows[i][index].toString());
+              String cellValue;
+              if (isLastSeenColumn) {
+                // Format the timestamp for Last Seen column
+                cellValue = Utils.lastSeenFromMilliseconds(rows[i][index]).toString();
+              } else if (isLastRecordColumn) {
+                // Format the date for Last Record column
+                String? lastSeenDate = NudronChartMap.convertDaysToDate(rows[i][index].toString());
+                cellValue = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
+              } else {
+                cellValue = rows[i][index].toString();
+              }
+              
+              double cellWidth = calculateTextWidth(cellValue);
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
                 
@@ -264,7 +289,19 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           
           for (var row in rows) {
             if (row[index] != null) {
-              double cellWidth = calculateTextWidth(row[index].toString());
+              String cellValue;
+              if (isLastSeenColumn) {
+                // Format the timestamp for Last Seen column
+                cellValue = Utils.lastSeenFromMilliseconds(row[index]).toString();
+              } else if (isLastRecordColumn) {
+                // Format the date for Last Record column
+                String? lastSeenDate = NudronChartMap.convertDaysToDate(row[index].toString());
+                cellValue = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
+              } else {
+                cellValue = row[index].toString();
+              }
+              
+              double cellWidth = calculateTextWidth(cellValue);
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
                 

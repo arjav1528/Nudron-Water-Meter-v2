@@ -188,8 +188,8 @@ class _SummaryTableState extends State<SummaryTable> {
                   
                   final Map<int, int> desktopJson = {};
                       final Map<int, int> mobileJson = {
-                        0: UIConfig.iconSizeLarge.toInt(),
-                        1: UIConfig.spacingExtraLarge.responsiveSp.toInt(),
+                        0: 0.responsiveSp.toInt(),
+                        1: 0.responsiveSp.toInt(),
                       };
                       final json = PlatformUtils.isDesktop ? desktopJson : mobileJson;
 
