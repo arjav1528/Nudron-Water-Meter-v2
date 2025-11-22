@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:watermeter2/services/platform_utils.dart';
 import 'package:watermeter2/utils/smallbutton.dart';
 
 import '../../bloc/dashboard_bloc.dart';
@@ -236,74 +235,66 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
               ),
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
                 _buildDialogHeader(),
-                SizedBox(height: (UIConfig.spacingExtraLarge.h - UIConfig.spacingSmall).clamp(0.0, double.infinity)),
-                // Container(
-                //     color: Provider.of<ThemeNotifier>(context)
-                //         .currentTheme
-                //         .gridLineColor,
-                //     height: UIConfig.borderWidthThin),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: PlatformUtils.isDesktop ? 100.w : 0),
-                  child: _buildTable(context),
-                ),
-                // Container(
-                //     color: Provider.of<ThemeNotifier>(context)
-                //         .currentTheme
-                //         .gridLineColor,
-                //     height: UIConfig.borderWidthThin),
-                SizedBox(height: UIConfig.spacingExtraLarge),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: PlatformUtils.isDesktop ? 100.w : 0),
-                  child: Row(
+                  padding: EdgeInsets.symmetric(horizontal: UIConfig.paddingHorizontalMedium.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // SizedBox(width: UIConfig.spacingExtraLarge.w),
-                      SmallButton(
-                          onPressed: () {
-                            if (tiers.length == 7) {
-                              CustomAlert.showCustomScaffoldMessenger(
-                                mainNavigatorKey.currentContext!,
-                                "You can add only 5 tiers",
-                                AlertType.error,
-                              );
-                              return;
-                            }
-
-                            setState(() {
-                              String lastAmount = amountControllers[
-                              amountControllers.length - 2]
-                                  .text;
-                              String lastTier =
-                                  tierControllers[tierControllers.length - 2]
-                                      .text;
-                              focusNodes.insert(
-                                  focusNodes.length - 1, FocusNode());
-                              amountControllers.insert(
-                                  amountControllers.length - 1,
-                                  TextEditingController(text: lastAmount));
-                              tierControllers.insert(tierControllers.length - 1,
-                                  TextEditingController(text: lastTier));
-                              tiers.insert(
-                                  tiers.length - 1, "$lastTier to $lastTier");
-                            });
-                          },
-                          iconData: Icons.add,
-                          bgColor: CommonColors.green),
-                      Text("ADD TIER",
-                          style: GoogleFonts.robotoMono(
-                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                            color: Provider.of<ThemeNotifier>(context)
-                                .currentTheme
-                                .basicAdvanceTextColor,
-                          )),
+                  
+                      SizedBox(height: UIConfig.spacingExtraLarge.h),
+                      _buildTable(context),
+                      SizedBox(height: UIConfig.spacingExtraLarge.h),
+                      Row(
+                          children: [
+                            SmallButton(
+                                onPressed: () {
+                                  if (tiers.length == 7) {
+                                    CustomAlert.showCustomScaffoldMessenger(
+                                      mainNavigatorKey.currentContext!,
+                                      "You can add only 5 tiers",
+                                      AlertType.error,
+                                    );
+                                    return;
+                                  }
+                
+                                  setState(() {
+                                    String lastAmount = amountControllers[
+                                    amountControllers.length - 2]
+                                        .text;
+                                    String lastTier =
+                                        tierControllers[tierControllers.length - 2]
+                                            .text;
+                                    focusNodes.insert(
+                                        focusNodes.length - 1, FocusNode());
+                                    amountControllers.insert(
+                                        amountControllers.length - 1,
+                                        TextEditingController(text: lastAmount));
+                                    tierControllers.insert(tierControllers.length - 1,
+                                        TextEditingController(text: lastTier));
+                                    tiers.insert(
+                                        tiers.length - 1, "$lastTier to $lastTier");
+                                  });
+                                },
+                                iconData: Icons.add,
+                                bgColor: CommonColors.green),
+                            SizedBox(width: UIConfig.spacingSmall.w),
+                            Text("ADD TIER",
+                                style: GoogleFonts.robotoMono(
+                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                  color: Provider.of<ThemeNotifier>(context)
+                                      .currentTheme
+                                      .basicAdvanceTextColor,
+                                )),
+                          ],
+                        ),
+                      SizedBox(height: UIConfig.spacingExtraLarge.h),
+                      _buildDialogActions(),
+                      SizedBox(height: UIConfig.spacingExtraLarge.h),
                     ],
                   ),
                 ),
-                SizedBox(height: UIConfig.spacingExtraLarge),
-                _buildDialogActions(),
-                SizedBox(height: UIConfig.spacingExtraLarge),
               ],
             ),
           ),
@@ -314,32 +305,35 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
 
   Widget _buildDialogHeader() {
     final width = UIConfig.getDesktopProjectWidth(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ChamferedTextWidgetInverted(
-          text: "BILLING FORMULA",
-          borderColor:
-              Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-        ),
-        IconButton(
-          icon: Icon(Icons.close,
-              color: Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .gridLineColor),
-          onPressed: () {
-            if (mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ChamferedTextWidgetInverted(
+            text: "BILLING FORMULA",
+            borderColor:
+                Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+          ),
+          IconButton(
+            icon: Icon(Icons.close,
+                color: Provider.of<ThemeNotifier>(context)
+                    .currentTheme
+                    .gridLineColor),
+            onPressed: () {
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
-  double rightpaddingconstant = UIConfig.iconSizeLarge + UIConfig.spacingSmall.w;
+  double rightpaddingconstant = 0;
 
   Widget _buildEditableTierCell(int index) {
     final width = UIConfig.getDesktopProjectWidth(context);
@@ -375,13 +369,16 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
             textAlign: TextAlign.right, 
           ),
         ),
-        Text(" to ",
-            style: GoogleFonts.robotoMono(
-              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-              color: Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .basicAdvanceTextColor,
-            )),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 2.w),
+          child: Text(" to ",
+              style: GoogleFonts.robotoMono(
+                fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                color: Provider.of<ThemeNotifier>(context)
+                    .currentTheme
+                    .basicAdvanceTextColor,
+              )),
+        ),
         Expanded(
           child: _buildTableCellTextField(
             tierControllers[index], 
@@ -420,21 +417,12 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .basicAdvanceTextColor,
-                  decoration: editable
-                      ? TextDecoration.underline
-                      : null, 
-                  decorationColor: editable
-                      ? Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .basicAdvanceTextColor
-                          .withOpacity(UIConfig.opacityHigh)
-                      : null,
                 ),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 textAlign: textAlign,
                 decoration: InputDecoration(
                   isDense: true,
-                  
+                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 8.h),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: CommonColors.blue,
@@ -527,11 +515,6 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           color: Provider.of<ThemeNotifier>(context)
               .currentTheme
               .basicAdvanceTextColor,
-          decoration: TextDecoration.underline, 
-          decorationColor: Provider.of<ThemeNotifier>(context)
-              .currentTheme
-              .basicAdvanceTextColor
-              .withOpacity(UIConfig.opacityHigh),
         ),
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
@@ -539,121 +522,166 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: UIConfig.paddingSymmetricVerticalSmall,
-          border: InputBorder.none, 
-          focusedBorder: InputBorder.none, 
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Provider.of<ThemeNotifier>(context)
+                  .currentTheme
+                  .basicAdvanceTextColor
+                  .withOpacity(UIConfig.opacityHigh),
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: CommonColors.blue,
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildTable(BuildContext context) {
-    return Table(
-      columnWidths: const {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(1),
-      },
-      border: TableBorder.symmetric(
-        inside: BorderSide(
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
           color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
           width: UIConfig.borderWidthThin,
         ),
       ),
-      children: [
-        TableRow(
-          children: [
-            _buildTableHeaderCell("Tier", rightpaddingconstant),
-            _buildTableHeaderCell("Amount", 0),
-          ],
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(0.8),
+          1: FlexColumnWidth(0.5),
+        },
+        border: TableBorder(
+          top: BorderSide(
+            color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            width: UIConfig.borderWidthThin,
+          ),
+          bottom: BorderSide(
+            color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            width: UIConfig.borderWidthThin,
+          ),
+          left: BorderSide(
+            color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            width: UIConfig.borderWidthThin,
+          ),
+          right: BorderSide(
+            color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            width: UIConfig.borderWidthThin,
+          ),
+          horizontalInside: BorderSide(
+            color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            width: UIConfig.borderWidthThin,
+          ),
+          verticalInside: BorderSide(
+            color: Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
+            width: UIConfig.borderWidthThin,
+          ),
         ),
-        for (int i = 0; i < tiers.length; i++)
+        children: [
           TableRow(
             children: [
-              Row(
-                children: [
-                  Expanded(child: _buildEditableTierCell(i)),
-                  if (i != 0 && i != tiers.length - 1)
-                    SmallButton(
-                        onPressed: () {
-                          setState(() {
-                            tiers.removeAt(i);
-                            amountControllers.removeAt(i);
-                            tierControllers.removeAt(i);
-                            focusNodes.removeAt(i);
-                          });
-                          
-                        },
-                        iconData: Icons.delete,
-                        bgColor: CommonColors.red)
-                ],
-              ),
-              _buildTableCellTextFieldAmount(amountControllers[i]),
+              _buildTableHeaderCell("Tier", rightpaddingconstant),
+              _buildTableHeaderCell("Amount", 0),
             ],
           ),
-      ],
+          for (int i = 0; i < tiers.length; i++)
+            TableRow(
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: _buildEditableTierCell(i)),
+                    if (i != 0 && i != tiers.length - 1)
+                      Padding(
+                        padding: EdgeInsets.only(left: UIConfig.spacingSmall.w),
+                        child: SmallButton(
+                            onPressed: () {
+                              setState(() {
+                                tiers.removeAt(i);
+                                amountControllers.removeAt(i);
+                                tierControllers.removeAt(i);
+                                focusNodes.removeAt(i);
+                              });
+                              
+                            },
+                            iconData: Icons.delete,
+                            bgColor: CommonColors.red),
+                      ),
+                  ],
+                ),
+                _buildTableCellTextFieldAmount(amountControllers[i]),
+              ],
+            ),
+        ],
+      ),
     );
   }
 
   Widget _buildDialogActions() {
     final width = UIConfig.getDesktopProjectWidth(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        CustomButton(
-          text: "CANCEL",
-          isRed: true,
-          dynamicWidth: true,
-          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
-          onPressed: () {
-            if (mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-        CustomButton(
-          text: "SUBMIT",
-          dynamicWidth: true,
-          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
-          onPressed: () {
-            String newFormula = _buildBillingFormula();
-            
-            LoaderUtility.showLoader(
-              context,
-              BlocProvider.of<DashboardBloc>(context)
-                  .setBillingFormula(newFormula),
-            ).then((s) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: UIConfig.paddingHorizontalMedium.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CustomButton(
+            text: "CANCEL",
+            isRed: true,
+            dynamicWidth: true,
+            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+            onPressed: () {
               if (mounted) {
-                
-                CustomAlert.showCustomScaffoldMessenger(
-                  mainNavigatorKey.currentContext!,
-                  "Billing formula set successfully",
-                  AlertType.success,
-                );
-
-                Future.microtask(() {
-                  if (mounted) {
-                    Navigator.of(context).pop();
-                  }
-                });
+                Navigator.of(context).pop();
               }
-            }).catchError((error) {
-              if (mounted) {
-                
-                CustomAlert.showCustomScaffoldMessenger(
-                  mainNavigatorKey.currentContext!,
-                  error.toString(),
-                  AlertType.error,
-                );
+            },
+          ),
+          CustomButton(
+            text: "SUBMIT",
+            dynamicWidth: true,
+            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+            onPressed: () {
+              String newFormula = _buildBillingFormula();
+              
+              LoaderUtility.showLoader(
+                context,
+                BlocProvider.of<DashboardBloc>(context)
+                    .setBillingFormula(newFormula),
+              ).then((s) {
+                if (mounted) {
+                  
+                  CustomAlert.showCustomScaffoldMessenger(
+                    mainNavigatorKey.currentContext!,
+                    "Billing formula set successfully",
+                    AlertType.success,
+                  );
 
-                Future.microtask(() {
-                  if (mounted) {
-                    Navigator.of(context).pop();
-                  }
-                });
-              }
-            });
-          },
-        ),
-      ],
+                  Future.microtask(() {
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  });
+                }
+              }).catchError((error) {
+                if (mounted) {
+                  
+                  CustomAlert.showCustomScaffoldMessenger(
+                    mainNavigatorKey.currentContext!,
+                    error.toString(),
+                    AlertType.error,
+                  );
+
+                  Future.microtask(() {
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  });
+                }
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -662,9 +690,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
     return Container(
       height: UIConfig.dropdownItemHeight,
       padding: EdgeInsets.only(right: padding),
-      
       alignment: Alignment.center,
-      
       child: Center(
         child: Text(
           text,
