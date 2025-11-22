@@ -312,6 +312,11 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         }
         
         columnWidths[index] = max(headerWidth, maxDataWidth);
+        
+        // Add extra width for frozen columns on desktop
+        if (isFrozenColumn && PlatformUtils.isDesktop) {
+          columnWidths[index] += 5.w;
+        }
       }
     }
   }
@@ -353,10 +358,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   _getHeaderWidget(int index, BuildContext context) {
     bool isFrozenColumn = index < widget.frozenColumns;
     bool isDesktop = PlatformUtils.isDesktop;
-    bool isDevicesPage = widget.location == 'devices' || widget.devicesTable == true;
-    Alignment alignment = (isFrozenColumn && isDesktop && isDevicesPage) 
+    Alignment alignment = isFrozenColumn 
         ? Alignment.centerLeft 
         : Alignment.center;
+    
+    EdgeInsets headerPadding = isFrozenColumn && isDesktop
+        ? EdgeInsets.only(left: 5.w)
+        : EdgeInsets.zero;
     
     if (widget.devicesTable == true) {
       return Container(
@@ -382,8 +390,11 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           ),
         ),
         alignment: alignment,
-        child: HeaderWidget(
-          title: Utils.cleanFieldName(widget.data![0][index].toString()),
+        child: Padding(
+          padding: headerPadding,
+          child: HeaderWidget(
+            title: Utils.cleanFieldName(widget.data![0][index].toString()),
+          ),
         ),
       );
     } else {
@@ -410,8 +421,11 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           ),
         ),
         alignment: alignment,
-        child: HeaderWidget(
-          title: Utils.cleanFieldName(widget.data![0][index].toString()),
+        child: Padding(
+          padding: headerPadding,
+          child: HeaderWidget(
+            title: Utils.cleanFieldName(widget.data![0][index].toString()),
+          ),
         ),
       );
     }
@@ -420,16 +434,25 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   _getNormalWidget(int index, int index2, BuildContext context) {
     bool isFrozenColumn = index2 < widget.frozenColumns;
     bool isDesktop = PlatformUtils.isDesktop;
-    bool isDevicesPage = widget.location == 'devices' || widget.devicesTable == true;
-    Alignment alignment = (isFrozenColumn && isDesktop && isDevicesPage) 
+    Alignment alignment = isFrozenColumn 
         ? Alignment.centerLeft 
         : Alignment.center;
+    
+    EdgeInsets cellPadding = EdgeInsets.symmetric(
+      horizontal: UIConfig.tableCellPaddingHorizontal,
+    );
+    if (isFrozenColumn && isDesktop) {
+      cellPadding = EdgeInsets.only(
+        left: UIConfig.tableCellPaddingHorizontal + 5.w,
+        right: UIConfig.tableCellPaddingHorizontal,
+      );
+    }
     
     return Container(
       width: columnWidths[index2],
       height: rowHeight,
       alignment: alignment,
-      padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
+      padding: cellPadding,
       decoration: BoxDecoration(
         color: index % 2 == 1
             ? Provider.of<ThemeNotifier>(context)
@@ -517,17 +540,26 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     final textStyle = _getTextStyle(context);
     bool isFrozenColumn = colIndex < widget.frozenColumns;
     bool isDesktop = PlatformUtils.isDesktop;
-    bool isDevicesPage = widget.location == 'devices' || widget.devicesTable == true;
-    Alignment alignment = (isFrozenColumn && isDesktop && isDevicesPage) 
+    Alignment alignment = isFrozenColumn 
         ? Alignment.centerLeft 
         : Alignment.center;
+    
+    EdgeInsets cellPadding = EdgeInsets.symmetric(
+      horizontal: UIConfig.tableCellPaddingHorizontal,
+    );
+    if (isFrozenColumn && isDesktop) {
+      cellPadding = EdgeInsets.only(
+        left: UIConfig.tableCellPaddingHorizontal + 5.w,
+        right: UIConfig.tableCellPaddingHorizontal,
+      );
+    }
     
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Container(
       width: columnWidths[colIndex],
       height: rowHeight,
       alignment: alignment,
-      padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
+      padding: cellPadding,
       decoration: BoxDecoration(
         color: theme.dialogBG,
         border: Border(
@@ -737,7 +769,9 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: UIConfig.paddingFromLTRBZero,
+                                    padding: PlatformUtils.isDesktop
+                                        ? EdgeInsets.only(left: 5.w)
+                                        : UIConfig.paddingFromLTRBZero,
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
                                           widget.data![0][0].toString()),
