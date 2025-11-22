@@ -19,10 +19,10 @@ class DataPostRequests {
   static final Map<String, DateTime> _lastRequestTime = {};
   static const Duration _requestThrottle = Duration(milliseconds: 300); 
   
-  static const Duration _fastTimeout = Duration(seconds: 30);
-  
+  static const Duration _totalTimeout = Duration(seconds: 5);
   static const int _maxRetries = 3;
   static const Duration _initialRetryDelay = Duration(seconds: 1);
+  static Duration get _fastTimeout => Duration(milliseconds: (_totalTimeout.inMilliseconds / _maxRetries).round());
 
   static getIconNamesForAlerts(int index) {
     switch (index) {

@@ -475,7 +475,8 @@ class LoginPostRequests {
     
     const int maxRetries = 3;
     const Duration initialRetryDelay = Duration(seconds: 1);
-    final effectiveTimeout = timeout ?? const Duration(seconds: 30);
+    const Duration totalTimeout = Duration(seconds: 5);
+    final effectiveTimeout = timeout ?? Duration(milliseconds: (totalTimeout.inMilliseconds / maxRetries).round());
     
     int attempt = 0;
     Exception? lastException;
