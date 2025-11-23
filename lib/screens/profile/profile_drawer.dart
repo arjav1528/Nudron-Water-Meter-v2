@@ -819,7 +819,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                 if (_deleteAccountKey.currentContext != null) {
                                                   Scrollable.ensureVisible(
                                                     _deleteAccountKey.currentContext!,
-                                                    duration: const Duration(milliseconds: 300),
+                                                    duration: const Duration(milliseconds: 100),
                                                     curve: Curves.easeInOut,
                                                   );
                                                 }
