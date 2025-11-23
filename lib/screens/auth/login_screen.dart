@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Center(
                           child: SizedBox(
-                            width: PlatformUtils.isMobile ? 1.sw : 600,
+                            width: MediaQuery.of(context).size.width / 3,
                             child: Column(
                               children: [
                                 SizedBox(height: UIConfig.spacingExtraLarge),
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     'Nudron IoT Solutions',
                                     style: GoogleFonts.roboto(
-                                        fontSize: PlatformUtils.isMobile ? 37.responsiveSp : 37.0,
+                                        fontSize: 37.responsiveSp,
                                         fontWeight: FontWeight.bold,
                                         color: Provider.of<ThemeNotifier>(context)
                                             .currentTheme
@@ -129,32 +129,40 @@ class _LoginPageState extends State<LoginPage> {
                                         "Welcome to Nudron's Water Metering Dashboard",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.roboto(
-                                            fontSize: PlatformUtils.isMobile ? ThemeNotifier.medium.responsiveSp : 16.0,
+                                            fontSize: ThemeNotifier.medium.responsiveSp,
                                             color: Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
                                                 .basicAdvanceTextColor)),
                                   ),
                                 ),
                                 SizedBox(height: UIConfig.spacingExtraLarge),
-                                Center(
-                                  child: ToggleButtonCustom(
-                                    
-                                    key: UniqueKey(),
-                                    tabs: const ["SIGN IN", "REGISTER"],
-                                    backgroundColor: CommonColors.blue,
-                                    fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.large, desktopWidth:  UIConfig.getDesktopDrawerWidth(context)),
-                                    selectedTextColor: Colors.white,
-                                    unselectedTextColor:
-                                        Provider.of<ThemeNotifier>(context)
-                                            .currentTheme
-                                            .basicAdvanceTextColor,
-                                    index: NudronRandomStuff.isSignIn.value ? 0 : 1,
-                                    onTap: (index) {
-                                      setState(() {
-                                        NudronRandomStuff.isSignIn.value = index == 0;
-                                      });
-                                    },
-                                  ),
+                                LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final toggleWidth = constraints.maxWidth * 0.6;
+                                    return Center(
+                                      child: ToggleButtonCustom(
+                                        key: UniqueKey(),
+                                        tabs: const ["SIGN IN", "REGISTER"],
+                                        backgroundColor: CommonColors.blue,
+                                        fontSize: ThemeNotifier.large.responsiveSp,
+                                        width: toggleWidth,
+                                        height: 50.91.responsiveSp,
+                                        smallerWidth: (toggleWidth / 2) - 12,
+                                        smallerHeight: 35.responsiveSp,
+                                        selectedTextColor: Colors.white,
+                                        unselectedTextColor:
+                                            Provider.of<ThemeNotifier>(context)
+                                                .currentTheme
+                                                .basicAdvanceTextColor,
+                                        index: NudronRandomStuff.isSignIn.value ? 0 : 1,
+                                        onTap: (index) {
+                                          setState(() {
+                                            NudronRandomStuff.isSignIn.value = index == 0;
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  },
                                 ),
                                 SizedBox(height: UIConfig.spacingXXXLarge),
                                 IndexedStack(
@@ -292,16 +300,12 @@ class _SigninPageState extends State<SigninPage> {
               hintText: 'Enter Email',
               keyboardType: TextInputType.emailAddress,
               style: GoogleFonts.roboto(
-                  fontSize: PlatformUtils.isMobile
-                      ? ThemeNotifier.medium.responsiveSp
-                      : 18.0,
+                  fontSize: ThemeNotifier.medium.responsiveSp,
                   color: Provider.of<ThemeNotifier>(context)
                       .currentTheme
                       .textfieldTextColor),
               hintStyle: GoogleFonts.roboto(
-                fontSize: PlatformUtils.isMobile
-                    ? ThemeNotifier.medium.responsiveSp
-                    : 18.0,
+                fontSize: ThemeNotifier.medium.responsiveSp,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
                     .textfieldHintColor,
@@ -373,16 +377,12 @@ class _SigninPageState extends State<SigninPage> {
                         child: PasswordTextField(
                           controller: passwordControllerObscure,
                           style: GoogleFonts.roboto(
-                              fontSize: PlatformUtils.isMobile
-                                  ? ThemeNotifier.medium.responsiveSp
-                                  : 18.0,
+                              fontSize: ThemeNotifier.medium.responsiveSp,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .textfieldTextColor),
                           hintStyle: GoogleFonts.roboto(
-                            fontSize: PlatformUtils.isMobile
-                                ? ThemeNotifier.medium.responsiveSp
-                                : 18.0,
+                            fontSize: ThemeNotifier.medium.responsiveSp,
                             color: Provider.of<ThemeNotifier>(context)
                                 .currentTheme
                                 .textfieldHintColor,
@@ -509,7 +509,7 @@ class _SigninPageState extends State<SigninPage> {
                           children: [
                             Icon(
                               Icons.fingerprint,
-                              size: PlatformUtils.isMobile ? 70.responsiveSp : 70.0,
+                              size: 70.responsiveSp,
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
                                   .basicAdvanceTextColor,
@@ -522,7 +522,7 @@ class _SigninPageState extends State<SigninPage> {
                                     Provider.of<ThemeNotifier>(context)
                                         .currentTheme
                                         .basicAdvanceTextColor,
-                                fontSize: PlatformUtils.isMobile ? ThemeNotifier.small.responsiveSp : 12.0,
+                                fontSize: ThemeNotifier.small.responsiveSp,
                                 color: Provider.of<ThemeNotifier>(context)
                                     .currentTheme
                                     .basicAdvanceTextColor,

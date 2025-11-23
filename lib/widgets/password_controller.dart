@@ -54,20 +54,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     final bool isMobile = PlatformUtils.isMobile;
-    final width = UIConfig.getDesktopDrawerWidth(context);
-    final textFieldHeight = UIConfig.getResponsiveTextFieldHeight(context);
-
-    // Calculate clamped width
-    final screenWidth = MediaQuery.of(context).size.width;
-    final calculatedWidth = PlatformUtils.isMobile ? screenWidth : width;
 
     return Container(
-      constraints: BoxConstraints(
-        minHeight: UIConfig.textFieldMinHeight,
-        maxHeight: UIConfig.textFieldMaxHeight,
-        minWidth: UIConfig.textFieldMinWidth,
-        maxWidth: UIConfig.textFieldMaxWidth,
-      ),
       child: CustomTextField(
         controller: widget.controller,
         iconPath: (!isMobile &&

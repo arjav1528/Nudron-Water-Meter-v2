@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../constants/app_config.dart';
-import '../../services/platform_utils.dart';
+import '../../utils/pok.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField({
@@ -62,23 +61,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final width = UIConfig.getDesktopDrawerWidth(context);
-    final fontSize = UIConfig.getResponsiveFontSize(
-        context, ThemeNotifier.medium,
-        desktopWidth: width);
-    final textFieldHeight = UIConfig.getResponsiveTextFieldHeight(context);
-
-    // Calculate clamped width
-    final screenWidth = MediaQuery.of(context).size.width;
-    final calculatedWidth = PlatformUtils.isMobile ? screenWidth : width;
+    final fontSize = ThemeNotifier.medium.responsiveSp;
 
     return Container(
-      constraints: BoxConstraints(
-        minHeight: UIConfig.textFieldMinHeight,
-        maxHeight: UIConfig.textFieldMaxHeight,
-        minWidth: UIConfig.textFieldMinWidth,
-        maxWidth: UIConfig.textFieldMaxWidth,
-      ),
       decoration: BoxDecoration(
         color:
             Provider.of<ThemeNotifier>(context).currentTheme.textFieldFillColor,
