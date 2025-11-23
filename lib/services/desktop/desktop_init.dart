@@ -28,7 +28,7 @@ class DesktopInit {
           alwaysOnTop: false,
           fullScreen: false,
           size: Size(1200, 800),
-          minimumSize: Size(800, 600),
+          minimumSize: Size(1280, 720),
         );
       } else {
         
