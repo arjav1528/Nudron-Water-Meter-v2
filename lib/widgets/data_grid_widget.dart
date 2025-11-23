@@ -313,10 +313,8 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         
         columnWidths[index] = max(headerWidth, maxDataWidth);
         
-        // Add extra width for frozen columns on desktop
-        if (isFrozenColumn && PlatformUtils.isDesktop) {
-          columnWidths[index] += 5.w;
-        }
+        // Add extra width for frozen columns on desktop (only for billing and devices pages)
+        
       }
     }
   }
@@ -358,11 +356,12 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   _getHeaderWidget(int index, BuildContext context) {
     bool isFrozenColumn = index < widget.frozenColumns;
     bool isDesktop = PlatformUtils.isDesktop;
-    Alignment alignment = isFrozenColumn 
+    bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
+    Alignment alignment = (isFrozenColumn && isDesktop && isBillingOrDevices) 
         ? Alignment.centerLeft 
         : Alignment.center;
     
-    EdgeInsets headerPadding = isFrozenColumn && isDesktop
+    EdgeInsets headerPadding = (isFrozenColumn && isDesktop && isBillingOrDevices)
         ? EdgeInsets.only(left: 5.w)
         : EdgeInsets.zero;
     
@@ -434,14 +433,15 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   _getNormalWidget(int index, int index2, BuildContext context) {
     bool isFrozenColumn = index2 < widget.frozenColumns;
     bool isDesktop = PlatformUtils.isDesktop;
-    Alignment alignment = isFrozenColumn 
+    bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
+    Alignment alignment = (isFrozenColumn && isDesktop && isBillingOrDevices) 
         ? Alignment.centerLeft 
         : Alignment.center;
     
     EdgeInsets cellPadding = EdgeInsets.symmetric(
       horizontal: UIConfig.tableCellPaddingHorizontal,
     );
-    if (isFrozenColumn && isDesktop) {
+    if (isFrozenColumn && isDesktop && isBillingOrDevices) {
       cellPadding = EdgeInsets.only(
         left: UIConfig.tableCellPaddingHorizontal + 5.w,
         right: UIConfig.tableCellPaddingHorizontal,
@@ -540,16 +540,17 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     final textStyle = _getTextStyle(context);
     bool isFrozenColumn = colIndex < widget.frozenColumns;
     bool isDesktop = PlatformUtils.isDesktop;
-    Alignment alignment = isFrozenColumn 
+    bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
+    Alignment alignment = (isFrozenColumn && isDesktop && isBillingOrDevices) 
         ? Alignment.centerLeft 
         : Alignment.center;
     
     EdgeInsets cellPadding = EdgeInsets.symmetric(
       horizontal: UIConfig.tableCellPaddingHorizontal,
     );
-    if (isFrozenColumn && isDesktop) {
+    if (isFrozenColumn && isDesktop && isBillingOrDevices) {
       cellPadding = EdgeInsets.only(
-        left: UIConfig.tableCellPaddingHorizontal + 5.w,
+        left: UIConfig.tableCellPaddingHorizontal + 6.w,
         right: UIConfig.tableCellPaddingHorizontal,
       );
     }
@@ -701,7 +702,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     radius: UIConfig.buttonSplashRadius,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
-                                          vertical: 2.h, horizontal: 7.w),
+                                          horizontal: 5.w),
                                       
                                       child: Icon(
                                         Icons.download,
@@ -769,8 +770,8 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                 Expanded(
                                   child: Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: PlatformUtils.isDesktop
-                                        ? EdgeInsets.only(left: 5.w)
+                                    padding: (PlatformUtils.isDesktop && (widget.location == 'billing' || widget.location == 'devices'))
+                                        ? EdgeInsets.only(left: 10.w)
                                         : UIConfig.paddingFromLTRBZero,
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
