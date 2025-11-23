@@ -165,7 +165,7 @@ class ExcelHelper {
             cell.cellStyle = CellStyle(
               horizontalAlign: HorizontalAlign.Center,
               //TODO : Change the bold for the average row
-              // bold: isAverageRow,
+              bold: isAverageRow,
               
             );
           }
