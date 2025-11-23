@@ -400,10 +400,10 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                 ),
               ),
                       Spacer(),
-                      Container(
-                        height: UIConfig.accentLineHeight,
-                        color: UIConfig.color14414e,
-                      ),
+                      // Container(
+                      //   height: UIConfig.accentLineHeight,
+                      //   color: UIConfig.color14414e,
+                      // ),
                     ],
                   ),
                 ),

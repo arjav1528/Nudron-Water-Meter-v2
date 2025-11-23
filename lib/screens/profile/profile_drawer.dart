@@ -896,10 +896,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                       ),
                     ),
                   ),
-                Container(
-                  height: UIConfig.accentLineHeight,
-                  color: CommonColors.blue2,
-                ),
+                // Container(
+                //   height: UIConfig.accentLineHeight,
+                //   color: CommonColors.blue2,
+                // ),
               ],
             );
           });

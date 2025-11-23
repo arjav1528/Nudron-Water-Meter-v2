@@ -352,10 +352,10 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                     ),
                   ),
                 ),
-                Container(
-                  height: UIConfig.accentLineHeight,
-                  color: UIConfig.accentColorBlue,
-                ),
+                // Container(
+                //   height: UIConfig.accentLineHeight,
+                //   color: UIConfig.accentColorBlue,
+                // ),
               ],
             ),
           ),

@@ -174,10 +174,10 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                Container(
-                  height: UIConfig.accentLineHeight,
-                  color: UIConfig.accentColorBlue,
-                ),
+                // Container(
+                //   height: UIConfig.accentLineHeight,
+                //   color: UIConfig.accentColorBlue,
+                // ),
               ],
             );
           },
