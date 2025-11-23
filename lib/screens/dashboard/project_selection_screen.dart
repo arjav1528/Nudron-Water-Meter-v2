@@ -35,11 +35,11 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
   @override
   void initState() {
     super.initState();
-    final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+    final dashboardBloc =
+        BlocProvider.of<DashboardBloc>(context, listen: false);
     final projects = dashboardBloc.projects;
     if (projects.length == 1) {
       selectedProject = projects.first;
-      
     } else {
       selectedProject = dashboardBloc.currentFilters.isNotEmpty
           ? dashboardBloc.currentFilters.first
@@ -54,35 +54,33 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       return;
     }
 
-    final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+    final dashboardBloc =
+        BlocProvider.of<DashboardBloc>(context, listen: false);
 
     try {
       await LoaderUtility.showLoader(
         context,
         () async {
-          
           dashboardBloc.currentFilters.clear();
           dashboardBloc.filterData = null;
           dashboardBloc.clearBillingData();
           dashboardBloc.devicesData = null;
 
-          var filterData = await dashboardBloc.selectProject(dashboardBloc.projects.indexOf(selectedProject ?? ""));
+          var filterData = await dashboardBloc.selectProject(
+              dashboardBloc.projects.indexOf(selectedProject ?? ""));
           if (filterData != null) {
-            
-            await dashboardBloc.updateSelectedFilters([selectedProject], filterData);
-            
+            await dashboardBloc
+                .updateSelectedFilters([selectedProject], filterData);
+
             dashboardBloc.screenIndex = 0;
-            
+
             dashboardBloc.switchBottomNavPos(0);
           }
         }(),
       );
     } catch (e) {
       CustomAlert.showCustomScaffoldMessenger(
-        context,
-        "Error selecting project: ${e.toString()}",
-        AlertType.error
-      );
+          context, "Error selecting project: ${e.toString()}", AlertType.error);
       return;
     }
 
@@ -91,7 +89,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
           context, "Error loading project data", AlertType.error);
       return;
     }
-    
+
     Navigator.of(context).pushReplacementNamed('/homePage');
   }
 
@@ -99,25 +97,25 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     showDialog(
       context: context,
       builder: (context) {
-        final currentTheme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
+        final currentTheme =
+            Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
         final dialogWidth = UIConfig.getDesktopDialogWidth(context);
         final width = dialogWidth;
         return Dialog(
           backgroundColor: currentTheme.dialogBG,
-            elevation: 0,
+          elevation: 0,
           child: Container(
             width: dialogWidth,
             constraints: BoxConstraints(
               maxHeight: UIConfig.dialogMaxHeight,
             ),
             decoration: BoxDecoration(
-                color: currentTheme.dialogBG, 
-                border: Border.all(
-                  color: currentTheme.gridLineColor, 
-                  width: UIConfig.dialogBorderWidth, 
-                ),
-                
+              color: currentTheme.dialogBG,
+              border: Border.all(
+                color: currentTheme.gridLineColor,
+                width: UIConfig.dialogBorderWidth,
               ),
+            ),
             child: Padding(
               padding: UIConfig.paddingDialogBottom,
               child: Column(
@@ -133,7 +131,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         borderColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .gridLineColor,
-                        fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                        fontSize: UIConfig.getResponsiveFontSize(
+                            context, ThemeNotifier.medium,
+                            desktopWidth: width),
                       ),
                       IconButton(
                         icon: Icon(Icons.close,
@@ -152,13 +152,18 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor,
+                          color: Provider.of<ThemeNotifier>(context)
+                              .currentTheme
+                              .profileBorderColor,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Provider.of<ThemeNotifier>(context).currentTheme.shadowColor,
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .shadowColor,
                             blurRadius: 1.r,
-                            offset: Offset(UIConfig.spacingXSmall * 0.75, UIConfig.spacingXSmall),
+                            offset: Offset(UIConfig.spacingXSmall * 0.75,
+                                UIConfig.spacingXSmall),
                           ),
                         ],
                         borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -168,22 +173,34 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         decoration: InputDecoration(
                           hintText: "Enter Activation Code",
                           hintStyle: TextStyle(
-                            color: Provider.of<ThemeNotifier>(context).currentTheme.textfieldHintColor,
+                            color: Provider.of<ThemeNotifier>(context)
+                                .currentTheme
+                                .textfieldHintColor,
                             fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                            fontSize: UIConfig.getResponsiveFontSize(
+                                context, ThemeNotifier.medium,
+                                desktopWidth: width),
                           ),
                           filled: true,
-                          fillColor: Provider.of<ThemeNotifier>(context).currentTheme.textFieldFillColor,
+                          fillColor: Provider.of<ThemeNotifier>(context)
+                              .currentTheme
+                              .textFieldFillColor,
                           border: OutlineInputBorder(
                             borderRadius: UIConfig.borderRadiusCircularMedium,
                             borderSide: BorderSide(
-                              color: Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor,
+                              color: Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .profileBorderColor,
                             ),
                           ),
                         ),
                         style: TextStyle(
-                          color: Provider.of<ThemeNotifier>(context).currentTheme.textfieldTextColor,
-                          fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                          color: Provider.of<ThemeNotifier>(context)
+                              .currentTheme
+                              .textfieldTextColor,
+                          fontSize: UIConfig.getResponsiveFontSize(
+                              context, ThemeNotifier.medium,
+                              desktopWidth: width),
                         ),
                       ),
                     ),
@@ -199,7 +216,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           text: "CANCEL",
                           isRed: true,
                           dynamicWidth: true,
-                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                          fontSize: UIConfig.getResponsiveFontSize(
+                              context, ThemeNotifier.small,
+                              desktopWidth: width),
                           onPressed: () {
                             activationCodeController.clear();
                             Navigator.of(context).pop();
@@ -209,20 +228,27 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         CustomButton(
                           text: "CONFIRM",
                           dynamicWidth: true,
-                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+                          fontSize: UIConfig.getResponsiveFontSize(
+                              context, ThemeNotifier.small,
+                              desktopWidth: width),
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
                             if (activationCodeController.text.isEmpty) {
                               CustomAlert.showCustomScaffoldMessenger(
-                                  context, "Activation code cannot be empty", AlertType.error);
+                                  context,
+                                  "Activation code cannot be empty",
+                                  AlertType.error);
                               return;
                             }
                             try {
                               var result = await LoaderUtility.showLoader(
                                 context,
-                                LoginPostRequests.addProject(activationCodeController.text),
+                                LoginPostRequests.addProject(
+                                    activationCodeController.text),
                               );
-                              BlocProvider.of<DashboardBloc>(context, listen: false).checkAndAddProject(result);
+                              BlocProvider.of<DashboardBloc>(context,
+                                      listen: false)
+                                  .checkAndAddProject(result);
                               activationCodeController.clear();
                               Navigator.of(context).pop();
                               setState(() {});
@@ -250,7 +276,6 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
   }
 
   void showProfileDrawer(BuildContext context) async {
-    
     final authBloc = BlocProvider.of<AuthBloc>(context);
     if (authBloc.state is! AuthAuthenticated) return;
 
@@ -258,7 +283,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
 
     Navigator.of(context).push(
       PageRouteBuilder(
-        transitionDuration: Duration.zero, 
+        transitionDuration: Duration.zero,
         pageBuilder: (context, animation, secondaryAnimation) {
           return BlocProvider.value(
             value: dashboardBloc,
@@ -267,9 +292,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
             ),
           );
         },
-        
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child; 
+          return child;
         },
       ),
     );
@@ -280,18 +304,17 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
     final projects = dashboardBloc.projects;
-    final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+    final width = (MediaQuery.of(context).size.width * 1 / 3);
 
     if (projects.isEmpty) {
-      
       return Scaffold(
         backgroundColor: theme.bgColor,
         body: MediaQuery.removePadding(
-        removeTop: true,
-        removeBottom: true,
-        context: context,
-        child: const CustomLoader(),
-      ),
+          removeTop: true,
+          removeBottom: true,
+          context: context,
+          child: const CustomLoader(),
+        ),
       );
     }
 
@@ -310,107 +333,142 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
         child: Builder(
           builder: (context) {
             return GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        height: UIConfig.accentLineHeight,
-                        color: UIConfig.color14414e,
-                      ),
-              Center(
-                child: SizedBox(
-                  width: PlatformUtils.isMobile
-                      ? MediaQuery.of(context).size.width
-                      : width,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: PlatformUtils.isMobile ? 16.w : 0),
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Column(
+                children: [
+                  Expanded(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/project.svg',
-                                  color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                                  height: PlatformUtils.isMobile ? 30.h : 30.0,
-                                ),
-                                UIConfig.spacingSizedBoxSmall,
-                                Text(
-                                  "SELECT PROJECT",
-                                  style: GoogleFonts.robotoMono(
-                                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
-                                    fontWeight: FontWeight.w500,
-                                    color: Provider.of<ThemeNotifier>(context).currentTheme.loginTitleColor,
+                        Container(
+                          height: UIConfig.accentLineHeight,
+                          color: UIConfig.color14414e,
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: PlatformUtils.isMobile
+                                ? MediaQuery.of(context).size.width
+                                : width,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10.h,
+                                  horizontal:
+                                      PlatformUtils.isMobile ? 16.w : 0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/project.svg',
+                                            color: Provider.of<ThemeNotifier>(
+                                                    context)
+                                                .currentTheme
+                                                .basicAdvanceTextColor,
+                                            height: PlatformUtils.isMobile
+                                                ? 30.h
+                                                : 30.0,
+                                          ),
+                                          UIConfig.spacingSizedBoxSmall,
+                                          Text(
+                                            "SELECT PROJECT",
+                                            style: GoogleFonts.robotoMono(
+                                              fontSize: UIConfig
+                                                  .getResponsiveFontSize(
+                                                      context,
+                                                      UIConfig.fontSizeMedium,
+                                                      desktopWidth: width),
+                                              fontWeight: FontWeight.w500,
+                                              color: Provider.of<ThemeNotifier>(
+                                                      context)
+                                                  .currentTheme
+                                                  .loginTitleColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: _showAddProjectDialog,
+                                        child: Container(
+                                          height: PlatformUtils.isMobile
+                                              ? 30.h
+                                              : 30.0,
+                                          width: PlatformUtils.isMobile
+                                              ? 30.w
+                                              : 30.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: UIConfig
+                                                .borderRadiusCircularSmall,
+                                            border: Border.all(
+                                              color:
+                                                  (Provider.of<ThemeNotifier>(
+                                                          context)
+                                                      .currentTheme
+                                                      .profileBorderColor),
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.add,
+                                            color: theme.basicAdvanceTextColor,
+                                            size:
+                                                UIConfig.getResponsiveIconSize(
+                                                    UIConfig.iconSizeSmall),
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: _showAddProjectDialog,
-                              child: Container(
-                                height: PlatformUtils.isMobile ? 30.h : 30.0,
-                                width: PlatformUtils.isMobile ? 30.w : 30.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: UIConfig.borderRadiusCircularSmall,
-                                  border: Border.all(
-                                    color: (Provider.of<ThemeNotifier>(context).currentTheme.profileBorderColor), 
-                                    width: 2, 
+                                  SizedBox(height: 15.h),
+                                  CustomDropdownButton2(
+                                    fieldName: "PROJECT",
+                                    value: selectedProject ??
+                                        (projects.length == 1
+                                            ? projects.first
+                                            : null),
+                                    items: projects,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedProject = value;
+                                      });
+                                    },
+                                    width1: PlatformUtils.isMobile ? 360.w : 0,
+                                    width2: PlatformUtils.isMobile
+                                        ? 350.w
+                                        : width - 30,
+                                    desktopDropdownWidth: width - 30,
+                                    fieldNameVisible: false,
                                   ),
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  color: theme.basicAdvanceTextColor,
-                                  size: UIConfig.getResponsiveIconSize(UIConfig.iconSizeSmall),
-                                ),
+                                  SizedBox(height: UIConfig.spacingHuge),
+                                  CustomButton(
+                                    text: "DASHBOARD",
+                                    onPressed: _navigateToDashboard,
+                                    fontSize: UIConfig.getResponsiveFontSize(
+                                        context, ThemeNotifier.medium,
+                                        desktopWidth: width),
+                                    arrowWidget: true,
+                                    dynamicWidth: true,
+                                  ),
+                                ],
                               ),
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 15.h),
-                        CustomDropdownButton2(
-                          fieldName: "PROJECT",
-                          value: selectedProject ?? (projects.length == 1 ? projects.first : null),
-                          items: projects,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedProject = value;
-                            });
-                          },
-                          width1: PlatformUtils.isMobile ? 360.w : 0,
-                          width2: PlatformUtils.isMobile ? 350.w : width - 30,
-                          desktopDropdownWidth: width - 30,
-                          fieldNameVisible: false,
-                        ),
-                        SizedBox(height: UIConfig.spacingHuge),
-                        CustomButton(
-                          text: "DASHBOARD",
-                          onPressed: _navigateToDashboard,
-                            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
-                          arrowWidget: true,
-                          dynamicWidth: true,
-                        ),
+                        Spacer(),
+                        // Container(
+                        //   height: UIConfig.accentLineHeight,
+                        //   color: UIConfig.color14414e,
+                        // ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-                      Spacer(),
-                      // Container(
-                      //   height: UIConfig.accentLineHeight,
-                      //   color: UIConfig.color14414e,
-                      // ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+            );
+          },
         ),
       ),
     );

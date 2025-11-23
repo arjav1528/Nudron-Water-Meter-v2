@@ -48,7 +48,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
 
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-    
+
     super.initState();
   }
 
@@ -57,12 +57,10 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
     final mediaQuery = MediaQuery.of(context);
     final width = mediaQuery.size.width;
     final height = mediaQuery.size.height;
-    
+
     // Calculate responsive content width with 400-550 clamp for desktop
-    final contentWidth = PlatformUtils.isMobile 
-        ? width 
-        : (width * (2/3)).clamp(UIConfig.desktopDrawerWidthMin, UIConfig.desktopDrawerWidthMax);
-    
+    final contentWidth = PlatformUtils.isMobile ? width : (width * (2 / 3));
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
@@ -110,8 +108,8 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                               alignment: Alignment.topLeft,
                               child: Padding(
                                 padding: EdgeInsets.only(
-                                  left: PlatformUtils.isMobile 
-                                      ? UIConfig.paddingHorizontalLarge 
+                                  left: PlatformUtils.isMobile
+                                      ? UIConfig.paddingHorizontalLarge
                                       : UIConfig.paddingHorizontalExtraLarge,
                                   top: UIConfig.spacingExtraLarge,
                                 ),
@@ -124,11 +122,13 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                         'assets/icons/back_arrow.svg',
                                         height: UIConfig.getResponsiveIconSize(
                                           UIConfig.backButtonIconSize,
-                                          desktopSize: UIConfig.backButtonIconSize,
+                                          desktopSize:
+                                              UIConfig.backButtonIconSize,
                                         ),
                                         width: UIConfig.getResponsiveIconSize(
                                           UIConfig.backButtonIconSize,
-                                          desktopSize: UIConfig.backButtonIconSize,
+                                          desktopSize:
+                                              UIConfig.backButtonIconSize,
                                         ),
                                         colorFilter: ColorFilter.mode(
                                           Provider.of<ThemeNotifier>(context)
@@ -137,19 +137,23 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                           BlendMode.srcIn,
                                         ),
                                       ),
-                                      onPressed: () => Navigator.of(context).pop(),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
                                     ),
                                     SizedBox(
-                                      width: PlatformUtils.isMobile ? 10.w : 10.0,
+                                      width:
+                                          PlatformUtils.isMobile ? 10.w : 10.0,
                                     ),
                                     Flexible(
                                       child: Text(
                                         "TWO-FACTOR AUTHENTICATION",
                                         style: GoogleFonts.robotoMono(
-                                          color: Provider.of<ThemeNotifier>(context)
+                                          color: Provider.of<ThemeNotifier>(
+                                                  context)
                                               .currentTheme
                                               .basicAdvanceTextColor,
-                                          fontSize: UIConfig.getResponsiveFontSize(
+                                          fontSize:
+                                              UIConfig.getResponsiveFontSize(
                                             context,
                                             ThemeNotifier.large + 4,
                                             desktopWidth: contentWidth,
@@ -164,8 +168,8 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: PlatformUtils.isMobile 
-                                    ? UIConfig.paddingHorizontalLarge 
+                                horizontal: PlatformUtils.isMobile
+                                    ? UIConfig.paddingHorizontalLarge
                                     : UIConfig.paddingHorizontalExtraLarge,
                               ),
                               child: Column(
@@ -173,21 +177,22 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    height: PlatformUtils.isMobile 
-                                        ? UIConfig.spacingXXXLarge 
+                                    height: PlatformUtils.isMobile
+                                        ? UIConfig.spacingXXXLarge
                                         : UIConfig.spacingXXXLarge,
                                   ),
                                   SvgPicture.asset(
                                     'assets/images/2falogo.svg',
                                     width: UIConfig.getResponsiveIconSize(
                                       min(width / 2.5, height / 2.5),
-                                      desktopSize: min(contentWidth / 2.5, height / 2.5),
+                                      desktopSize:
+                                          min(contentWidth / 2.5, height / 2.5),
                                     ),
                                     color: CommonColors.blue,
                                   ),
                                   SizedBox(
-                                    height: PlatformUtils.isMobile 
-                                        ? UIConfig.spacingXXXLarge 
+                                    height: PlatformUtils.isMobile
+                                        ? UIConfig.spacingXXXLarge
                                         : UIConfig.spacingXXXLarge,
                                   ),
                                   Text(
@@ -205,20 +210,23 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: PlatformUtils.isMobile 
-                                        ? UIConfig.spacingLarge 
+                                    height: PlatformUtils.isMobile
+                                        ? UIConfig.spacingLarge
                                         : UIConfig.spacingLarge,
                                   ),
                                   PinCodeTextField(
                                     length: 6,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
                                     ],
-                                    keyboardType: const TextInputType.numberWithOptions(
-                                        decimal: true),
-                                    cursorColor: Provider.of<ThemeNotifier>(context)
-                                        .currentTheme
-                                        .basicAdvanceTextColor,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    cursorColor:
+                                        Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .basicAdvanceTextColor,
                                     obscureText: false,
                                     animationType: AnimationType.fade,
                                     textStyle: GoogleFonts.roboto(
@@ -235,47 +243,45 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                     pinTheme: PinTheme(
                                       shape: PinCodeFieldShape.underline,
                                       borderRadius: BorderRadius.circular(5.r),
-                                      fieldHeight: PlatformUtils.isMobile 
-                                          ? 50.h 
-                                          : 50.0,
-                                      fieldWidth: PlatformUtils.isMobile 
-                                          ? 40.w 
-                                          : 40.0,
-
-                                      activeFillColor: Provider.of<ThemeNotifier>(context)
-                                          .currentTheme
-                                          .basicAdvanceTextColor,
+                                      fieldHeight:
+                                          PlatformUtils.isMobile ? 50.h : 50.0,
+                                      fieldWidth:
+                                          PlatformUtils.isMobile ? 40.w : 40.0,
+                                      activeFillColor:
+                                          Provider.of<ThemeNotifier>(context)
+                                              .currentTheme
+                                              .basicAdvanceTextColor,
                                       activeColor: CommonColors.blue,
                                       selectedColor: CommonColors.blue,
-                                      inactiveColor: Provider.of<ThemeNotifier>(context)
-                                          .currentTheme
-                                          .basicAdvanceTextColor,
-                                      
+                                      inactiveColor:
+                                          Provider.of<ThemeNotifier>(context)
+                                              .currentTheme
+                                              .basicAdvanceTextColor,
                                       selectedFillColor:
                                           Provider.of<ThemeNotifier>(context)
                                               .currentTheme
                                               .bgColor,
                                     ),
-                                    animationDuration: const Duration(milliseconds: 300),
-                                    backgroundColor: Provider.of<ThemeNotifier>(context)
-                                        .currentTheme
-                                        .bgColor,
+                                    animationDuration:
+                                        const Duration(milliseconds: 300),
+                                    backgroundColor:
+                                        Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .bgColor,
                                     controller: otpFieldController,
                                     enablePinAutofill: true,
                                     onCompleted: (v) {
-                                      if (kDebugMode) {
-                                      }
+                                      if (kDebugMode) {}
                                     },
                                     beforeTextPaste: (text) {
-                                      
                                       return true;
                                     },
                                     appContext: context,
                                     onChanged: (String value) {},
                                   ),
                                   SizedBox(
-                                    height: PlatformUtils.isMobile 
-                                        ? UIConfig.spacingXXXLarge 
+                                    height: PlatformUtils.isMobile
+                                        ? UIConfig.spacingXXXLarge
                                         : UIConfig.spacingXXXLarge,
                                   ),
                                   CustomButton(
@@ -283,26 +289,31 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                     text: "VERIFY",
                                     onPressed: () async {
                                       if (otpFieldController.text.length == 6) {
-                                        final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
-                                        
+                                        final authBloc =
+                                            BlocProvider.of<AuthBloc>(context,
+                                                listen: false);
+
                                         // Create a completer to wait for the auth result
                                         final completer = Completer<void>();
                                         StreamSubscription? subscription;
-                                        
+
                                         // Listen to auth state changes
-                                        subscription = authBloc.stream.listen((state) {
-                                          if (state is AuthAuthenticated || state is AuthError) {
+                                        subscription =
+                                            authBloc.stream.listen((state) {
+                                          if (state is AuthAuthenticated ||
+                                              state is AuthError) {
                                             subscription?.cancel();
                                             if (!completer.isCompleted) {
                                               if (state is AuthError) {
-                                                completer.completeError(state.message);
+                                                completer.completeError(
+                                                    state.message);
                                               } else {
                                                 completer.complete();
                                               }
                                             }
                                           }
                                         });
-                                        
+
                                         try {
                                           // Show loader and wait for verification
                                           await LoaderUtility.showLoader(
@@ -317,15 +328,19 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                               await completer.future;
                                             }),
                                           );
-                                          
+
                                           // If we get here, authentication was successful
                                           // Navigation is handled by the BlocListener
                                         } catch (e) {
                                           // Error is already handled by the BlocListener
                                           // But we can show an error message if needed
-                                          if (mounted && e.toString().isNotEmpty) {
-                                            CustomAlert.showCustomScaffoldMessenger(
-                                                context, e.toString(), AlertType.error);
+                                          if (mounted &&
+                                              e.toString().isNotEmpty) {
+                                            CustomAlert
+                                                .showCustomScaffoldMessenger(
+                                                    context,
+                                                    e.toString(),
+                                                    AlertType.error);
                                           }
                                         } finally {
                                           subscription.cancel();
@@ -339,8 +354,8 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                     },
                                   ),
                                   SizedBox(
-                                    height: PlatformUtils.isMobile 
-                                        ? 100.h 
+                                    height: PlatformUtils.isMobile
+                                        ? 100.h
                                         : UIConfig.spacingXXXLarge,
                                   ),
                                 ],
@@ -375,7 +390,7 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
 
   @override
   void dispose() {
-    cancel(); 
+    cancel();
     super.dispose();
   }
 }

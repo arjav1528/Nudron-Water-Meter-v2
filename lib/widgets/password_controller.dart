@@ -30,23 +30,21 @@ class PasswordTextField extends StatefulWidget {
 }
 
 class _PasswordTextFieldState extends State<PasswordTextField> {
-
   @override
   void initState() {
     super.initState();
-    
+
     widget.controller.addListener(_updateObscureText);
   }
 
   @override
   void dispose() {
-    
     widget.controller.removeListener(_updateObscureText);
     super.dispose();
   }
 
   void _updateObscureText() {
-    setState(() {}); 
+    setState(() {});
   }
 
   void _toggleObscureText() {
@@ -58,15 +56,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     final bool isMobile = PlatformUtils.isMobile;
     final width = UIConfig.getDesktopDrawerWidth(context);
     final textFieldHeight = UIConfig.getResponsiveTextFieldHeight(context);
-    
+
     // Calculate clamped width
     final screenWidth = MediaQuery.of(context).size.width;
-    final calculatedWidth = PlatformUtils.isMobile 
-        ? screenWidth.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth)
-        : width.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth);
-    
+    final calculatedWidth = PlatformUtils.isMobile ? screenWidth : width;
+
     return Container(
-      
       constraints: BoxConstraints(
         minHeight: UIConfig.textFieldMinHeight,
         maxHeight: UIConfig.textFieldMaxHeight,
@@ -75,16 +70,21 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       ),
       child: CustomTextField(
         controller: widget.controller,
-        iconPath: (!isMobile && (widget.desktopPrefixIconHeight != null || widget.desktopPrefixIconWidth != null))
+        iconPath: (!isMobile &&
+                (widget.desktopPrefixIconHeight != null ||
+                    widget.desktopPrefixIconWidth != null))
             ? null
             : 'assets/icons/pwd.svg',
-        prefixIcon: (!isMobile && (widget.desktopPrefixIconHeight != null || widget.desktopPrefixIconWidth != null))
+        prefixIcon: (!isMobile &&
+                (widget.desktopPrefixIconHeight != null ||
+                    widget.desktopPrefixIconWidth != null))
             ? Padding(
                 padding: UIConfig.paddingTextFieldHorizontal,
                 child: SvgPicture.asset(
                   'assets/icons/pwd.svg',
                   // height: widget.desktopPrefixIconHeight ?? UIConfig.iconSizeSmall,
-                  width: widget.desktopPrefixIconWidth ?? UIConfig.fontSizeSmall,
+                  width:
+                      widget.desktopPrefixIconWidth ?? UIConfig.fontSizeSmall,
                   fit: BoxFit.scaleDown,
                 ),
               )
@@ -96,11 +96,15 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         hintStyle: widget.hintStyle,
         suffixIcon: IconButton(
           icon: SvgPicture.asset(
-            widget.controller.isObscuring 
-                ? 'assets/icons/visibility_off.svg' 
+            widget.controller.isObscuring
+                ? 'assets/icons/visibility_off.svg'
                 : 'assets/icons/visibility.svg',
-            height: isMobile ? UIConfig.iconSizePrefix : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
-            width: isMobile ? UIConfig.iconSizePrefixWidth : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+            height: isMobile
+                ? UIConfig.iconSizePrefix
+                : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+            width: isMobile
+                ? UIConfig.iconSizePrefixWidth
+                : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
             fit: BoxFit.scaleDown,
             colorFilter: ColorFilter.mode(
               Provider.of<ThemeNotifier>(context)
@@ -131,8 +135,8 @@ class ObscuringTextEditingController extends TextEditingController {
   @override
   TextSpan buildTextSpan(
       {required BuildContext context,
-        TextStyle? style,
-        required bool withComposing}) {
+      TextStyle? style,
+      required bool withComposing}) {
     var displayValue = isObscuring ? '•' * text.length : text;
     if (!value.composing.isValid || !withComposing) {
       return TextSpan(style: style, text: displayValue);

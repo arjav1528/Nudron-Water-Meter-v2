@@ -11,20 +11,19 @@ import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-
   final void Function(dynamic)? choiceAction;
   final bool isProfile;
-  const CustomAppBar({super.key, required this.choiceAction, this.isProfile = false});
+  const CustomAppBar(
+      {super.key, required this.choiceAction, this.isProfile = false});
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(UIConfig.appBarHeight); 
+  Size get preferredSize => Size.fromHeight(UIConfig.appBarHeight);
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -36,9 +35,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
     final responsiveLogoSize = UIConfig.getResponsiveAppBarLogoSize(context);
     final responsiveIconSize = UIConfig.getResponsiveAppBarIconSize(context);
     final iconVerticalPadding =
-        ((UIConfig.appBarHeight - responsiveIconSize) / 2)
-            .clamp(0.0, double.infinity);
-    
+        ((UIConfig.appBarHeight - responsiveIconSize) / 2);
+
     return PreferredSize(
         preferredSize: Size.fromHeight(UIConfig.appBarHeight + topPadding),
         child: Container(
@@ -70,7 +68,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 .loginTitleColor,
                             BlendMode.srcIn,
                           ),
-                        ), 
+                        ),
                         SizedBox(width: UIConfig.spacingAppBarLogo),
                         Text("WATER METERING",
                             style: GoogleFonts.robotoMono(
@@ -85,26 +83,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                     Row(
                       children: [
-                        
-                        
                         Material(
                           color: Colors.transparent,
-                          
                           child: InkWell(
                             borderRadius: UIConfig.borderRadiusAppBarIcon,
-                            onTap: Provider.of<ThemeNotifier>(context)
-                                .toggleTheme,
+                            onTap:
+                                Provider.of<ThemeNotifier>(context).toggleTheme,
                             splashColor: Provider.of<ThemeNotifier>(context,
-                                listen: false)
+                                    listen: false)
                                 .currentTheme
                                 .splashColor,
-                                    
-                            highlightColor: Provider.of<ThemeNotifier>(
-                                context,
-                                listen: false)
+                            highlightColor: Provider.of<ThemeNotifier>(context,
+                                    listen: false)
                                 .currentTheme
                                 .splashColor,
-                            
                             child: Padding(
                               padding: EdgeInsets.only(
                                 right: 11.w,
@@ -126,18 +118,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                             bool isUserLoggedIn = state is AuthAuthenticated;
-                            
+
                             if (isUserLoggedIn)
                               return Material(
-                                color:Colors.transparent,
+                                color: Colors.transparent,
                                 child: InkWell(
                                   borderRadius: UIConfig.borderRadiusAppBarIcon,
                                   onTap: () {
                                     if (widget.choiceAction != null) {
-                                      widget.choiceAction!(0); 
+                                      widget.choiceAction!(0);
                                     }
                                   },
-                                  splashColor: Provider.of<ThemeNotifier>(context,
+                                  splashColor: Provider.of<ThemeNotifier>(
+                                          context,
                                           listen: false)
                                       .currentTheme
                                       .splashColor,
@@ -163,28 +156,29 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                         colorFilter: ColorFilter.mode(
                                           widget.isProfile
                                               ? CommonColors.blue2
-                                              : Provider.of<ThemeNotifier>(context)
+                                              : Provider.of<ThemeNotifier>(
+                                                      context)
                                                   .currentTheme
                                                   .loginTitleColor,
                                           BlendMode.srcIn,
                                         ),
                                       ),
-                                    ),  
-                                    
+                                    ),
                                   ),
                                 ),
                               );
-                            
+
                             return SizedBox.shrink();
                           },
                         ),
-                        SizedBox(width: UIConfig.spacingXSmall - (PlatformUtils.isMobile ? 2.5.w : 4.w)),
+                        SizedBox(
+                            width: UIConfig.spacingXSmall -
+                                (PlatformUtils.isMobile ? 2.5.w : 4.w)),
                       ],
                     )
                   ],
                 ),
               ),
-              
             ],
           ),
         ));

@@ -25,18 +25,18 @@ class TrendsChartCombined extends StatefulWidget {
 
 class _TrendsChartCombinedState extends State<TrendsChartCombined> {
   String? _lastProject;
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DashboardBloc, DashboardState>(
-      listenWhen: (previous, current) => 
-        current is RefreshDashboard || current is ChangeDashBoardNav,
+      listenWhen: (previous, current) =>
+          current is RefreshDashboard || current is ChangeDashBoardNav,
       listener: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
-          ? dashboardBloc.currentFilters.first
-          : null;
-        
+            ? dashboardBloc.currentFilters.first
+            : null;
+
         if (mounted && _lastProject != currentProject) {
           _lastProject = currentProject;
           setState(() {});
@@ -44,57 +44,62 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
       },
       builder: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-        final width = (MediaQuery.of(context).size.width * 1/3).clamp(400.0, 550.0);
+        final width = (MediaQuery.of(context).size.width * 1 / 3);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
-          ? dashboardBloc.currentFilters.first.toUpperCase()
-          : "NO PROJECT SELECTED";
-
-        
+            ? dashboardBloc.currentFilters.first.toUpperCase()
+            : "NO PROJECT SELECTED";
 
         return Column(
           children: [
-              Container(
-                height: UIConfig.accentLineHeight,
-                color: UIConfig.accentColorYellow,
-              ),
+            Container(
+              height: UIConfig.accentLineHeight,
+              color: UIConfig.accentColorYellow,
+            ),
             Container(
               height: UIConfig.headerSectionHeight,
-              padding: EdgeInsets.only(left: UIConfig.spacingLarge.w, right: (UIConfig.spacingExtraLarge - 1).w),
+              padding: EdgeInsets.only(
+                  left: UIConfig.spacingLarge.w,
+                  right: (UIConfig.spacingExtraLarge - 1).w),
               child: Row(
                 children: [
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/projectSelection');
+                        Navigator.of(context)
+                            .pushReplacementNamed('/projectSelection');
                       },
                       child: Container(
                         height: UIConfig.backButtonHeight,
                         // width: UIConfig.backButtonWidth,
                         decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: UIConfig.borderRadiusCircularMedium,
-                          color: UIConfig.colorTransparent,
-                          border: GradientBoxBorder(
-                            width: UIConfig.chartBorderWidth,
-                            gradient: LinearGradient(
-                              colors: [
-                                UIConfig.accentColorYellow,
-                                UIConfig.accentColorYellow.withOpacity(UIConfig.opacityVeryHigh),
-                                Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          )
-                        ),
+                            shape: BoxShape.rectangle,
+                            borderRadius: UIConfig.borderRadiusCircularMedium,
+                            color: UIConfig.colorTransparent,
+                            border: GradientBoxBorder(
+                              width: UIConfig.chartBorderWidth,
+                              gradient: LinearGradient(
+                                colors: [
+                                  UIConfig.accentColorYellow,
+                                  UIConfig.accentColorYellow
+                                      .withOpacity(UIConfig.opacityVeryHigh),
+                                  Provider.of<ThemeNotifier>(context)
+                                      .currentTheme
+                                      .gridLineColor,
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                            )),
                         child: Center(
                           child: SvgPicture.asset(
                             'assets/icons/back_arrow.svg',
                             height: UIConfig.projectIconHeight,
                             width: UIConfig.projectIconWidth,
                             colorFilter: ColorFilter.mode(
-                              Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                              Provider.of<ThemeNotifier>(context)
+                                  .currentTheme
+                                  .basicAdvanceTextColor,
                               BlendMode.srcIn,
                             ),
                           ),
@@ -103,8 +108,11 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                     ),
                   ),
                   UIConfig.spacingSizedBoxMedium,
-                  SvgPicture.asset('assets/icons/project.svg',
-                    color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                  SvgPicture.asset(
+                    'assets/icons/project.svg',
+                    color: Provider.of<ThemeNotifier>(context)
+                        .currentTheme
+                        .basicAdvanceTextColor,
                     height: UIConfig.projectIconHeight,
                     width: UIConfig.projectIconWidth,
                   ),
@@ -112,12 +120,13 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                   Text(
                     currentProject.toUpperCase(),
                     style: TextStyle(
-                      color: Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
-                      fontFamily: GoogleFonts.robotoMono().fontFamily,
-                      fontWeight: FontWeight.w500,
-                      fontSize: UIConfig.fontSizeMediumResponsive,
-                      letterSpacing: UIConfig.letterSpacingSp
-                    ),
+                        color: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .basicAdvanceTextColor,
+                        fontFamily: GoogleFonts.robotoMono().fontFamily,
+                        fontWeight: FontWeight.w500,
+                        fontSize: UIConfig.fontSizeMediumResponsive,
+                        letterSpacing: UIConfig.letterSpacingSp),
                   ),
                 ],
               ),
@@ -134,7 +143,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
                   buildWhen: (previous, current) {
-                if (current is RefreshDashboard2 || current is RefreshDashboard) {
+                if (current is RefreshDashboard2 ||
+                    current is RefreshDashboard) {
                   return true;
                 }
                 return false;
@@ -142,7 +152,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                 return TrendsChart(
                   chartData: dashboardBloc.nudronChartData,
                 );
-
               }),
             ),
             Container(
@@ -152,15 +161,13 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
                   buildWhen: (previous, current) {
-                if (current is RefreshDashboard2 || current is RefreshDashboard) {
+                if (current is RefreshDashboard2 ||
+                    current is RefreshDashboard) {
                   return true;
                 }
                 return false;
               }, builder: (context, state) {
-                return TrendsTable(
-                    
-                    );
-                
+                return TrendsTable();
               }),
             ),
             Container(
@@ -172,13 +179,14 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
       },
     );
   }
-  
+
   @override
   void didUpdateWidget(TrendsChartCombined oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+    final dashboardBloc =
+        BlocProvider.of<DashboardBloc>(context, listen: false);
     if (dashboardBloc.currentFilters.isNotEmpty && mounted) {
-      setState(() {}); 
+      setState(() {});
     }
   }
 }

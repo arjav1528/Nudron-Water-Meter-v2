@@ -53,7 +53,7 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   bool isLargerTextField = ConfigurationCustom.isLargerTextField;
   final FocusNode _focusNode = FocusNode();
-  
+
   @override
   void dispose() {
     _focusNode.dispose();
@@ -63,15 +63,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     final width = UIConfig.getDesktopDrawerWidth(context);
-    final fontSize = UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width);
+    final fontSize = UIConfig.getResponsiveFontSize(
+        context, ThemeNotifier.medium,
+        desktopWidth: width);
     final textFieldHeight = UIConfig.getResponsiveTextFieldHeight(context);
-    
+
     // Calculate clamped width
     final screenWidth = MediaQuery.of(context).size.width;
-    final calculatedWidth = PlatformUtils.isMobile 
-        ? screenWidth.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth)
-        : width.clamp(UIConfig.textFieldMinWidth, UIConfig.textFieldMaxWidth);
-    
+    final calculatedWidth = PlatformUtils.isMobile ? screenWidth : width;
+
     return Container(
       constraints: BoxConstraints(
         minHeight: UIConfig.textFieldMinHeight,
@@ -93,7 +93,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           controller: widget.controller,
           focusNode: _focusNode,
           onSubmitted: widget.onChanged,
-          
+
           enableInteractiveSelection: widget.enableInteractiveSelection,
           keyboardType: widget.keyboardType,
           inputFormatters: widget.inputFormatters,
@@ -116,14 +116,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
           decoration: InputDecoration(
             suffixIcon: widget.suffixIcon,
             prefixIcon: widget.iconPath != null
-                      ? SvgPicture.asset(
-                          widget.iconPath!,
-                          height: UIConfig.iconSizePrefix,
-                          width: UIConfig.iconSizePrefixWidth,
-                          fit: BoxFit.scaleDown,
-                        )
-                      : null,
-            
+                ? SvgPicture.asset(
+                    widget.iconPath!,
+                    height: UIConfig.iconSizePrefix,
+                    width: UIConfig.iconSizePrefixWidth,
+                    fit: BoxFit.scaleDown,
+                  )
+                : null,
             focusedBorder: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide(
@@ -149,7 +148,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   borderSide: BorderSide.none,
                   borderRadius: UIConfig.borderRadiusAllLarge,
                 ),
-            
           ),
         ),
       ),

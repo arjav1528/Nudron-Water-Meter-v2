@@ -107,15 +107,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     prefixIcon: Container(
-                      
-                      padding: EdgeInsets.only(left: (16.w - 8).clamp(0.0, double.infinity)),
+                      padding: EdgeInsets.only(left: (16.w - 8)),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10.r),
                             bottomLeft: Radius.circular(10.r),
                           ),
                           color: Colors.transparent),
-                      
                       child: CountryCodePicker2(
                         dropDownColor: Provider.of<ThemeNotifier>(context)
                             .currentTheme
@@ -134,7 +132,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         getPhoneNumberWithoutCountryCode: (String phoneNumber) {
                           _phoneController.text = phoneNumber;
                         },
-                        
                         initialSelection: null,
                       ),
                     ),
@@ -144,7 +141,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: CustomTextField(
                     controller: activationCodeController,
                     key: UniqueKey(),
-
                     hintText: 'Enter Activation Code',
                     prefixIcon: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -154,15 +150,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               .currentTheme
                               .textfieldHintColor,
                         )),
-                    
                   )),
               SizedBox(height: UIConfig.spacingXXXLarge),
               Center(
                 child: CustomButton(
                   text: "REGISTER",
-                  
                   dynamicWidth: true,
-                  
                   onPressed: () async {
                     if (checkAllTextFields()) {
                       LoaderUtility.showLoader(
@@ -189,7 +182,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
               ),
-              
               SizedBox(height: UIConfig.spacingXXXLarge),
             ],
           ),
