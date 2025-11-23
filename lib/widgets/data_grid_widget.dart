@@ -436,7 +436,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     );
     if (isFrozenColumn && isDesktop && isBillingOrDevices) {
       cellPadding = EdgeInsets.only(
-        left: UIConfig.tableCellPaddingHorizontal + 5.w,
+        left: UIConfig.tableCellPaddingHorizontal + 8.w,
         right: UIConfig.tableCellPaddingHorizontal,
       );
     }

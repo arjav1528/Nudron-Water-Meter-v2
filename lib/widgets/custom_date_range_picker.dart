@@ -235,8 +235,9 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 backgroundColor: currentTheme.dialogBG,
                 elevation: 0,
                   child: Container(
-                    width: dialogWidth,
+                    
                     constraints: BoxConstraints(
+                      maxWidth: UIConfig.desktopDrawerWidthMin - 60.w,
                       // maxHeight: UIConfig.dialogMaxHeight + 150.h,
                     ),
                   decoration: BoxDecoration(
@@ -521,20 +522,20 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
                       SizedBox(height: 30.h,),
 
-                      Container(
-                        width: UIConfig.desktopDrawerWidthMin - 120.w,
-                        padding: UIConfig.paddingSymmetricVerticalSmall,
-                        child: Text(
-                          'Tip: Select start and end dates. Max range: 92 days.',
-                          style: TextStyle(
-                            color: currentTheme.gridHeadingColor,
-                            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
-                            fontStyle: FontStyle.italic,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                        SizedBox(height: 30.h,),
+                      // Container(
+                      //   width: UIConfig.desktopDrawerWidthMin - 120.w,
+                      //   // padding: UIConfig.paddingSymmetricVerticalSmall,
+                      //   child: Text(
+                      //     'Select start and end dates',
+                      //     style: TextStyle(
+                      //       color: currentTheme.gridHeadingColor,
+                      //       fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
+                      //       fontStyle: FontStyle.italic,
+                      //     ),
+                      //     textAlign: TextAlign.center,
+                      //   ),
+                      // ),
+                      //   SizedBox(height: 30.h,),
 
                       Container(
 
