@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/utils/pok.dart';
@@ -156,7 +157,7 @@ class UIConfig {
   static EdgeInsets get paddingFromLTRBLarge =>
       EdgeInsets.fromLTRB(35.w, 0.h, 0.w, 0.h);
   static EdgeInsets get paddingFromLTRBWithClamp =>
-      EdgeInsets.only(left: (16.w - 8));
+      EdgeInsets.only(left: max(0.0, 16.w - 8));
 
   /// Margin/Spacing values
   static double get spacingXSmall => 4.w;
@@ -452,7 +453,7 @@ class UIConfig {
       double baseWidth, double minValue, double maxValue) {
     final normalized = ((baseWidth - desktopDrawerWidthMin) /
         (desktopDrawerWidthMax - desktopDrawerWidthMin));
-    return minValue + (maxValue - minValue) * normalized;
+    return max(0.0, minValue + (maxValue - minValue) * normalized);
   }
 
   static double getResponsiveAppBarLogoSize(BuildContext context) {

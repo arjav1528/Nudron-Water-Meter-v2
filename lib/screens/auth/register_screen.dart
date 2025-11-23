@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -107,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     prefixIcon: Container(
-                      padding: EdgeInsets.only(left: (16.w - 8)),
+                      padding: EdgeInsets.only(left: max(0.0, 16.w - 8)),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10.r),
