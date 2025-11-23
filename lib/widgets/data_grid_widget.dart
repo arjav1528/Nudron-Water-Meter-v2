@@ -354,16 +354,9 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   }
 
   _getHeaderWidget(int index, BuildContext context) {
-    bool isFrozenColumn = index < widget.frozenColumns;
-    bool isDesktop = PlatformUtils.isDesktop;
-    bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
-    Alignment alignment = (isFrozenColumn && isDesktop && isBillingOrDevices) 
-        ? Alignment.centerLeft 
-        : Alignment.center;
+    Alignment alignment = Alignment.center;
     
-    EdgeInsets headerPadding = (isFrozenColumn && isDesktop && isBillingOrDevices)
-        ? EdgeInsets.only(left: 5.w)
-        : EdgeInsets.zero;
+    EdgeInsets headerPadding = EdgeInsets.zero;
     
     if (widget.devicesTable == true) {
       return Container(
@@ -769,10 +762,8 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                 ),
                                 Expanded(
                                   child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: (PlatformUtils.isDesktop && (widget.location == 'billing' || widget.location == 'devices'))
-                                        ? EdgeInsets.only(left: 10.w)
-                                        : UIConfig.paddingFromLTRBZero,
+                                    alignment: Alignment.center,
+                                    padding: UIConfig.paddingFromLTRBZero,
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
                                           widget.data![0][0].toString()),
