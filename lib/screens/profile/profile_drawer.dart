@@ -334,15 +334,16 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               begin: Alignment.centerLeft,
                                               end: Alignment.centerRight,
                                             ),
-                                          )
-                                      ),
+                                          )),
                                       child: Center(
                                         child: SvgPicture.asset(
                                           'assets/icons/back_arrow.svg',
                                           height: UIConfig.projectIconHeight,
                                           width: UIConfig.projectIconWidth,
                                           colorFilter: ColorFilter.mode(
-                                            Provider.of<ThemeNotifier>(context).currentTheme.basicAdvanceTextColor,
+                                            Provider.of<ThemeNotifier>(context)
+                                                .currentTheme
+                                                .basicAdvanceTextColor,
                                             BlendMode.srcIn,
                                           ),
                                         ),

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:watermeter2/services/platform_utils.dart';
+import 'package:watermeter2/utils/pok.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_state.dart';
 import '../../constants/theme2.dart';
@@ -28,14 +29,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final topPadding = mediaQuery.padding.top;
-    final responsiveFontSize = UIConfig.getResponsiveAppBarTitleSize(
-      context,
-      UIConfig.fontSizeExtraLarge,
-    );
-    final responsiveLogoSize = UIConfig.getResponsiveAppBarLogoSize(context);
-    final responsiveIconSize = UIConfig.getResponsiveAppBarIconSize(context);
-    final iconVerticalPadding =
-        ((UIConfig.appBarHeight - responsiveIconSize) / 2);
+    
 
     return PreferredSize(
         preferredSize: Size.fromHeight(UIConfig.appBarHeight + topPadding),
@@ -60,8 +54,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         SizedBox(width: UIConfig.spacingMedium),
                         SvgPicture.asset(
                           "assets/icons/nudronlogo.svg",
-                          width: responsiveLogoSize,
-                          height: responsiveLogoSize,
+                          width: UIConfig.getResponsiveAppBarLogoSize(context),
+                          height: UIConfig.getResponsiveAppBarLogoSize(context),
                           colorFilter: ColorFilter.mode(
                             Provider.of<ThemeNotifier>(context)
                                 .currentTheme
@@ -72,7 +66,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         SizedBox(width: UIConfig.spacingAppBarLogo),
                         Text("WATER METERING",
                             style: GoogleFonts.robotoMono(
-                              fontSize: responsiveFontSize,
+                              fontSize: UIConfig.fontSizeMediumResponsive,
                               fontWeight: FontWeight.w500,
                               letterSpacing: UIConfig.letterSpacingSp,
                               color: Provider.of<ThemeNotifier>(context)
@@ -83,36 +77,38 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                     Row(
                       children: [
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: UIConfig.borderRadiusAppBarIcon,
-                            onTap:
-                                Provider.of<ThemeNotifier>(context).toggleTheme,
-                            splashColor: Provider.of<ThemeNotifier>(context,
-                                    listen: false)
-                                .currentTheme
-                                .splashColor,
-                            highlightColor: Provider.of<ThemeNotifier>(context,
-                                    listen: false)
-                                .currentTheme
-                                .splashColor,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: 11.w,
-                                top: iconVerticalPadding,
-                                bottom: iconVerticalPadding,
-                                left: 11.w,
+                        Consumer<ThemeNotifier>(
+                          builder: (context, themeNotifier, child) {
+                            // Determine splash color based on current theme
+                            // Dark mode -> Light mode: black splash
+                            // Light mode -> Dark mode: white splash
+                            final splashColor = themeNotifier.isDark
+                                ? Colors.black.withOpacity(0.4) // Black splash for dark->light
+                                : Colors.white.withOpacity(0.4); // White splash for light->dark
+                            
+                            return Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: UIConfig.borderRadiusAppBarIcon,
+                                onTap: themeNotifier.toggleTheme,
+                                splashColor: splashColor,
+                                highlightColor: splashColor,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    right: 11.w,
+                                    top: 11.w,
+                                    bottom: 11.w,
+                                    left: 11.w,
+                                  ),
+                                  child: Icon(
+                                    Icons.contrast,
+                                    size: 28.responsiveSp,
+                                    color: themeNotifier.currentTheme.loginTitleColor,
+                                  ),
+                                ),
                               ),
-                              child: Icon(
-                                Icons.contrast,
-                                size: UIConfig.iconSizeAppBarIcon,
-                                color: Provider.of<ThemeNotifier>(context)
-                                    .currentTheme
-                                    .loginTitleColor,
-                              ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                         // SizedBox(width: UIConfig.spacingSmall),
                         BlocBuilder<AuthBloc, AuthState>(
@@ -142,17 +138,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                       right: 11.w,
-                                      top: iconVerticalPadding,
-                                      bottom: iconVerticalPadding,
+                                      top: 11.w,
+                                      bottom: 11.w,
                                       left: 11.w,
                                     ),
                                     child: SizedBox(
-                                      width: UIConfig.iconSizeAppBarIcon,
-                                      height: UIConfig.iconSizeAppBarIcon,
+                                      width: 28.responsiveSp,
+                                      height: 28.responsiveSp,
                                       child: SvgPicture.asset(
                                         "assets/icons/profile2.svg",
-                                        width: UIConfig.iconSizeAppBarIcon,
-                                        height: UIConfig.iconSizeAppBarIcon,
+                                        width: 28.responsiveSp,
+                                        height: 28.responsiveSp,
                                         colorFilter: ColorFilter.mode(
                                           widget.isProfile
                                               ? CommonColors.blue2

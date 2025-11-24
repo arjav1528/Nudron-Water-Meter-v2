@@ -54,35 +54,38 @@ class _BackgroundChartState extends State<BackgroundChart> {
               },
             ),
             actions: [
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(50.r),
-                  onTap: Provider.of<ThemeNotifier>(context).toggleTheme,
-                  splashColor:
-                      Provider.of<ThemeNotifier>(context, listen: false)
-                          .currentTheme
-                          .splashColor,
-                  highlightColor:
-                      Provider.of<ThemeNotifier>(context, listen: false)
-                          .currentTheme
-                          .splashColor,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      right: 11.w,
-                      top: ((51.h - 28.responsiveSp) / 2),
-                      bottom: ((51.h - 28.responsiveSp) / 2),
-                      left: 11.w,
+              Consumer<ThemeNotifier>(
+                builder: (context, themeNotifier, child) {
+                  // Determine splash color based on current theme
+                  // Dark mode -> Light mode: black splash
+                  // Light mode -> Dark mode: white splash
+                  final splashColor = themeNotifier.isDark
+                      ? Colors.black.withOpacity(0.4) // Black splash for dark->light
+                      : Colors.white.withOpacity(0.4); // White splash for light->dark
+                  
+                  return Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50.r),
+                      onTap: themeNotifier.toggleTheme,
+                      splashColor: splashColor,
+                      highlightColor: splashColor,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          right: 11.w,
+                          top: ((51.h - 28.responsiveSp) / 2),
+                          bottom: ((51.h - 28.responsiveSp) / 2),
+                          left: 11.w,
+                        ),
+                        child: Icon(
+                          Icons.contrast,
+                          size: 28.responsiveSp,
+                          color: themeNotifier.currentTheme.loginTitleColor,
+                        ),
+                      ),
                     ),
-                    child: Icon(
-                      Icons.contrast,
-                      size: 28.responsiveSp,
-                      color: Provider.of<ThemeNotifier>(context)
-                          .currentTheme
-                          .loginTitleColor,
-                    ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
             title: Text('FULLSCREEN CHART',
