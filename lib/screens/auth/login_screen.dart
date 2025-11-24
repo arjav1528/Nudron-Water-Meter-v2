@@ -147,8 +147,6 @@ class _LoginPageState extends State<LoginPage> {
                                         fontSize: ThemeNotifier.large.responsiveSp,
                                         width: toggleWidth,
                                         height: 50.91.responsiveSp,
-                                        smallerWidth: (toggleWidth / 2) - 12,
-                                        smallerHeight: 35.responsiveSp,
                                         selectedTextColor: Colors.white,
                                         unselectedTextColor:
                                             Provider.of<ThemeNotifier>(context)

@@ -38,18 +38,6 @@ class ToggleButtonCustom extends StatefulWidget {
   /// Total height of the toggle button
   final double height;
   
-  /// Width of each individual tab/indicator
-  final double smallerWidth;
-  
-  /// Height of the selection indicator
-  final double smallerHeight;
-  
-  /// Vertical gap (padding) from top/bottom edges
-  final double verticalGap;
-  
-  /// Horizontal gap (padding) from left edge
-  final double leftGap;
-  
   /// Font size for tab text. If null, uses default from UIConfig
   final double? fontSize;
   
@@ -83,12 +71,8 @@ class ToggleButtonCustom extends StatefulWidget {
     required this.backgroundColor,
     required this.selectedTextColor,
     required this.unselectedTextColor,
-    this.width = 244,
-    this.height = 50.91,
-    this.smallerWidth = 116,
-    this.smallerHeight = 35,
-    this.verticalGap = 8,
-    this.leftGap = 6,
+    required this.width,
+    required this.height,
     this.fontSize,
     this.tabColor = CommonColors.blue,
     this.tabColor2 = CommonColors.blue,
@@ -136,17 +120,38 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
   }
 
   /// Calculates responsive dimensions based on platform
+  /// Automatically calculates internal dimensions (indicator size, gaps) from width and height
   _ResponsiveDimensions _calculateDimensions() {
     final isMobile = PlatformUtils.isMobile;
-    final leftGap = isMobile ? widget.leftGap.w : widget.leftGap;
-    // Make vertical gap equal to left gap for symmetry
-    final verticalGap = leftGap;
+    
+    // Calculate gaps proportionally (approximately 22% of height for vertical, 2.5% of width for horizontal)
+    final baseVerticalGap = widget.height * 0.17;
+    final baseHorizontalGap = widget.width * 0.025;
+    
+    // Calculate indicator dimensions from base dimensions
+    // Indicator width: (container width / number of tabs) - horizontal gaps on both sides
+    final baseTabWidth = (widget.width / widget.tabs.length) - (baseHorizontalGap * 2);
+    // Indicator height: container height - vertical gaps on both sides
+    final baseTabHeight = widget.height - (baseVerticalGap * 2);
+    
+    // Calculate the width of each tab section (for positioning)
+    final baseTabSectionWidth = widget.width / widget.tabs.length;
+    
+    // Apply responsive scaling
+    final containerWidth = isMobile ? widget.width.w : widget.width;
+    final containerHeight = isMobile ? widget.height.h : widget.height;
+    final tabWidth = isMobile ? baseTabWidth.w : baseTabWidth;
+    final tabHeight = isMobile ? baseTabHeight.h : baseTabHeight;
+    final tabSectionWidth = isMobile ? baseTabSectionWidth.w : baseTabSectionWidth;
+    final leftGap = isMobile ? baseHorizontalGap.w : baseHorizontalGap;
+    final verticalGap = isMobile ? baseVerticalGap.h : baseVerticalGap;
     
     return _ResponsiveDimensions(
-      containerWidth: isMobile ? widget.width.w : widget.width,
-      containerHeight: isMobile ? widget.height.h : widget.height,
-      tabWidth: isMobile ? widget.smallerWidth.w : widget.smallerWidth,
-      tabHeight: isMobile ? widget.smallerHeight.h : widget.smallerHeight,
+      containerWidth: containerWidth,
+      containerHeight: containerHeight,
+      tabWidth: tabWidth,
+      tabHeight: tabHeight,
+      tabSectionWidth: tabSectionWidth,
       leftGap: leftGap,
       rightGap: leftGap, // Right gap equals left gap
       verticalGap: verticalGap,
@@ -207,10 +212,14 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     _ResponsiveDimensions dimensions,
     Color indicatorColor,
   ) {
-    double indicatorLeft = selectedIndex * dimensions.tabWidth + dimensions.leftGap;
+    // Center the indicator within its tab section
+    // Position = start of tab section + (section width - indicator width) / 2
+    double indicatorLeft = selectedIndex * dimensions.tabSectionWidth + 
+                          (dimensions.tabSectionWidth - dimensions.tabWidth) / 2;
     
     // Platform-aware adjustments for profile drawer
-    double adjustedTop = dimensions.verticalGap;
+    // Slightly reduce top gap to balance with bottom extension
+    double adjustedTop = dimensions.verticalGap * 0.75;
     double adjustedHeight = dimensions.tabHeight;
     
     if (widget.adjustDesktopPosition) {
@@ -269,22 +278,18 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     return SizedBox(
       width: dimensions.containerWidth,
       height: dimensions.containerHeight,
-      child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: List.generate(
-            widget.tabs.length,
-            (index) => _buildTabLabel(index, dimensions.tabWidth, fontSize),
-          ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          widget.tabs.length,
+          (index) => _buildTabLabel(index, dimensions.tabSectionWidth, fontSize),
         ),
       ),
     );
   }
 
   /// Builds a single tab label
-  Widget _buildTabLabel(int index, double tabWidth, double fontSize) {
+  Widget _buildTabLabel(int index, double tabSectionWidth, double fontSize) {
     final isSelected = selectedIndex == index;
     final textColor = isSelected
         ? widget.selectedTextColor
@@ -294,7 +299,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
       onTap: () => _handleTabTap(index),
       child: Container(
         color: Colors.transparent,
-        width: tabWidth,
+        width: tabSectionWidth,
         child: Center(
           child: Text(
             widget.tabs[index],
@@ -316,6 +321,7 @@ class _ResponsiveDimensions {
   final double containerHeight;
   final double tabWidth;
   final double tabHeight;
+  final double tabSectionWidth;
   final double leftGap;
   final double rightGap;
   final double verticalGap;
@@ -325,6 +331,7 @@ class _ResponsiveDimensions {
     required this.containerHeight,
     required this.tabWidth,
     required this.tabHeight,
+    required this.tabSectionWidth,
     required this.leftGap,
     required this.rightGap,
     required this.verticalGap,
@@ -409,7 +416,7 @@ class ToggleIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Extend bottom edge more (about 5% of height)
+    // Extend bottom edge more (about 10% of height)
     final bottomExtension = size.height * 0.1;
     final indicatorPath = Path()
       ..moveTo(size.width * 0.9754789, size.height + bottomExtension)
