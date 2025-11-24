@@ -558,13 +558,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     if (path != null) {
-      
-      final directory = File(path).parent.path;
-      CustomAlert.showCustomScaffoldMessenger(
-        mainNavigatorKey.currentContext!,
-        "Data exported successfully to:\n$directory",
-        AlertType.success,
-      );
       debugPrint("Data exported successfully to $path");
     } else {
       CustomAlert.showCustomScaffoldMessenger(
