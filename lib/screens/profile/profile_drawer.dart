@@ -65,6 +65,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   bool _isLoaderShowing = false;
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _deleteAccountKey = GlobalKey();
+  final GlobalKey _twoFactorKey = GlobalKey();
+  final GlobalKey _biometricKey = GlobalKey();
 
   @override
   void initState() {
@@ -573,9 +575,37 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                 ),
                                 AuthenticationWidget(
                                   bottomOpen: true,
+                                  scrollKey: _twoFactorKey,
+                                  scrollController: _scrollController,
+                                  onToggle: () {
+                                    // Auto-scroll to the 2FA section after the widget is built
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                      if (_twoFactorKey.currentContext != null) {
+                                        Scrollable.ensureVisible(
+                                          _twoFactorKey.currentContext!,
+                                          duration: const Duration(milliseconds: 100),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      }
+                                    });
+                                  },
                                 ),
                                 BiometricWidget(
                                   topOpen: true,
+                                  scrollKey: _biometricKey,
+                                  scrollController: _scrollController,
+                                  onToggle: () {
+                                    // Auto-scroll to the biometric section after the widget is built
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                      if (_biometricKey.currentContext != null) {
+                                        Scrollable.ensureVisible(
+                                          _biometricKey.currentContext!,
+                                          duration: const Duration(milliseconds: 100),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      }
+                                    });
+                                  },
                                 ),
                               ],
                             ),
@@ -921,10 +951,16 @@ class AuthenticationWidget extends StatefulWidget {
     super.key,
     this.topOpen = false,
     this.bottomOpen = false,
+    this.scrollKey,
+    this.scrollController,
+    this.onToggle,
   });
 
   final bool topOpen;
   final bool bottomOpen;
+  final GlobalKey? scrollKey;
+  final ScrollController? scrollController;
+  final VoidCallback? onToggle;
   @override
   State<AuthenticationWidget> createState() => _AuthenticationWidgetState();
 }
@@ -950,6 +986,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: widget.scrollKey,
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
         border: widget.topOpen
@@ -1034,6 +1071,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                         showAuthenticationDialog = true;
                         showDisableConfirm = false;
                       });
+                      widget.onToggle?.call();
                     }
                   } else {
                     if (is2FAEnabled) {
@@ -1041,6 +1079,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                         showDisableConfirm = true;
                         showAuthenticationDialog = false;
                       });
+                      widget.onToggle?.call();
                     }
                   }
                 },
@@ -1132,10 +1171,16 @@ class BiometricWidget extends StatefulWidget {
     super.key,
     this.topOpen = false,
     this.bottomOpen = false,
+    this.scrollKey,
+    this.scrollController,
+    this.onToggle,
   });
 
   final bool topOpen;
   final bool bottomOpen;
+  final GlobalKey? scrollKey;
+  final ScrollController? scrollController;
+  final VoidCallback? onToggle;
   @override
   State<BiometricWidget> createState() => _BiometricWidgetState();
 }
@@ -1189,6 +1234,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        key: widget.scrollKey,
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         decoration: BoxDecoration(
           border: widget.topOpen
@@ -1275,6 +1321,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                           showBiometricDialog = true;
                           showDisableConfirm = false;
                         });
+                        widget.onToggle?.call();
                       }
                     } else {
                       if (isBiometricEnabled) {
@@ -1282,6 +1329,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                           showDisableConfirm = true;
                           showBiometricDialog = false;
                         });
+                        widget.onToggle?.call();
                       }
                     }
                   },
