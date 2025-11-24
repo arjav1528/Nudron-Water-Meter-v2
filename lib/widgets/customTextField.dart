@@ -100,14 +100,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           textDirection: TextDirection.ltr,
           decoration: InputDecoration(
             suffixIcon: widget.suffixIcon,
-            prefixIcon: widget.iconPath != null
-                ? SvgPicture.asset(
-                    widget.iconPath!,
-                    height: UIConfig.iconSizePrefix,
-                    width: UIConfig.iconSizePrefixWidth,
-                    fit: BoxFit.scaleDown,
-                  )
-                : null,
+            prefixIcon: widget.prefixIcon != null
+                ? widget.prefixIcon
+                : widget.iconPath != null
+                    ? SvgPicture.asset(
+                        widget.iconPath!,
+                        height: UIConfig.iconSizePrefix,
+                        width: UIConfig.iconSizePrefixWidth,
+                        fit: BoxFit.scaleDown,
+                      )
+                    : null,
             focusedBorder: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide(

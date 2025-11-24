@@ -157,21 +157,26 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
         child: Container(
           height: widget.height,
           decoration: widget.decoration,
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
                 'flags/${country.code!.toLowerCase()}.png',
                 package: 'country_code_picker',
                 width: UIConfig.iconSizeSmall * 0.83,
               ),
-              Text(country.dialCode ?? '',
-                  style: GoogleFonts.roboto(
-                    fontSize: UIConfig.fontSizeMediumResponsive,
-                    color: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .textfieldTextColor,
-                  )),
+              SizedBox(width: 4.w),
+              Flexible(
+                child: Text(country.dialCode ?? '',
+                    style: GoogleFonts.roboto(
+                      fontSize: UIConfig.fontSizeMediumResponsive,
+                      color: Provider.of<ThemeNotifier>(context)
+                          .currentTheme
+                          .textfieldTextColor,
+                    )),
+              ),
             ],
           ),
         ),
