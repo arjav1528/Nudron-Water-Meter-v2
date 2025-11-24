@@ -342,22 +342,18 @@ class _DropdownContentState extends State<DropdownContent> {
     final projects = dashboardBloc.projects;
     final width = UIConfig.getDesktopProjectWidth(context);
 
-    // Calculate the maximum width needed for all field names (labels)
     double maxLabelWidth = 0;
     
-    // For desktop: make font size responsive to actual available width to prevent overflow
     final double fontSize = UIConfig.fontSizeSmallResponsive;
     
     final textStyle = GoogleFonts.robotoMono(fontSize: fontSize);
     
-    // Measure all labels to find the maximum width
     for (int index = 1; index < levels.length; index++) {
       final textPainter = TextPainter(
         text: TextSpan(text: levels[index], style: textStyle),
         textDirection: TextDirection.ltr,
         maxLines: 1,
       );
-      // Layout with no width constraint to get the full text width
       textPainter.layout(maxWidth: double.infinity);
       final labelWidth = textPainter.width;
       if (labelWidth > maxLabelWidth) {
@@ -366,50 +362,28 @@ class _DropdownContentState extends State<DropdownContent> {
       textPainter.dispose();
     }
     
-    // Add padding for the label area using UIConfig constants
     final labelPadding = UIConfig.dropdownLabelTotalPadding;
     final dividerWidth = UIConfig.borderWidthThin;
     
-    // CustomDropdownButton2 applies .w to width1 (line 425: widget.width1.w)
-    // .w converts from design units to screen units based on design size
-    // Mobile design size: 430, Desktop design size: 1920
-    // So we need to pass width1 in design units
-    
-    // For mobile: convert logical pixels to design units (divide by scaleWidth)
-    // For desktop: convert logical pixels to design units (divide by scaleWidth, which scales to 1920)
     final maxLabelWidthInDesignUnits = maxLabelWidth / ScreenUtil().scaleWidth;
     
     final calculatedWidth1 = maxLabelWidthInDesignUnits + labelPadding;
     
-    // Calculate width2 as remaining width after width1, divider, and icon space
-    // CustomDropdownButton2 uses width2 differently:
-    // - Mobile: applies .w (line 454: widget.width2.w), so needs design units
-    // - Desktop: uses directly (line 454: widget.width2), so needs logical pixels
-    
-    // For mobile: get actual available screen width and constrain to it
-    // Account for horizontal padding that will be applied to the dropdown container
     final totalAvailableWidth = PlatformUtils.isMobile 
-        ? MediaQuery.of(context).size.width - (UIConfig.spacingMedium.w * 2) // Subtract left and right padding
+        ? MediaQuery.of(context).size.width - (UIConfig.spacingMedium.w * 2)
         : width;
     
-    // Convert everything to the appropriate units for width2
     final double calculatedWidth2;
     if (PlatformUtils.isMobile) {
-      // For mobile: convert to design units since CustomDropdownButton2 will apply .w
-      // Account for all spacing: left padding (10.w), width1, right padding (3.w), divider (1.w), icon space (30.responsiveSp)
-      // Add a small buffer (8 design units) to prevent overflow from rounding errors
       final totalInDesignUnits = totalAvailableWidth / ScreenUtil().scaleWidth;
-      final width1InDesignUnits = calculatedWidth1; // already in design units
+      final width1InDesignUnits = calculatedWidth1;
       final leftPaddingInDesignUnits = 10.0 / ScreenUtil().scaleWidth;
       final rightPaddingInDesignUnits = UIConfig.dropdownLabelPaddingRight / ScreenUtil().scaleWidth;
       final dividerInDesignUnits = dividerWidth / ScreenUtil().scaleWidth;
       final iconSpaceInDesignUnits = UIConfig.desktopDropdownIconSpace / ScreenUtil().scaleWidth;
-      final safetyBuffer = 8.0 / ScreenUtil().scaleWidth; // Buffer to prevent overflow
-      // Subtract all spacing elements and buffer from total width
+      final safetyBuffer = 8.0 / ScreenUtil().scaleWidth;
       calculatedWidth2 = totalInDesignUnits - width1InDesignUnits - leftPaddingInDesignUnits - rightPaddingInDesignUnits - dividerInDesignUnits - iconSpaceInDesignUnits - safetyBuffer;
     } else {
-      // For desktop: use logical pixels directly (CustomDropdownButton2 doesn't apply .w)
-      // But width1 was converted to design units, so we need to convert it back to logical pixels
       final width1InLogicalPixels = calculatedWidth1 * ScreenUtil().scaleWidth;
       calculatedWidth2 = totalAvailableWidth - width1InLogicalPixels - dividerWidth - UIConfig.desktopDropdownIconSpace;
     }
@@ -432,25 +406,19 @@ class _DropdownContentState extends State<DropdownContent> {
                   child: CustomDropdownButton2(
                     width1: calculatedWidth1,
                     width2: calculatedWidth2,
-                    // desktopDropdownWidth: PlatformUtils.isMobile ? null : width,
-                    // desktopDropdownWidth: width - 30,
-                    
-                    
                     fieldName: levels[index],
                     value: selectedFilters[index],
                     items: items,
                     onChanged: (value) => _onFilterChanged(index, value),
                     fieldNameVisible: true,
-                    customFontSize: fontSize, // Pass responsive font size for desktop
+                    customFontSize: fontSize,
                   ),
                 );
               }
             ),
           SizedBox(height: UIConfig.spacingExtraLarge),
-          // Calculate the exact dropdown width to align buttons
           Builder(
             builder: (context) {
-              // Calculate the total dropdown width (same as the dropdown itself)
               final dropdownTotalWidth = PlatformUtils.isMobile
                   ? (calculatedWidth1.w + calculatedWidth2.w + dividerWidth + UIConfig.desktopDropdownIconSpace.responsiveSp)
                   : (calculatedWidth1 * ScreenUtil().scaleWidth + calculatedWidth2 + dividerWidth + UIConfig.desktopDropdownIconSpace);
@@ -465,14 +433,12 @@ class _DropdownContentState extends State<DropdownContent> {
                       isRed: true,
                       dynamicWidth: true,
                       onPressed: widget.onClose,
-                      // width: UIConfig.buttonDefaultWidth + UIConfig.buttonWidthExtraPadding,
                       fontSize: ThemeNotifier.large.w,
                     ),
                     CustomButton(
                       text: 'CONFIRM',
                       dynamicWidth: true,
                       onPressed: _onConfirm,
-                      // width: UIConfig.buttonDefaultWidth + UIConfig.buttonWidthExtraPadding,
                       fontSize: ThemeNotifier.large.w,
                     ),
                   ],
@@ -489,8 +455,6 @@ class _DropdownContentState extends State<DropdownContent> {
 
   void _onFilterChanged(int index, String? value) async {
   if (index == 0) {
-    // Only fetch filterData for UI purposes, don't update bloc state yet
-    // This is needed to populate nested dropdowns
     try {
       filterData = await LoaderUtility.showLoader(
         context,
@@ -542,12 +506,10 @@ class _DropdownContentState extends State<DropdownContent> {
   void _onConfirm() async {
     final parentContext = widget.context;
     
-    // Check if project changed and needs to be selected first
     final currentProject = dashboardBloc.currentFilters.firstOrNull;
     final selectedProject = selectedFilters.first;
     
     try {
-      // If project changed, select it first (this fetches filterData if needed)
       if (selectedProject != null && selectedProject != currentProject) {
         final projectIndex = dashboardBloc.projects.indexOf(selectedProject);
         if (projectIndex >= 0) {
@@ -558,7 +520,6 @@ class _DropdownContentState extends State<DropdownContent> {
         }
       }
       
-      // Now update the selected filters - this will trigger all API calls
       widget.onClose();
       widget.onProjectSelected(selectedFilters.first, selectedFilters);
       
@@ -587,16 +548,12 @@ class _DropdownContentState extends State<DropdownContent> {
       if (items.isNotEmpty) {
         items = ["-", ...items];
 
-        // Only update local state, don't trigger API calls
-        // API calls will only happen when confirm button is clicked
         if (items.length == 2 && selectedFilters[level] == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               setState(() {
                 selectedFilters[level] = items[1]; 
               });
-              // Removed: dashboardBloc.updateSelectedFilters(selectedFilters, filterData);
-              // This was causing premature API calls
             }
           });
         }
