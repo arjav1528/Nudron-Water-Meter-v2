@@ -162,14 +162,8 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
   double _calculateFontSize() {
     final defaultSize = widget.fontSize ?? UIConfig.fontSizeSmall;
     
-    if (PlatformUtils.isMobile) {
-      return defaultSize.responsiveSp;
-    } else {
-      // For desktop, use fontSize if provided and > 10, otherwise use responsive size
-      return (widget.fontSize != null && widget.fontSize! > 10)
-          ? widget.fontSize!
-          : defaultSize.responsiveSp;
-    }
+    // Always apply responsive scaling for consistent sizing across platforms
+    return defaultSize.responsiveSp;
   }
 
   @override

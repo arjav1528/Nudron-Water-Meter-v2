@@ -9,6 +9,7 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
 import '../../models/userInfo.dart';
+import '../../utils/pok.dart';
 
 class ActiveDevices extends StatelessWidget {
   const ActiveDevices({super.key});
@@ -57,14 +58,13 @@ class SessionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = UIConfig.getDesktopDrawerWidth(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Client: ${session.clientID}',
           style: GoogleFonts.roboto(
-            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeLarge, desktopWidth: width),
+            fontSize: UIConfig.fontSizeLarge.responsiveSp,
             color: CommonColors.blue2,
             fontWeight: FontWeight.bold,
           ),
@@ -76,7 +76,7 @@ class SessionWidget extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.roboto(
-              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+              fontSize: UIConfig.fontSizeMedium.responsiveSp,
               color: Provider.of<ThemeNotifier>(context)
                   .currentTheme
                   .basicAdvanceTextColor,
@@ -86,7 +86,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Location: ${session.location}',
           style: GoogleFonts.roboto(
-            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+            fontSize: UIConfig.fontSizeMedium.responsiveSp,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,
@@ -95,7 +95,7 @@ class SessionWidget extends StatelessWidget {
         Text(
           'Last Active: ${timeago.format(session.lastRefresh)}',
           style: GoogleFonts.roboto(
-            fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeMedium, desktopWidth: width),
+            fontSize: UIConfig.fontSizeMedium.responsiveSp,
             color: Provider.of<ThemeNotifier>(context)
                 .currentTheme
                 .basicAdvanceTextColor,
