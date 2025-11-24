@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:watermeter2/services/platform_utils.dart';
+import 'package:watermeter2/utils/pok.dart';
 
 import '../../api/auth_service.dart';
 import '../../bloc/auth_bloc.dart';
@@ -368,19 +369,13 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                                     context)
                                                 .currentTheme
                                                 .basicAdvanceTextColor,
-                                            height: PlatformUtils.isMobile
-                                                ? 30.h
-                                                : 30.0,
+                                            height: 30.h,
                                           ),
                                           UIConfig.spacingSizedBoxSmall,
                                           Text(
                                             "SELECT PROJECT",
                                             style: GoogleFonts.robotoMono(
-                                              fontSize: UIConfig
-                                                  .getResponsiveFontSize(
-                                                      context,
-                                                      UIConfig.fontSizeMedium,
-                                                      desktopWidth: width),
+                                              fontSize: UIConfig.fontSizeMedium.responsiveSp,
                                               fontWeight: FontWeight.w500,
                                               color: Provider.of<ThemeNotifier>(
                                                       context)
@@ -393,12 +388,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                       GestureDetector(
                                         onTap: _showAddProjectDialog,
                                         child: Container(
-                                          height: PlatformUtils.isMobile
-                                              ? 30.h
-                                              : 30.0,
-                                          width: PlatformUtils.isMobile
-                                              ? 30.w
-                                              : 30.0,
+                                          height: 30.h,
+                                          // width: 30.w,
                                           decoration: BoxDecoration(
                                             borderRadius: UIConfig
                                                 .borderRadiusCircularSmall,
@@ -415,8 +406,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                             Icons.add,
                                             color: theme.basicAdvanceTextColor,
                                             size:
-                                                UIConfig.getResponsiveIconSize(
-                                                    UIConfig.iconSizeSmall),
+                                                UIConfig.iconSizeSmall.responsiveSp,
                                           ),
                                         ),
                                       )
@@ -446,9 +436,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                   CustomButton(
                                     text: "DASHBOARD",
                                     onPressed: _navigateToDashboard,
-                                    fontSize: UIConfig.getResponsiveFontSize(
-                                        context, ThemeNotifier.medium,
-                                        desktopWidth: width),
+                                    fontSize: ThemeNotifier.large.responsiveSp,
                                     arrowWidget: true,
                                     dynamicWidth: true,
                                   ),
