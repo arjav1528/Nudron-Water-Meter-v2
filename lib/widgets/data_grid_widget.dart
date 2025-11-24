@@ -60,7 +60,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
     
-    final cacheKey = '${text}_${isHeader}_${hasDownloadButton}';
+    final cacheKey = '${text}_${isHeader}_$hasDownloadButton';
     
     if (_textWidthCache.containsKey(cacheKey)) {
       return _textWidthCache[cacheKey]!;
@@ -479,15 +479,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   TextStyle? _cachedTextStyle;
   
   TextStyle _getTextStyle(BuildContext context) {
-    if (_cachedTextStyle == null) {
-      _cachedTextStyle = GoogleFonts.robotoMono(
+    _cachedTextStyle ??= GoogleFonts.robotoMono(
         fontSize: UIConfig.fontSizeTableMobile,
         height: UIConfig.lineHeight,
         fontWeight: UIConfig.fontWeightNormal,
         letterSpacing: UIConfig.letterSpacing,
         color: Provider.of<ThemeNotifier>(context).currentTheme.tableText,
       );
-    }
     return _cachedTextStyle!;
   }
 

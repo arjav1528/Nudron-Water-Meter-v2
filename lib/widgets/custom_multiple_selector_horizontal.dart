@@ -535,7 +535,7 @@ class _DropdownContentState extends State<DropdownContent> {
           AlertType.error,
         );
       }
-      throw e;
+      rethrow;
     }
   }
 

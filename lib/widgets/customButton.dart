@@ -62,7 +62,7 @@ class CustomButton extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          text.length < 6 ? "${text}     " : text,
+                          text.length < 6 ? "$text     " : text,
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(

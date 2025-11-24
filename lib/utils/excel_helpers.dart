@@ -155,7 +155,7 @@ class ExcelHelper {
           // Check if this is the average row (last row with "Average" in first cell for billing)
           bool isAverageRow = (exportType == 'billing' && 
                                i == rows.length && 
-                               rows.length > 0 &&
+                               rows.isNotEmpty &&
                                rows[i - 1].isNotEmpty &&
                                rows[i - 1][0].toString().trim() == "Average");
           

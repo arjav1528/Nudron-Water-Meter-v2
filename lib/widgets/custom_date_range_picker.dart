@@ -273,7 +273,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                           ),
                         ],
                       ),
-                      Container(
+                      SizedBox(
                           // color: Colors.red,
 
                           // width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 90.w : dialogWidth - UIConfig.spacingXXXLarge,
@@ -537,7 +537,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       // ),
                       //   SizedBox(height: 30.h,),
 
-                      Container(
+                      SizedBox(
 
                         width: UIConfig.desktopDrawerWidthMin - 120.w,
                         child: Row(

@@ -44,7 +44,6 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
       },
       builder: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-        final width = (MediaQuery.of(context).size.width * 1 / 3);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";

@@ -55,54 +55,52 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     final bool isMobile = PlatformUtils.isMobile;
 
-    return Container(
-      child: CustomTextField(
-        controller: widget.controller,
-        iconPath: (!isMobile &&
-                (widget.desktopPrefixIconHeight != null ||
-                    widget.desktopPrefixIconWidth != null))
-            ? null
-            : 'assets/icons/pwd.svg',
-        prefixIcon: (!isMobile &&
-                (widget.desktopPrefixIconHeight != null ||
-                    widget.desktopPrefixIconWidth != null))
-            ? Padding(
-                padding: UIConfig.paddingTextFieldHorizontal,
-                child: SvgPicture.asset(
-                  'assets/icons/pwd.svg',
-                  // height: widget.desktopPrefixIconHeight ?? UIConfig.iconSizeSmall,
-                  width:
-                      widget.desktopPrefixIconWidth ?? UIConfig.fontSizeSmall,
-                  fit: BoxFit.scaleDown,
-                ),
-              )
-            : null,
-        hintText: widget.hint,
-        enableSuggestions: false,
-        autocorrect: false,
-        style: widget.style,
-        hintStyle: widget.hintStyle,
-        suffixIcon: IconButton(
-          icon: SvgPicture.asset(
-            widget.controller.isObscuring
-                ? 'assets/icons/visibility_off.svg'
-                : 'assets/icons/visibility.svg',
-            height: isMobile
-                ? UIConfig.iconSizePrefix
-                : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
-            width: isMobile
-                ? UIConfig.iconSizePrefixWidth
-                : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
-            fit: BoxFit.scaleDown,
-            colorFilter: ColorFilter.mode(
-              Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .textfieldHintColor,
-              BlendMode.srcIn,
-            ),
+    return CustomTextField(
+      controller: widget.controller,
+      iconPath: (!isMobile &&
+              (widget.desktopPrefixIconHeight != null ||
+                  widget.desktopPrefixIconWidth != null))
+          ? null
+          : 'assets/icons/pwd.svg',
+      prefixIcon: (!isMobile &&
+              (widget.desktopPrefixIconHeight != null ||
+                  widget.desktopPrefixIconWidth != null))
+          ? Padding(
+              padding: UIConfig.paddingTextFieldHorizontal,
+              child: SvgPicture.asset(
+                'assets/icons/pwd.svg',
+                // height: widget.desktopPrefixIconHeight ?? UIConfig.iconSizeSmall,
+                width:
+                    widget.desktopPrefixIconWidth ?? UIConfig.fontSizeSmall,
+                fit: BoxFit.scaleDown,
+              ),
+            )
+          : null,
+      hintText: widget.hint,
+      enableSuggestions: false,
+      autocorrect: false,
+      style: widget.style,
+      hintStyle: widget.hintStyle,
+      suffixIcon: IconButton(
+        icon: SvgPicture.asset(
+          widget.controller.isObscuring
+              ? 'assets/icons/visibility_off.svg'
+              : 'assets/icons/visibility.svg',
+          height: isMobile
+              ? UIConfig.iconSizePrefix
+              : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+          width: isMobile
+              ? UIConfig.iconSizePrefixWidth
+              : (widget.desktopSuffixIconSize ?? UIConfig.fontSizeSmall),
+          fit: BoxFit.scaleDown,
+          colorFilter: ColorFilter.mode(
+            Provider.of<ThemeNotifier>(context)
+                .currentTheme
+                .textfieldHintColor,
+            BlendMode.srcIn,
           ),
-          onPressed: _toggleObscureText,
         ),
+        onPressed: _toggleObscureText,
       ),
     );
   }
