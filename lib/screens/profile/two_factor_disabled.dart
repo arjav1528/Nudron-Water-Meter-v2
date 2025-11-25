@@ -202,7 +202,6 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                       LoaderUtility.showLoader(
                               context, LoginPostRequests.enableTwoFactorAuth(2))
                           .then((s) async {
-                        debugPrint("SMS ENABLED");
                         CustomAlert.showCustomScaffoldMessenger(
                             mainNavigatorKey.currentContext!,
                             "Two factor authentication (SMS) enabled",

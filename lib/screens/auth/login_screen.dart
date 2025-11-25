@@ -249,7 +249,6 @@ class _SigninPageState extends State<SigninPage> {
             dashboardBloc.loadInitialData();
           } catch (e) {
             
-            debugPrint('Error initializing dashboard after login: $e');
           }
         } else if (state is AuthTwoFactorRequired) {
           
@@ -580,7 +579,6 @@ class _AutoLoginState extends State<AutoLogin> {
             }
           } catch (e) {
             
-            debugPrint('Error initializing dashboard after biometric login: $e');
           }
 
           if (mounted) {

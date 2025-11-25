@@ -723,7 +723,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                         try {
                                           await ExcelHelper.deleteOldExportFiles();
                                         } catch (e) {
-                                          debugPrint('Error deleting old export files: $e');
                                         }
                                         
                                         

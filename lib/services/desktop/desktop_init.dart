@@ -57,7 +57,6 @@ class DesktopInit {
       });
     } catch (e) {
       
-      debugPrint('DesktopInit error: $e');
     }
     
     SystemChrome.setPreferredOrientations([

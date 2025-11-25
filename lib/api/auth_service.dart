@@ -80,9 +80,6 @@ class LoginPostRequests {
       String? twoFactorEnabled = await secureStorage.read(key: 'two_factor').timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          if (kDebugMode) {
-            debugPrint('Secure storage read (two_factor) timed out');
-          }
           return null;
         },
       );
@@ -91,18 +88,12 @@ class LoginPostRequests {
       String? biometricEnabled = await secureStorage.read(key: 'biometric').timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          if (kDebugMode) {
-            debugPrint('Secure storage read (biometric) timed out');
-          }
           return null;
         },
       );
       NudronRandomStuff.isBiometricEnabled.value = biometricEnabled == 'true';
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error in refreshListeners: $e');
-      }
-      
+
     }
   }
 

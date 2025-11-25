@@ -155,7 +155,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         });
       } catch (e) {
         final errorMsg = "Error in capturing screenshot: ${e.toString()}";
-        debugPrint(errorMsg);
         CustomAlert.showCustomScaffoldMessenger(
             mainNavigatorKey.currentContext!, errorMsg, AlertType.error);
       }
@@ -198,7 +197,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   refreshSummaryPage() {
-    debugPrint("OOPS I WAS HIT 1");
     if (state is RefreshSummaryPage) {
       emit(RefreshSummaryPage2());
     } else {
@@ -207,7 +205,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   refreshDevicesPage() {
-    debugPrint("OOPS I WAS HIT 2");
     if (state is RefreshDevicesPage) {
       emit(RefreshDevicesPage2());
     } else {
@@ -310,10 +307,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   filterDevices(String query) {
-    debugPrint("Query is : $query");
 
     if (allDevices == null || allDevices is! List || allDevices.length < 2) {
-      debugPrint("Error: allDevices is not properly initialized");
       return;
     }
 
@@ -321,8 +316,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     var dataToFilterValue = allDevices[1];
 
     if (headerValue is! List || dataToFilterValue is! List) {
-      debugPrint(
-          "Error: allDevices structure is invalid. Header: ${headerValue.runtimeType}, Data: ${dataToFilterValue.runtimeType}");
       return;
     }
 
@@ -351,7 +344,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     List filteredData = dataToFilter.where((device) {
       if (device is! List) {
-        debugPrint("Invalid device record encountered");
         return false;
       }
       return matchesQuery(device);
@@ -359,7 +351,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     devicesData = [header, filteredData];
 
-    debugPrint("Filtered devices count: ${filteredData.length}");
     refreshDevicesPage();
   }
   
@@ -376,8 +367,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     var dataToFilterValue = allSummaryData[1];
 
     if (headerValue is! List || dataToFilterValue is! List) {
-      debugPrint(
-          "Error: summary data structure is invalid. Header: ${headerValue.runtimeType}, Data: ${dataToFilterValue.runtimeType}");
       return;
     }
 
@@ -395,7 +384,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     List filteredData = dataToFilter.where((row) {
       if (row is! List || row.length < 2) {
-        debugPrint("Invalid billing record encountered");
         return false;
       }
 
@@ -554,7 +542,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     if (path != null) {
-      debugPrint("Data exported successfully to $path");
     } else {
       CustomAlert.showCustomScaffoldMessenger(
         mainNavigatorKey.currentContext!,
@@ -889,7 +876,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   int bottomNavPos = 0;
 
   refreshDashboard() {
-    debugPrint("OOPS I WAS HIT 3");
     if (state is RefreshDashboard) {
       emit(RefreshDashboard2());
     } else {
@@ -899,29 +885,22 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   loadInitialData() async {
     try {
-      debugPrint('loadInitialData called, current state: $state');
       
       emit(DashboardPageInitial());
       
       final isLoggedIn = await AuthService.isLoggedIn();
       if (!isLoggedIn) {
         
-        if (kDebugMode) {
-          debugPrint('User is not logged in, skipping dashboard data load');
-        }
         emit(DashboardPageError(message: 'User not authenticated'));
         return;
       }
       
-      debugPrint('User is logged in, loading user info...');
       await initUserInfo();
-      debugPrint('User info loaded, projects: ${projects.length}');
       
       if (currentFilters.isNotEmpty && projects.isNotEmpty) {
         final selectedProject = currentFilters.first;
         if (projects.contains(selectedProject)) {
           try {
-            debugPrint('Loading data for selected project: $selectedProject');
             
             final projectIndex = projects.indexOf(selectedProject);
             final filterData = await selectProject(projectIndex);
@@ -930,25 +909,17 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
               
               await updateSelectedFilters([selectedProject], filterData);
               
-              debugPrint('Project data loaded successfully');
               emit(DashboardPageLoaded());
               return;
             }
           } catch (e) {
-            if (kDebugMode) {
-              debugPrint('Error loading project data after init: ${e.toString()}');
-            }
             
           }
         }
       }
       
-      debugPrint('No project selected, emitting DashboardPageLoaded');
       emit(DashboardPageLoaded());
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error loading dashboard data: ${e.toString()}');
-      }
       emit(DashboardPageError(message: e.toString()));
     }
   }

@@ -24,24 +24,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRefreshToken>(_onRefreshToken);
     
     AuthService.onLoggedOut = () {
-      debugPrint('Forced logout detected, emitting AuthUnauthenticated');
       add(AuthLogout());
     };
   }
 
   Future<void> _onCheckLoginStatus(AuthCheckLoginStatus event, Emitter<AuthState> emit) async {
     try {
-      debugPrint('Checking login status...');
       
       final isLoggedIn = await AuthService.isLoggedIn().timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          debugPrint('isLoggedIn check timed out, assuming not logged in');
           return false;
         },
       );
-      
-      debugPrint('isLoggedIn result: $isLoggedIn');
       
       if (!isLoggedIn) {
         emit(AuthUnauthenticated());
@@ -49,49 +44,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
       
       try {
-        debugPrint('Calling refreshListeners...');
         
         await LoginPostRequests.refreshListeners().timeout(
           const Duration(seconds: 2),
           onTimeout: () {
-            debugPrint('refreshListeners timed out, continuing anyway');
           },
         );
-        debugPrint('refreshListeners completed');
       } catch (e) {
-        debugPrint('refreshListeners error: $e, continuing anyway');
       }
       
       Map<String, dynamic>? userInfo;
       bool isTwoFactorEnabled = false;
       
       try {
-        debugPrint('Getting user info...');
         userInfo = await AuthService.getUserInfo(timeout: const Duration(seconds: 3));
-        debugPrint('User info retrieved, checking 2FA status...');
         isTwoFactorEnabled = await AuthService.isTwoFactorEnabled().timeout(
           const Duration(seconds: 2),
           onTimeout: () {
-            debugPrint('isTwoFactorEnabled timed out');
             return false;
           },
         );
-        debugPrint('2FA status: $isTwoFactorEnabled');
       } catch (e) {
-        debugPrint('Error loading user details: $e, proceeding without them');
         
       }
-      
-      debugPrint('Emitting AuthAuthenticated state...');
       
       emit(AuthAuthenticated(
         userInfo: userInfo,
         isTwoFactorEnabled: isTwoFactorEnabled,
       ));
       
-      debugPrint('Login status check complete: authenticated');
     } catch (e) {
-      debugPrint('Fatal error during login check: $e, defaulting to unauthenticated');
       
       emit(AuthUnauthenticated());
     }
@@ -112,7 +94,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await LoginPostRequests.refreshListeners().timeout(
             const Duration(seconds: 3),
             onTimeout: () {
-              debugPrint('refreshListeners timed out during login');
             },
           );
           
@@ -124,7 +105,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             isTwoFactorEnabled: isTwoFactorEnabled,
           ));
         } catch (e) {
-          debugPrint('Error loading user info during login: $e');
           
           emit(AuthAuthenticated(
             userInfo: null,
@@ -187,7 +167,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await LoginPostRequests.refreshListeners().timeout(
             const Duration(seconds: 3),
             onTimeout: () {
-              debugPrint('refreshListeners timed out during biometric login');
             },
           );
           
@@ -199,7 +178,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             isTwoFactorEnabled: isTwoFactorEnabled,
           ));
         } catch (e) {
-          debugPrint('Error loading user info during biometric login: $e');
           
           emit(AuthAuthenticated(
             userInfo: null,
@@ -231,7 +209,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await LoginPostRequests.refreshListeners().timeout(
             const Duration(seconds: 3),
             onTimeout: () {
-              debugPrint('refreshListeners timed out during 2FA verification');
             },
           );
           
@@ -243,7 +220,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             isTwoFactorEnabled: isTwoFactorEnabled,
           ));
         } catch (e) {
-          debugPrint('Error loading user info during 2FA verification: $e');
           
           emit(AuthAuthenticated(
             userInfo: null,

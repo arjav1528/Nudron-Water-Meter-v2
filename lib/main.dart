@@ -31,7 +31,6 @@ void main() async {
   
   if(Platform.isIOS){
     final iosInfo = await DeviceInfoPlugin().iosInfo;
-    debugPrint('Running on ${iosInfo.utsname.machine}');
   }
   if(Platform.isAndroid){
     final deviceInfo = DeviceInfoPlugin();
@@ -42,9 +41,7 @@ void main() async {
     final likelyTablet = !features.contains('android.hardware.telephony');
 
     if (likelyTablet || model.contains('tablet') || model.startsWith('sm-x')) {
-      debugPrint('Running on Android tablet');
     } else {
-      debugPrint('Running on Android phone');
   }
   }
 
@@ -53,7 +50,6 @@ void main() async {
   } else if (PlatformUtils.isMobile) {
     await MobileInit.initialize();
   }
-  debugPrint('here');
   final themeProvider = ThemeNotifier();
   await themeProvider.readThemeMode();
   
@@ -92,7 +88,6 @@ class _MyAppState extends State<MyApp> {
         final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
         authBloc.add(AuthCheckLoginStatus());
       } catch (e) {
-        debugPrint('Error triggering auth check: $e');
       }
     });
   }
@@ -105,13 +100,11 @@ class _MyAppState extends State<MyApp> {
     } else {
       designSize = const Size(1920, 1080);
     }
-    debugPrint('designSize: $designSize');
     return ScreenUtilInit(
         designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          debugPrint('context: $context');
           return BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
               final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
@@ -194,7 +187,6 @@ class _MyAppState extends State<MyApp> {
                           (route) => false,
                         );
                       } catch (e) {
-                        debugPrint('Navigation error during logout: $e');
                       }
                     }
                     
@@ -257,7 +249,6 @@ class _MyAppState extends State<MyApp> {
                     return true;
                   },
                   builder: (context, authState) {
-                    debugPrint('Auth state changed: $authState');
                     
                     if (authState is AuthAuthenticated) {
                       
@@ -270,8 +261,6 @@ class _MyAppState extends State<MyApp> {
                         },
                         builder: (context, dashboardState) {
                           final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-                          
-                          debugPrint('Dashboard state: $dashboardState, projects: ${dashboardBloc.projects.length}, filters: ${dashboardBloc.currentFilters.length}');
                           
                           if (dashboardState is DashboardPageInitial) {
                             return const Scaffold(
