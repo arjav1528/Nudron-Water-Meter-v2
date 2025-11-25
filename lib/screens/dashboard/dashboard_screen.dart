@@ -569,6 +569,10 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                 },
               ),
             ),
+            Container(
+              height: 12.h,
+              color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
+            ),
             // BlocBuilder<DashboardBloc, DashboardState>(
             //   buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
             //   builder: (context, state) {
