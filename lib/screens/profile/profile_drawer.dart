@@ -1050,7 +1050,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 child: Text(
                   "Two Factor Authentication",
                   style: GoogleFonts.roboto(
-                    fontSize: UIConfig.fontSizeMedium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                     color: Provider.of<ThemeNotifier>(context)
                         .currentTheme
                         .basicAdvanceTextColor,
@@ -1107,7 +1107,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                     CustomButton(
                       dynamicWidth: true,
                       text: "CANCEL",
-                      fontSize: UIConfig.fontSizeSmall,
+                      fontSize: UIConfig.fontSizeSmallResponsive,
                       onPressed: () {
                         setState(() {
                           showDisableConfirm = false;
@@ -1119,7 +1119,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                     CustomButton(
                       dynamicWidth: true,
                       text: "CONFIRM",
-                      fontSize: UIConfig.fontSizeSmall,
+                      fontSize: UIConfig.fontSizeSmallResponsive,
                       onPressed: () {
                         if (NudronRandomStuff.isAuthEnabled.value) {
                           LoaderUtility.showLoader(context,
@@ -1300,7 +1300,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   child: Text(
                     "Biometric Login",
                     style: GoogleFonts.roboto(
-                    fontSize: UIConfig.fontSizeMedium.responsiveSp,
+                    fontSize: UIConfig.fontSizeMediumResponsive,
                     color: Provider.of<ThemeNotifier>(context)
                           .currentTheme
                           .basicAdvanceTextColor,
@@ -1357,7 +1357,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                         CustomButton(
                           dynamicWidth: true,
                           text: "CANCEL",
-                          fontSize: UIConfig.fontSizeSmall,
+                          fontSize: UIConfig.fontSizeSmallResponsive,
                           onPressed: () {
                             setState(() {
                               showDisableConfirm = false;
@@ -1369,7 +1369,7 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                         CustomButton(
                           dynamicWidth: true,
                           text: "CONFIRM",
-                          fontSize: ThemeNotifier.medium,
+                          fontSize: ThemeNotifier.medium.responsiveSp,
                           onPressed: () {
                             if (NudronRandomStuff.isBiometricEnabled.value) {
                               disableBiometric()
