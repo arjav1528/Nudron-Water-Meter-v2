@@ -41,7 +41,7 @@ class ExcelHelper {
       final String fileName;
       switch (exportType) {
         case 'trends':
-          fileName = "Water_Trends_${identifier}_$todayDDMMYYYY.xlsx";
+          fileName = "WaterMeter_Trends_${identifier}_$todayDDMMYYYY.xlsx";
           break;
         case 'billing':
           final bloc = BlocProvider.of<DashboardBloc>(context);
@@ -63,14 +63,14 @@ class ExcelHelper {
           final endStr = DateFormat('ddMMyyyy').format(endDate);
           rangePart = "${startStr}_$endStr";
           
-          fileName = "Water_Summary_${identifier[0]}_$rangePart.xlsx";
+          fileName = "WaterMeter_Summary_${identifier[0]}_$rangePart.xlsx";
           break;
         case 'activity':
         case 'devices':
-          fileName = "Water_Meters_${identifier[0]}_${todayDDMMYYYY}_$timeHHmm.xlsx";
+          fileName = "WaterMeter_${identifier[0]}_${todayDDMMYYYY}_$timeHHmm.xlsx";
           break;
         default:
-          fileName = "Water_Export_$todayDDMMYYYY.xlsx";
+          fileName = "WaterMeter_Export_$todayDDMMYYYY.xlsx";
       }
 
       for (var sheetInfo in sheetsData) {

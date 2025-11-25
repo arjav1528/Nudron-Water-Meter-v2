@@ -912,18 +912,18 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       UIConfig.spacingSizedBoxVerticalLarge,
                                     ],
                                   )),
-
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
 
                           UIConfig.spacingSizedBoxVerticalLarge,
                           UIConfig.spacingSizedBoxVerticalLarge,
-                      ]),
-                        ),
+                        ],
                       ),
                     ),
                   ),
+                ),
+              ),
                 // Container(
                 //   height: UIConfig.accentLineHeight,
                 //   color: CommonColors.blue2,
