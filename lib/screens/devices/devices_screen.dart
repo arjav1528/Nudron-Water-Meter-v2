@@ -87,7 +87,7 @@ class _DevicesPageState extends State<DevicesPage> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            // width: UIConfig.backButtonWidth,
+                            
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -190,7 +190,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                           ),
                                           decoration: InputDecoration(
                                           
-                                            // filled: true,
+                                            
                                             fillColor: UIConfig.colorTransparent,
                                             hintText:
                                             'SEARCH LABEL OR SERIAL NO.',
@@ -206,10 +206,10 @@ class _DevicesPageState extends State<DevicesPage> {
                                           ),
                                           textAlignVertical: TextAlignVertical.center,
                                           onChanged: (query) {
-                                            // Cancel previous timer if it exists
+                                            
                                             _searchDebounceTimer?.cancel();
                                             
-                                            // Start a new timer that will trigger search after 0.5 seconds
+                                            
                                             _searchDebounceTimer = Timer(const Duration(milliseconds: 250), () {
                                               if (mounted) {
                                                 dashboardBloc.filterDevices(_searchController.text);

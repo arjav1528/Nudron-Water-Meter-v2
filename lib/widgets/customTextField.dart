@@ -95,21 +95,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
           cursorHeight: UIConfig.textFieldCursorHeight,
           enableSuggestions: widget.enableSuggestions,
           autocorrect: widget.autocorrect,
-          // textAlign: TextAlign.center,
+          
           textAlignVertical: TextAlignVertical.center,
           textDirection: TextDirection.ltr,
           decoration: InputDecoration(
             suffixIcon: widget.suffixIcon,
-            prefixIcon: widget.prefixIcon != null
-                ? widget.prefixIcon
-                : widget.iconPath != null
+            prefixIcon: widget.prefixIcon ?? (widget.iconPath != null
                     ? SvgPicture.asset(
                         widget.iconPath!,
                         height: UIConfig.iconSizePrefix,
                         width: UIConfig.iconSizePrefixWidth,
                         fit: BoxFit.scaleDown,
                       )
-                    : null,
+                    : null),
             focusedBorder: widget.border ??
                 OutlineInputBorder(
                   borderSide: BorderSide(

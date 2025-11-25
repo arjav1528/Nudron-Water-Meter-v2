@@ -55,7 +55,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   List<dynamic>? _averageRow;
 
   final double rowHeight = UIConfig.rowHeight;
-  final double headerRowHeight = UIConfig.headerWidgetHeight; // Add this line
+  final double headerRowHeight = UIConfig.headerWidgetHeight; 
 
   double calculateTextWidth(String text,
       {bool isHeader = false, bool hasDownloadButton = false}) {
@@ -123,7 +123,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
 
   void init(double height) {
     
-    // Check if we need to recalculate column widths
+    
     bool needsRecalculation = _cachedProcessedData == null || 
         _cachedProcessedData!.length != widget.data![1].length ||
         columnWidths.isEmpty ||
@@ -176,19 +176,19 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     averages.add("Average");
     averages.add(" ");
 
-    // For each column
+    
     for (int colIndex = 2; colIndex < headers.length; colIndex++) {
       if (colIndex < widget.frozenColumns) {
         
       } else {
-        // Numeric columns: calculate average
+        
         double sum = 0.0;
         int count = 0;
         
         for (var row in rows) {
           if (row is List && colIndex < row.length && row[colIndex] != null) {
             try {
-              // Try to parse as number
+              
               String valueStr = row[colIndex].toString().trim();
               if (valueStr.isNotEmpty) {
                 double? value = double.tryParse(valueStr);
@@ -198,7 +198,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                 }
               }
             } catch (e) {
-              // Skip non-numeric values
+              
             }
           }
         }
@@ -231,13 +231,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         double headerWidth = calculateTextWidth(headers[index].toString(),
             isHeader: true, hasDownloadButton: index == 0);
         
-        // For frozen columns on mobile in billing/devices pages, use only header width
+        
         bool isFrozenColumn = index < widget.frozenColumns;
         bool isMobile = PlatformUtils.isMobile;
         bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
         
         if (isFrozenColumn && isMobile && isBillingOrDevices) {
-          // Add extra padding if this column is in the map
+          
           if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
             columnWidths[index] = headerWidth +
                 widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
@@ -251,7 +251,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         
         bool shouldCheckAllRows = (widget.devicesTable == true && index == 0);
         
-        // Check if this column needs special formatting (for devices table)
+        
         String? fieldName = headers[index].toString();
         bool isLastSeenColumn = widget.devicesTable == true && 
             fieldName.isNotEmpty && fieldName[0] == '%';
@@ -267,10 +267,10 @@ class _DataGridWidgetState extends State<DataGridWidget> {
             if (rows[i][index] != null) {
               String cellValue;
               if (isLastSeenColumn) {
-                // Format the timestamp for Last Seen column
+                
                 cellValue = Utils.lastSeenFromMilliseconds(rows[i][index]).toString();
               } else if (isLastRecordColumn) {
-                // Format the date for Last Record column
+                
                 String? lastSeenDate = NudronChartMap.convertDaysToDate(rows[i][index].toString());
                 cellValue = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
               } else {
@@ -291,10 +291,10 @@ class _DataGridWidgetState extends State<DataGridWidget> {
             if (row[index] != null) {
               String cellValue;
               if (isLastSeenColumn) {
-                // Format the timestamp for Last Seen column
+                
                 cellValue = Utils.lastSeenFromMilliseconds(row[index]).toString();
               } else if (isLastRecordColumn) {
-                // Format the date for Last Record column
+                
                 String? lastSeenDate = NudronChartMap.convertDaysToDate(row[index].toString());
                 cellValue = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
               } else {
@@ -313,7 +313,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         
         columnWidths[index] = max(headerWidth, maxDataWidth);
         
-        // Add extra width for frozen columns on desktop (only for billing and devices pages)
+        
         
       }
     }
@@ -360,7 +360,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     
     if (widget.devicesTable == true) {
       return Container(
-        height: headerRowHeight, // Change from rowHeight to headerRowHeight
+        height: headerRowHeight, 
         width: columnWidths[index],
         decoration: BoxDecoration(
           color: Provider.of<ThemeNotifier>(context)
@@ -391,7 +391,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       );
     } else {
       return Container(
-        height: headerRowHeight, // Change from rowHeight to headerRowHeight
+        height: headerRowHeight, 
         width: columnWidths[index],
         decoration: BoxDecoration(
           color: Provider.of<ThemeNotifier>(context)
@@ -583,7 +583,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         _verticalScrollController1, _verticalScrollController2);
     syncScrollControllers(
         _horizontalScrollController1, _horizontalScrollController2);
-    // Sync average row horizontal scroll with main horizontal scroll
+    
     syncScrollControllers(
         _horizontalScrollController2, _horizontalScrollControllerAverage);
 
@@ -595,7 +595,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     } else {
       return LayoutBuilder(builder: (context, contraints) {
         init(contraints.maxHeight);
-        // Recalculate averages if data changed
+        
         if (_cachedProcessedData == null || 
             _cachedProcessedData!.length != widget.data![1].length) {
           calculateAverages();
@@ -661,7 +661,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                         if (widget.frozenColumns > 0)
                           Container(
                             width: columnWidths[0],
-                            height: headerRowHeight, // Change from rowHeight to headerRowHeight
+                            height: headerRowHeight, 
                             decoration: BoxDecoration(
                               color: Provider.of<ThemeNotifier>(context)
                                   .currentTheme
@@ -726,23 +726,23 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                           debugPrint('Error deleting old export files: $e');
                                         }
                                         
-                                        // Prepare data for export - include average row for billing
+                                        
                                         var dataToExport = widget.data!;
                                         if (widget.location == 'billing' && _averageRow != null) {
-                                          // Create a copy of the data with average row appended
+                                          
                                           List<dynamic> headers = List.from(dataToExport[0]);
                                           List<List<dynamic>> allRows = List.from(dataToExport[1]);
                                           
-                                          // Filter out empty/dummy rows (rows where all cells are empty or null)
+                                          
                                           List<List<dynamic>> rows = allRows.where((row) {
-                                            // Check if row has any non-empty values
+                                            
                                             return row.any((cell) => 
                                               cell != null && 
                                               cell.toString().trim().isNotEmpty
                                             );
                                           }).toList();
                                           
-                                          // Add average row as the last row
+                                          
                                           rows.add(List.from(_averageRow!));
                                           dataToExport = [headers, rows];
                                         }
@@ -846,7 +846,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                   ],
                 ),
               ),
-              // Fixed average row at the bottom
+              
               if (_averageRow != null && widget.location == 'billing')
                 Positioned(
                   bottom: 0,
@@ -855,14 +855,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Frozen columns for average row
+                      
                       Row(
                         children: List.generate(
                           widget.frozenColumns,
                           (index) => _getAverageRowCell(index, context),
                         ),
                       ),
-                      // Scrollable columns for average row
+                      
                       Expanded(
                         child: SingleChildScrollView(
                           controller: _horizontalScrollControllerAverage,

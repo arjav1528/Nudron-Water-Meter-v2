@@ -69,7 +69,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               padding: UIConfig.paddingTextFieldHorizontal,
               child: SvgPicture.asset(
                 'assets/icons/pwd.svg',
-                // height: widget.desktopPrefixIconHeight ?? UIConfig.iconSizeSmall,
+                
                 width:
                     widget.desktopPrefixIconWidth ?? UIConfig.fontSizeSmall,
                 fit: BoxFit.scaleDown,

@@ -316,7 +316,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                     },
                                     child: Container(
                                       height: UIConfig.backButtonHeight,
-                                      // width: UIConfig.backButtonWidth,
+                                      
                                       decoration: BoxDecoration(
                                           shape: BoxShape.rectangle,
                                           borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -364,7 +364,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               ],
                             ),
                           ),
-                          // User Section
+                          
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                             child: Column(
@@ -551,7 +551,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           UIConfig.spacingSizedBoxVerticalLarge,
                           UIConfig.spacingSizedBoxVerticalLarge,
 
-                          // Authentication Section
+                          
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                             child: Column(
@@ -579,7 +579,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   scrollKey: _twoFactorKey,
                                   scrollController: _scrollController,
                                   onToggle: () {
-                                    // Auto-scroll to the 2FA section after the widget is built
+                                    
                                     WidgetsBinding.instance.addPostFrameCallback((_) {
                                       if (_twoFactorKey.currentContext != null) {
                                         Scrollable.ensureVisible(
@@ -596,7 +596,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                   scrollKey: _biometricKey,
                                   scrollController: _scrollController,
                                   onToggle: () {
-                                    // Auto-scroll to the biometric section after the widget is built
+                                    
                                     WidgetsBinding.instance.addPostFrameCallback((_) {
                                       if (_biometricKey.currentContext != null) {
                                         Scrollable.ensureVisible(
@@ -615,7 +615,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           UIConfig.spacingSizedBoxVerticalLarge,
                           UIConfig.spacingSizedBoxVerticalLarge,
 
-                          // Logout
+                          
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                             child: Column(
@@ -692,7 +692,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           UIConfig.spacingSizedBoxVerticalLarge,
                           UIConfig.spacingSizedBoxVerticalLarge,
 
-                          // active seshh
+                          
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                             child: Column(
@@ -780,7 +780,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           UIConfig.spacingSizedBoxVerticalLarge,
                           UIConfig.spacingSizedBoxVerticalLarge,
 
-                          // account delete
+                          
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
                           child: Column(
@@ -842,7 +842,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                               setState(() {
                                                 deleteAccountVisible = true;
                                               });
-                                              // Auto-scroll to the delete account section after the widget is built
+                                              
                                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                                 if (_deleteAccountKey.currentContext != null) {
                                                   Scrollable.ensureVisible(
@@ -924,10 +924,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   ),
                 ),
               ),
-                // Container(
-                //   height: UIConfig.accentLineHeight,
-                //   color: CommonColors.blue2,
-                // ),
+                
+                
+                
+                
               ],
             );
           });

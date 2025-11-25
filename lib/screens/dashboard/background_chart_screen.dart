@@ -38,7 +38,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
           try {
             BlocProvider.of<DashboardBloc>(context).changeScreen();
           } catch (e) {
-            // Widget may be disposed
+            
           }
         }
         return Future.value(false);
@@ -68,7 +68,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                   try {
                     BlocProvider.of<DashboardBloc>(context).changeScreen();
                   } catch (e) {
-                    // Widget may be disposed
+                    
                   }
                 }
               },
@@ -76,12 +76,12 @@ class _BackgroundChartState extends State<BackgroundChart> {
             actions: [
               Consumer<ThemeNotifier>(
                 builder: (context, themeNotifier, child) {
-                  // Determine splash color based on current theme
-                  // Dark mode -> Light mode: black splash
-                  // Light mode -> Dark mode: white splash
+                  
+                  
+                  
                   final splashColor = themeNotifier.isDark
-                      ? Colors.black.withOpacity(0.4) // Black splash for dark->light
-                      : Colors.white.withOpacity(0.4); // White splash for light->dark
+                      ? Colors.black.withOpacity(0.4) 
+                      : Colors.white.withOpacity(0.4); 
                   
                   return Material(
                     color: Colors.transparent,
@@ -133,7 +133,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
             listenWhen: (previous, current) => current is ChangeScreen,
             listener: (context, state) {
               if (!mounted) return;
-              // Update the key when screen changes to this one (screenIndex == 1)
+              
               if (state is ChangeScreen && mounted) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (mounted) {
@@ -143,7 +143,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                         bloc.changeKey(_repaintBoundaryKey);
                       }
                     } catch (e) {
-                      // Widget may be disposed
+                      
                     }
                   }
                 });

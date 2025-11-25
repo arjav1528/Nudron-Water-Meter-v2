@@ -7,61 +7,61 @@ import '../constants/theme2.dart';
 import '../constants/ui_config.dart';
 import '../services/platform_utils.dart';
 
-/// A custom toggle button widget with animated selection indicator.
-/// 
-/// Features:
-/// - Custom painted frame and indicator with unique shapes
-/// - Animated position transitions
-/// - Support for multiple tabs
-/// - Customizable colors, sizes, and fonts
-/// - Platform-aware sizing (mobile/desktop)
+
+
+
+
+
+
+
+
 class ToggleButtonCustom extends StatefulWidget {
-  /// List of tab labels to display
+  
   final List<String> tabs;
   
-  /// Callback function called when a tab is tapped
-  /// Receives the index of the tapped tab
+  
+  
   final Function(int) onTap;
   
-  /// Background color of the outer frame
+  
   final Color? backgroundColor;
   
-  /// Text color for the selected tab
+  
   final Color selectedTextColor;
   
-  /// Text color for unselected tabs
+  
   final Color unselectedTextColor;
   
-  /// Total width of the toggle button
+  
   final double width;
   
-  /// Total height of the toggle button
+  
   final double height;
   
-  /// Font size for tab text. If null, uses default from UIConfig
+  
   final double? fontSize;
   
-  /// Color for the selection indicator when first tab is selected
+  
   final Color tabColor;
   
-  /// Color for the selection indicator when second tab is selected
+  
   final Color tabColor2;
   
-  /// Initial selected tab index
+  
   final int index;
   
-  /// If true, the visual selection won't update immediately on tap
-  /// Useful when you want to control the selection externally
+  
+  
   final bool dontChangeImmediately;
   
-  /// If true, fills the background with the backgroundColor.
-  /// If false, only draws a border outline (transparent background).
+  
+  
   final bool fillBackground;
 
-  /// If true, applies platform-aware position adjustments for profile drawer.
-  /// When NO (index 0): extends indicator downward slightly.
-  /// When YES (index 1): moves indicator upward slightly.
-  /// Adjustments are applied on both mobile and desktop platforms.
+  
+  
+  
+  
   final bool adjustDesktopPosition;
 
   const ToggleButtonCustom({
@@ -103,12 +103,12 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     }
   }
 
-  /// Returns the appropriate color for the selection indicator based on tab index
+  
   Color _getIndicatorColor(int index) {
     return index == 0 ? widget.tabColor : widget.tabColor2;
   }
 
-  /// Handles tab tap and updates selection
+  
   void _handleTabTap(int index) {
     widget.onTap(index);
     
@@ -119,25 +119,25 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     }
   }
 
-  /// Calculates responsive dimensions based on platform
-  /// Automatically calculates internal dimensions (indicator size, gaps) from width and height
+  
+  
   _ResponsiveDimensions _calculateDimensions() {
     final isMobile = PlatformUtils.isMobile;
     
-    // Calculate gaps proportionally (approximately 22% of height for vertical, 2.5% of width for horizontal)
+    
     final baseVerticalGap = widget.height * 0.17;
     final baseHorizontalGap = widget.width * 0.025;
     
-    // Calculate indicator dimensions from base dimensions
-    // Indicator width: (container width / number of tabs) - horizontal gaps on both sides
+    
+    
     final baseTabWidth = (widget.width / widget.tabs.length) - (baseHorizontalGap * 2);
-    // Indicator height: container height - vertical gaps on both sides
+    
     final baseTabHeight = widget.height - (baseVerticalGap * 2);
     
-    // Calculate the width of each tab section (for positioning)
+    
     final baseTabSectionWidth = widget.width / widget.tabs.length;
     
-    // Apply responsive scaling
+    
     final containerWidth = isMobile ? widget.width.w : widget.width;
     final containerHeight = isMobile ? widget.height.h : widget.height;
     final tabWidth = isMobile ? baseTabWidth.w : baseTabWidth;
@@ -153,16 +153,16 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
       tabHeight: tabHeight,
       tabSectionWidth: tabSectionWidth,
       leftGap: leftGap,
-      rightGap: leftGap, // Right gap equals left gap
+      rightGap: leftGap, 
       verticalGap: verticalGap,
     );
   }
 
-  /// Calculates the font size based on platform and widget settings
+  
   double _calculateFontSize() {
     final defaultSize = widget.fontSize ?? UIConfig.fontSizeSmall;
     
-    // Always apply responsive scaling for consistent sizing across platforms
+    
     return defaultSize.responsiveSp;
   }
 
@@ -177,20 +177,20 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
       height: dimensions.containerHeight,
       child: Stack(
         children: [
-          // Outer frame background
+          
           _buildOuterFrame(dimensions),
           
-          // Animated selection indicator
+          
           _buildSelectionIndicator(dimensions, indicatorColor),
           
-          // Tab text labels
+          
           _buildTabLabels(dimensions, fontSize),
         ],
       ),
     );
   }
 
-  /// Builds the outer frame using CustomPaint
+  
   Widget _buildOuterFrame(_ResponsiveDimensions dimensions) {
     return CustomPaint(
       size: Size(dimensions.containerWidth, dimensions.containerHeight),
@@ -201,18 +201,18 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     );
   }
 
-  /// Builds the animated selection indicator
+  
   Widget _buildSelectionIndicator(
     _ResponsiveDimensions dimensions,
     Color indicatorColor,
   ) {
-    // Center the indicator within its tab section
-    // Position = start of tab section + (section width - indicator width) / 2
+    
+    
     double indicatorLeft = selectedIndex * dimensions.tabSectionWidth + 
                           (dimensions.tabSectionWidth - dimensions.tabWidth) / 2;
     
-    // Platform-aware adjustments for profile drawer
-    // Slightly reduce top gap to balance with bottom extension
+    
+    
     double adjustedTop = dimensions.verticalGap * 0.75;
     double adjustedHeight = dimensions.tabHeight;
     
@@ -220,26 +220,26 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
       final isMobile = PlatformUtils.isMobile;
       
       if (isMobile) {
-        // Mobile-specific adjustments
+        
         adjustedHeight = dimensions.tabHeight + 1;
         
         if (selectedIndex == 0) {
-          // NO: move up by 1.h pixels to center it better, and move left to extreme
+          
           adjustedTop = dimensions.verticalGap - 0.75 - 1.h;
           indicatorLeft = indicatorLeft - 1.h;
         } else if (selectedIndex == 1) {
-          // YES: move upward slightly (reduced offset for mobile)
+          
           adjustedTop = dimensions.verticalGap - 1.0;
         }
       } else {
-        // Desktop-specific adjustments
+        
         adjustedHeight = dimensions.tabHeight + 1;
         
         if (selectedIndex == 0) {
-          // NO: extend downward slightly
+          
           adjustedTop = dimensions.verticalGap - 0.75;
         } else if (selectedIndex == 1) {
-          // YES: move upward slightly
+          
           adjustedTop = dimensions.verticalGap - 1.5;
         }
       }
@@ -254,20 +254,20 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     );
   }
 
-  /// Builds the indicator content (either image or custom paint)
+  
   Widget _buildIndicatorContent(
     _ResponsiveDimensions dimensions,
     Color indicatorColor,
     double height,
   ) {
-    // Use CustomPaint for all colors to ensure consistent appearance
+    
     return CustomPaint(
       size: Size(dimensions.tabWidth, height),
       painter: ToggleIndicatorPainter(color: indicatorColor),
     );
   }
 
-  /// Builds the tab text labels
+  
   Widget _buildTabLabels(_ResponsiveDimensions dimensions, double fontSize) {
     return SizedBox(
       width: dimensions.containerWidth,
@@ -282,7 +282,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
     );
   }
 
-  /// Builds a single tab label
+  
   Widget _buildTabLabel(int index, double tabSectionWidth, double fontSize) {
     final isSelected = selectedIndex == index;
     final textColor = isSelected
@@ -309,7 +309,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
   }
 }
 
-/// Helper class to hold responsive dimensions
+
 class _ResponsiveDimensions {
   final double containerWidth;
   final double containerHeight;
@@ -332,15 +332,15 @@ class _ResponsiveDimensions {
   });
 }
 
-/// Custom painter for the outer toggle frame
-/// 
-/// Creates a frame with wavy/scalloped edges on the left and right sides.
-/// Can render as either a filled background or just a border outline.
+
+
+
+
 class ToggleFramePainter extends CustomPainter {
-  /// Color of the frame. If null, uses default dark teal color
+  
   final Color? color;
   
-  /// If true, fills the background. If false, only draws a border.
+  
   final bool fillBackground;
 
   const ToggleFramePainter({
@@ -353,7 +353,7 @@ class ToggleFramePainter extends CustomPainter {
     final frameColor = color ?? const Color(0xff434343);
     
     if (fillBackground) {
-      // Draw filled background
+      
       final outerPath = Path()
         ..moveTo(size.width * 0.9797321, 0)
         ..lineTo(size.width * 0.02027027, 0)
@@ -370,7 +370,7 @@ class ToggleFramePainter extends CustomPainter {
 
       canvas.drawPath(outerPath, fillPaint);
     } else {
-      // Draw border only (transparent background)
+      
       final borderPath = Path()
         ..moveTo(size.width * 0.9797321, 0)
         ..lineTo(size.width * 0.02027027, 0)
@@ -396,12 +396,12 @@ class ToggleFramePainter extends CustomPainter {
   }
 }
 
-/// Custom painter for the selection indicator
-/// 
-/// Creates a diamond/hexagon-shaped indicator that slides between tabs.
-/// The shape has pointed edges on the left and right sides.
+
+
+
+
 class ToggleIndicatorPainter extends CustomPainter {
-  /// Color of the indicator
+  
   final Color color;
 
   const ToggleIndicatorPainter({
@@ -410,7 +410,7 @@ class ToggleIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Extend bottom edge more (about 10% of height)
+    
     final bottomExtension = size.height * 0.1;
     final indicatorPath = Path()
       ..moveTo(size.width * 0.9754789, size.height + bottomExtension)

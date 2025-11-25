@@ -58,18 +58,18 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
     final width = mediaQuery.size.width;
     final height = mediaQuery.size.height;
 
-    // Calculate responsive content width with 400-550 clamp for desktop
+    
     final contentWidth = PlatformUtils.isMobile ? width : (width * (2 / 3));
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          // Navigate to home route so the route builder can show the dashboard/project selection
-          // Success message is shown in main.dart after navigation completes
+          
+          
           WidgetsBinding.instance.addPostFrameCallback((_) {
             final navigator = mainNavigatorKey.currentState;
             if (navigator != null) {
-              // Navigate to home route - this will trigger the route builder to show dashboard/project selection
+              
               navigator.pushNamedAndRemoveUntil('/', (route) => false);
             }
           });
@@ -293,11 +293,11 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                             BlocProvider.of<AuthBloc>(context,
                                                 listen: false);
 
-                                        // Create a completer to wait for the auth result
+                                        
                                         final completer = Completer<void>();
                                         StreamSubscription? subscription;
 
-                                        // Listen to auth state changes
+                                        
                                         subscription =
                                             authBloc.stream.listen((state) {
                                           if (state is AuthAuthenticated ||
@@ -315,25 +315,25 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                                         });
 
                                         try {
-                                          // Show loader and wait for verification
+                                          
                                           await LoaderUtility.showLoader(
                                             context,
                                             Future(() async {
-                                              // Trigger the verification
+                                              
                                               authBloc.add(AuthVerifyTwoFactor(
                                                 refCode: widget.referenceCode,
                                                 code: otpFieldController.text,
                                               ));
-                                              // Wait for the result
+                                              
                                               await completer.future;
                                             }),
                                           );
 
-                                          // If we get here, authentication was successful
-                                          // Navigation is handled by the BlocListener
+                                          
+                                          
                                         } catch (e) {
-                                          // Error is already handled by the BlocListener
-                                          // But we can show an error message if needed
+                                          
+                                          
                                           if (mounted &&
                                               e.toString().isNotEmpty) {
                                             CustomAlert
@@ -367,10 +367,10 @@ class _EnterTwoFacCodeState extends State<EnterTwoFacCode> with CodeAutoFill {
                     ),
                   ),
                 ),
-                // Container(
-                //   height: UIConfig.accentLineHeight,
-                //   color: UIConfig.accentColorBlue,
-                // ),
+                
+                
+                
+                
               ],
             ),
           ),

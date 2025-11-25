@@ -204,8 +204,8 @@ class _MyAppState extends State<MyApp> {
                 
                 dashboardBloc.loadInitialData();
                 
-                // Show success message after navigation completes
-                // Using postFrameCallback ensures the message displays after route changes
+                
+                
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   final context = mainNavigatorKey.currentContext;
                   if (context != null && scaffoldMessengerKey.currentState != null) {
@@ -217,7 +217,7 @@ class _MyAppState extends State<MyApp> {
                   }
                 });
               } else if (state is AuthTwoFactorRequired) {
-                // Handle 2FA navigation at app level to ensure it works properly
+                
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   final navigator = mainNavigatorKey.currentState;
                   if (navigator != null) {
@@ -325,7 +325,7 @@ class _MyAppState extends State<MyApp> {
                         ),
                       );
                     } else if (authState is AuthTwoFactorRequired) {
-                      // Show LoginPage - the 2FA screen will be pushed on top via navigation
+                      
                       return const LoginPage();
                     } else {
                       

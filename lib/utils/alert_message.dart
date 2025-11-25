@@ -15,11 +15,11 @@ class CustomAlert {
     final messenger = scaffoldMessengerKey.currentState;
     if(messenger == null) return;
     
-    // Hide any existing SnackBar to prevent Hero tag conflicts
+    
     messenger.hideCurrentSnackBar();
     
-    // Use a small delay to ensure previous SnackBar is fully dismissed
-    // This prevents Hero tag conflicts when multiple SnackBars are shown quickly
+    
+    
     Future.delayed(const Duration(milliseconds: 100), () {
       final currentMessenger = scaffoldMessengerKey.currentState;
       if (currentMessenger != null) {

@@ -180,10 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                // Container(
-                //   height: UIConfig.accentLineHeight,
-                //   color: UIConfig.accentColorBlue,
-                // ),
+                
+                
+                
+                
               ],
             );
           },
@@ -241,8 +241,8 @@ class _SigninPageState extends State<SigninPage> {
           
         } else if (state is AuthAuthenticated) {
           
-          // Success message is shown in main.dart after navigation completes
-          // to ensure it displays properly after route changes
+          
+          
           
           try {
             final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
@@ -335,7 +335,7 @@ class _SigninPageState extends State<SigninPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomButton(
-                      // width: UIConfig.buttonWidthForgotPassword,
+                      
                       dynamicWidth: true,
                       text: "CANCEL",
                       isRed: true,
@@ -346,7 +346,7 @@ class _SigninPageState extends State<SigninPage> {
                       },
                     ),
                     CustomButton(
-                      // width: UIConfig.buttonWidthForgotPassword,
+                      
                       dynamicWidth: true,
                       text: "SEND EMAIL",
                       onPressed: () async {
@@ -564,7 +564,7 @@ class _AutoLoginState extends State<AutoLogin> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
-          // Close the dialog immediately when loading starts (after successful biometric scan)
+          
           if (mounted) {
             Navigator.of(context).pop();
           }
@@ -587,7 +587,7 @@ class _AutoLoginState extends State<AutoLogin> {
             Navigator.of(context).pop();
           }
         } else if (state is AuthTwoFactorRequired) {
-          // Close the dialog - navigation to 2FA screen is handled in main.dart
+          
           if (mounted) {
             Navigator.of(context).pop();
           }

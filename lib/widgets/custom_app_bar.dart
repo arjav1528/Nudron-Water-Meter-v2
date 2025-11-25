@@ -37,7 +37,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           color: Colors.transparent,
           child: Column(
             children: [
-              // Extend app bar background above the notch
+              
               Container(
                 height: topPadding,
                 color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
@@ -79,12 +79,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       children: [
                         Consumer<ThemeNotifier>(
                           builder: (context, themeNotifier, child) {
-                            // Determine splash color based on current theme
-                            // Dark mode -> Light mode: black splash
-                            // Light mode -> Dark mode: white splash
+                            
+                            
+                            
                             final splashColor = themeNotifier.isDark
-                                ? Colors.black.withOpacity(0.4) // Black splash for dark->light
-                                : Colors.white.withOpacity(0.4); // White splash for light->dark
+                                ? Colors.black.withOpacity(0.4) 
+                                : Colors.white.withOpacity(0.4); 
                             
                             return Material(
                               color: Colors.transparent,
@@ -110,7 +110,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             );
                           },
                         ),
-                        // SizedBox(width: UIConfig.spacingSmall),
+                        
                         BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                             bool isUserLoggedIn = state is AuthAuthenticated;

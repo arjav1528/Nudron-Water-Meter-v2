@@ -225,7 +225,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                             Navigator.of(context).pop();
                           },
                         ),
-                        // SizedBox(width: 12.w),
+                        
                         CustomButton(
                           text: "CONFIRM",
                           dynamicWidth: true,
@@ -389,7 +389,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                         onTap: _showAddProjectDialog,
                                         child: Container(
                                           height: 30.h,
-                                          // width: 30.w,
+                                          
                                           decoration: BoxDecoration(
                                             borderRadius: UIConfig
                                                 .borderRadiusCircularSmall,
@@ -446,10 +446,10 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           ),
                         ),
                         Spacer(),
-                        // Container(
-                        //   height: UIConfig.accentLineHeight,
-                        //   color: UIConfig.color14414e,
-                        // ),
+                        
+                        
+                        
+                        
                       ],
                     ),
                   ),

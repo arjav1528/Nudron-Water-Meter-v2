@@ -16,10 +16,10 @@ class Utils {
   }
 
   static DateTime parseMMMYYToDate(String dateStr) {
-    // Clean the date string (remove asterisks and trim)
+    
     String cleanedDateStr = dateStr.trim().replaceAll('*', '');
     
-    // Handle "DD-MMM-YY" format (e.g., "11-Oct-25")
+    
     if (cleanedDateStr.contains('-')) {
       List<String> parts = cleanedDateStr.split('-');
       if (parts.length == 3) {
@@ -27,7 +27,7 @@ class Utils {
         String monthStr = parts[1];
         String yearStr = parts[2];
         
-        // Convert 2-digit year to 4-digit year
+        
         int year = int.tryParse(yearStr) ?? 0;
         if (year < 100) {
           year = year < 50 ? 2000 + year : 1900 + year;
@@ -53,7 +53,7 @@ class Utils {
       }
     }
     
-    // Handle "MMM YY" format (e.g., "Oct 2025")
+    
     List<String> parts = cleanedDateStr.split(' ');
     if (parts.length != 2) return DateTime(1900); 
 

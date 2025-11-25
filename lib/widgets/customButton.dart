@@ -17,13 +17,13 @@ class CustomButton extends StatelessWidget {
   final bool isEnabled;
   bool arrowWidget = false;
 
-  // final double horizontalPadding;
+  
 
   CustomButton({
     super.key,
     required this.text,
     this.width,
-    // this.horizontalPadding=35,
+    
     this.fontSize,
     this.dynamicWidth = false,
     required this.onPressed,
@@ -50,7 +50,7 @@ class CustomButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                // color: Colors.green,
+                
                 height: 44.h,
 
                 width: dynamicWidth ? null : (width ?? 112.w),

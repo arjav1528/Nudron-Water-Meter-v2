@@ -34,8 +34,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-        // Only set the key if we're on the normal screen (screenIndex == 0)
-        // This prevents conflicts with BackgroundChart which uses screenIndex == 1
+        
+        
         if (dashboardBloc.screenIndex == 0) {
           dashboardBloc.changeKey(_repaintBoundaryKey);
         }
@@ -56,7 +56,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
             ? dashboardBloc.currentFilters.first
             : null;
 
-        // Update the key when screen changes to this one (screenIndex == 0)
+        
         if (state is ChangeScreen && mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted && dashboardBloc.screenIndex == 0) {
@@ -107,7 +107,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                                     },
                                     child: Container(
                                       height: UIConfig.backButtonHeight,
-                                      // width: UIConfig.backButtonWidth,
+                                      
                                       decoration: BoxDecoration(
                                           shape: BoxShape.rectangle,
                                           borderRadius: UIConfig.borderRadiusCircularMedium,
@@ -240,8 +240,8 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
 
   @override
   void dispose() {
-    // Clear the key reference when disposing to avoid conflicts
-    // Only clear if this widget's key is currently set in the bloc
+    
+    
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
     if (dashboardBloc.repaintBoundaryKey == _repaintBoundaryKey && dashboardBloc.screenIndex == 0) {
       dashboardBloc.repaintBoundaryKey = GlobalKey();

@@ -74,7 +74,7 @@ class _SummaryTableState extends State<SummaryTable> {
             }
           }
         } catch (e) {
-          // Widget may be disposed
+          
         }
       },
       builder: (context, state){
@@ -111,7 +111,7 @@ class _SummaryTableState extends State<SummaryTable> {
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
-                            // width: UIConfig.backButtonWidth,
+                            
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 borderRadius: UIConfig.borderRadiusCircularMedium,

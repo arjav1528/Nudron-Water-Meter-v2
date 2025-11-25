@@ -32,7 +32,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
   @override
   void initState() {
     super.initState();
-    // Initialize with default dates immediately to prevent "Select Month Range" flash
+    
     final now = DateTime.now();
     final minDate = DateTime(2020, 1, 1);
     final maxDate = DateTime(now.year, now.month, now.day);
@@ -50,7 +50,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     startDate = defaultStart;
     endDate = defaultEnd;
     
-    // Sync with bloc after first frame to get any existing dates from bloc
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _syncWithBlocDates();
     });
@@ -60,7 +60,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
     
     if (dashboardBloc.selectedStartDate != null && dashboardBloc.selectedEndDate != null) {
-      // Only update if bloc has different dates
+      
       if (startDate != dashboardBloc.selectedStartDate || endDate != dashboardBloc.selectedEndDate) {
         setState(() {
           startDate = dashboardBloc.selectedStartDate;
@@ -68,7 +68,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         });
       }
     } else {
-      // Sync default dates to bloc so Excel export uses correct dates
+      
       dashboardBloc.selectedStartDate = startDate;
       dashboardBloc.selectedEndDate = endDate;
     }
@@ -91,7 +91,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
             });
           }
         } else if (startDate != null && endDate != null) {
-          // If widget has dates but bloc doesn't (e.g., after hot reload), sync to bloc
+          
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted && (dashboardBloc.selectedStartDate == null || dashboardBloc.selectedEndDate == null)) {
               dashboardBloc.selectedStartDate = startDate;
@@ -146,18 +146,18 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ),
                       ),
                     ),
-                    // Center(
-                    //   child: Icon(
-                    //     // weight: 1,
-                    //     Icons.calendar_month,
-                    //     color: isDialogOpen
-                    //         ? UIConfig.accentColorGreen
-                    //         : Provider.of<ThemeNotifier>(context)
-                    //             .currentTheme
-                    //             .basicAdvanceTextColor,
-                    //     size: UIConfig.iconSizeLarge,
-                    //   ),
-                    // ),
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     Center(
                       child: SvgPicture.asset(
                         'assets/icons/calendar_month.svg',
@@ -238,7 +238,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                     
                     constraints: BoxConstraints(
                       maxWidth: UIConfig.desktopDrawerWidthMin - 60.w,
-                      // maxHeight: UIConfig.dialogMaxHeight + 150.h,
+                      
                     ),
                   decoration: BoxDecoration(
                     color: currentTheme.dialogBG,
@@ -274,9 +274,9 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ],
                       ),
                       SizedBox(
-                          // color: Colors.red,
+                          
 
-                          // width: PlatformUtils.isMobile ? UIConfig.desktopDrawerWidthMin - 90.w : dialogWidth - UIConfig.spacingXXXLarge,
+                          
                           width: UIConfig.desktopDrawerWidthMin - 90.w,
                           height: PlatformUtils.isMobile ? UIConfig.dialogMaxHeight * 0.6 : null,
                           child: RangeDatePicker(
@@ -522,20 +522,20 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
                       SizedBox(height: 30.h,),
 
-                      // Container(
-                      //   width: UIConfig.desktopDrawerWidthMin - 120.w,
-                      //   // padding: UIConfig.paddingSymmetricVerticalSmall,
-                      //   child: Text(
-                      //     'Select start and end dates',
-                      //     style: TextStyle(
-                      //       color: currentTheme.gridHeadingColor,
-                      //       fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 14.0),
-                      //       fontStyle: FontStyle.italic,
-                      //     ),
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
-                      //   SizedBox(height: 30.h,),
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
 
                       SizedBox(
 

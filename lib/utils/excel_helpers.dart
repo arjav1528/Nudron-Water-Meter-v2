@@ -53,7 +53,7 @@ class ExcelHelper {
             startDate = bloc.selectedStartDate!;
             endDate = bloc.selectedEndDate!;
           } else {
-            // Fallback to current month if dates are not set
+            
             final now = DateTime.now();
             startDate = DateTime(now.year, now.month, 1);
             endDate = DateTime(now.year, now.month + 1, 0);
@@ -81,13 +81,13 @@ class ExcelHelper {
 
         List<dynamic> columnNames = data[0];
         
-        // Process headers: use getActualTitle for ! columns, cleanFieldName for others in devices table
+        
         List<TextCellValue> textColumnNames;
         if (isDevicesTable) {
           textColumnNames = columnNames
               .map((e) {
                 String columnName = e.toString();
-                // Use getActualTitle for columns starting with ! (like !AI0, !St1)
+                
                 if (columnName.isNotEmpty && columnName[0] == '!') {
                   return TextCellValue(getActualTitle(columnName));
                 } else {
@@ -108,16 +108,16 @@ class ExcelHelper {
           for (int j = 0; j < rows[i].length; j++) {
             var cellValue = rows[i][j];
             
-            // Process cell value for devices table
+            
             if (isDevicesTable && columnNames.length > j) {
               String fieldName = columnNames[j].toString();
               
-              // Process fields starting with '%' (Last Seen)
+              
               if (fieldName.isNotEmpty && fieldName[0] == '%') {
                 String processedValue = Utils.lastSeenFromMilliseconds(cellValue).toString();
                 row.add(TextCellValue(processedValue));
               }
-              // Process fields starting with '@' (Last Record)
+              
               else if (fieldName.isNotEmpty && fieldName[0] == '@') {
                 String lastSeenDate = NudronChartMap.convertDaysToDate(cellValue.toString());
                 if (lastSeenDate == '01-Jan-20') {
@@ -125,14 +125,14 @@ class ExcelHelper {
                 }
                 row.add(TextCellValue(lastSeenDate));
               }
-              // Regular cell value
+              
               else {
                 row.add((cellValue is num
                     ? DoubleCellValue(cellValue.toDouble())
                     : TextCellValue(cellValue.toString())));
               }
             } else {
-              // Regular processing for non-devices table
+              
               row.add((cellValue is num
                   ? DoubleCellValue(cellValue.toDouble())
                   : TextCellValue(cellValue.toString())));
@@ -152,7 +152,7 @@ class ExcelHelper {
         }
 
         for (var i = 1; i <= rows.length; i++) {
-          // Check if this is the average row (last row with "Average" in first cell for billing)
+          
           bool isAverageRow = (exportType == 'billing' && 
                                i == rows.length && 
                                rows.isNotEmpty &&

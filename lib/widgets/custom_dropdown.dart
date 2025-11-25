@@ -43,7 +43,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate font size gradient for desktop
+    
     final totalWidth = PlatformUtils.isMobile 
         ? null 
         : UIConfig.getDesktopDropdownTotalWidth(widget.width1, widget.width2);
@@ -230,7 +230,7 @@ class CustomDropdownButton2 extends StatefulWidget {
   final double width2;
   final bool fieldNameVisible;
   final double? desktopDropdownWidth;
-  final double? customFontSize; // Optional custom font size for responsive behavior
+  final double? customFontSize; 
 
   const CustomDropdownButton2({
     super.key,
@@ -318,12 +318,12 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
     }
     final size = renderBox.size;
 
-    // Use custom font size if provided, otherwise calculate normally
+    
     final double fontSize;
     if (widget.customFontSize != null) {
       fontSize = widget.customFontSize!;
     } else {
-      // Calculate font size gradient for desktop (default behavior)
+      
       final totalWidth = PlatformUtils.isMobile 
           ? null 
           : (widget.width1 + widget.width2 + 30.0 + 20.0);
@@ -400,13 +400,13 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
 
   @override
   Widget build(BuildContext context) {
-    // Use custom font size if provided, otherwise calculate normally
-    // This allows specific dropdowns to have responsive font sizes
+    
+    
     final double fontSize;
     if (widget.customFontSize != null) {
       fontSize = widget.customFontSize!;
     } else {
-      // Calculate font size gradient for desktop (default behavior)
+      
       final totalWidth = PlatformUtils.isMobile 
           ? null 
           : UIConfig.getDesktopDropdownTotalWidth(widget.width1, widget.width2);
@@ -422,7 +422,7 @@ class _CustomDropdownButton2State extends State<CustomDropdownButton2> {
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: PlatformUtils.isMobile 
-                ? MediaQuery.of(context).size.width - (UIConfig.spacingMedium.w * 2) - 0.w // Extra 8.w buffer to prevent overflow
+                ? MediaQuery.of(context).size.width - (UIConfig.spacingMedium.w * 2) - 0.w 
                 : double.infinity,
           ),
           child: Row(

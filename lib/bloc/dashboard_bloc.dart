@@ -60,9 +60,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Future<void> captureSS() async {
     if (Platform.isAndroid) {
       try {
-        // Only switch to fullscreen if we're not already there
-        // But since we want to capture from normal view with project name and selector,
-        // we'll capture directly without switching
+        
+        
+        
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext!
               .findRenderObject() as RenderRepaintBoundary;
@@ -111,9 +111,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         Platform.isWindows ||
         Platform.isLinux) {
       try {
-        // Only switch to fullscreen if we're not already there
-        // But since we want to capture from normal view with project name and selector,
-        // we'll capture directly without switching
+        
+        
+        
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           
           RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext!
@@ -173,7 +173,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   List<String> currentFilters = [];
   
-  // Initialize selectedStartDate and selectedEndDate to current month's first day to today
+  
   void _initializeSelectedDates() {
     if (selectedStartDate == null || selectedEndDate == null) {
       final now = DateTime.now();
@@ -660,7 +660,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Future<void> _loadSummaryDataWithCache() async {
     if (currentFilters.isEmpty) return;
     
-    // Ensure dates are initialized
+    
     _initializeSelectedDates();
     
     if (selectedStartDate == null || selectedEndDate == null) {

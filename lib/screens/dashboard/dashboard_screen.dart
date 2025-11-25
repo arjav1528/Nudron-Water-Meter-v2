@@ -622,18 +622,18 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               height: 12.h,
               color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
             ),
-            // BlocBuilder<DashboardBloc, DashboardState>(
-            //   buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
-            //   builder: (context, state) {
-            //     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-            //     int currentNavPos = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
-            //     final clampedNavPos = currentNavPos.clamp(0, selectedColor.length - 1);
-            //     return Container(
-            //       height: UIConfig.accentLineHeight,
-            //       color: selectedColor[clampedNavPos],
-            //     );
-            //   },
-            // ),
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           ],
         ),
       ),
