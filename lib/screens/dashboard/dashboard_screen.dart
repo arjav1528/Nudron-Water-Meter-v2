@@ -221,7 +221,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         children: [
           Container(
             height: UIConfig.accentLineHeight,
-            color: selectedColor[drawerIndex],
+            color: selectedColor[currentNavPos.clamp(0, selectedColor.length - 1)],
           ),
           // Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.2)),
           Expanded(
@@ -242,7 +242,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
           ),
           Container(
             height: UIConfig.accentLineHeight,
-            color: selectedColor[drawerIndex],
+            color: selectedColor[currentNavPos.clamp(0, selectedColor.length - 1)],
           ),
         ],
       ),
