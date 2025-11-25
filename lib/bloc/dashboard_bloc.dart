@@ -60,18 +60,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Future<void> captureSS() async {
     if (Platform.isAndroid) {
       try {
-        if (screenIndex == 0) {
-          screenIndex = 1;
-          emit(ChangeScreen());
-        }
-
+        // Only switch to fullscreen if we're not already there
+        // But since we want to capture from normal view with project name and selector,
+        // we'll capture directly without switching
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext!
               .findRenderObject() as RenderRepaintBoundary;
 
           ui.Image image = await boundary.toImage(pixelRatio: 3);
-          screenIndex = 0;
-          emit(ChangeScreen());
           ByteData? byteData =
               await image.toByteData(format: ui.ImageByteFormat.png);
 
@@ -113,19 +109,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         Platform.isWindows ||
         Platform.isLinux) {
       try {
-        if (screenIndex == 0) {
-          screenIndex = 1;
-          emit(ChangeScreen());
-        }
-
+        // Only switch to fullscreen if we're not already there
+        // But since we want to capture from normal view with project name and selector,
+        // we'll capture directly without switching
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           
           RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext!
               .findRenderObject() as RenderRepaintBoundary;
 
           ui.Image image = await boundary.toImage(pixelRatio: 3);
-          screenIndex = 0;
-          emit(ChangeScreen());
           ByteData? byteData =
               await image.toByteData(format: ui.ImageByteFormat.png);
 

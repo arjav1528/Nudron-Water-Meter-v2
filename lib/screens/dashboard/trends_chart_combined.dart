@@ -25,6 +25,16 @@ class TrendsChartCombined extends StatefulWidget {
 
 class _TrendsChartCombinedState extends State<TrendsChartCombined> {
   String? _lastProject;
+  final GlobalKey _repaintBoundaryKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+      dashboardBloc.changeKey(_repaintBoundaryKey);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,132 +58,153 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
             ? dashboardBloc.currentFilters.first.toUpperCase()
             : "NO PROJECT SELECTED";
 
-        return Column(
-          children: [
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorYellow,
-            ),
-            Container(
-              height: UIConfig.headerSectionHeight,
-              padding: EdgeInsets.only(
-                  left: UIConfig.spacingLarge.w,
-                  right: (UIConfig.spacingExtraLarge - 1).w),
-              child: Row(
-                children: [
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/projectSelection');
-                      },
-                      child: Container(
-                        height: UIConfig.backButtonHeight,
-                        // width: UIConfig.backButtonWidth,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: UIConfig.borderRadiusCircularMedium,
-                            color: UIConfig.colorTransparent,
-                            border: GradientBoxBorder(
-                              width: UIConfig.chartBorderWidth,
-                              gradient: LinearGradient(
-                                colors: [
-                                  UIConfig.accentColorYellow,
-                                  UIConfig.accentColorYellow
-                                      .withOpacity(UIConfig.opacityVeryHigh),
-                                  Provider.of<ThemeNotifier>(context)
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: RepaintBoundary(
+                    key: _repaintBoundaryKey,
+                    child: Column(
+                      children: [
+                          Container(
+                            height: UIConfig.accentLineHeight,
+                            color: UIConfig.accentColorYellow,
+                          ),
+                          Container(
+                            height: UIConfig.headerSectionHeight,
+                            color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
+                            padding: EdgeInsets.only(
+                                left: UIConfig.spacingLarge.w,
+                                right: (UIConfig.spacingExtraLarge - 1).w),
+                            child: Row(
+                              children: [
+                                MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .pushReplacementNamed('/projectSelection');
+                                    },
+                                    child: Container(
+                                      height: UIConfig.backButtonHeight,
+                                      // width: UIConfig.backButtonWidth,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius: UIConfig.borderRadiusCircularMedium,
+                                          color: UIConfig.colorTransparent,
+                                          border: GradientBoxBorder(
+                                            width: UIConfig.chartBorderWidth,
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                UIConfig.accentColorYellow,
+                                                UIConfig.accentColorYellow
+                                                    .withOpacity(UIConfig.opacityVeryHigh),
+                                                Provider.of<ThemeNotifier>(context)
+                                                    .currentTheme
+                                                    .gridLineColor,
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                          )),
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          'assets/icons/back_arrow.svg',
+                                          height: UIConfig.projectIconHeight,
+                                          width: UIConfig.projectIconWidth,
+                                          colorFilter: ColorFilter.mode(
+                                            Provider.of<ThemeNotifier>(context)
+                                                .currentTheme
+                                                .basicAdvanceTextColor,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                UIConfig.spacingSizedBoxMedium,
+                                SvgPicture.asset(
+                                  'assets/icons/project.svg',
+                                  color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
-                                      .gridLineColor,
-                                ],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              ),
-                            )),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/icons/back_arrow.svg',
-                            height: UIConfig.projectIconHeight,
-                            width: UIConfig.projectIconWidth,
-                            colorFilter: ColorFilter.mode(
-                              Provider.of<ThemeNotifier>(context)
-                                  .currentTheme
-                                  .basicAdvanceTextColor,
-                              BlendMode.srcIn,
+                                      .basicAdvanceTextColor,
+                                  height: UIConfig.projectIconHeight,
+                                  width: UIConfig.projectIconWidth,
+                                ),
+                                UIConfig.spacingSizedBoxSmall,
+                                Expanded(
+                                  child: Text(
+                                    currentProject.toUpperCase(),
+                                    style: TextStyle(
+                                        color: Provider.of<ThemeNotifier>(context)
+                                            .currentTheme
+                                            .basicAdvanceTextColor,
+                                        fontFamily: GoogleFonts.robotoMono().fontFamily,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: UIConfig.fontSizeLargeResponsive,
+                                        letterSpacing: UIConfig.letterSpacingSp),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.clip,
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
+                          Container(
+                            height: UIConfig.accentLineHeight,
+                            color: UIConfig.accentColorYellow,
+                          ),
+                          CustomMultipleSelectorHorizontal(),
+                          Container(
+                            height: UIConfig.accentLineHeight,
+                            color: UIConfig.accentColorYellow,
+                          ),
+                          Expanded(
+                            child: BlocBuilder<DashboardBloc, DashboardState>(
+                                buildWhen: (previous, current) {
+                              if (current is RefreshDashboard2 ||
+                                  current is RefreshDashboard) {
+                                return true;
+                              }
+                              return false;
+                            }, builder: (context, state) {
+                              return TrendsChart(
+                                chartData: dashboardBloc.nudronChartData,
+                              );
+                            }),
+                          ),
+                          Container(
+                            height: UIConfig.accentLineHeight,
+                            color: UIConfig.accentColorYellow,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  UIConfig.spacingSizedBoxMedium,
-                  SvgPicture.asset(
-                    'assets/icons/project.svg',
-                    color: Provider.of<ThemeNotifier>(context)
-                        .currentTheme
-                        .basicAdvanceTextColor,
-                    height: UIConfig.projectIconHeight,
-                    width: UIConfig.projectIconWidth,
-                  ),
-                  UIConfig.spacingSizedBoxSmall,
-                  Text(
-                    currentProject.toUpperCase(),
-                    style: TextStyle(
-                        color: Provider.of<ThemeNotifier>(context)
-                            .currentTheme
-                            .basicAdvanceTextColor,
-                        fontFamily: GoogleFonts.robotoMono().fontFamily,
-                        fontWeight: FontWeight.w500,
-                        fontSize: UIConfig.fontSizeMediumResponsive,
-                        letterSpacing: UIConfig.letterSpacingSp),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorYellow,
-            ),
-            CustomMultipleSelectorHorizontal(),
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorYellow,
-            ),
-            Expanded(
-              child: BlocBuilder<DashboardBloc, DashboardState>(
-                  buildWhen: (previous, current) {
-                if (current is RefreshDashboard2 ||
-                    current is RefreshDashboard) {
-                  return true;
-                }
-                return false;
-              }, builder: (context, state) {
-                return TrendsChart(
-                  chartData: dashboardBloc.nudronChartData,
-                );
-              }),
-            ),
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorYellow,
-            ),
-            Expanded(
-              child: BlocBuilder<DashboardBloc, DashboardState>(
-                  buildWhen: (previous, current) {
-                if (current is RefreshDashboard2 ||
-                    current is RefreshDashboard) {
-                  return true;
-                }
-                return false;
-              }, builder: (context, state) {
-                return TrendsTable();
-              }),
-            ),
-            Container(
-              height: UIConfig.accentLineHeight,
-              color: UIConfig.accentColorYellow,
-            ),
-          ],
+                Expanded(
+                  flex: 1,
+                  child: BlocBuilder<DashboardBloc, DashboardState>(
+                      buildWhen: (previous, current) {
+                    if (current is RefreshDashboard2 ||
+                        current is RefreshDashboard) {
+                      return true;
+                    }
+                    return false;
+                  }, builder: (context, state) {
+                    return TrendsTable();
+                  }),
+                ),
+                Container(
+                  height: UIConfig.accentLineHeight,
+                  color: UIConfig.accentColorYellow,
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -184,6 +215,12 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
     super.didUpdateWidget(oldWidget);
     final dashboardBloc =
         BlocProvider.of<DashboardBloc>(context, listen: false);
+    // Ensure the repaint boundary key is always current
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        dashboardBloc.changeKey(_repaintBoundaryKey);
+      }
+    });
     if (dashboardBloc.currentFilters.isNotEmpty && mounted) {
       setState(() {});
     }
