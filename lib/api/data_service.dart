@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../utils/custom_exception.dart';
@@ -435,6 +436,7 @@ class DataPostRequests {
       response = await _makeRequest(
         body,
         url: wm1Url,
+        apiName: 'Get Filters',
       );
     }
 
@@ -479,6 +481,7 @@ class DataPostRequests {
       response = await _makeRequest(
         body,
         url: wm1Url,
+        apiName: 'Get Chart Data',
       );
     }
 
@@ -521,7 +524,7 @@ class DataPostRequests {
     if (project.toLowerCase() == 'test') {
       response = await getDummyBillingData();
     } else {
-      response = await _makeRequest(body, url: wm1Url);
+      response = await _makeRequest(body, url: wm1Url, apiName: 'Get Billing Data');
     }
     
     return jsonDecode(response);
@@ -563,7 +566,7 @@ class DataPostRequests {
     if (project.toLowerCase() == 'test') {
       response = await getDummyBillingData();
     } else {
-      response = await _makeRequest(body, url: wm1Url);
+      response = await _makeRequest(body, url: wm1Url, apiName: 'Get Billing Data By Date Range');
     }
     return jsonDecode(response);
   }
@@ -574,16 +577,22 @@ class DataPostRequests {
     final response = await _makeRequest(
       body,
       url: wm1Url,
+      apiName: 'Set Billing Formula',
     );
     return jsonDecode(response);
   }
 
   static Future<String> _makeRequest(String requestBody,
-      {String url = wm1Url, Duration? timeout}) async {
+      {String url = wm1Url, Duration? timeout, String? apiName}) async {
+    final startTime = DateTime.now();
 
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
     if (connectivityResult.contains(ConnectivityResult.none)) {
+      final duration = DateTime.now().difference(startTime).inMilliseconds;
+      if (apiName != null) {
+        debugPrint('$apiName API : ${duration}ms Failed');
+      }
       throw CustomException('No internet connection');
     }
     
@@ -611,9 +620,17 @@ class DataPostRequests {
         String responseBody;
         if (response.statusCode == 200) {
           responseBody = await response.stream.bytesToString().timeout(effectiveTimeout);
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Success');
+          }
           return responseBody;
         } else {
           responseBody = await response.stream.bytesToString().timeout(const Duration(seconds: 5));
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           if (response.statusCode == 401 || response.statusCode == 403) {
             await AuthService.logout(notifyListeners: true);
             throw CustomException('Redirecting to login page..Please login again');
@@ -630,6 +647,10 @@ class DataPostRequests {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Request timed out after $_maxRetries attempts');
       } on SocketException catch (e) {
         lastException = e;
@@ -640,10 +661,18 @@ class DataPostRequests {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Network connection failed: ${e.message}');
       } catch (e) {
         
         if (e is CustomException && e.message.contains('login')) {
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           rethrow;
         }
         lastException = e is Exception ? e : Exception(e.toString());
@@ -653,10 +682,18 @@ class DataPostRequests {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Network error: ${e.toString()}');
       }
     }
     
+    final duration = DateTime.now().difference(startTime).inMilliseconds;
+    if (apiName != null) {
+      debugPrint('$apiName API : ${duration}ms Failed');
+    }
     throw CustomException('Network error after $_maxRetries attempts: ${lastException?.toString()}');
   }
 }

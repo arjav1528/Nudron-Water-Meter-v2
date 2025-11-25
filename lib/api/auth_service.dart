@@ -70,7 +70,7 @@ class LoginPostRequests {
     }
     const body = '07';
 
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Token Check');
     return jsonDecode(response);
   }
 
@@ -166,7 +166,7 @@ class LoginPostRequests {
   static Future<int> signUp(
       String actCode, String fullName, String email, String phone) async {
     final body = '00$actCode|$fullName|$email|$phone';
-    final response = await _makeRequest(body);
+    final response = await _makeRequest(body, apiName: 'Sign Up');
     try {
       await SmsAutoFill().listenForCode();
     } catch (e) {
@@ -186,7 +186,7 @@ class LoginPostRequests {
     final passwordBase64 = base64.encode(utf8.encode(pass));
 
     final body = '01$actCode|$passwordBase64|$emCode|$phCode';
-    final response = await _makeRequest(body);
+    final response = await _makeRequest(body, apiName: 'Contact Verification');
     if (response == '0') {
       throw CustomException('Incorrect email or phone code');
     }
@@ -202,7 +202,7 @@ class LoginPostRequests {
 
     final body = '02$email|$passwordBase64';
 
-    final response = await _makeRequest(body);
+    final response = await _makeRequest(body, apiName: 'Login');
     final splitResponse = response.split('|');
     if (response == '0') {
       throw CustomException('Incorrect email or password');
@@ -233,7 +233,7 @@ class LoginPostRequests {
       String refCode, String twoFactorCode) async {
     final body = '03$refCode|$twoFactorCode';
     
-    final response = await _makeRequest(body);
+    final response = await _makeRequest(body, apiName: 'Two Factor Code');
     final splitResponse = response.split('|');
     if (response == '0') {
       throw CustomException('Incorrect code');
@@ -257,7 +257,7 @@ class LoginPostRequests {
     }
 
     final body = '04$refToken';
-    final response = await _makeRequest(body);
+    final response = await _makeRequest(body, apiName: 'Refresh Token');
     final splitResponse = response.split('|');
     if (response == '0') {
       await deleteDataAndLogout();
@@ -276,7 +276,7 @@ class LoginPostRequests {
 
   static Future<int> forgotPassword(String email) async {
     final body = '05$email';
-    final response = await _makeRequest(body);
+    final response = await _makeRequest(body, apiName: 'Forgot Password');
     if (response == '0') {
       throw CustomException('Error processing request');
     }
@@ -289,7 +289,7 @@ class LoginPostRequests {
     final newPassB64 = base64.encode(utf8.encode(newPass));
 
     final body = '00$oldPassB64|$fullName|$email|$phone|$newPassB64';
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Update Info');
 
     if (response == '0') {
       throw CustomException('Incorrect old password');
@@ -304,7 +304,7 @@ class LoginPostRequests {
 
   static Future<String> addProject(String activationCode) async {
     final body = '04$activationCode';
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Add Project');
 
     if (response == '0') {
       throw CustomException('Incorrect activation code. Please check again');
@@ -315,7 +315,7 @@ class LoginPostRequests {
 
   static Future<String> verifyEmailPhone(String emCode, String phCode) async {
     final body = '10$emCode|$phCode';
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Verify Email Phone');
     if (response == '00' ||
         response == '02' ||
         response == '10' ||
@@ -339,7 +339,7 @@ class LoginPostRequests {
 
   static Future<List<String?>> enableTwoFactorAuth(int mode) async {
     final body = '02$mode';
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Enable Two Factor');
 
     if (response == '0') {
       throw CustomException('Error processing request');
@@ -357,7 +357,7 @@ class LoginPostRequests {
 
   static Future<void> disableTwoFactorAuth() async {
     const body = '03';
-    await _makeRequest(body, url: au3Url);
+    await _makeRequest(body, url: au3Url, apiName: 'Disable Two Factor');
     twoFAToggleVal(false);
   }
 
@@ -429,7 +429,7 @@ class LoginPostRequests {
     if (kDebugMode) {
     }
 
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Logout');
     if (response == '0') {
       throw CustomException('Error processing request');
     }
@@ -439,7 +439,7 @@ class LoginPostRequests {
 
   static Future<int> globalLogout() async {
     const body = '09';
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Global Logout');
     if (response == '0') {
       throw CustomException('Error processing request');
     }
@@ -449,7 +449,7 @@ class LoginPostRequests {
 
   static Future<int> deleteAccount() async {
     const body = '05';
-    final response = await _makeRequest(body, url: au3Url);
+    final response = await _makeRequest(body, url: au3Url, apiName: 'Delete Account');
     if (response == '0') {
       throw CustomException('Error processing request');
     }
@@ -458,9 +458,14 @@ class LoginPostRequests {
   }
 
   static Future<String> _makeRequest(String body,
-      {String url = au1Url, Duration? timeout}) async {
+      {String url = au1Url, Duration? timeout, String? apiName}) async {
+    final startTime = DateTime.now();
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
+      final duration = DateTime.now().difference(startTime).inMilliseconds;
+      if (apiName != null) {
+        debugPrint('$apiName API : ${duration}ms Failed');
+      }
       throw CustomException('No internet connection');
     }
     
@@ -495,12 +500,24 @@ class LoginPostRequests {
         if (response.statusCode == 200) {
           
           var resp = await response.stream.bytesToString().timeout(effectiveTimeout);
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Success');
+          }
           return resp;
         } else if (response.statusCode == 401 || response.statusCode == 403) {
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           await deleteDataAndLogout();
           throw CustomException('Redirecting to login page.. Please login again');
         } else {
           String responseBody = await response.stream.bytesToString().timeout(const Duration(seconds: 5));
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           throw CustomException(responseBody);
         }
       } on TimeoutException catch (e) {
@@ -512,6 +529,10 @@ class LoginPostRequests {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Request timed out after $maxRetries attempts');
       } on SocketException catch (e) {
         lastException = e;
@@ -522,10 +543,18 @@ class LoginPostRequests {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Network connection failed: ${e.message}');
       } catch (e) {
         
         if (e is CustomException && e.message.contains('login')) {
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           rethrow;
         }
         lastException = e is Exception ? e : Exception(e.toString());
@@ -535,10 +564,18 @@ class LoginPostRequests {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Network error: ${e.toString()}');
       }
     }
     
+    final duration = DateTime.now().difference(startTime).inMilliseconds;
+    if (apiName != null) {
+      debugPrint('$apiName API : ${duration}ms Failed');
+    }
     throw CustomException('Network error after $maxRetries attempts: ${lastException?.toString()}');
   }
 }

@@ -67,7 +67,7 @@ class AuthService {
       final passwordBase64 = base64.encode(utf8.encode(password));
       final body = '02$email|$passwordBase64';
 
-      final response = await _makeRequest(body, url: _au1Url);
+      final response = await _makeRequest(body, url: _au1Url, apiName: 'Login');
       return _handleLoginResponse(response, email, password);
 
     } catch (e) {
@@ -101,7 +101,7 @@ class AuthService {
   static Future<AuthResult> verifyTwoFactor(String refCode, String code) async {
     try {
       final body = '03$refCode|$code';
-      final response = await _makeRequest(body, url: _au1Url);
+      final response = await _makeRequest(body, url: _au1Url, apiName: 'Two Factor Code');
       
       if (response == '0') {
         return AuthResult.error('Incorrect verification code');
@@ -200,7 +200,7 @@ class AuthService {
       }
 
       final body = '04$refreshToken';
-      final response = await _makeRequest(body, url: _au1Url, timeout: const Duration(seconds: 10));
+      final response = await _makeRequest(body, url: _au1Url, timeout: const Duration(seconds: 10), apiName: 'Refresh Token');
       
       if (response == '0') {
         if (!_isLoggingOut) {
@@ -244,7 +244,7 @@ class AuthService {
       }
 
       const body = '07';
-      final response = await _makeRequest(body, url: _au3Url, timeout: timeout);
+      final response = await _makeRequest(body, url: _au3Url, timeout: timeout, apiName: 'Get User Info');
       
       return jsonDecode(response);
     } catch (e) {
@@ -259,7 +259,7 @@ class AuthService {
       }
 
       final body = '05$email';
-      final response = await _makeRequest(body, url: _au1Url);
+      final response = await _makeRequest(body, url: _au1Url, apiName: 'Forgot Password');
       
       if (response == '0') {
         return AuthResult.error('Error processing request');
@@ -289,7 +289,7 @@ class AuthService {
         try {
           const body = '08';
           
-          await _makeRequest(body, url: _au3Url, timeout: const Duration(seconds: 5));
+          await _makeRequest(body, url: _au3Url, timeout: const Duration(seconds: 5), apiName: 'Logout');
         } catch (e) {
           
         }
@@ -315,7 +315,7 @@ class AuthService {
       _isLoggingOut = true;
       
       const body = '09';
-      await _makeRequest(body, url: _au3Url, timeout: const Duration(seconds: 5));
+      await _makeRequest(body, url: _au3Url, timeout: const Duration(seconds: 5), apiName: 'Global Logout');
     } catch (e) {
     } finally {
       await _clearAuthData();
@@ -330,7 +330,7 @@ class AuthService {
   static Future<AuthResult> deleteAccount() async {
     try {
       const body = '05';
-      final response = await _makeRequest(body, url: _au3Url);
+      final response = await _makeRequest(body, url: _au3Url, apiName: 'Delete Account');
       
       if (response == '0') {
         return AuthResult.error('Error processing request');
@@ -361,7 +361,7 @@ class AuthService {
   static Future<AuthResult> enableTwoFactor(int mode) async {
     try {
       final body = '02$mode';
-      final response = await _makeRequest(body, url: _au3Url);
+      final response = await _makeRequest(body, url: _au3Url, apiName: 'Enable Two Factor');
       
       if (response == '0') {
         return AuthResult.error('Error processing request');
@@ -386,7 +386,7 @@ class AuthService {
   static Future<AuthResult> disableTwoFactor() async {
     try {
       const body = '03';
-      await _makeRequest(body, url: _au3Url);
+      await _makeRequest(body, url: _au3Url, apiName: 'Disable Two Factor');
       await _setTwoFactorEnabled(false);
       return AuthResult.success(message: 'Two-factor authentication disabled');
     } catch (e) {
@@ -561,7 +561,8 @@ class AuthService {
     }
   }
 
-  static Future<String> _makeRequest(String body, {String url = _au1Url, Duration? timeout}) async {
+  static Future<String> _makeRequest(String body, {String url = _au1Url, Duration? timeout, String? apiName}) async {
+    final startTime = DateTime.now();
     
     try {
       final connectivityResult = await Connectivity().checkConnectivity().timeout(
@@ -572,10 +573,16 @@ class AuthService {
       );
       
       if (connectivityResult.contains(ConnectivityResult.none) && connectivityResult.length == 1) {
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('No internet connection');
       }
     } catch (e) {
-      
+      if (e is CustomException && e.message == 'No internet connection') {
+        rethrow;
+      }
     }
 
     const int maxRetries = 3;
@@ -625,8 +632,16 @@ class AuthService {
         if (response.statusCode == 200) {
           
           final responseBody = await response.stream.bytesToString().timeout(effectiveTimeout);
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Success');
+          }
           return responseBody;
         } else if (response.statusCode == 401 || response.statusCode == 403) {
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           
           if (!_isLoggingOut) {
             
@@ -636,6 +651,10 @@ class AuthService {
           throw CustomException('Session expired. Please login again.');
         } else {
           final responseBody = await response.stream.bytesToString().timeout(const Duration(seconds: 5));
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           throw CustomException(responseBody.isNotEmpty ? responseBody : 'Server error');
         }
       } on TimeoutException catch (e) {
@@ -645,6 +664,10 @@ class AuthService {
           final delay = Duration(seconds: initialRetryDelay.inSeconds * (1 << (attempt - 1)));
           await Future.delayed(delay);
           continue;
+        }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
         }
         throw CustomException('Request timed out after $maxRetries attempts');
       } on SocketException catch (e) {
@@ -656,10 +679,18 @@ class AuthService {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Network connection failed: ${e.message}');
       } catch (e) {
         
         if (e is CustomException && e.message.contains('login')) {
+          final duration = DateTime.now().difference(startTime).inMilliseconds;
+          if (apiName != null) {
+            debugPrint('$apiName API : ${duration}ms Failed');
+          }
           rethrow;
         }
         lastException = e is Exception ? e : Exception(e.toString());
@@ -669,10 +700,18 @@ class AuthService {
           await Future.delayed(delay);
           continue;
         }
+        final duration = DateTime.now().difference(startTime).inMilliseconds;
+        if (apiName != null) {
+          debugPrint('$apiName API : ${duration}ms Failed');
+        }
         throw CustomException('Network error: ${e.toString()}');
       }
     }
     
+    final duration = DateTime.now().difference(startTime).inMilliseconds;
+    if (apiName != null) {
+      debugPrint('$apiName API : ${duration}ms Failed');
+    }
     throw CustomException('Network error after $maxRetries attempts: ${lastException?.toString()}');
   }
 }
