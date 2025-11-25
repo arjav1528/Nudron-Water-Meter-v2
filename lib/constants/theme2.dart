@@ -111,7 +111,8 @@ class ThemeNotifier with ChangeNotifier {
       noEntriesColor: const Color(0xFFB0B0B0),
       dropDownColor: const Color(0xFFF5F5F5),
       onSecondaryContainer: const Color(0xffF2F2F2),
-      dialogBG: Colors.white,
+            dialogBG: const Color(0xFFF0F0F0),
+
       textFieldBGProfile: const Color(0xFFF2F2F2),
       popupcolor: const Color(0xFF2D2D2D),
       signInColor: const Color(0xFF515151),

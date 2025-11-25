@@ -547,13 +547,14 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     }
     
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Container(
       width: columnWidths[colIndex],
       height: rowHeight,
       alignment: alignment,
       padding: cellPadding,
       decoration: BoxDecoration(
-        color: theme.dialogBG,
+        color: themeNotifier.isDark ? theme.dialogBG : Colors.white,
         border: Border(
           right: BorderSide(
             color: theme.gridLineColor,
