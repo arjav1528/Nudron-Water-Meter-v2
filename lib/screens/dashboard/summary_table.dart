@@ -58,19 +58,29 @@ class _SummaryTableState extends State<SummaryTable> {
       listenWhen: (previous, current) =>
       current is RefreshDashboard || current is ChangeDashBoardNav,
       listener: (context, state) {
-        final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-        final currentProject = dashboardBloc.currentFilters.isNotEmpty
-            ? dashboardBloc.currentFilters.first
-            : null;
-        
-        if (mounted && _lastProject != currentProject) {
-          _lastProject = currentProject;
-          _billingSearchController.clear();
-          dashboardBloc.filterBillingData('');
-          setState(() {});
+        if (!mounted) return;
+        try {
+          final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+          final currentProject = dashboardBloc.currentFilters.isNotEmpty
+              ? dashboardBloc.currentFilters.first
+              : null;
+          
+          if (_lastProject != currentProject) {
+            _lastProject = currentProject;
+            _billingSearchController.clear();
+            dashboardBloc.filterBillingData('');
+            if (mounted) {
+              setState(() {});
+            }
+          }
+        } catch (e) {
+          // Widget may be disposed
         }
       },
       builder: (context, state){
+        if (!mounted) {
+          return const SizedBox.shrink();
+        }
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
@@ -183,6 +193,9 @@ class _SummaryTableState extends State<SummaryTable> {
                   return false;
                 },
                 builder: (context, state) {
+                  if (!mounted) {
+                    return const SizedBox.shrink();
+                  }
                   final data =
                       BlocProvider.of<DashboardBloc>(context).summaryData;
                   
@@ -216,6 +229,9 @@ class _SummaryTableState extends State<SummaryTable> {
   }
 
   Widget _buildBillingSearchBar(BuildContext context) {
+    if (!mounted) {
+      return const SizedBox.shrink();
+    }
     final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
     final theme = Provider.of<ThemeNotifier>(context);
 

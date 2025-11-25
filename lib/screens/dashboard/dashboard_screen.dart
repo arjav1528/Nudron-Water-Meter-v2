@@ -71,12 +71,20 @@ class _DashboardPageState extends State<DashboardPage> {
           return false;
         }, builder: (context, state) {
             if (state is DashboardPageLoaded || state is ChangeScreen) {
-              return GestureDetector(
-                  onTap: () => FocusScope.of(context).unfocus(),
-                  child: IndexedStack(
-                    index: BlocProvider.of<DashboardBloc>(context).screenIndex,
-                    children: fullScreens,
-                  ));
+              if (!mounted) {
+                return const SizedBox.shrink();
+              }
+              try {
+                final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+                return GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: IndexedStack(
+                      index: dashboardBloc.screenIndex,
+                      children: fullScreens,
+                    ));
+              } catch (e) {
+                return const SizedBox.shrink();
+              }
             } else if (state is DashboardPageError) {
               return Scaffold(
                 body: Center(
@@ -351,20 +359,28 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
 
     return BlocBuilder<DashboardBloc, DashboardState>(
       buildWhen: (previous, current) {
-        final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-        final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
-                              dashboardBloc.filterData != null;
-        
-        return current is DashboardPageLoaded ||
-               current is ChangeScreen ||
-               current is DashboardPageError ||
-               current is DashboardPageInitial ||
-               current is ChangeDashBoardNav ||
-               current is RefreshDashboard ||
-               current is RefreshDashboard2 ||
-               hasDataLoaded;
+        if (!mounted) return false;
+        try {
+          final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+          final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
+                                dashboardBloc.filterData != null;
+          
+          return current is DashboardPageLoaded ||
+                 current is ChangeScreen ||
+                 current is DashboardPageError ||
+                 current is DashboardPageInitial ||
+                 current is ChangeDashBoardNav ||
+                 current is RefreshDashboard ||
+                 current is RefreshDashboard2 ||
+                 hasDataLoaded;
+        } catch (e) {
+          return false;
+        }
       },
       builder: (context, state) {
+        if (!mounted) {
+          return const SizedBox.shrink();
+        }
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         
         final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty && 
@@ -460,6 +476,9 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             BlocBuilder<DashboardBloc, DashboardState>(
               buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
               builder: (context, state) {
+                if (!mounted) {
+                  return const SizedBox.shrink();
+                }
                 final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
                 int currentNavPos = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
                 
@@ -468,28 +487,55 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                 final clampedNavPos = currentNavPos.clamp(0, selectedColor.length - 1);
                 if (drawerIndex != clampedNavPos) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    setState(() {
-                      drawerIndex = clampedNavPos;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        drawerIndex = clampedNavPos;
+                      });
+                    }
                   });
                 }
 
                 return _buildDesktopSideNav(context, currentNavPos, visibleTabs);
               },
             ),
-            Container(
-              width: UIConfig.sidebarWidth,
-              color: selectedColor[BlocProvider.of<DashboardBloc>(context).bottomNavPos % selectedColor.length],
+            Builder(
+              builder: (context) {
+                if (!mounted) {
+                  return Container(
+                    width: UIConfig.sidebarWidth,
+                    color: selectedColor[0],
+                  );
+                }
+                try {
+                  final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+                  return Container(
+                    width: UIConfig.sidebarWidth,
+                    color: selectedColor[dashboardBloc.bottomNavPos % selectedColor.length],
+                  );
+                } catch (e) {
+                  return Container(
+                    width: UIConfig.sidebarWidth,
+                    color: selectedColor[0],
+                  );
+                }
+              },
             ),
             Expanded(
               child: BlocBuilder<DashboardBloc, DashboardState>(
                   buildWhen: (previous, current) => current is ChangeDashBoardNav,
                   builder: (context, state) {
-                    int currentNavPos = BlocProvider.of<DashboardBloc>(context).bottomNavPos;
-                    return IndexedStack(
-                      index: currentNavPos,
-                      children: contentPages,
-                    );
+                    if (!mounted) {
+                      return const SizedBox.shrink();
+                    }
+                    try {
+                      int currentNavPos = BlocProvider.of<DashboardBloc>(context).bottomNavPos;
+                      return IndexedStack(
+                        index: currentNavPos,
+                        children: contentPages,
+                      );
+                    } catch (e) {
+                      return const SizedBox.shrink();
+                    }
                   }),
             ),
           ],
@@ -509,9 +555,12 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             Container(
               height: UIConfig.bottomNavBarHeight,
               color: Provider.of<ThemeNotifier>(context).currentTheme.bottomNavColor,
-              child: BlocBuilder<DashboardBloc, DashboardState>(
+                  child: BlocBuilder<DashboardBloc, DashboardState>(
                 buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
                 builder: (context, state) {
+                  if (!mounted) {
+                    return const SizedBox.shrink();
+                  }
                   final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
                   int currentPositionOfBottomNav = dashboardBloc.bottomNavPos.clamp(0, MainDashboardPage.bottomNavTabs.length - 1);
 
@@ -618,13 +667,20 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                         buildWhen: (previous, current) =>
                             current is ChangeDashBoardNav,
                         builder: (context, state) {
-                          int bottomNavPos =
-                              BlocProvider.of<DashboardBloc>(context)
-                                  .bottomNavPos;
-                          return IndexedStack(
-                            index: bottomNavPos,
-                            children: contentPages,
-                          );
+                          if (!mounted) {
+                            return const SizedBox.shrink();
+                          }
+                          try {
+                            int bottomNavPos =
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .bottomNavPos;
+                            return IndexedStack(
+                              index: bottomNavPos,
+                              children: contentPages,
+                            );
+                          } catch (e) {
+                            return const SizedBox.shrink();
+                          }
                         }),
                   ),
                 ],

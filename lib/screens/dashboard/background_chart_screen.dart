@@ -34,7 +34,13 @@ class _BackgroundChartState extends State<BackgroundChart> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        BlocProvider.of<DashboardBloc>(context).changeScreen();
+        if (mounted) {
+          try {
+            BlocProvider.of<DashboardBloc>(context).changeScreen();
+          } catch (e) {
+            // Widget may be disposed
+          }
+        }
         return Future.value(false);
       },
       child: Scaffold(
@@ -58,7 +64,13 @@ class _BackgroundChartState extends State<BackgroundChart> {
                 ),
               ),
               onPressed: () {
-                BlocProvider.of<DashboardBloc>(context).changeScreen();
+                if (mounted) {
+                  try {
+                    BlocProvider.of<DashboardBloc>(context).changeScreen();
+                  } catch (e) {
+                    // Widget may be disposed
+                  }
+                }
               },
             ),
             actions: [
@@ -120,32 +132,47 @@ class _BackgroundChartState extends State<BackgroundChart> {
           child: BlocListener<DashboardBloc, DashboardState>(
             listenWhen: (previous, current) => current is ChangeScreen,
             listener: (context, state) {
-              final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+              if (!mounted) return;
               // Update the key when screen changes to this one (screenIndex == 1)
               if (state is ChangeScreen && mounted) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted && dashboardBloc.screenIndex == 1) {
-                    dashboardBloc.changeKey(_repaintBoundaryKey);
+                  if (mounted) {
+                    try {
+                      final bloc = BlocProvider.of<DashboardBloc>(context);
+                      if (bloc.screenIndex == 1) {
+                        bloc.changeKey(_repaintBoundaryKey);
+                      }
+                    } catch (e) {
+                      // Widget may be disposed
+                    }
                   }
                 });
               }
             },
             child: BlocBuilder<DashboardBloc, DashboardState>(
               buildWhen: (previous, current) {
-                final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-                final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty &&
-                    dashboardBloc.filterData != null;
+                if (!mounted) return false;
+                try {
+                  final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+                  final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty &&
+                      dashboardBloc.filterData != null;
 
-                return current is DashboardPageLoaded ||
-                    current is RefreshDashboard2 ||
-                    current is RefreshDashboard ||
-                    current is DashboardPageError ||
-                    current is ChangeScreen ||
-                    current is ChangeDashBoardNav ||
-                    current is DashboardPageInitial ||
-                    hasDataLoaded;
+                  return current is DashboardPageLoaded ||
+                      current is RefreshDashboard2 ||
+                      current is RefreshDashboard ||
+                      current is DashboardPageError ||
+                      current is ChangeScreen ||
+                      current is ChangeDashBoardNav ||
+                      current is DashboardPageInitial ||
+                      hasDataLoaded;
+                } catch (e) {
+                  return false;
+                }
               },
               builder: (context, state) {
+              if (!mounted) {
+                return const SizedBox.shrink();
+              }
               final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
               final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty &&
                   dashboardBloc.filterData != null;

@@ -18,15 +18,15 @@ class CustomAlert {
     // Hide any existing SnackBar to prevent Hero tag conflicts
     messenger.hideCurrentSnackBar();
     
-    // Generate a unique key based on timestamp and message to ensure unique Hero tags
-    final uniqueKey = ValueKey('${DateTime.now().millisecondsSinceEpoch}_$message');
-    
-    messenger.showSnackBar(
-      SnackBar(
-          key: uniqueKey,
-          duration: duration,
+    // Use a small delay to ensure previous SnackBar is fully dismissed
+    // This prevents Hero tag conflicts when multiple SnackBars are shown quickly
+    Future.delayed(const Duration(milliseconds: 100), () {
+      final currentMessenger = scaffoldMessengerKey.currentState;
+      if (currentMessenger != null) {
+        currentMessenger.showSnackBar(
+          SnackBar(
+              duration: duration,
           content: RichText(
-            key: uniqueKey,
             text: TextSpan(
               children: [
                 TextSpan(
@@ -43,12 +43,14 @@ class CustomAlert {
               ],
             ),
           ),
-          backgroundColor: colorAccent,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: UIConfig.borderRadiusCircularLarge,
-          )),
-    );
+              backgroundColor: colorAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: UIConfig.borderRadiusCircularLarge,
+              )),
+        );
+      }
+    });
   }
 
   static Widget customAlertWidget(String message, AlertType alertType,
