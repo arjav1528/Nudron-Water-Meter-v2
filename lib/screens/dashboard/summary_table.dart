@@ -271,7 +271,7 @@ class _SummaryTableState extends State<SummaryTable> {
                             onChanged: (query) {
                               _billingSearchDebounceTimer?.cancel();
                               _billingSearchDebounceTimer =
-                                  Timer(const Duration(milliseconds: 500), () {
+                                  Timer(const Duration(milliseconds: 250), () {
                                 if (!mounted) return;
                                 dashboardBloc.filterBillingData(
                                     _billingSearchController.text);

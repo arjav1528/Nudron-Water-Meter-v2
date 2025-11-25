@@ -210,7 +210,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                             _searchDebounceTimer?.cancel();
                                             
                                             // Start a new timer that will trigger search after 0.5 seconds
-                                            _searchDebounceTimer = Timer(const Duration(milliseconds: 500), () {
+                                            _searchDebounceTimer = Timer(const Duration(milliseconds: 250), () {
                                               if (mounted) {
                                                 dashboardBloc.filterDevices(_searchController.text);
                                               }

@@ -375,7 +375,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                           Text(
                                             "SELECT PROJECT",
                                             style: GoogleFonts.robotoMono(
-                                              fontSize: UIConfig.fontSizeMedium.responsiveSp,
+                                              fontSize: UIConfig.fontSizeLargeResponsive,
                                               fontWeight: FontWeight.w500,
                                               color: Provider.of<ThemeNotifier>(
                                                       context)
