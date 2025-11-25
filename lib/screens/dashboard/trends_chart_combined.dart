@@ -25,14 +25,21 @@ class TrendsChartCombined extends StatefulWidget {
 
 class _TrendsChartCombinedState extends State<TrendsChartCombined> {
   String? _lastProject;
-  final GlobalKey _repaintBoundaryKey = GlobalKey();
+  late final GlobalKey _repaintBoundaryKey;
 
   @override
   void initState() {
     super.initState();
+    _repaintBoundaryKey = GlobalKey();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
-      dashboardBloc.changeKey(_repaintBoundaryKey);
+      if (mounted) {
+        final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+        // Only set the key if we're on the normal screen (screenIndex == 0)
+        // This prevents conflicts with BackgroundChart which uses screenIndex == 1
+        if (dashboardBloc.screenIndex == 0) {
+          dashboardBloc.changeKey(_repaintBoundaryKey);
+        }
+      }
     });
   }
 
@@ -40,12 +47,23 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
   Widget build(BuildContext context) {
     return BlocConsumer<DashboardBloc, DashboardState>(
       listenWhen: (previous, current) =>
-          current is RefreshDashboard || current is ChangeDashBoardNav,
+          current is RefreshDashboard || 
+          current is ChangeDashBoardNav ||
+          current is ChangeScreen,
       listener: (context, state) {
         final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
         final currentProject = dashboardBloc.currentFilters.isNotEmpty
             ? dashboardBloc.currentFilters.first
             : null;
+
+        // Update the key when screen changes to this one (screenIndex == 0)
+        if (state is ChangeScreen && mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && dashboardBloc.screenIndex == 0) {
+              dashboardBloc.changeKey(_repaintBoundaryKey);
+            }
+          });
+        }
 
         if (mounted && _lastProject != currentProject) {
           _lastProject = currentProject;
@@ -215,14 +233,19 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
     super.didUpdateWidget(oldWidget);
     final dashboardBloc =
         BlocProvider.of<DashboardBloc>(context, listen: false);
-    // Ensure the repaint boundary key is always current
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        dashboardBloc.changeKey(_repaintBoundaryKey);
-      }
-    });
     if (dashboardBloc.currentFilters.isNotEmpty && mounted) {
       setState(() {});
     }
+  }
+
+  @override
+  void dispose() {
+    // Clear the key reference when disposing to avoid conflicts
+    // Only clear if this widget's key is currently set in the bloc
+    final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+    if (dashboardBloc.repaintBoundaryKey == _repaintBoundaryKey && dashboardBloc.screenIndex == 0) {
+      dashboardBloc.repaintBoundaryKey = GlobalKey();
+    }
+    super.dispose();
   }
 }

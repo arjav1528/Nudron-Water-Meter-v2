@@ -22,6 +22,14 @@ class BackgroundChart extends StatefulWidget {
 }
 
 class _BackgroundChartState extends State<BackgroundChart> {
+  late final GlobalKey _repaintBoundaryKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _repaintBoundaryKey = GlobalKey();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -109,22 +117,35 @@ class _BackgroundChartState extends State<BackgroundChart> {
           removeTop: true,
           removeBottom: true,
           context: context,
-          child: BlocBuilder<DashboardBloc, DashboardState>(
-            buildWhen: (previous, current) {
+          child: BlocListener<DashboardBloc, DashboardState>(
+            listenWhen: (previous, current) => current is ChangeScreen,
+            listener: (context, state) {
               final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-              final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty &&
-                  dashboardBloc.filterData != null;
-
-              return current is DashboardPageLoaded ||
-                  current is RefreshDashboard2 ||
-                  current is RefreshDashboard ||
-                  current is DashboardPageError ||
-                  current is ChangeScreen ||
-                  current is ChangeDashBoardNav ||
-                  current is DashboardPageInitial ||
-                  hasDataLoaded;
+              // Update the key when screen changes to this one (screenIndex == 1)
+              if (state is ChangeScreen && mounted) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted && dashboardBloc.screenIndex == 1) {
+                    dashboardBloc.changeKey(_repaintBoundaryKey);
+                  }
+                });
+              }
             },
-            builder: (context, state) {
+            child: BlocBuilder<DashboardBloc, DashboardState>(
+              buildWhen: (previous, current) {
+                final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
+                final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty &&
+                    dashboardBloc.filterData != null;
+
+                return current is DashboardPageLoaded ||
+                    current is RefreshDashboard2 ||
+                    current is RefreshDashboard ||
+                    current is DashboardPageError ||
+                    current is ChangeScreen ||
+                    current is ChangeDashBoardNav ||
+                    current is DashboardPageInitial ||
+                    hasDataLoaded;
+              },
+              builder: (context, state) {
               final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
               final hasDataLoaded = dashboardBloc.currentFilters.isNotEmpty &&
                   dashboardBloc.filterData != null;
@@ -147,7 +168,7 @@ class _BackgroundChartState extends State<BackgroundChart> {
                   return false;
                 }, builder: (context, state) {
                   return RepaintBoundary(
-                    key: dashboardBloc.repaintBoundaryKey,
+                    key: _repaintBoundaryKey,
                     child: Column(
                       children: [
                         Container(
@@ -185,7 +206,8 @@ class _BackgroundChartState extends State<BackgroundChart> {
               }
 
               return CustomLoader();
-            },
+              },
+            ),
           ),
         ),
       ),
