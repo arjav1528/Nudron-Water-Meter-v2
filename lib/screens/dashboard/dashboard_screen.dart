@@ -209,12 +209,12 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
       width: _isDrawerCollapsed ? 130.0.w : _drawerWidth,
       decoration: BoxDecoration(
         color: Provider.of<ThemeNotifier>(context).currentTheme.bgColor,
-        border: Border(
-          right: BorderSide(
-            color: Colors.grey.withOpacity(0.2),
-            width: 1.0,
-          ),
-        ),
+        // border: Border(
+        //   right: BorderSide(
+        //     color: Colors.grey.withOpacity(0.2),
+        //     width: 1.0,
+        //   ),
+        // ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +223,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
             height: UIConfig.accentLineHeight,
             color: selectedColor[drawerIndex],
           ),
-          Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.2)),
+          // Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.2)),
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -399,10 +399,8 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
               index: dashboardBloc.screenIndex,
               children: [
                 
-                WillPopScope(
-                  onWillPop: () {
-                    return Future.value(false);
-                  },
+                PopScope(
+                  canPop: false,
                   child: PlatformUtils.isDesktop
                       ? _buildDesktopLayout(context, contentPages)
                       : _buildMobileLayout(context, contentPages),
@@ -469,9 +467,11 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
         body: MediaQuery.removePadding(
           removeTop: true,
           removeBottom: true,
+          removeLeft: true,
+          removeRight: true,
           context: context,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            
             children: [
             BlocBuilder<DashboardBloc, DashboardState>(
               buildWhen: (previous, current) => current is ChangeDashBoardNav || current is RefreshDashboard,
@@ -512,6 +512,7 @@ class _MainDashboardPageState extends State<MainDashboardPage> {
                     width: UIConfig.sidebarWidth,
                     color: selectedColor[dashboardBloc.bottomNavPos % selectedColor.length],
                   );
+                  // return SizedBox.shrink();
                 } catch (e) {
                   return Container(
                     width: UIConfig.sidebarWidth,

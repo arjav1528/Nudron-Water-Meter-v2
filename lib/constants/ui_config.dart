@@ -56,7 +56,7 @@ class UIConfig {
   static double get dialogMaxHeight => 500.h;
 
   
-  static double get sidebarWidth => 3.responsiveSp;
+  static double get sidebarWidth => 3.3.responsiveSp;
   static double get dividerWidth => 1.w;
   static double get borderWidth => 2;
   static double get borderWidthThin => 1.w;

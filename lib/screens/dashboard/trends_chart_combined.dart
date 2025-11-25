@@ -162,7 +162,7 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                                             .basicAdvanceTextColor,
                                         fontFamily: GoogleFonts.robotoMono().fontFamily,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: UIConfig.fontSizeLargeResponsive,
+                                        fontSize: UIConfig.fontSizeMediumResponsive,
                                         letterSpacing: UIConfig.letterSpacingSp),
                                     maxLines: 2,
                                     overflow: TextOverflow.clip,

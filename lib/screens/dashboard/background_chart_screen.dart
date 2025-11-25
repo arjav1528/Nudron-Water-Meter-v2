@@ -32,16 +32,16 @@ class _BackgroundChartState extends State<BackgroundChart> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        if (mounted) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop && mounted) {
           try {
             BlocProvider.of<DashboardBloc>(context).changeScreen();
           } catch (e) {
             
           }
         }
-        return Future.value(false);
       },
       child: Scaffold(
         backgroundColor:
