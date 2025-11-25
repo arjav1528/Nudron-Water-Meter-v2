@@ -293,7 +293,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 ),
                 Expanded(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
+                    width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width / 3,
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       physics: ClampingScrollPhysics(),

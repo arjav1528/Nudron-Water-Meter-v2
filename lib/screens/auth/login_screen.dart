@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Center(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 3,
+                            width: PlatformUtils.isMobile ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width / 3,
                             child: Column(
                               children: [
                                 SizedBox(height: UIConfig.spacingExtraLarge),
