@@ -90,7 +90,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             throw Exception("Error: External storage directory not available");
           }
 
-          String filePath = "${directory.path}/chart.png";
+          String todayDDMMYYYY = DateFormat('ddMMyyyy').format(DateTime.now());
+          String fileName = "WaterMeter_Trends_${currentFilters}_$todayDDMMYYYY.png";
+          String filePath = "${directory.path}/$fileName";
           File file = File(filePath);
           await file.create(recursive: true);
           await file.writeAsBytes(pngBytes);
@@ -142,7 +144,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           
           directory ??= await getApplicationDocumentsDirectory();
 
-          String filePath = "${directory.path}/chart.png";
+          String todayDDMMYYYY = DateFormat('ddMMyyyy').format(DateTime.now());
+          String fileName = "WaterMeter_Trends_${currentFilters}_$todayDDMMYYYY.png";
+          String filePath = "${directory.path}/$fileName";
           File file = File(filePath);
           await file.create(recursive: true);
           await file.writeAsBytes(pngBytes);
