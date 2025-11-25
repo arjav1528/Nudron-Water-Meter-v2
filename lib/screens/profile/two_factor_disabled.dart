@@ -52,9 +52,9 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
 
   @override
   Widget build(BuildContext context) {
-    final width = UIConfig.getDesktopDrawerWidth(context);
+    // final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
-      width: width,
+      // width: width,
       decoration: BoxDecoration(
         borderRadius: UIConfig.borderRadiusCircularSmall,
       ),
@@ -75,11 +75,11 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                         text: "Recommended! ",
                         style: GoogleFonts.roboto(
                           color: const Color(0xFF00BC8A),
-                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
-                        )),
+                            fontSize: UIConfig.fontSizeSmallResponsive,
+                          )),
                     TextSpan(
                         style: GoogleFonts.roboto(
-                          fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                          fontSize: UIConfig.fontSizeSmallResponsive,
                           color: Provider.of<ThemeNotifier>(context)
                               .currentTheme
                               .basicAdvanceTextColor,
@@ -102,7 +102,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -114,7 +114,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                   SizedBox(width: UIConfig.spacingXXXLarge.w),
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     text: "CONFIRM",
                     onPressed: () async {
                       if (!await checkIfAlreadyEnabled()) {
@@ -183,7 +183,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                 children: [
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -195,7 +195,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                   SizedBox(width: UIConfig.spacingXXXLarge.w),
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     text: "CONFIRM",
                     onPressed: () async {
                       if (await checkIfAlreadyEnabled()) return;
@@ -253,7 +253,7 @@ class CustomtwofacRow extends StatefulWidget {
 class _CustomtwofacRowState extends State<CustomtwofacRow> {
   @override
   Widget build(BuildContext context) {
-    final width = UIConfig.getDesktopDrawerWidth(context);
+    // final width = UIConfig.getDesktopDrawerWidth(context);
     return GestureDetector(
       onTap: () {
         widget.onTap();
@@ -287,7 +287,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                     Text(
                       widget.subtitle,
                       style: GoogleFonts.roboto(
-                        fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                        fontSize: UIConfig.fontSizeSmallResponsive,
                         color: Provider.of<ThemeNotifier>(context)
                             .currentTheme
                             .basicAdvanceTextColor,
@@ -381,7 +381,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
 
   @override
   Widget build(BuildContext context) {
-    final width = UIConfig.getDesktopDrawerWidth(context);
+    // final width = UIConfig.getDesktopDrawerWidth(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: UIConfig.borderRadiusCircularSmall,
@@ -412,7 +412,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
                 children: [
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     text: "CANCEL",
                     onPressed: () {
                       setState(() {
@@ -424,7 +424,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
                   SizedBox(width: UIConfig.spacingXXXLarge.w),
                   CustomButton(
                     dynamicWidth: true,
-                    fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeSmall, desktopWidth: width),
+                    fontSize: UIConfig.fontSizeSmallResponsive,
                     text: "CONFIRM",
                     onPressed: () async {
                       if (await checkIfAlreadyEnabled()) return;
