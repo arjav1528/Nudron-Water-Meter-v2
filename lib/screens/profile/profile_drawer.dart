@@ -584,7 +584,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       if (_twoFactorKey.currentContext != null) {
                                         Scrollable.ensureVisible(
                                           _twoFactorKey.currentContext!,
-                                          duration: const Duration(milliseconds: 100),
+                                          alignment: 1.0,
+                                          duration: const Duration(milliseconds: 300),
                                           curve: Curves.easeInOut,
                                         );
                                       }
@@ -601,7 +602,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       if (_biometricKey.currentContext != null) {
                                         Scrollable.ensureVisible(
                                           _biometricKey.currentContext!,
-                                          duration: const Duration(milliseconds: 100),
+                                          alignment: 1.0,
+                                          duration: const Duration(milliseconds: 300),
                                           curve: Curves.easeInOut,
                                         );
                                       }

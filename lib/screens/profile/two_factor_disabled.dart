@@ -41,6 +41,19 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
     });
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Scrollable.ensureVisible(
+          context,
+          alignment: 1.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
   checkIfAlreadyEnabled() async {
     if (NudronRandomStuff.isAuthEnabled.value) {
       CustomAlert.showCustomScaffoldMessenger(mainNavigatorKey.currentContext!,
@@ -91,6 +104,9 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             onTap: () async {
               setState(() {
                 showCancelConfirmQrCode = !showCancelConfirmQrCode;
+                if (showCancelConfirmQrCode) {
+                  _scrollToBottom();
+                }
               });
             },
           ),
@@ -130,6 +146,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
                           url = a[1]!;
                           setState(() {
                             showQrCode = true;
+                            _scrollToBottom();
                           });
 
                           NudronRandomStuff.isAuthEnabled.value = true;
@@ -171,6 +188,9 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             onTap: () async {
               setState(() {
                 showCancelConfirmSms = !showCancelConfirmSms;
+                if (showCancelConfirmSms) {
+                  _scrollToBottom();
+                }
               });
             },
           ),
@@ -332,6 +352,19 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
     });
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Scrollable.ensureVisible(
+          context,
+          alignment: 1.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
   Future<bool> checkForFaceID() async {
     List<BiometricType> availableBiometrics =
         await localAuthentication.getAvailableBiometrics();
@@ -400,6 +433,9 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
             onTap: () async {
               setState(() {
                 showCancelConfirmBiometric = !showCancelConfirmBiometric;
+                if (showCancelConfirmBiometric) {
+                  _scrollToBottom();
+                }
               });
             },
           ),
