@@ -393,6 +393,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                         onTap: _showAddProjectDialog,
                                         child: Container(
                                           height: 30.h,
+                                          width: 30.h,
                                           
                                           decoration: BoxDecoration(
                                             borderRadius: UIConfig
