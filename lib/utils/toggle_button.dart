@@ -225,22 +225,25 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
         
         if (selectedIndex == 0) {
           
-          adjustedTop = dimensions.verticalGap - 0.75 - 1.h;
-          indicatorLeft = indicatorLeft - 1.h;
-        } else if (selectedIndex == 1) {
-          
-          adjustedTop = dimensions.verticalGap - 1.0;
-        }
-      } else {
-        
-        adjustedHeight = dimensions.tabHeight + 1;
-        
-        if (selectedIndex == 0) {
-          
-          adjustedTop = dimensions.verticalGap - 0.75;
+          adjustedTop = dimensions.verticalGap - 1.5;
+          indicatorLeft = indicatorLeft;
         } else if (selectedIndex == 1) {
           
           adjustedTop = dimensions.verticalGap - 1.5;
+          
+        }
+      } else {
+        
+        adjustedHeight = dimensions.tabHeight + 2;
+        
+        if (selectedIndex == 0) {
+          
+          adjustedTop = dimensions.verticalGap - 1.5;
+          indicatorLeft = indicatorLeft;
+        } else if (selectedIndex == 1) {
+          
+          adjustedTop = dimensions.verticalGap - 2;
+          
         }
       }
     }
