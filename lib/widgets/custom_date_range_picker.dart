@@ -237,7 +237,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                   child: Container(
                     
                     constraints: BoxConstraints(
-                      maxWidth: UIConfig.desktopDrawerWidthMin - 60.w,
+                      maxWidth: (PlatformUtils.isDesktop ? UIConfig.desktopDrawerWidthMin : UIConfig.desktopDrawerWidthMin.w) - 60.w,
                       
                     ),
                   decoration: BoxDecoration(
@@ -249,7 +249,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                     
                       children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -274,10 +274,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                         ],
                       ),
                       SizedBox(
-                          
-
-                          
-                          width: UIConfig.desktopDrawerWidthMin - 90.w,
+                          width: (PlatformUtils.isDesktop ? UIConfig.desktopDrawerWidthMin : UIConfig.desktopDrawerWidthMin.w) - 90.w,
                           height: PlatformUtils.isMobile ? UIConfig.dialogMaxHeight * 0.6 : null,
                           child: RangeDatePicker(
                             minDate: minDate,
@@ -491,11 +488,8 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             },
                           ),
                         ),
-
-
-
                       Container(
-                        width: UIConfig.desktopDrawerWidthMin - 120.w,
+                        width: (PlatformUtils.isDesktop ? UIConfig.desktopDrawerWidthMin : UIConfig.desktopDrawerWidthMin.w) - 125.w,
                         padding: EdgeInsets.symmetric(vertical: UIConfig.spacingXSmall * 1.5.h, horizontal: UIConfig.spacingMedium.w),
                         decoration: BoxDecoration(
                           color: currentTheme.dropDownColor,
@@ -521,25 +515,9 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       ),
 
                       SizedBox(height: 30.h,),
-
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-
                       SizedBox(
 
-                        width: UIConfig.desktopDrawerWidthMin - 120.w,
+                        width: (PlatformUtils.isDesktop ? UIConfig.desktopDrawerWidthMin : UIConfig.desktopDrawerWidthMin.w) - 125.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
