@@ -79,20 +79,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       children: [
                         Consumer<ThemeNotifier>(
                           builder: (context, themeNotifier, child) {
-                            
-                            
-                            
-                            final splashColor = themeNotifier.isDark
-                                ? Colors.black.withOpacity(0.4) 
-                                : Colors.white.withOpacity(0.4); 
-                            
                             return Material(
                               color: Colors.transparent,
                               child: InkWell(
                                 borderRadius: UIConfig.borderRadiusAppBarIcon,
                                 onTap: themeNotifier.toggleTheme,
-                                splashColor: splashColor,
-                                highlightColor: splashColor,
+                                splashColor: Provider.of<ThemeNotifier>(
+                                        context,
+                                        listen: false)
+                                    .currentTheme
+                                    .splashColor,
+                                highlightColor: Provider.of<ThemeNotifier>(
+                                        context,
+                                        listen: false)
+                                    .currentTheme
+                                    .splashColor,
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                     right: 11.w,
@@ -100,10 +101,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                     bottom: 11.w,
                                     left: 11.w,
                                   ),
-                                  child: Icon(
-                                    Icons.contrast,
-                                    size: 28.responsiveSp,
-                                    color: themeNotifier.currentTheme.loginTitleColor,
+                                  child: SizedBox(
+                                    width: 28.responsiveSp,
+                                    height: 28.responsiveSp,
+                                    child: SvgPicture.asset(
+                                      "assets/icons/contrast.svg",
+                                      width: 28.responsiveSp,
+                                      height: 28.responsiveSp,
+                                      colorFilter: ColorFilter.mode(
+                                        themeNotifier.currentTheme.loginTitleColor,
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
