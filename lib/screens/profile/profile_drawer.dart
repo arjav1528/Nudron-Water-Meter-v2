@@ -783,8 +783,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                           
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: UIConfig.spacingMedium.w, vertical: 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ChamferedTextWidget(
                                 text: "DELETE ACCOUNT",
