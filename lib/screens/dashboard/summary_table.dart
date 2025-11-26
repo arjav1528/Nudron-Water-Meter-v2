@@ -15,9 +15,11 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
+import '../../utils/custom_page_routes.dart';
 import '../../widgets/billing_formula.dart';
 import '../../widgets/custom_date_range_picker.dart';
 import '../../widgets/data_grid_widget.dart';
+import 'project_selection_screen.dart';
 
 class SummaryTable extends StatefulWidget {
   const SummaryTable({super.key});
@@ -107,7 +109,9 @@ class _SummaryTableState extends State<SummaryTable> {
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushReplacementNamed('/projectSelection');
+                            Navigator.of(context).pushReplacement(
+                              SlideLeftToRightRoute(page: const ProjectSelectionPage()),
+                            );
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,

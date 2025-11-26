@@ -16,11 +16,13 @@ import '../../constants/ui_config.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/loader.dart';
 import '../../utils/new_loader.dart';
+import '../../utils/custom_page_routes.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../profile/profile_drawer.dart';
+import 'dashboard_screen.dart';
 
 class ProjectSelectionPage extends StatefulWidget {
   const ProjectSelectionPage({super.key});
@@ -91,7 +93,9 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
       return;
     }
 
-    Navigator.of(context).pushReplacementNamed('/homePage');
+    Navigator.of(context).pushReplacement(
+      SlideRightToLeftRoute(page: const MainDashboardPage()),
+    );
   }
 
   void _showAddProjectDialog() {

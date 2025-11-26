@@ -12,9 +12,11 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
+import '../../utils/custom_page_routes.dart';
 import '../../widgets/custom_multiple_selector_horizontal.dart';
 import 'trends_chart.dart';
 import 'trends_table.dart';
+import 'project_selection_screen.dart';
 
 class TrendsChartCombined extends StatefulWidget {
   const TrendsChartCombined({super.key});
@@ -102,8 +104,9 @@ class _TrendsChartCombinedState extends State<TrendsChartCombined> {
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context)
-                                          .pushReplacementNamed('/projectSelection');
+                                      Navigator.of(context).pushReplacement(
+                                        SlideLeftToRightRoute(page: const ProjectSelectionPage()),
+                                      );
                                     },
                                     child: Container(
                                       height: UIConfig.backButtonHeight,

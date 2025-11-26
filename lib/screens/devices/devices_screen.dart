@@ -13,7 +13,9 @@ import '../../bloc/dashboard_bloc.dart';
 import '../../bloc/dashboard_state.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
+import '../../utils/custom_page_routes.dart';
 import '../../widgets/data_grid_widget.dart';
+import '../dashboard/project_selection_screen.dart';
 class DevicesPage extends StatefulWidget {
   const DevicesPage({super.key});
 
@@ -83,7 +85,9 @@ class _DevicesPageState extends State<DevicesPage> {
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushReplacementNamed('/projectSelection');
+                            Navigator.of(context).pushReplacement(
+                              SlideLeftToRightRoute(page: const ProjectSelectionPage()),
+                            );
                           },
                           child: Container(
                             height: UIConfig.backButtonHeight,
