@@ -119,7 +119,7 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
 
     return OverlayEntry(
       builder: (context) => Positioned(
-        width: size.width,
+        width: size.width * 1.3,
         child: CompositedTransformFollower(
           link: _layerLink,
           showWhenUnlinked: false,
@@ -157,18 +157,18 @@ class _CountryCodePicker2State extends State<CountryCodePicker2> {
         child: Container(
           height: widget.height,
           decoration: widget.decoration,
-          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Image.asset(
                 'flags/${country.code!.toLowerCase()}.png',
                 package: 'country_code_picker',
                 width: UIConfig.iconSizeSmall * 0.83,
               ),
-              SizedBox(width: 4.w),
-              Flexible(
+              SizedBox(width: 8.w),
+              Expanded(
                 child: Text(country.dialCode ?? '',
                     style: GoogleFonts.roboto(
                       fontSize: UIConfig.fontSizeMediumResponsive,
