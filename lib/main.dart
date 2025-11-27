@@ -30,7 +30,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   if(Platform.isIOS){
-    final iosInfo = await DeviceInfoPlugin().iosInfo;
+    await DeviceInfoPlugin().iosInfo;
   }
   if(Platform.isAndroid){
     final deviceInfo = DeviceInfoPlugin();
