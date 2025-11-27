@@ -245,7 +245,9 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
               ),
             ),
           ),
-          SizedBox(height: UIConfig.spacingLarge * 2.h),
+          // SizedBox(height: UIConfig.spacingLarge * 2.h), //TODO : Change Spacing
+          UIConfig.spacingSizedBoxVerticalLarge,
+          UIConfig.spacingSizedBoxVerticalLarge,
         ],
       ),
     );
@@ -282,7 +284,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
       child: Row(
         children: [
           Padding(
-            padding: UIConfig.paddingSmall,
+            padding: EdgeInsets.symmetric(horizontal: UIConfig.paddingSmall.horizontal),
             child: Icon(
               widget.icon,
               color: Provider.of<ThemeNotifier>(context)

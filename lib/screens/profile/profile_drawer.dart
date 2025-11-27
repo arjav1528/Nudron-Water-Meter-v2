@@ -1154,9 +1154,13 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                     });
                   },
                 )
-              : Container(),
-          UIConfig.spacingSizedBoxVerticalLarge,
-          UIConfig.spacingSizedBoxVerticalLarge,
+              : Column(
+            children: [
+              UIConfig.spacingSizedBoxVerticalLarge,
+              UIConfig.spacingSizedBoxVerticalLarge,
+            ],
+          ),
+
           Container(
             height: UIConfig.borderWidthThin,
             color: Provider.of<ThemeNotifier>(context)
