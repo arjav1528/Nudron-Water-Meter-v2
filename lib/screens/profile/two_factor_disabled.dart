@@ -245,6 +245,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
               ),
             ),
           ),
+          SizedBox(height: UIConfig.spacingLarge * 2.h),
         ],
       ),
     );
@@ -325,6 +326,7 @@ class _CustomtwofacRowState extends State<CustomtwofacRow> {
                   .basicAdvanceTextColor,
             ),
           ),
+          SizedBox(height: UIConfig.spacingLarge * 2.h),
         ],
       ),
     );
@@ -473,6 +475,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
               ),
             ),
           ),
+          SizedBox(height: UIConfig.spacingLarge * 2.h),
         ],
       ),
     );
