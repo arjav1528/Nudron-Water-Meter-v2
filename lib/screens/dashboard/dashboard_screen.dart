@@ -105,15 +105,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           dynamicWidth: true,
                           text: "REFRESH",
                           onPressed: () {
-                            LoaderUtility.showLoader(
-                                    context,
-                                    BlocProvider.of<DashboardBloc>(context)
-                                        .loadInitialData())
-                                .then((s) {})
-                                .catchError((e) {
-                              CustomAlert.showCustomScaffoldMessenger(context,
-                                  "Error in loading data", AlertType.error);
-                            });
+                            BlocProvider.of<DashboardBloc>(context)
+                                .loadInitialData();
                           },
                         )
                       ],

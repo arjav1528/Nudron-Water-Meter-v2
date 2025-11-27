@@ -105,9 +105,11 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
+          return MultiBlocListener(
+            listeners: [
+              BlocListener<AuthBloc, AuthState>(
+                listener: (context, state) {
+                  final dashboardBloc = BlocProvider.of<DashboardBloc>(context, listen: false);
               
               if (state is AuthUnauthenticated) {
                 
@@ -155,9 +157,7 @@ class _MyAppState extends State<MyApp> {
                                           if (dashboardBloc.projects.isNotEmpty) {
                                             return const ProjectSelectionPage();
                                           }
-                                          return const Scaffold(
-                                            body: Center(child: CustomLoader()),
-                                          );
+                                          return const DashboardPage();
                                         }
                                         
                                         if (dashboardBloc.currentFilters.isNotEmpty && dashboardBloc.projects.isNotEmpty) {
@@ -195,19 +195,6 @@ class _MyAppState extends State<MyApp> {
               } else if (state is AuthAuthenticated) {
                 
                 dashboardBloc.loadInitialData();
-                
-                
-                
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  final context = mainNavigatorKey.currentContext;
-                  if (context != null && scaffoldMessengerKey.currentState != null) {
-                    CustomAlert.showCustomScaffoldMessenger(
-                      context,
-                      "Successfully logged in!",
-                      AlertType.success,
-                    );
-                  }
-                });
               } else if (state is AuthTwoFactorRequired) {
                 
                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -234,7 +221,26 @@ class _MyAppState extends State<MyApp> {
                 });
               }
             },
-            child: MaterialApp(
+          ),
+          BlocListener<DashboardBloc, DashboardState>(
+            listenWhen: (previous, current) {
+              return previous is DashboardPageInitial && current is DashboardPageLoaded;
+            },
+            listener: (context, state) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                final context = mainNavigatorKey.currentContext;
+                if (context != null && scaffoldMessengerKey.currentState != null) {
+                  CustomAlert.showCustomScaffoldMessenger(
+                    context,
+                    "Successfully logged in!",
+                    AlertType.success,
+                  );
+                }
+              });
+            },
+          ),
+        ],
+        child: MaterialApp(
               title: 'Meter Config',
               debugShowCheckedModeBanner: false,
               navigatorKey: mainNavigatorKey,
@@ -284,11 +290,7 @@ class _MyAppState extends State<MyApp> {
                               return const ProjectSelectionPage();
                             }
                             
-                            return const Scaffold(
-                              body: Center(
-                                child: CustomLoader(),
-                              ),
-                            );
+                            return const DashboardPage();
                           }
                           
                           if (dashboardBloc.currentFilters.isNotEmpty && dashboardBloc.projects.isNotEmpty) {

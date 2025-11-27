@@ -826,7 +826,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   initUserInfo() async {
     try {
-      Map<String, dynamic>? json = await AuthService.getUserInfo();
+      Map<String, dynamic>? json = await AuthService.getUserInfo(timeout: const Duration(seconds: 1));
       if (json == null) {
         throw Exception("Failed to get user info");
       }
@@ -883,44 +883,57 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
+  Future<void> _loadInitialDataInternal() async {
+    final isLoggedIn = await AuthService.isLoggedIn();
+    if (!isLoggedIn) {
+      
+      emit(DashboardPageError(message: 'User not authenticated'));
+      return;
+    }
+    
+    await initUserInfo();
+    
+    if (currentFilters.isNotEmpty && projects.isNotEmpty) {
+      final selectedProject = currentFilters.first;
+      if (projects.contains(selectedProject)) {
+        try {
+          
+          final projectIndex = projects.indexOf(selectedProject);
+          final filterData = await selectProject(projectIndex);
+          
+          if (filterData != null) {
+            
+            await updateSelectedFilters([selectedProject], filterData);
+            
+            emit(DashboardPageLoaded());
+            return;
+          }
+        } catch (e) {
+          
+        }
+      }
+    }
+    
+    emit(DashboardPageLoaded());
+  }
+
   loadInitialData() async {
     try {
       
       emit(DashboardPageInitial());
       
-      final isLoggedIn = await AuthService.isLoggedIn();
-      if (!isLoggedIn) {
-        
-        emit(DashboardPageError(message: 'User not authenticated'));
-        return;
-      }
-      
-      await initUserInfo();
-      
-      if (currentFilters.isNotEmpty && projects.isNotEmpty) {
-        final selectedProject = currentFilters.first;
-        if (projects.contains(selectedProject)) {
-          try {
-            
-            final projectIndex = projects.indexOf(selectedProject);
-            final filterData = await selectProject(projectIndex);
-            
-            if (filterData != null) {
-              
-              await updateSelectedFilters([selectedProject], filterData);
-              
-              emit(DashboardPageLoaded());
-              return;
-            }
-          } catch (e) {
-            
-          }
-        }
-      }
-      
-      emit(DashboardPageLoaded());
+      await _loadInitialDataInternal().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          emit(DashboardPageError(message: 'Loading timed out. Please check your internet connection and try again.'));
+        },
+      );
     } catch (e) {
-      emit(DashboardPageError(message: e.toString()));
+      if (e is TimeoutException) {
+        emit(DashboardPageError(message: 'Loading timed out. Please check your internet connection and try again.'));
+      } else {
+        emit(DashboardPageError(message: e.toString()));
+      }
     }
   }
 
