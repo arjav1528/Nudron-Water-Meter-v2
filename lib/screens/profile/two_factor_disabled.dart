@@ -47,7 +47,7 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
         Scrollable.ensureVisible(
           context,
           alignment: 1.0,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 100),
           curve: Curves.easeInOut,
         );
       }
@@ -362,7 +362,7 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
         Scrollable.ensureVisible(
           context,
           alignment: 1.0,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 100),
           curve: Curves.easeInOut,
         );
       }
