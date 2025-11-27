@@ -224,6 +224,14 @@ class _MyAppState extends State<MyApp> {
                             )));
                   }
                 });
+              } else if (state is AuthError) {
+                 WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final context = mainNavigatorKey.currentContext;
+                  if (context != null) {
+                    CustomAlert.showCustomScaffoldMessenger(
+                        context, state.message, AlertType.error);
+                  }
+                });
               }
             },
             child: MaterialApp(

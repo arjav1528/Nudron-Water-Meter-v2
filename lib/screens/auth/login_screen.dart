@@ -261,10 +261,6 @@ class _SigninPageState extends State<SigninPage> {
               builder: (context) => EnterTwoFacCode(
                     referenceCode: state.refCode,
                   )));
-        } else if (state is AuthError) {
-          
-          CustomAlert.showCustomScaffoldMessenger(
-              context, state.message, AlertType.error);
         } else if (state is AuthForgotPasswordSent) {
           
           CustomAlert.showCustomScaffoldMessenger(
@@ -591,8 +587,6 @@ class _AutoLoginState extends State<AutoLogin> {
           }
         } else if (state is AuthError) {
           
-          CustomAlert.showCustomScaffoldMessenger(
-              context, state.message, AlertType.error);
           Navigator.of(context).pop();
         }
       },

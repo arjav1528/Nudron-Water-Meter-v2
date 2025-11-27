@@ -651,7 +651,7 @@ class DataPostRequests {
         if (apiName != null) {
           debugPrint('$apiName API : ${duration}ms Failed');
         }
-        throw CustomException('Request timed out after $_maxRetries attempts');
+        throw CustomException('Request timed out. Please try again.');
       } on SocketException catch (e) {
         lastException = e;
         attempt++;
