@@ -477,7 +477,8 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
               ),
             ),
           ),
-          SizedBox(height: UIConfig.spacingLarge * 2.h),
+          UIConfig.spacingSizedBoxVerticalLarge,
+          UIConfig.spacingSizedBoxVerticalLarge,
         ],
       ),
     );

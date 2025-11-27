@@ -1400,9 +1400,13 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                       });
                     },
                   )
-                : Container(),
-            UIConfig.spacingSizedBoxVerticalLarge,
-            UIConfig.spacingSizedBoxVerticalLarge,
+                : Column(
+              children: [
+                UIConfig.spacingSizedBoxVerticalLarge,
+                UIConfig.spacingSizedBoxVerticalLarge,
+              ],
+            ),
+
           ],
         ));
   }
