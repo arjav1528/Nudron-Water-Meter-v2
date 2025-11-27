@@ -226,7 +226,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
         if (selectedIndex == 0) {
           
           adjustedTop = dimensions.verticalGap - 1.5.responsiveSp;
-          indicatorLeft = indicatorLeft;
+          indicatorLeft = indicatorLeft + 0.5.w;
         } else if (selectedIndex == 1) {
           
           adjustedTop = dimensions.verticalGap - 1.5.responsiveSp;
@@ -239,7 +239,7 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
         if (selectedIndex == 0) {
           
           adjustedTop = dimensions.verticalGap - 1.5.responsiveSp;
-          indicatorLeft = indicatorLeft;
+          indicatorLeft = indicatorLeft + 0.w;
         } else if (selectedIndex == 1) {
           
           adjustedTop = dimensions.verticalGap - 2.responsiveSp;

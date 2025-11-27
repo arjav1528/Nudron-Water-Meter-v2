@@ -79,21 +79,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       children: [
                         Consumer<ThemeNotifier>(
                           builder: (context, themeNotifier, child) {
+                            final splashColor = themeNotifier.isDark ? Colors.black.withOpacity(0.4) : Colors.white.withOpacity(0.4);
                             return Material(
                               color: Colors.transparent,
                               child: InkWell(
                                 borderRadius: UIConfig.borderRadiusAppBarIcon,
                                 onTap: themeNotifier.toggleTheme,
-                                splashColor: Provider.of<ThemeNotifier>(
-                                        context,
-                                        listen: false)
-                                    .currentTheme
-                                    .splashColor,
-                                highlightColor: Provider.of<ThemeNotifier>(
-                                        context,
-                                        listen: false)
-                                    .currentTheme
-                                    .splashColor,
+                                splashColor: splashColor,
+                                highlightColor: splashColor,
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                     right: 11.w,
