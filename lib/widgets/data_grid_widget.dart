@@ -57,63 +57,39 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   final double rowHeight = UIConfig.rowHeight;
   final double headerRowHeight = UIConfig.headerWidgetHeight; 
 
-  double calculateTextWidth(String text,
-      {bool isHeader = false, bool hasDownloadButton = false}) {
-    
-    final cacheKey = '${text}_${isHeader}_$hasDownloadButton';
+  /// Calculates the pure width of the text without padding.
+  double calculateTextWidth(String text, {bool isHeader = false}) {
+    final cacheKey = '${text}_$isHeader';
     
     if (_textWidthCache.containsKey(cacheKey)) {
       return _textWidthCache[cacheKey]!;
     }
     
-    double width;
-    
-    if (isHeader && text[0] == '!') {
-      
-      final TextPainter textPainter = TextPainter(
-        text: TextSpan(
-          text: Utils.cleanFieldName(text),
-          style: GoogleFonts.robotoMono(
+    final textStyle = isHeader
+        ? GoogleFonts.robotoMono(
             fontSize: UIConfig.fontSizeTableHeaderMobile,
             fontWeight: UIConfig.fontWeightBold,
             height: UIConfig.lineHeight,
             letterSpacing: UIConfig.letterSpacing,
-          ),
-        ),
-        maxLines: 1,
-        textDirection: TextDirection.ltr,
-      )..layout(minWidth: 0);
-      
-      width = textPainter.width + UIConfig.tableTextWidthPadding + UIConfig.tableTextWidthPaddingSmall;
-    } else {
-      final TextPainter textPainter = TextPainter(
-        text: TextSpan(
-          text: Utils.cleanFieldName(text),
-          style: isHeader
-              ? GoogleFonts.robotoMono(
-                  fontSize: UIConfig.fontSizeTableHeaderMobile,
-                  fontWeight: UIConfig.fontWeightBold,
-                  height: UIConfig.lineHeight, 
-                  letterSpacing: UIConfig.letterSpacing, 
-                )
-              : GoogleFonts.robotoMono(
-                  fontSize: UIConfig.fontSizeTableMobile,
-                  height: UIConfig.lineHeight,
-                  fontWeight: UIConfig.fontWeightNormal,
-                  letterSpacing: UIConfig.letterSpacing,
-                ),
-        ),
-        maxLines: 1,
-        textDirection: TextDirection.ltr,
-      )..layout(minWidth: 0);
+          )
+        : GoogleFonts.robotoMono(
+            fontSize: UIConfig.fontSizeTableMobile,
+            height: UIConfig.lineHeight,
+            fontWeight: UIConfig.fontWeightNormal,
+            letterSpacing: UIConfig.letterSpacing,
+          );
 
-      width = textPainter.width +
-          UIConfig.tableTextWidthPadding + 
-          UIConfig.tableTextWidthPaddingSmall + 
-          (hasDownloadButton
-              ? rowHeight
-              : 0.0); 
-    }
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: Utils.cleanFieldName(text),
+        style: textStyle,
+      ),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0);
+    
+    // Add a small buffer for subpixel rendering safety
+    final width = textPainter.width + 4.w;
     
     _textWidthCache[cacheKey] = width;
     return width;
@@ -122,8 +98,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
   num dummyRows = 0;
 
   void init(double height) {
-    
-    
     bool needsRecalculation = _cachedProcessedData == null || 
         _cachedProcessedData!.length != widget.data![1].length ||
         columnWidths.isEmpty ||
@@ -176,19 +150,16 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     averages.add("Average");
     averages.add(" ");
 
-    
     for (int colIndex = 2; colIndex < headers.length; colIndex++) {
       if (colIndex < widget.frozenColumns) {
-        
+        // Skip frozen columns for average calc (except first 2 which are handled above conceptually)
       } else {
-        
         double sum = 0.0;
         int count = 0;
         
         for (var row in rows) {
           if (row is List && colIndex < row.length && row[colIndex] != null) {
             try {
-              
               String valueStr = row[colIndex].toString().trim();
               if (valueStr.isNotEmpty) {
                 double? value = double.tryParse(valueStr);
@@ -198,14 +169,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                 }
               }
             } catch (e) {
-              
+              // ignore error
             }
           }
         }
         
         if (count > 0) {
           double avg = sum / count;
-          //TODO : Change the decimaal places
           String avgStr = avg.toStringAsFixed(0);
           if (avgStr.contains('.')) {
             avgStr = avgStr.replaceAll(RegExp(r'0*$'), '').replaceAll(RegExp(r'\.$'), '');
@@ -227,30 +197,22 @@ class _DataGridWidgetState extends State<DataGridWidget> {
 
       columnWidths = List<double>.filled(headers.length, 0.0);
       
+      // Padding to apply to all columns (Left + Right)
+      final double paddingHorizontal = UIConfig.tableCellPaddingHorizontal;
+      final double totalPadding = paddingHorizontal * 2;
+
       for (int index = 0; index < headers.length; index++) {
-        double headerWidth = calculateTextWidth(headers[index].toString(),
-            isHeader: true, hasDownloadButton: index == 0);
+        // 1. Calculate Header Width
+        double headerWidth = calculateTextWidth(headers[index].toString(), isHeader: true);
         
-        
-        bool isFrozenColumn = index < widget.frozenColumns;
-        bool isMobile = PlatformUtils.isMobile;
-        bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
-        
-        if (isFrozenColumn && isMobile && isBillingOrDevices) {
-          
-          if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
-            columnWidths[index] = headerWidth +
-                widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
-          } else {
-            columnWidths[index] = headerWidth;
-          }
-          continue;
+        // Add space for download button in the first column
+        if (index == 0) {
+          headerWidth += UIConfig.iconSizeLarge + 10.w; // Icon size + spacing
         }
         
+        // 2. Calculate Max Data Width
         double maxDataWidth = 0.0;
-        
         bool shouldCheckAllRows = (widget.devicesTable == true && index == 0);
-        
         
         String? fieldName = headers[index].toString();
         bool isLastSeenColumn = widget.devicesTable == true && 
@@ -258,70 +220,71 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         bool isLastRecordColumn = widget.devicesTable == true && 
             fieldName.isNotEmpty && fieldName[0] == '@';
         
+        // Determine sampling strategy
         if (rows.length > 1000 && !shouldCheckAllRows) {
-          
           final sampleSize = min<int>(100, rows.length);
           final step = (rows.length ~/ sampleSize) as int;
           
           for (int i = 0; i < rows.length; i += step) {
             if (rows[i][index] != null) {
-              String cellValue;
-              if (isLastSeenColumn) {
-                
-                cellValue = Utils.lastSeenFromMilliseconds(rows[i][index]).toString();
-              } else if (isLastRecordColumn) {
-                
-                String? lastSeenDate = NudronChartMap.convertDaysToDate(rows[i][index].toString());
-                cellValue = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
-              } else {
-                cellValue = rows[i][index].toString();
-              }
-              
+              String cellValue = _getCellValueAsString(rows[i][index], isLastSeenColumn, isLastRecordColumn);
               double cellWidth = calculateTextWidth(cellValue);
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
-                
-                if (maxDataWidth > headerWidth * 2) break;
               }
             }
           }
         } else {
-          
           for (var row in rows) {
             if (row[index] != null) {
-              String cellValue;
-              if (isLastSeenColumn) {
-                
-                cellValue = Utils.lastSeenFromMilliseconds(row[index]).toString();
-              } else if (isLastRecordColumn) {
-                
-                String? lastSeenDate = NudronChartMap.convertDaysToDate(row[index].toString());
-                cellValue = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
-              } else {
-                cellValue = row[index].toString();
-              }
-              
+              String cellValue = _getCellValueAsString(row[index], isLastSeenColumn, isLastRecordColumn);
               double cellWidth = calculateTextWidth(cellValue);
               if (cellWidth > maxDataWidth) {
                 maxDataWidth = cellWidth;
-                
-                if (!shouldCheckAllRows && maxDataWidth > headerWidth * 2) break;
               }
             }
           }
         }
         
-        columnWidths[index] = max(headerWidth, maxDataWidth);
+        // 3. Determine Final Column Width based on Rules
+        bool isFrozenColumn = index < widget.frozenColumns;
+        bool isMobile = PlatformUtils.isMobile;
         
-        
-        
+        if (isMobile) {
+          if (isFrozenColumn) {
+            // Phone + Frozen: Width of Header + Padding
+            double frozenWidth = headerWidth + totalPadding;
+            
+            // Check for specific overrides (e.g. extra space needed)
+            if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
+              frozenWidth += widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
+            }
+            columnWidths[index] = frozenWidth;
+          } else {
+            // Phone + Unfrozen: Max(Header, Data) + Padding
+            columnWidths[index] = max(headerWidth, maxDataWidth) + totalPadding;
+          }
+        } else {
+          // Desktop: Max of all texts (Header vs Data) + Padding
+          columnWidths[index] = max(headerWidth, maxDataWidth) + totalPadding;
+        }
       }
+    }
+  }
+
+  String _getCellValueAsString(dynamic rawValue, bool isLastSeen, bool isLastRecord) {
+    if (isLastSeen) {
+      return Utils.lastSeenFromMilliseconds(rawValue).toString();
+    } else if (isLastRecord) {
+      String? lastSeenDate = NudronChartMap.convertDaysToDate(rawValue.toString());
+      return (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
+    } else {
+      return rawValue.toString();
     }
   }
 
   @override
   void dispose() {
-    
     _verticalScrollController1.dispose();
     _verticalScrollController2.dispose();
     _horizontalScrollController1.dispose();
@@ -353,126 +316,118 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     });
   }
 
-  _getHeaderWidget(int index, BuildContext context) {
-    Alignment alignment = Alignment.center;
+  Widget _buildCellContainer({
+    required int index, // Row index (or -1 for header)
+    required int colIndex, // Column index
+    required BuildContext context,
+    required Widget child,
+    required bool isHeader,
+    Color? backgroundColor,
+  }) {
+    // Uniform padding logic
+    // For headers, HeaderWidget already adds padding, so we don't add it here to avoid double padding.
+    final padding = isHeader 
+        ? EdgeInsets.zero
+        : EdgeInsets.symmetric(
+            horizontal: UIConfig.tableCellPaddingHorizontal,
+          );
+
+    // Alignment - Left aligned for frozen columns on desktop, centered otherwise
+    bool isFrozenColumn = colIndex < widget.frozenColumns;
+    bool isDesktop = PlatformUtils.isDesktop;
+    Alignment alignment = (isFrozenColumn && isDesktop) 
+        ? Alignment.centerLeft 
+        : Alignment.center;
+
+    // Decoration
+    final theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    final borderColor = theme.gridLineColor;
     
-    EdgeInsets headerPadding = EdgeInsets.zero;
-    
-    if (widget.devicesTable == true) {
-      return Container(
-        height: headerRowHeight, 
-        width: columnWidths[index],
-        decoration: BoxDecoration(
-          color: Provider.of<ThemeNotifier>(context)
-              .currentTheme
-              .onSecondaryContainer,
-          border: Border(
-            right: BorderSide(
-              color: Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .gridLineColor,
-              width: index == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth,
-            ),
-            bottom: BorderSide(
-              color: Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .gridLineColor,
-              width: UIConfig.tableBorderWidth,
-            ),
-          ),
-        ),
-        alignment: alignment,
-        child: Padding(
-          padding: headerPadding,
-          child: HeaderWidget(
-            title: Utils.cleanFieldName(widget.data![0][index].toString()),
-          ),
+    final double rightBorderWidth = colIndex == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth;
+    final double bottomBorderWidth = (index == widget.data![1].length - 1 && !isHeader) ? 0.00 : UIConfig.tableBorderWidth;
+
+    BoxDecoration decoration;
+    if (isHeader) {
+      decoration = BoxDecoration(
+        color: theme.onSecondaryContainer,
+        border: Border(
+          right: BorderSide(color: borderColor, width: rightBorderWidth),
+          bottom: BorderSide(color: borderColor, width: UIConfig.tableBorderWidth),
         ),
       );
     } else {
-      return Container(
-        height: headerRowHeight, 
-        width: columnWidths[index],
-        decoration: BoxDecoration(
-          color: Provider.of<ThemeNotifier>(context)
-              .currentTheme
-              .onSecondaryContainer,
-          border: Border(
-            right: BorderSide(
-              color: Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .gridLineColor,
-              width: index == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth,
-            ),
-            bottom: BorderSide(
-              color: Provider.of<ThemeNotifier>(context)
-                  .currentTheme
-                  .gridLineColor,
-              width: UIConfig.tableBorderWidth,
-            ),
-          ),
-        ),
-        alignment: alignment,
-        child: Padding(
-          padding: headerPadding,
-          child: HeaderWidget(
-            title: Utils.cleanFieldName(widget.data![0][index].toString()),
+      decoration = BoxDecoration(
+        color: backgroundColor ?? (index % 2 == 1 ? theme.onSecondaryContainer : theme.primaryContainer),
+        border: Border(
+          right: BorderSide(color: borderColor, width: rightBorderWidth),
+          bottom: BorderSide(
+              color: (index == widget.data![1].length - 1) ? Colors.transparent : borderColor, 
+              width: bottomBorderWidth
           ),
         ),
       );
     }
+
+    return Container(
+      width: columnWidths[colIndex],
+      height: isHeader ? headerRowHeight : rowHeight,
+      alignment: alignment,
+      padding: padding,
+      decoration: decoration,
+      child: child,
+    );
   }
 
-  _getNormalWidget(int index, int index2, BuildContext context) {
-    bool isFrozenColumn = index2 < widget.frozenColumns;
-    bool isDesktop = PlatformUtils.isDesktop;
-    bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
-    Alignment alignment = (isFrozenColumn && isDesktop && isBillingOrDevices) 
-        ? Alignment.centerLeft 
-        : Alignment.center;
-    
-    EdgeInsets cellPadding = EdgeInsets.symmetric(
-      horizontal: UIConfig.tableCellPaddingHorizontal,
-    );
-    if (isFrozenColumn && isDesktop && isBillingOrDevices) {
-      cellPadding = EdgeInsets.only(
-        left: UIConfig.tableCellPaddingHorizontal + 8.w,
-        right: UIConfig.tableCellPaddingHorizontal,
-      );
-    }
-    
-    return Container(
-      width: columnWidths[index2],
-      height: rowHeight,
-      alignment: alignment,
-      padding: cellPadding,
-      decoration: BoxDecoration(
-        color: index % 2 == 1
-            ? Provider.of<ThemeNotifier>(context)
-                .currentTheme
-                .onSecondaryContainer
-            : Provider.of<ThemeNotifier>(context).currentTheme.primaryContainer,
-        border: Border(
-          right: BorderSide(
-            color:
-                Provider.of<ThemeNotifier>(context).currentTheme.gridLineColor,
-            width: index2 == widget.data![1][index].length - 1 ? 0 : UIConfig.tableBorderWidth,
-          ),
-          bottom: BorderSide(
-            color: index == widget.data![1]!.length - 1
-                ? Colors.transparent
-                : Provider.of<ThemeNotifier>(context)
-                    .currentTheme
-                    .gridLineColor,
-            width: index == widget.data![1]!.length - 1 ? 0.00 : UIConfig.tableBorderWidth,
-          ),
-        ),
+  Widget _getHeaderWidget(int index, BuildContext context) {
+    return _buildCellContainer(
+      index: -1, // Header
+      colIndex: index,
+      context: context,
+      isHeader: true,
+      child: HeaderWidget(
+        title: Utils.cleanFieldName(widget.data![0][index].toString()),
       ),
+    );
+  }
+
+  Widget _getNormalWidget(int index, int index2, BuildContext context) {
+    return _buildCellContainer(
+      index: index,
+      colIndex: index2,
+      context: context,
+      isHeader: false,
       child: widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index2)
           ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: _getNCNormalWidget(index, index2, context))
           : _getNCNormalWidget(index, index2, context),
+    );
+  }
+  
+  Widget _getAverageRowCell(int colIndex, BuildContext context) {
+    if (_averageRow == null || colIndex >= _averageRow!.length) {
+      return Container();
+    }
+    
+    final cellValue = _averageRow![colIndex].toString();
+    final textStyle = _getTextStyle(context).copyWith(fontWeight: FontWeight.bold);
+    
+    // Manually use _buildCellContainer logic but slightly customized for Footer look if needed
+    // For now using same consistent logic but with specific footer bg
+    final theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    
+    return _buildCellContainer(
+      index: widget.data![1].length, // Treating as next row
+      colIndex: colIndex,
+      context: context,
+      isHeader: false,
+      backgroundColor: Provider.of<ThemeNotifier>(context).isDark ? theme.dialogBG : Colors.white,
+      child: Text(
+        cellValue,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: textStyle,
+      ),
     );
   }
 
@@ -489,91 +444,26 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     return _cachedTextStyle!;
   }
 
-  _getNCNormalWidget(int index, int index2, BuildContext context) {
+  Widget _getNCNormalWidget(int index, int index2, BuildContext context) {
     String? field = widget.data![0][index2].toString();
     final cellValue = widget.data![1][index][index2].toString();
     final textStyle = _getTextStyle(context);
     
+    String displayText;
     if (field[0] == '%' && widget.devicesTable == true) {
-      return Text(
-        Utils.lastSeenFromMilliseconds(cellValue).toString(),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: textStyle,
-      );
+      displayText = Utils.lastSeenFromMilliseconds(cellValue).toString();
     } else if (field[0] == '@' && widget.devicesTable == true) {
       String? lastSeenDate = NudronChartMap.convertDaysToDate(cellValue);
-      if (lastSeenDate == '01-Jan-20') {
-        lastSeenDate = 'NA';
-      }
-      return Text(
-        lastSeenDate,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: textStyle,
-      );
+      displayText = (lastSeenDate == '01-Jan-20') ? 'NA' : lastSeenDate;
     } else {
-      return Text(
-        cellValue,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: textStyle,
-      );
-    }
-  }
-
-  Widget _getAverageRowCell(int colIndex, BuildContext context) {
-    if (_averageRow == null || colIndex >= _averageRow!.length) {
-      return Container();
+      displayText = cellValue;
     }
     
-    final cellValue = _averageRow![colIndex].toString();
-    final textStyle = _getTextStyle(context);
-    bool isFrozenColumn = colIndex < widget.frozenColumns;
-    bool isDesktop = PlatformUtils.isDesktop;
-    bool isBillingOrDevices = widget.location == 'billing' || widget.location == 'devices';
-    Alignment alignment = (isFrozenColumn && isDesktop && isBillingOrDevices) 
-        ? Alignment.centerLeft 
-        : Alignment.center;
-    
-    EdgeInsets cellPadding = EdgeInsets.symmetric(
-      horizontal: UIConfig.tableCellPaddingHorizontal,
-    );
-    if (isFrozenColumn && isDesktop && isBillingOrDevices) {
-      cellPadding = EdgeInsets.only(
-        left: UIConfig.tableCellPaddingHorizontal + 6.w,
-        right: UIConfig.tableCellPaddingHorizontal,
-      );
-    }
-    
-    final theme = Provider.of<ThemeNotifier>(context).currentTheme;
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
-    return Container(
-      width: columnWidths[colIndex],
-      height: rowHeight,
-      alignment: alignment,
-      padding: cellPadding,
-      decoration: BoxDecoration(
-        color: themeNotifier.isDark ? theme.dialogBG : Colors.white,
-        border: Border(
-          right: BorderSide(
-            color: theme.gridLineColor,
-            width: colIndex == columnWidths.length - 1 ? 0 : UIConfig.tableBorderWidth,
-          ),
-          top: BorderSide(
-            color: theme.gridLineColor,
-            width: UIConfig.tableBorderWidth,
-          ),
-        ),
-      ),
-      child: Text(
-        cellValue,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: textStyle.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+    return Text(
+      displayText,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: textStyle,
     );
   }
 
@@ -604,7 +494,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
           behavior: NoBounceScrollBehavior(),
           child: GestureDetector(
             onPanUpdate: (details) {
-              
+              // Scroll sync logic
               final newOffsetV1 =
                   _verticalScrollController1.offset - details.delta.dy;
               if (_verticalScrollController1.hasClients) {
@@ -656,8 +546,10 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     
+                    // Header Row
                     Row(
                       children: [
+                        // Frozen Headers
                         if (widget.frozenColumns > 0)
                           Container(
                             width: columnWidths[0],
@@ -683,6 +575,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                             ),
                             child: Row(
                               children: [
+                                // Download Button (Fixed padding logic approx 5.w)
                                 Material(
                                   color: Colors.transparent,
                                   child: InkWell(
@@ -695,7 +588,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 5.w),
-                                      
                                       child: Icon(
                                         Icons.download,
                                         size: UIConfig.iconSizeLarge,
@@ -708,7 +600,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     ),
                                     onTap: () async {
                                       bool confirm = await showDialog(
-                                        
                                         context: context,
                                         builder: (context2) {
                                           return ConfirmationDialog(
@@ -725,22 +616,17 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                         } catch (e) {
                                         }
                                         
-                                        
                                         var dataToExport = widget.data!;
                                         if (widget.location == 'billing' && _averageRow != null) {
-                                          
                                           List<dynamic> headers = List.from(dataToExport[0]);
                                           List<List<dynamic>> allRows = List.from(dataToExport[1]);
                                           
-                                          
                                           List<List<dynamic>> rows = allRows.where((row) {
-                                            
                                             return row.any((cell) => 
                                               cell != null && 
                                               cell.toString().trim().isNotEmpty
                                             );
                                           }).toList();
-                                          
                                           
                                           rows.add(List.from(_averageRow!));
                                           dataToExport = [headers, rows];
@@ -758,10 +644,13 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     },
                                   ),
                                 ),
+                                // Header Text
                                 Expanded(
                                   child: Container(
-                                    alignment: Alignment.center,
-                                    padding: UIConfig.paddingFromLTRBZero,
+                                    alignment: (PlatformUtils.isDesktop && widget.frozenColumns > 0)
+                                        ? Alignment.centerLeft
+                                        : Alignment.center,
+                                    padding: EdgeInsets.zero,
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
                                           widget.data![0][0].toString()),
@@ -771,12 +660,16 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                               ],
                             ),
                           ),
+                        
+                        // Remaining Frozen Headers
                         Row(
                           children: List.generate(
                             widget.frozenColumns - 1,
                             (index) => _getHeaderWidget(index + 1, context),
                           ),
                         ),
+                        
+                        // Unfrozen Headers
                         Expanded(
                           child: SingleChildScrollView(
                             controller: _horizontalScrollController1,
@@ -793,11 +686,12 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                       ],
                     ),
                     
+                    // Data Rows
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          
+                          // Frozen Columns Data
                           SingleChildScrollView(
                             controller: _verticalScrollController1,
                             scrollDirection: Axis.vertical,
@@ -815,6 +709,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                             ),
                           ),
                           
+                          // Unfrozen Columns Data
                           Expanded(
                             child: SingleChildScrollView(
                               controller: _verticalScrollController2,
@@ -846,6 +741,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                 ),
               ),
               
+              // Footer (Average Row)
               if (_averageRow != null && widget.location == 'billing')
                 Positioned(
                   bottom: 0,
@@ -854,7 +750,6 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       Row(
                         children: List.generate(
                           widget.frozenColumns,
