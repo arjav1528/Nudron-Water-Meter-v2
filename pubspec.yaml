@@ -126,6 +126,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/flags/
     - assets/ca/ # For desktop certificate
 
   # An image asset can refer to one or more resolution-specific "variants", see

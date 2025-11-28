@@ -1,4 +1,3 @@
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
@@ -9,6 +8,7 @@ import '../../api/auth_service.dart';
 import '../../constants/app_config.dart';
 import '../../constants/theme2.dart';
 import '../../constants/ui_config.dart';
+import '../../models/country_code.dart';
 import '../../services/app_state_service.dart';
 import '../../utils/alert_message.dart';
 import '../../utils/new_loader.dart';

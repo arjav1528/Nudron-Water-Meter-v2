@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +32,8 @@ import '../../widgets/chamfered_text_widget.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/password_controller.dart';
+import '../../models/country_code.dart';
+import '../../utils/country_codes_data.dart';
 import 'active_devices.dart';
 import 'country_code_picker.dart';
 import 'two_factor_disabled.dart';
@@ -111,7 +112,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
   CountryCode findCountry(String dialCode) {
     List<CountryCode> countries =
-        codes.map((e) => CountryCode.fromJson(e)).toList();
+        countryCodesData.map((e) => CountryCode.fromJson(e)).toList();
 
     for (var country in countries) {
       if (country.dialCode == dialCode) {
