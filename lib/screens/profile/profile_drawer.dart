@@ -1071,7 +1071,6 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 key: UniqueKey(),
                 index: is2FAEnabled ? 1 : 0,
                 dontChangeImmediately: true,
-                adjustDesktopPosition: true,
                 tabs: const ["NO", "YES"],
                 onTap: (int newIndex) {
                   if (newIndex == 1) {
@@ -1099,7 +1098,6 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                 unselectedTextColor: Colors.white,
                   width: PlatformUtils.isMobile ? 110.w : 140.w,
                   height: PlatformUtils.isMobile ? 28.h : 30.h,
-                  fontSize: ThemeNotifier.extrasmall.responsiveSp,
                 tabColor: CommonColors.red,
                 tabColor2: const Color(0xFF00BC8A),
               ),
@@ -1339,7 +1337,6 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   key: UniqueKey(),
                   index: isBiometricEnabled ? 1 : 0,
                   dontChangeImmediately: true,
-                  adjustDesktopPosition: true,
                   tabs: const ["NO", "YES"],
                   onTap: (int newIndex) {
                     if (newIndex == 1) {
@@ -1367,7 +1364,6 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   unselectedTextColor: Colors.white,
                   width: PlatformUtils.isMobile ? 110.w : 140.w,
                   height: PlatformUtils.isMobile ? 28.h : 30.h,
-                  fontSize: ThemeNotifier.extrasmall.responsiveSp,
                   tabColor: CommonColors.red,
                   tabColor2: const Color(0xFF00BC8A),
                 ),

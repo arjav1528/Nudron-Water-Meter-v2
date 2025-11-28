@@ -144,10 +144,12 @@ class _LoginPageState extends State<LoginPage> {
                                         key: UniqueKey(),
                                         tabs: const ["SIGN IN", "REGISTER"],
                                         backgroundColor: CommonColors.blue,
-                                        fontSize: ThemeNotifier.large.responsiveSp,
                                         width: toggleWidth,
                                         height: 50.91.responsiveSp,
                                         selectedTextColor: Colors.white,
+                                        fontSize: ThemeNotifier.medium.responsiveSp,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: GoogleFonts.robotoMono().fontFamily,
                                         unselectedTextColor:
                                             Provider.of<ThemeNotifier>(context)
                                                 .currentTheme
