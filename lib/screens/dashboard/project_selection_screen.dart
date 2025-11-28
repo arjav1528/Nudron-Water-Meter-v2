@@ -388,8 +388,8 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                       GestureDetector(
                                         onTap: _showAddProjectDialog,
                                         child: Container(
-                                          height: 30.h,
-                                          width: 30.h,
+                                          height: 30.sp,
+                                          width: 30.sp,
                                           
                                           decoration: BoxDecoration(
                                             borderRadius: UIConfig
@@ -403,11 +403,13 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                               width: 2,
                                             ),
                                           ),
-                                          child: Icon(
-                                            Icons.add,
-                                            color: theme.basicAdvanceTextColor,
-                                            size:
-                                                UIConfig.iconSizeSmall.responsiveSp,
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.add,
+                                              color: theme.basicAdvanceTextColor,
+                                              size:
+                                                  UIConfig.iconSizeSmall.sp,
+                                            ),
                                           ),
                                         ),
                                       )
