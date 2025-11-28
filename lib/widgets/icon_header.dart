@@ -11,20 +11,26 @@ import '../../constants/ui_config.dart';
 
 class HeaderWidget extends StatelessWidget {
   final String title;
+  final EdgeInsetsGeometry? padding;
 
-  const HeaderWidget({super.key, required this.title});
+  const HeaderWidget({
+    super.key,
+    required this.title,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
       child: title[0] != '!'
           ? Text(
               title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.robotoMono(
-                fontSize: UIConfig.fontSizeMediumResponsive,
+                // Use table header font size to match DataGridWidget calculations
+                fontSize: UIConfig.fontSizeTableHeaderMobile,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ThemeNotifier>(context)
                     .currentTheme
@@ -130,7 +136,7 @@ class CustomIconButton extends StatelessWidget {
     leftOffset = leftOffset < 0
         ? UIConfig.spacingSmall
         : leftOffset; 
-
+    
     if (leftOffset + fullTooltipWidth + UIConfig.iconSizeMedium > screenWidth) {
       leftOffset = screenWidth - fullTooltipWidth - UIConfig.iconSizeMedium;
     }

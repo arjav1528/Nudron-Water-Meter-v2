@@ -325,12 +325,9 @@ class _DataGridWidgetState extends State<DataGridWidget> {
     Color? backgroundColor,
   }) {
     // Uniform padding logic
-    // For headers, HeaderWidget already adds padding, so we don't add it here to avoid double padding.
-    final padding = isHeader 
-        ? EdgeInsets.zero
-        : EdgeInsets.symmetric(
-            horizontal: UIConfig.tableCellPaddingHorizontal,
-          );
+    final padding = EdgeInsets.symmetric(
+      horizontal: UIConfig.tableCellPaddingHorizontal,
+    );
 
     // Alignment - Left aligned for frozen columns on desktop, centered otherwise
     bool isFrozenColumn = colIndex < widget.frozenColumns;
@@ -386,6 +383,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
       isHeader: true,
       child: HeaderWidget(
         title: Utils.cleanFieldName(widget.data![0][index].toString()),
+        padding: EdgeInsets.zero,
       ),
     );
   }
@@ -654,6 +652,7 @@ class _DataGridWidgetState extends State<DataGridWidget> {
                                     child: HeaderWidget(
                                       title: Utils.cleanFieldName(
                                           widget.data![0][0].toString()),
+                                      padding: EdgeInsets.zero,
                                     ),
                                   ),
                                 ),
