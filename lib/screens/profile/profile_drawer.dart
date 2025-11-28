@@ -978,18 +978,75 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
   bool showAuthenticationDialog = false;
   bool showDisableConfirm = false;
   bool is2FAEnabled = NudronRandomStuff.isAuthEnabled.value;
+  TwoFactorMethod? activeTwoFactorMethod =
+      NudronRandomStuff.twoFactorMethod.value;
+  late final VoidCallback _authEnabledListener;
+  late final VoidCallback _twoFactorMethodListener;
 
   @override
   void initState() {
-    NudronRandomStuff.isAuthEnabled.addListener(() {
-      if (mounted) {
-        setState(() {
-          is2FAEnabled = NudronRandomStuff.isAuthEnabled.value ||
-              NudronRandomStuff.isBiometricEnabled.value;
-        });
-      }
-    });
     super.initState();
+    _authEnabledListener = () {
+      if (!mounted) return;
+      setState(() {
+        is2FAEnabled = NudronRandomStuff.isAuthEnabled.value ||
+            NudronRandomStuff.isBiometricEnabled.value;
+      });
+    };
+    _twoFactorMethodListener = () {
+      if (!mounted) return;
+      setState(() {
+        activeTwoFactorMethod = NudronRandomStuff.twoFactorMethod.value;
+      });
+    };
+    NudronRandomStuff.isAuthEnabled.addListener(_authEnabledListener);
+    NudronRandomStuff.twoFactorMethod.addListener(_twoFactorMethodListener);
+  }
+
+  @override
+  void dispose() {
+    NudronRandomStuff.isAuthEnabled.removeListener(_authEnabledListener);
+    NudronRandomStuff.twoFactorMethod.removeListener(_twoFactorMethodListener);
+    super.dispose();
+  }
+
+  IconData _methodIcon(TwoFactorMethod method) {
+    switch (method) {
+      case TwoFactorMethod.sms:
+        return Icons.message;
+      case TwoFactorMethod.authenticator:
+        return Icons.lock_outline;
+    }
+  }
+
+  String _methodTitle(TwoFactorMethod method) {
+    switch (method) {
+      case TwoFactorMethod.sms:
+        return "Text message (SMS)";
+      case TwoFactorMethod.authenticator:
+        return "Authenticator app";
+    }
+  }
+
+  Widget _buildDisableInfo() {
+    if (activeTwoFactorMethod == null) {
+      return Text(
+        "Are you sure you want to disable 2FA?",
+        style: GoogleFonts.roboto(
+          fontSize: UIConfig.fontSizeMediumResponsive,
+          color: Provider.of<ThemeNotifier>(context)
+              .currentTheme
+              .basicAdvanceTextColor,
+        ),
+      );
+    }
+
+    return CustomtwofacRow(
+      icon: _methodIcon(activeTwoFactorMethod!),
+      title: _methodTitle(activeTwoFactorMethod!),
+      subtitle: "Are you sure you want to disable 2FA?",
+      onTap: () {},
+    );
   }
 
   @override
@@ -1111,12 +1168,7 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                   padding: EdgeInsets.symmetric(horizontal: 70.w),
                   child: Column(
                     children: [
-                      Text("Are you sure you want to disable 2FA?", style: GoogleFonts.roboto(
-                        fontSize: UIConfig.fontSizeMediumResponsive,
-                        color: Provider.of<ThemeNotifier>(context)
-                            .currentTheme
-                            .basicAdvanceTextColor,
-                      ),),
+                      _buildDisableInfo(),
                       UIConfig.spacingSizedBoxVerticalLarge,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1214,17 +1266,24 @@ class _BiometricWidgetState extends State<BiometricWidget> {
   bool showBiometricDialog = false;
   bool showDisableConfirm = false;
   bool isBiometricEnabled = NudronRandomStuff.isBiometricEnabled.value;
+  late final VoidCallback _biometricEnabledListener;
 
   @override
   void initState() {
-    NudronRandomStuff.isBiometricEnabled.addListener(() {
-      if (mounted) {
-        setState(() {
-          isBiometricEnabled = NudronRandomStuff.isBiometricEnabled.value;
-        });
-      }
-    });
     super.initState();
+    _biometricEnabledListener = () {
+      if (!mounted) return;
+      setState(() {
+        isBiometricEnabled = NudronRandomStuff.isBiometricEnabled.value;
+      });
+    };
+    NudronRandomStuff.isBiometricEnabled.addListener(_biometricEnabledListener);
+  }
+
+  @override
+  void dispose() {
+    NudronRandomStuff.isBiometricEnabled.removeListener(_biometricEnabledListener);
+    super.dispose();
   }
 
   Future<bool> disableBiometric() async {
@@ -1254,6 +1313,19 @@ class _BiometricWidgetState extends State<BiometricWidget> {
       return true;
     }
     return false;
+  }
+
+  Widget _buildBiometricDisableInfo() {
+    return IgnorePointer(
+      ignoring: true,
+      child: CustomtwofacRow(
+        icon: Icons.fingerprint,
+        title: "Fingerprint / Face ID",
+        subtitle:
+            "Log in without a password using your Fingerprint or Face ID",
+        onTap: () {},
+      ),
+    );
   }
 
   @override
@@ -1375,40 +1447,49 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                   padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 70.w),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            dynamicWidth: true,
-                            text: "CANCEL",
+                    child: Column(
+                      children: [
+                        _buildBiometricDisableInfo(),
+                        UIConfig.spacingSizedBoxVerticalLarge,
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomButton(
+                                dynamicWidth: true,
+                                text: "CANCEL",
 
-                            onPressed: () {
-                              setState(() {
-                                showDisableConfirm = false;
-                              });
-                            },
-                            isRed: true,
-                          ),
-                          SizedBox(width: UIConfig.spacingXXXLarge.w),
-                          CustomButton(
-                            dynamicWidth: true,
-                            text: "CONFIRM",
+                                onPressed: () {
+                                  setState(() {
+                                    showDisableConfirm = false;
+                                  });
+                                },
+                                isRed: true,
+                              ),
+                              SizedBox(width: UIConfig.spacingXXXLarge.w),
+                              CustomButton(
+                                dynamicWidth: true,
+                                text: "CONFIRM",
 
-                            onPressed: () {
-                              if (NudronRandomStuff.isBiometricEnabled.value) {
-                                disableBiometric()
-                                    .then((value) {})
-                                    .catchError((e) {
-                                  CustomAlert.showCustomScaffoldMessenger(
-                                      context, e.toString(), AlertType.error);
-                                });
-                                setState(() {
-                                  showDisableConfirm = false;
-                                });
-                              }
-                            },
-                          ),
-                        ]),
+                                onPressed: () {
+                                  if (NudronRandomStuff
+                                      .isBiometricEnabled.value) {
+                                    disableBiometric()
+                                        .then((value) {})
+                                        .catchError((e) {
+                                      CustomAlert.showCustomScaffoldMessenger(
+                                          context,
+                                          e.toString(),
+                                          AlertType.error);
+                                    });
+                                    setState(() {
+                                      showDisableConfirm = false;
+                                    });
+                                  }
+                                },
+                              ),
+                            ]),
+                      ],
+                    ),
                   ),
                 )),
             showBiometricDialog

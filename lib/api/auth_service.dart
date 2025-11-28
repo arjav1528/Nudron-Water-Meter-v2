@@ -21,6 +21,7 @@ import '../utils/getDeviceID.dart';
 class LoginPostRequests {
   static const String au1Url = 'https://api.nudron.com/prod/au1';
   static const String au3Url = 'https://api.nudron.com/prod/au3';
+  static const String _twoFactorMethodKey = 'two_factor_method';
   static FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   static bool isLoggedIn = false;
 
@@ -28,6 +29,31 @@ class LoginPostRequests {
     await secureStorage.write(
         key: 'two_factor', value: twoFAEnabled.toString());
     NudronRandomStuff.isAuthEnabled.value = twoFAEnabled;
+  }
+
+  static TwoFactorMethod? _twoFactorMethodFromString(String? raw) {
+    switch (raw) {
+      case 'sms':
+        return TwoFactorMethod.sms;
+      case 'authenticator':
+        return TwoFactorMethod.authenticator;
+      default:
+        return null;
+    }
+  }
+
+  static TwoFactorMethod _twoFactorMethodFromMode(int mode) {
+    return mode == 2 ? TwoFactorMethod.sms : TwoFactorMethod.authenticator;
+  }
+
+  static Future<void> _setTwoFactorMethod(TwoFactorMethod? method) async {
+    if (method == null) {
+      await secureStorage.delete(key: _twoFactorMethodKey);
+    } else {
+      await secureStorage.write(
+          key: _twoFactorMethodKey, value: method.name);
+    }
+    NudronRandomStuff.twoFactorMethod.value = method;
   }
 
   static Future<void> updateApp() async {
@@ -84,6 +110,15 @@ class LoginPostRequests {
         },
       );
       NudronRandomStuff.isAuthEnabled.value = twoFactorEnabled == 'true';
+
+      String? storedMethod = await secureStorage.read(key: _twoFactorMethodKey).timeout(
+        const Duration(seconds: 2),
+        onTimeout: () {
+          return null;
+        },
+      );
+      NudronRandomStuff.twoFactorMethod.value =
+          _twoFactorMethodFromString(storedMethod);
 
       String? biometricEnabled = await secureStorage.read(key: 'biometric').timeout(
         const Duration(seconds: 2),
@@ -345,6 +380,7 @@ class LoginPostRequests {
       throw CustomException('Error processing request');
     }
     twoFAToggleVal(true);
+    await _setTwoFactorMethod(_twoFactorMethodFromMode(mode));
 
     if (mode == 2) {
       return [null, null]; 
@@ -359,6 +395,7 @@ class LoginPostRequests {
     const body = '03';
     await _makeRequest(body, url: au3Url, apiName: 'Disable Two Factor');
     twoFAToggleVal(false);
+    await _setTwoFactorMethod(null);
   }
 
   static deleteStoredData() async {
@@ -376,6 +413,7 @@ class LoginPostRequests {
         'access_token',
         'refresh_token',
         'two_factor',
+        _twoFactorMethodKey,
       };
       
       for (final key in allKeys) {
@@ -385,6 +423,7 @@ class LoginPostRequests {
           
         }
       }
+      await _setTwoFactorMethod(null);
       
       if (!shouldPreserveBiometric) {
         try {

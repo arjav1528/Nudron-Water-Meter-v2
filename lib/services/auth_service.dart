@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../constants/app_config.dart';
 import '../utils/custom_exception.dart';
 import '../utils/getDeviceID.dart';
+import 'app_state_service.dart';
 import 'platform_utils.dart';
 
 class AuthService {
@@ -22,6 +23,7 @@ class AuthService {
   static const String _emailKey = 'email';
   static const String _passwordKey = 'password';
   static const String _twoFactorKey = 'two_factor';
+  static const String _twoFactorMethodKey = 'two_factor_method';
   static const String _biometricKey = 'biometric';
   static const String _themeModeKey = 'themeMode';
   
@@ -368,6 +370,7 @@ class AuthService {
       }
 
       await _setTwoFactorEnabled(true);
+      await _storeTwoFactorMethod(_twoFactorMethodFromMode(mode));
 
       if (mode == 2) {
         return AuthResult.success(message: 'SMS two-factor authentication enabled');
@@ -388,6 +391,7 @@ class AuthService {
       const body = '03';
       await _makeRequest(body, url: _au3Url, apiName: 'Disable Two Factor');
       await _setTwoFactorEnabled(false);
+      await _storeTwoFactorMethod(null);
       return AuthResult.success(message: 'Two-factor authentication disabled');
     } catch (e) {
       return AuthResult.error(_getErrorMessage(e));
@@ -452,6 +456,20 @@ class AuthService {
     await _secureStorage.write(key: _twoFactorKey, value: enabled.toString());
   }
 
+  static TwoFactorMethod _twoFactorMethodFromMode(int mode) {
+    return mode == 2 ? TwoFactorMethod.sms : TwoFactorMethod.authenticator;
+  }
+
+  static Future<void> _storeTwoFactorMethod(TwoFactorMethod? method) async {
+    if (method == null) {
+      await _secureStorage.delete(key: _twoFactorMethodKey);
+    } else {
+      await _secureStorage.write(
+          key: _twoFactorMethodKey, value: method.name);
+    }
+    NudronRandomStuff.twoFactorMethod.value = method;
+  }
+
   static Future<void> _clearAuthData() async {
     try {
       
@@ -466,6 +484,7 @@ class AuthService {
         _accessTokenKey,
         _refreshTokenKey,
         _twoFactorKey,
+        _twoFactorMethodKey,
       };
       
       for (final key in allKeys) {
