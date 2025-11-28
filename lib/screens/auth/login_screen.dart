@@ -635,14 +635,30 @@ class _AutoLoginState extends State<AutoLogin> {
             ),
             SizedBox(height: UIConfig.spacingExtraLarge),
             Center(
-              child: Text(
-                "WELCOME BACK! \nLOGIN AS ${widget.email}?",
+              child: RichText(
                 textAlign: TextAlign.center,
-                style: GoogleFonts.robotoMono(
-                  color: Provider.of<ThemeNotifier>(context)
-                      .currentTheme
-                      .basicAdvanceTextColor,
-                  fontSize: ThemeNotifier.small.responsiveSp,
+                text: TextSpan(
+                  style: GoogleFonts.robotoMono(
+                    color: Provider.of<ThemeNotifier>(context)
+                        .currentTheme
+                        .basicAdvanceTextColor,
+                    fontSize: ThemeNotifier.small.responsiveSp,
+                  ),
+                  children: [
+                    const TextSpan(text: "WELCOME BACK!\n \nLOGIN AS "),
+                    TextSpan(
+                      text: widget.email.toUpperCase(),
+                      style: GoogleFonts.robotoMono(
+                        color: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .basicAdvanceTextColor,
+                        fontSize: ThemeNotifier.small.responsiveSp,
+                        
+
+                      ),
+                    ),
+                    const TextSpan(text: " ? \n"),
+                  ],
                 ),
               ),
             ),
@@ -654,6 +670,7 @@ class _AutoLoginState extends State<AutoLogin> {
                   text: "NO",
                   dynamicWidth: true,
                   isRed: true,
+
                   onPressed: () {
                     if (mounted) {
                       Navigator.of(context).pop();
@@ -663,6 +680,7 @@ class _AutoLoginState extends State<AutoLogin> {
                 CustomButton(
                   text: "YES",
                   dynamicWidth: true,
+
                   onPressed: () async {
                     
                     final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);

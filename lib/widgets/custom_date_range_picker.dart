@@ -293,7 +293,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             ),
                             currentDateTextStyle: TextStyle(
                               color: UIConfig.accentColorGreen,
-                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                              fontSize: UIConfig.fontSizeExtraSmallResponsive,
                               fontWeight: FontWeight.w600,
 
                             ),
@@ -304,7 +304,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                             ),
                             enabledCellsTextStyle: TextStyle(
                               color: currentTheme.basicAdvanceTextColor,
-                              fontSize: UIConfig.getResponsiveFontSize(context, UIConfig.fontSizeExtraSmall, desktopWidth: 16.0),
+                              fontSize: UIConfig.fontSizeExtraSmallResponsive,
                             ),
 
                             selectedCellsDecoration: BoxDecoration(
@@ -529,7 +529,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: 16.0),
                               dynamicWidth: true,
                             ),
                             CustomButton(
@@ -539,7 +538,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                               onPressed: () {
                                 Navigator.of(context).pop(currentSelectedRange);
                               },
-                              fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: 16.0),
                               dynamicWidth: true,
                             ),
                           ],

@@ -50,7 +50,7 @@ class InvertedChamferedLinePainter extends CustomPainter {
 
     final borderPaint = Paint()
       ..color = borderColor
-      ..strokeWidth = UIConfig.tableBorderWidth
+      ..strokeWidth = UIConfig.dialogBorderWidth
       ..style = PaintingStyle.stroke;
 
     final fillPath = Path();
@@ -183,24 +183,24 @@ class ChamferedLinePainter extends CustomPainter {
 
     final borderPaint = Paint()
       ..color = borderColor
-      ..strokeWidth = UIConfig.tableBorderWidth
+      ..strokeWidth = UIConfig.dialogBorderWidth
       ..style = PaintingStyle.stroke;
 
     final fillPath = Path();
 
-    fillPath.moveTo(UIConfig.tableBorderWidth * 0.5, size.height);
-    fillPath.lineTo(UIConfig.tableBorderWidth * 0.5, 0);
+    fillPath.moveTo(UIConfig.dialogBorderWidth * 0.5, size.height);
+    fillPath.lineTo(UIConfig.dialogBorderWidth * 0.5, 0);
     fillPath.lineTo(size.width - size.height, 0);
     fillPath.lineTo(size.width, size.height);
     fillPath.close();
 
     final borderPath = Path();
     if(!isInverted) {
-      borderPath.moveTo(UIConfig.tableBorderWidth * 0.5, size.height);
-      borderPath.lineTo(UIConfig.tableBorderWidth * 0.5, 0);
+      borderPath.moveTo(UIConfig.dialogBorderWidth * 0.5, size.height);
+      borderPath.lineTo(UIConfig.dialogBorderWidth * 0.5, 0);
     }
     borderPath.lineTo(size.width - size.height, 0);
-    borderPath.lineTo(size.width, size.height+UIConfig.tableBorderWidth * 0.5);
+    borderPath.lineTo(size.width, size.height+UIConfig.dialogBorderWidth * 0.5);
 
     canvas.drawPath(fillPath, fillPaint);
 

@@ -115,53 +115,56 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             child: Column(
               children: [
                 SizedBox(height: UIConfig.spacingLarge * 1.25.h),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  CustomButton(
-                    dynamicWidth: true,
-                    fontSize: UIConfig.fontSizeSmallResponsive,
-                    text: "CANCEL",
-                    onPressed: () {
-                      setState(() {
-                        showCancelConfirmQrCode = false;
-                      });
-                    },
-                    isRed: true,
-                  ),
-                  SizedBox(width: UIConfig.spacingXXXLarge.w),
-                  CustomButton(
-                    dynamicWidth: true,
-                    fontSize: UIConfig.fontSizeSmallResponsive,
-                    text: "CONFIRM",
-                    onPressed: () async {
-                      if (!await checkIfAlreadyEnabled()) {
-                        bool isDarkMode =
-                            Provider.of<ThemeNotifier>(context, listen: false)
-                                .isDark;
-                        LoaderUtility.showLoader(
-                                context,
-                                LoginPostRequests.enableTwoFactorAuth(
-                                    isDarkMode ? 11 : 10))
-                            .then((a) {
-                          image = a[0]!;
-                          url = a[1]!;
-                          setState(() {
-                            showQrCode = true;
-                            _scrollToBottom();
-                          });
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 70.w),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    CustomButton(
+                      dynamicWidth: true,
 
-                          NudronRandomStuff.isAuthEnabled.value = true;
-                        }).catchError((e) {
-                          CustomAlert.showCustomScaffoldMessenger(
-                              mainNavigatorKey.currentContext!,
-                              e.toString(),
-                              AlertType.error);
+                      text: "CANCEL",
+                      onPressed: () {
+                        setState(() {
+                          showCancelConfirmQrCode = false;
                         });
+                      },
+                      isRed: true,
+                    ),
+                    SizedBox(width: UIConfig.spacingXXXLarge.w),
+                    CustomButton(
+                      dynamicWidth: true,
 
-                        reset();
-                      }
-                    },
-                  ),
-                ]),
+                      text: "CONFIRM",
+                      onPressed: () async {
+                        if (!await checkIfAlreadyEnabled()) {
+                          bool isDarkMode =
+                              Provider.of<ThemeNotifier>(context, listen: false)
+                                  .isDark;
+                          LoaderUtility.showLoader(
+                                  context,
+                                  LoginPostRequests.enableTwoFactorAuth(
+                                      isDarkMode ? 11 : 10))
+                              .then((a) {
+                            image = a[0]!;
+                            url = a[1]!;
+                            setState(() {
+                              showQrCode = true;
+                              _scrollToBottom();
+                            });
+                  
+                            NudronRandomStuff.isAuthEnabled.value = true;
+                          }).catchError((e) {
+                            CustomAlert.showCustomScaffoldMessenger(
+                                mainNavigatorKey.currentContext!,
+                                e.toString(),
+                                AlertType.error);
+                          });
+                  
+                          reset();
+                        }
+                      },
+                    ),
+                  ]),
+                ),
               ],
             ),
           ),
@@ -198,50 +201,53 @@ class _TwoFADisabledState extends State<TwoFADisabled> {
             visible: showCancelConfirmSms,
             child: Padding(
               padding: EdgeInsets.only(top: UIConfig.spacingLarge * 1.25.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                    dynamicWidth: true,
-                    fontSize: UIConfig.fontSizeSmallResponsive,
-                    text: "CANCEL",
-                    onPressed: () {
-                      setState(() {
-                        showCancelConfirmSms = false;
-                      });
-                    },
-                    isRed: true,
-                  ),
-                  SizedBox(width: UIConfig.spacingXXXLarge.w),
-                  CustomButton(
-                    dynamicWidth: true,
-                    fontSize: UIConfig.fontSizeSmallResponsive,
-                    text: "CONFIRM",
-                    onPressed: () async {
-                      if (await checkIfAlreadyEnabled()) return;
-                      LoaderUtility.showLoader(
-                              context, LoginPostRequests.enableTwoFactorAuth(2))
-                          .then((s) async {
-                        CustomAlert.showCustomScaffoldMessenger(
-                            mainNavigatorKey.currentContext!,
-                            "Two factor authentication (SMS) enabled",
-                            AlertType.success);
-                        NudronRandomStuff.isAuthEnabled.value = true;
-                      }).catchError((e) {
-                        CustomAlert.showCustomScaffoldMessenger(
-                            mainNavigatorKey.currentContext!,
-                            e.toString(),
-                            AlertType.error);
-                      })
-                        .whenComplete(
-                          () {
-                            reset();
-                            widget.closeFunction();
-                          },
-                        );
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 70.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      dynamicWidth: true,
+
+                      text: "CANCEL",
+                      onPressed: () {
+                        setState(() {
+                          showCancelConfirmSms = false;
+                        });
+                      },
+                      isRed: true,
+                    ),
+                    SizedBox(width: UIConfig.spacingXXXLarge.w),
+                    CustomButton(
+                      dynamicWidth: true,
+
+                      text: "CONFIRM",
+                      onPressed: () async {
+                        if (await checkIfAlreadyEnabled()) return;
+                        LoaderUtility.showLoader(
+                                context, LoginPostRequests.enableTwoFactorAuth(2))
+                            .then((s) async {
+                          CustomAlert.showCustomScaffoldMessenger(
+                              mainNavigatorKey.currentContext!,
+                              "Two factor authentication (SMS) enabled",
+                              AlertType.success);
+                          NudronRandomStuff.isAuthEnabled.value = true;
+                        }).catchError((e) {
+                          CustomAlert.showCustomScaffoldMessenger(
+                              mainNavigatorKey.currentContext!,
+                              e.toString(),
+                              AlertType.error);
+                        })
+                          .whenComplete(
+                            () {
+                              reset();
+                              widget.closeFunction();
+                            },
+                          );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -447,33 +453,36 @@ class _BiometricDisabledState extends State<BiometricDisabled> {
             visible: showCancelConfirmBiometric,
             child: Padding(
               padding: EdgeInsets.only(top: UIConfig.spacingLarge * 1.25.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                    dynamicWidth: true,
-                    fontSize: UIConfig.fontSizeSmallResponsive,
-                    text: "CANCEL",
-                    onPressed: () {
-                      setState(() {
-                        showCancelConfirmBiometric = false;
-                      });
-                    },
-                    isRed: true,
-                  ),
-                  SizedBox(width: UIConfig.spacingXXXLarge.w),
-                  CustomButton(
-                    dynamicWidth: true,
-                    fontSize: UIConfig.fontSizeSmallResponsive,
-                    text: "CONFIRM",
-                    onPressed: () async {
-                      if (await checkIfAlreadyEnabled()) return;
-                      enableBiometric();
-                      reset();
-                      widget.closeFunction();
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 70.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      dynamicWidth: true,
+
+                      text: "CANCEL",
+                      onPressed: () {
+                        setState(() {
+                          showCancelConfirmBiometric = false;
+                        });
+                      },
+                      isRed: true,
+                    ),
+                    SizedBox(width: UIConfig.spacingXXXLarge.w),
+                    CustomButton(
+                      dynamicWidth: true,
+
+                      text: "CONFIRM",
+                      onPressed: () async {
+                        if (await checkIfAlreadyEnabled()) return;
+                        enableBiometric();
+                        reset();
+                        widget.closeFunction();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

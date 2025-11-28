@@ -245,7 +245,7 @@ class UIConfig {
   
 
   static double get iconSizeXSmall => 16.69.h;
-  static double get iconSizeSmall => 24.h;
+  static double get iconSizeSmall => 24.minSp;
   static double get iconSizeMedium => 25.responsiveSp;
   static double get iconSizeLarge => 30.responsiveSp;
   static double get iconSizeExtraLarge => 35.responsiveSp;

@@ -257,12 +257,10 @@ class _DevicesPageState extends State<DevicesPage> {
                     builder: (context, state) {
                       final Map<int, int> mobileJson = {
                         0: UIConfig.iconSizeLarge.toInt(),
-                        3: UIConfig.scrollClampMin.toInt(),
+                       
                       };
-                      final Map<int, int> desktopJson = {
-                        3: UIConfig.scrollClampMin.toInt(),
-                      };
-                      final Map<int, int> json = PlatformUtils.isMobile ? mobileJson : desktopJson;
+                      
+                      final Map<int, int> json = PlatformUtils.isMobile ? mobileJson : {};
                       return DataGridWidget(
                         data: dashboardBloc.devicesData,
                         key: UniqueKey(), columnsToTakeHeaderWidthAndExtraPadding: json,

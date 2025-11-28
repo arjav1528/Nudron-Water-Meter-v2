@@ -10,7 +10,7 @@ import '../../constants/theme2.dart';
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final double? fontSize;
+
   final bool isRed;
   final double? width;
   final bool dynamicWidth;
@@ -24,7 +24,7 @@ class CustomButton extends StatelessWidget {
     required this.text,
     this.width,
     
-    this.fontSize,
+
     this.dynamicWidth = false,
     required this.onPressed,
     this.isRed = false,
@@ -57,7 +57,7 @@ class CustomButton extends StatelessWidget {
                 child: Center(
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: dynamicWidth ? 15.0 : 0),
+                        EdgeInsets.symmetric(horizontal: dynamicWidth ? 15.0.w : 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -66,7 +66,7 @@ class CustomButton extends StatelessWidget {
                           maxLines: 1,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.robotoMono(
-                            fontSize: (fontSize ?? ThemeNotifier.medium).responsiveSp,
+                            fontSize: (UIConfig.fontSizeSmallResponsive),
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),

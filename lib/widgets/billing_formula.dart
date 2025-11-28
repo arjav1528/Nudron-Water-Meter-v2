@@ -282,7 +282,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
                             SizedBox(width: UIConfig.spacingSmall.w),
                             Text("ADD TIER",
                                 style: GoogleFonts.robotoMono(
-                                  fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.medium, desktopWidth: width),
+                                  fontSize: UIConfig.fontSizeSmallResponsive,
                                   color: Provider.of<ThemeNotifier>(context)
                                       .currentTheme
                                       .basicAdvanceTextColor,
@@ -629,7 +629,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
             text: "CANCEL",
             isRed: true,
             dynamicWidth: true,
-            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+
             onPressed: () {
               if (mounted) {
                 Navigator.of(context).pop();
@@ -639,7 +639,7 @@ class _BillingFormulaDialogState extends State<BillingFormulaDialog> {
           CustomButton(
             text: "SUBMIT",
             dynamicWidth: true,
-            fontSize: UIConfig.getResponsiveFontSize(context, ThemeNotifier.small, desktopWidth: width),
+
             onPressed: () {
               String newFormula = _buildBillingFormula();
               

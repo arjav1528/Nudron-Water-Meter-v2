@@ -471,16 +471,25 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       ),
                                       UIConfig.spacingSizedBoxVerticalSmall,
                                       PasswordTextField(
+                                        desktopPrefixIconWidth: UIConfig.iconSizeSmall,
+                                        desktopPrefixIconHeight: UIConfig.iconSizeSmall,
+                                        desktopSuffixIconSize: UIConfig.iconSizeSmall,
                                         controller: oldPasswordController,
                                         hint: "Enter current password",
                                       ),
                                       UIConfig.spacingSizedBoxVerticalSmall,
                                       PasswordTextField(
+                                        desktopPrefixIconWidth: UIConfig.iconSizeSmall,
+                                        desktopPrefixIconHeight: UIConfig.iconSizeSmall,
+                                        desktopSuffixIconSize: UIConfig.iconSizeSmall,
                                         controller: newPasswordController,
                                         hint: "Enter new password",
                                       ),
                                       UIConfig.spacingSizedBoxVerticalSmall,
                                       PasswordTextField(
+                                        desktopPrefixIconWidth: UIConfig.iconSizeSmall,
+                                        desktopPrefixIconHeight: UIConfig.iconSizeSmall,
+                                        desktopSuffixIconSize: UIConfig.iconSizeSmall,
                                         controller:
                                         confirmNewPasswordController,
                                         hint: "Confirm new password",
@@ -490,7 +499,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                       CustomButton(
                                         dynamicWidth: true,
                                         text: "SUBMIT",
-                                        fontSize: ThemeNotifier.medium,
+
                                         onPressed: () async {
                                           FocusScope.of(context).unfocus();
 
@@ -672,7 +681,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             CustomButton(
                                               text: "LOGOUT",
                                               dynamicWidth: true,
-                                              fontSize: ThemeNotifier.medium,
                                               onPressed: () async {
                                                 setState(() {
                                                   _isLoggingOut = true;
@@ -759,7 +767,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                             CustomButton(
                                               text: "GLOBAL LOGOUT",
                                               dynamicWidth: true,
-                                              fontSize: ThemeNotifier.medium,
                                               onPressed: () async {
                                                 setState(() {
                                                   _isGlobalLoggingOut = true;
@@ -839,7 +846,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                           CustomButton(
                                             text: "DELETE",
                                             dynamicWidth: true,
-                                            fontSize: ThemeNotifier.medium,
+
                                             onPressed: () async {
                                               setState(() {
                                                 deleteAccountVisible = true;
@@ -882,7 +889,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                 CustomButton(
                                                   dynamicWidth: true,
                                                   text: "CANCEL",
-                                                  fontSize: ThemeNotifier.medium,
                                                   onPressed: () {
                                                     setState(() {
                                                       deleteAccountVisible = false;
@@ -894,7 +900,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                                 CustomButton(
                                                   dynamicWidth: true,
                                                   text: "CONFIRM",
-                                                  fontSize: ThemeNotifier.medium,
                                                   onPressed: () {
                                                     if (deleteConfirmationFieldController.text.toUpperCase() == "DELETE") {
 
@@ -1103,47 +1108,61 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
               visible: showDisableConfirm,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      dynamicWidth: true,
-                      text: "CANCEL",
-                      fontSize: UIConfig.fontSizeSmallResponsive,
-                      onPressed: () {
-                        setState(() {
-                          showDisableConfirm = false;
-                        });
-                      },
-                      isRed: true,
-                    ),
-                    SizedBox(width: UIConfig.spacingXXXLarge.w),
-                    CustomButton(
-                      dynamicWidth: true,
-                      text: "CONFIRM",
-                      fontSize: UIConfig.fontSizeSmallResponsive,
-                      onPressed: () {
-                        if (NudronRandomStuff.isAuthEnabled.value) {
-                          LoaderUtility.showLoader(context,
-                                  LoginPostRequests.disableTwoFactorAuth())
-                              .then((s) {
-                            NudronRandomStuff.isAuthEnabled.value = false;
-                            setState(() {
-                              showDisableConfirm = false;
-                              is2FAEnabled = false;
-                            });
-                            CustomAlert.showCustomScaffoldMessenger(
-                                context,
-                                "Two Factor Authentication Disabled",
-                                AlertType.success);
-                          }).catchError((e) {
-                            CustomAlert.showCustomScaffoldMessenger(
-                                context, e.toString(), AlertType.error);
-                          });
-                        }
-                      },
-                    ),
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 70.w),
+                  child: Column(
+                    children: [
+                      Text("Are you sure you want to disable 2FA?", style: GoogleFonts.roboto(
+                        fontSize: UIConfig.fontSizeMediumResponsive,
+                        color: Provider.of<ThemeNotifier>(context)
+                            .currentTheme
+                            .basicAdvanceTextColor,
+                      ),),
+                      UIConfig.spacingSizedBoxVerticalLarge,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            dynamicWidth: true,
+                            text: "CANCEL",
+
+                            onPressed: () {
+                              setState(() {
+                                showDisableConfirm = false;
+                              });
+                            },
+                            isRed: true,
+                          ),
+                          SizedBox(width: UIConfig.spacingXXXLarge.w),
+                          CustomButton(
+                            dynamicWidth: true,
+                            text: "CONFIRM",
+
+                            onPressed: () {
+                              if (NudronRandomStuff.isAuthEnabled.value) {
+                                LoaderUtility.showLoader(context,
+                                        LoginPostRequests.disableTwoFactorAuth())
+                                    .then((s) {
+                                  NudronRandomStuff.isAuthEnabled.value = false;
+                                  setState(() {
+                                    showDisableConfirm = false;
+                                    is2FAEnabled = false;
+                                  });
+                                  CustomAlert.showCustomScaffoldMessenger(
+                                      context,
+                                      "Two Factor Authentication Disabled",
+                                      AlertType.success);
+                                }).catchError((e) {
+                                  CustomAlert.showCustomScaffoldMessenger(
+                                      context, e.toString(), AlertType.error);
+                                });
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               )),
           showAuthenticationDialog
@@ -1357,40 +1376,43 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                 visible: showDisableConfirm,
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          dynamicWidth: true,
-                          text: "CANCEL",
-                          fontSize: UIConfig.fontSizeSmallResponsive,
-                          onPressed: () {
-                            setState(() {
-                              showDisableConfirm = false;
-                            });
-                          },
-                          isRed: true,
-                        ),
-                        SizedBox(width: UIConfig.spacingXXXLarge.w),
-                        CustomButton(
-                          dynamicWidth: true,
-                          text: "CONFIRM",
-                          fontSize: ThemeNotifier.medium.responsiveSp,
-                          onPressed: () {
-                            if (NudronRandomStuff.isBiometricEnabled.value) {
-                              disableBiometric()
-                                  .then((value) {})
-                                  .catchError((e) {
-                                CustomAlert.showCustomScaffoldMessenger(
-                                    context, e.toString(), AlertType.error);
-                              });
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 70.w),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            dynamicWidth: true,
+                            text: "CANCEL",
+
+                            onPressed: () {
                               setState(() {
                                 showDisableConfirm = false;
                               });
-                            }
-                          },
-                        ),
-                      ]),
+                            },
+                            isRed: true,
+                          ),
+                          SizedBox(width: UIConfig.spacingXXXLarge.w),
+                          CustomButton(
+                            dynamicWidth: true,
+                            text: "CONFIRM",
+
+                            onPressed: () {
+                              if (NudronRandomStuff.isBiometricEnabled.value) {
+                                disableBiometric()
+                                    .then((value) {})
+                                    .catchError((e) {
+                                  CustomAlert.showCustomScaffoldMessenger(
+                                      context, e.toString(), AlertType.error);
+                                });
+                                setState(() {
+                                  showDisableConfirm = false;
+                                });
+                              }
+                            },
+                          ),
+                        ]),
+                  ),
                 )),
             showBiometricDialog
                 ? BiometricDisabled(

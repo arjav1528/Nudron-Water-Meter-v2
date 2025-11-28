@@ -221,9 +221,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                           text: "CANCEL",
                           isRed: true,
                           dynamicWidth: true,
-                          fontSize: UIConfig.getResponsiveFontSize(
-                              context, ThemeNotifier.small,
-                              desktopWidth: width),
+
                           onPressed: () {
                             activationCodeController.clear();
                             Navigator.of(context).pop();
@@ -233,9 +231,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                         CustomButton(
                           text: "CONFIRM",
                           dynamicWidth: true,
-                          fontSize: UIConfig.getResponsiveFontSize(
-                              context, ThemeNotifier.small,
-                              desktopWidth: width),
+
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
                             if (activationCodeController.text.isEmpty) {
@@ -441,7 +437,7 @@ class _ProjectSelectionPageState extends State<ProjectSelectionPage> {
                                   CustomButton(
                                     text: "DASHBOARD",
                                     onPressed: _navigateToDashboard,
-                                    fontSize: UIConfig.fontSizeLargeResponsive,
+
                                     arrowWidget: true,
                                     dynamicWidth: true,
                                   ),

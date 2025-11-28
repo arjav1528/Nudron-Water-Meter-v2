@@ -433,13 +433,13 @@ class _DropdownContentState extends State<DropdownContent> {
                       isRed: true,
                       dynamicWidth: true,
                       onPressed: widget.onClose,
-                      fontSize: ThemeNotifier.large.w,
+
                     ),
                     CustomButton(
                       text: 'CONFIRM',
                       dynamicWidth: true,
                       onPressed: _onConfirm,
-                      fontSize: ThemeNotifier.large.w,
+
                     ),
                   ],
                 ),
