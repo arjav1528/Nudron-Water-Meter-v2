@@ -92,22 +92,30 @@ class _ToggleButtonCustomState extends State<ToggleButtonCustom> {
             ),
           ),
 
-          // Animated Indicator
-          AnimatedAlign(
+          // Animated Indicator - perfectly centered vertically using top and bottom constraints
+          AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            alignment: _selectedIndex == 0 ? Alignment.centerLeft : Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.all(widget.height * 0.1), // Padding inside frame
-              child: CustomPaint(
-                // Adjust width to account for the arrow shape and padding
-                size: Size((widget.width / 2) - (widget.height * 0.1 * 1.5), widget.height * 0.8),
-                painter: _ToggleShapePainter(
-                  color: _selectedIndex == 0 ? widget.tabColor : widget.tabColor2,
-                  isFilled: true,
-                  arrowWidth: arrowWidth,
-                ),
-              ),
+            left: _selectedIndex == 0 
+                ? widget.height * 0.1  // Left side: padding from left edge
+                : widget.width / 2, // Right side: start at midpoint
+            top: widget.height * 0.1, // Top padding
+            bottom: widget.height * 0.1, // Bottom padding - ensures perfect vertical centering
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Use the constrained height from top/bottom for perfect centering
+                return CustomPaint(
+                  size: Size(
+                    (widget.width / 2) - (widget.height * 0.1), 
+                    constraints.maxHeight // Use the height from constraints (top/bottom)
+                  ),
+                  painter: _ToggleShapePainter(
+                    color: _selectedIndex == 0 ? widget.tabColor : widget.tabColor2,
+                    isFilled: true,
+                    arrowWidth: arrowWidth,
+                  ),
+                );
+              },
             ),
           ),
 
