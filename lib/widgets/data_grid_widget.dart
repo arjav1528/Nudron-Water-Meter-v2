@@ -252,14 +252,19 @@ class _DataGridWidgetState extends State<DataGridWidget> {
         
         if (isMobile) {
           if (isFrozenColumn) {
-            // Phone + Frozen: Width of Header + Padding
-            double frozenWidth = headerWidth + totalPadding;
-            
-            // Check for specific overrides (e.g. extra space needed)
-            if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
-              frozenWidth += widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
+            if (widget.location == 'trends') {
+               // For trends on mobile, frozen column should use Max(Header, Data) + Padding
+               columnWidths[index] = max(headerWidth, maxDataWidth) + totalPadding;
+            } else {
+               // Phone + Frozen (Billing/Devices): Width of Header + Padding
+               double frozenWidth = headerWidth + totalPadding;
+               
+               // Check for specific overrides (e.g. extra space needed)
+               if (widget.columnsToTakeHeaderWidthAndExtraPadding.containsKey(index)) {
+                 frozenWidth += widget.columnsToTakeHeaderWidthAndExtraPadding[index]!.toDouble().w;
+               }
+               columnWidths[index] = frozenWidth;
             }
-            columnWidths[index] = frozenWidth;
           } else {
             // Phone + Unfrozen: Max(Header, Data) + Padding
             columnWidths[index] = max(headerWidth, maxDataWidth) + totalPadding;
