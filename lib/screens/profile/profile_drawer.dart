@@ -1164,56 +1164,62 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
               visible: showDisableConfirm,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 70.w),
-                  child: Column(
-                    children: [
-                      _buildDisableInfo(),
-                      UIConfig.spacingSizedBoxVerticalLarge,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  children: [
+                    _buildDisableInfo(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 70.w),
+                      child: Column(
                         children: [
-                          CustomButton(
-                            dynamicWidth: true,
-                            text: "CANCEL",
-
-                            onPressed: () {
-                              setState(() {
-                                showDisableConfirm = false;
-                              });
-                            },
-                            isRed: true,
-                          ),
-                          SizedBox(width: UIConfig.spacingXXXLarge.w),
-                          CustomButton(
-                            dynamicWidth: true,
-                            text: "CONFIRM",
-
-                            onPressed: () {
-                              if (NudronRandomStuff.isAuthEnabled.value) {
-                                LoaderUtility.showLoader(context,
-                                        LoginPostRequests.disableTwoFactorAuth())
-                                    .then((s) {
-                                  NudronRandomStuff.isAuthEnabled.value = false;
+                          
+                          UIConfig.spacingSizedBoxVerticalLarge,
+                          UIConfig.spacingSizedBoxVerticalLarge,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomButton(
+                                dynamicWidth: true,
+                                text: "CANCEL",
+                    
+                                onPressed: () {
                                   setState(() {
                                     showDisableConfirm = false;
-                                    is2FAEnabled = false;
                                   });
-                                  CustomAlert.showCustomScaffoldMessenger(
-                                      context,
-                                      "Two Factor Authentication Disabled",
-                                      AlertType.success);
-                                }).catchError((e) {
-                                  CustomAlert.showCustomScaffoldMessenger(
-                                      context, e.toString(), AlertType.error);
-                                });
-                              }
-                            },
+                                },
+                                isRed: true,
+                              ),
+                              SizedBox(width: UIConfig.spacingXXXLarge.w),
+                              CustomButton(
+                                dynamicWidth: true,
+                                text: "CONFIRM",
+                    
+                                onPressed: () {
+                                  if (NudronRandomStuff.isAuthEnabled.value) {
+                                    LoaderUtility.showLoader(context,
+                                            LoginPostRequests.disableTwoFactorAuth())
+                                        .then((s) {
+                                      NudronRandomStuff.isAuthEnabled.value = false;
+                                      setState(() {
+                                        showDisableConfirm = false;
+                                        is2FAEnabled = false;
+                                      });
+                                      CustomAlert.showCustomScaffoldMessenger(
+                                          context,
+                                          "Two Factor Authentication Disabled",
+                                          AlertType.success);
+                                    }).catchError((e) {
+                                      CustomAlert.showCustomScaffoldMessenger(
+                                          context, e.toString(), AlertType.error);
+                                    });
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )),
           showAuthenticationDialog
@@ -1445,51 +1451,57 @@ class _BiometricWidgetState extends State<BiometricWidget> {
                 visible: showDisableConfirm,
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: UIConfig.spacingLarge),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 70.w),
-                    child: Column(
-                      children: [
-                        _buildBiometricDisableInfo(),
-                        UIConfig.spacingSizedBoxVerticalLarge,
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomButton(
-                                dynamicWidth: true,
-                                text: "CANCEL",
-
-                                onPressed: () {
-                                  setState(() {
-                                    showDisableConfirm = false;
-                                  });
-                                },
-                                isRed: true,
-                              ),
-                              SizedBox(width: UIConfig.spacingXXXLarge.w),
-                              CustomButton(
-                                dynamicWidth: true,
-                                text: "CONFIRM",
-
-                                onPressed: () {
-                                  if (NudronRandomStuff
-                                      .isBiometricEnabled.value) {
-                                    disableBiometric()
-                                        .then((value) {})
-                                        .catchError((e) {
-                                      CustomAlert.showCustomScaffoldMessenger(
-                                          context,
-                                          e.toString(),
-                                          AlertType.error);
-                                    });
-                                    setState(() {
-                                      showDisableConfirm = false;
-                                    });
-                                  }
-                                },
-                              ),
-                            ]),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      _buildBiometricDisableInfo(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 70.w),
+                        child: Column(
+                          children: [
+                            
+                            UIConfig.spacingSizedBoxVerticalLarge,
+                            UIConfig.spacingSizedBoxVerticalLarge,
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  CustomButton(
+                                    dynamicWidth: true,
+                                    text: "CANCEL",
+                      
+                                    onPressed: () {
+                                      setState(() {
+                                        showDisableConfirm = false;
+                                      });
+                                    },
+                                    isRed: true,
+                                  ),
+                                  SizedBox(width: UIConfig.spacingXXXLarge.w),
+                                  CustomButton(
+                                    dynamicWidth: true,
+                                    text: "CONFIRM",
+                      
+                                    onPressed: () {
+                                      if (NudronRandomStuff
+                                          .isBiometricEnabled.value) {
+                                        disableBiometric()
+                                            .then((value) {})
+                                            .catchError((e) {
+                                          CustomAlert.showCustomScaffoldMessenger(
+                                              context,
+                                              e.toString(),
+                                              AlertType.error);
+                                        });
+                                        setState(() {
+                                          showDisableConfirm = false;
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ]),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 )),
             showBiometricDialog
