@@ -22,7 +22,7 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? EdgeInsets.symmetric(horizontal: UIConfig.tableCellPaddingHorizontal),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 0),
       child: title[0] != '!'
           ? Text(
               title,
@@ -85,7 +85,7 @@ class CustomIconButton extends StatelessWidget {
             .currentTheme
             .splashColor,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 0.h),
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(UIConfig.spacingXSmall),
